@@ -1,47 +1,112 @@
-from shapeDetect import ShapeDetector
+# Contains metadata about the shape object detected, including coordinates, both
+# absolute and relative, as well as a classification for the basic shape detected.
+#
+# @ Aaron Baw
 
-import argparse
-import imutils
-import cv2
+import numpy as np
 
-# NOTES:
-# For unclosed shapes, may be worth looking into convexHull...
+class Shape:
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True, help="Input path.")
-args = vars(ap.parse_args())
+    def __init__(self, vertices):
+        if (type(vertices) != np.ndarray):
+            vertices = np.array(vertices)
+        self.rawVertices = vertices
+        self.rawVertices = vertices.reshape(-1,2)
+        self.type = self.determineShapeType()
+        self.vertices = self.tidyAndApproximate()
+        self.midpoint = self.calculateMidpoint()
+        self.width = self.calculateWidth()
+        self.height = self.calculateHeight()
+        self.numSides = len(self.vertices)
 
-image = cv2.imread(args["image"])
-image = imutils.resize(image, width=300)
+    def calculateMidpoint(self):
+        return [int(round(np.mean(self.vertices[:,0]))), int(round(np.mean(self.vertices[:,1])))]
 
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-blurred = cv2.GaussianBlur(image, (5,5), 0)
-threshA = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-# thresh = cv2.threshold(gray, 60,200, cv2.THRESH_BINARY)[1]
+    def calculateWidth(self):
+        return self.vertices[:,0].max() - self.vertices[:,0].min()
 
-# Find edges with Canny.
-canny = cv2.Canny(threshA, 50, 200)
+    def calculateHeight(self):
+        return self.vertices[:,1].max() - self.vertices[:,1].min()
 
-# Find contours after applying Canny edge detection.
-canny2, contours, hierarchy = cv2.findContours(canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    def determineShapeType(self):
+        if (len(self.rawVertices) == 3): return "triangle"
+        if (len(self.rawVertices) == 4): return "rectangle"
+        else: return "polygon"
 
-# Draw the contours and show what we have found.
-cv2.drawContours(image, contours, -1, (0,255,0), 2)
+    # Given the raw vertices detected by cv2.findContour(), and the shape type,
+    # attempts to return an approximation of the shape with straight lines.
+    def tidyAndApproximate(self):
+        output = np.array(self.rawVertices)
+        if (self.type == "rectangle"):
+            # Iterate over each x coordinate. If the x-coordinates diverge by
+            # a small amount (< 5 pixels), then we average the two, keeping the
+            # y values intact.
+            output[:,0] = straightenAlongAxis(output[:,0], 20)
+            output[:,1] = straightenAlongAxis(output[:,1], 20)
+        return output
 
-# Approximate the shape for each contour..
-for cnt in contours:
-    # Investigate what Epsilon does here, and why it is set to this value
-    ac = cv2.approxPolyDP(cnt, 0.1 * cv2.arcLength(cnt, True), True)
 
-    # print("Curve approximation: " + str(approximateCurve))
-    #
-    # print("Number of sides: " + str(len(approximateCurve)))
 
-    # Annotate each shape.
-    # Find midpoint between first two points.
-    print(ac[0][0])
-    midpoint = ((ac[0][0] + ac[1][0]) / 2, (ac[1][0] + ac[1][1]) / 2)
-    print("Midpoint: " + midpoint)
 
-cv2.imshow('Canny', image)
-cv2.waitKey(0)
+
+    def __str__(self):
+        return \
+            "Type: " + self.type + "\n" + \
+            "Raw Vertices: " + str(self.rawVertices) + "\n" + \
+            "Vertices: "+str(self.vertices) + "\n" + \
+            "Mid Point: " + str(self.midpoint) + "\n" + \
+            "Width: " + str(self.width) + "\n" + \
+            "Height: " + str(self.height)
+
+
+# For each coordinate along some axis, find the similar coordinates within a
+# distance of 5 pixels, then group and average them out.
+def straightenAlongAxis(xs, threshold):
+    # Ensure array is ndarray.
+    if (type(xs) != np.ndarray):
+        xs = np.array(xs)
+    output = xs.copy()
+
+    return straighten(output, threshold)
+
+
+
+def straighten(xs, threshold):
+    print("Straightening: " + str(xs))
+    straightened = False
+    for x in xs:
+        skewedXs = getSimilarValuesWithinRange(xs, x, threshold)
+        print("SkewedAxisVals: " + str(skewedXs))
+        print("Xs: " + str(xs))
+        print("Replaceing : " + str(skewedXs[:,0]) + " with: " + str(round(np.mean(skewedXs[:,0]))))
+        if (len(np.unique(skewedXs) > 1)): straightened = False
+        # Average out the coordinate values.
+        skewedXs[:,0] = round(np.mean(skewedXs[:,0]))
+
+
+        # Replace all coordinate values in 'xs' array with the new
+        # averaged values at the index positions where they originally
+        # occurred.
+        xs[skewedXs[:,1]] = skewedXs[:,0]
+        print("Xs[After]: " + str(xs))
+    return straighten(xs,threshold) if straightened else xs
+
+# Given an array, returns a 2d array containing the element and the index position
+# at which it occurs.
+def getSimilarValuesWithinRange(array, element, threshold):
+    output = []
+    for i in range(0, len(array)):
+        item = array[i]
+        if (abs(item - element) <= threshold):
+            output.append([item, i])
+    print("Similar Values: " + str(output))
+    return np.array(output)
+
+# poly = Shape([[2,1],[10,1],[10,10],[1,10]])
+# print(poly)
+# print(poly.vertices[:,0])
+# print(poly.vertices[:,1])
+# print([np.mean(poly.vertices[:,0]), np.mean(poly.vertices[:,1])])
+# array = [123,142,11,14,11,24,12,10,9]
+# print(straightenAlongAxis(array, 5))
+# print(array)

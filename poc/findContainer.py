@@ -7,18 +7,26 @@ import imutils
 import cv2
 import random
 import math
+from shape import Shape
 
-# Read in arguments
-args = argparse.ArgumentParser()
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True, help="Input path.")
-args = vars(ap.parse_args())
+# Remove contours that are smaller than a given threshold, determined by the size
+# of the image
+def filterContours(contours, imageSize):
+    height, width, channels = imageSize
 
-def getShapeContours(image):
+    contours = np.array(contours)
 
-    # Load the image.
-    image = cv2.imread(args["image"])
-    image = imutils.resize(image, width=300)
+    # Contours with area less than 1% of the image size will be removed.
+    threshold = 0.0025 * height * width
+
+    booleanMask = [(cv2.contourArea(cont) > threshold) for cont in contours]
+
+    return contours[booleanMask].tolist()
+
+
+def getContainers(image):
+
+    print(image.shape)
 
     # Convert the image to grayscale.
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -48,6 +56,8 @@ def getShapeContours(image):
     # about how to represent the lines that make it up (e.g. the endpoints of the lines).
     canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    # Filter miniscule contours.
+    contours = filterContours(contours, image.shape)
 
     approximatedContours = []
     # Draw the contours to see what we found.
@@ -58,17 +68,45 @@ def getShapeContours(image):
 
         # Approximating with approxPolyDP.
         # Calculate epsilon as a fraction of the perimeter of the contour.
-        epsilon = 0.01 * cv2.arcLength(cont, True)
+        epsilon = 0.012 * cv2.arcLength(cont, True)
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
         # print("Contour: " + str(cont) + ". Averaged: " + str(approx))
 
         approximatedContours.append(approx)
 
+    return ([Shape(contour) for contour in approximatedContours], approximatedContours)
 
-    # cv2.drawContours(image, approximatedContours, -1, (0,255,0))
+if (__name__ == "__main__"):
+    # Read in arguments
+    args = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True, help="Input path.")
+    args = vars(ap.parse_args())
 
-    # print("Found : " + str(len(approximatedContours)) + " shapes.")
+    # Load the image.
+    image = cv2.imread(args["image"])
+    image = imutils.resize(image, width=300)
 
-    # cv2.imshow('Image', image)
-    # cv2.waitKey(0)
+    # Find containers
+    shapes, containerContours = getContainers(image)
+
+    # Get the approximated container vertices from the shape objects and use
+    # this to draw the contours.
+    #
+    # print([np.array(shape.vertices) for shape in shapes])
+
+    # Add shape type at midpoint of the shape.
+    for shape in shapes:
+        # If the shape has four vertices, then get the bounding rect.
+        if (shape.type == "rectangle"):
+            (x, y, w, h) = cv2.boundingRect(shape.vertices)
+            cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),2)
+        print(shape)
+        cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+
+    # print("Found : " + str(len(containerContours)) + " shapes.")
+    cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,255,0))
+
+    cv2.imshow('Image', image)
+    cv2.waitKey(0)
