@@ -9,6 +9,7 @@ import imutils
 import cv2
 import random
 import math
+from clean import removeInnerRectangles
 from shape import Shape
 
 # Remove contours that are smaller than a given threshold, determined by the size
@@ -27,6 +28,8 @@ def filterContours(contours, imageSize):
 
 
 def getContainers(image):
+
+    imgHeight, imgWidth, channels = image.shape
 
     print(image.shape)
 
@@ -70,14 +73,22 @@ def getContainers(image):
 
         # Approximating with approxPolyDP.
         # Calculate epsilon as a fraction of the perimeter of the contour.
-        epsilon = 0.012 * cv2.arcLength(cont, True)
+        epsilon = 0.02 * cv2.arcLength(cont, True)
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
         # print("Contour: " + str(cont) + ". Averaged: " + str(approx))
 
         approximatedContours.append(approx)
 
-    return ([Shape(contour) for contour in approximatedContours], approximatedContours)
+    # Create shapes.
+    shapes = [Shape(contour) for contour in approximatedContours]
+
+    # Remove inner re
+    # ctangles detected from each container.
+    distanceThreshold = 0.001 * imgWidth * imgHeight
+    shapes = removeInnerRectangles(shapes, 0.1, distanceThreshold)
+
+    return (shapes, approximatedContours)
 
 if (__name__ == "__main__"):
     # Read in arguments
@@ -97,18 +108,18 @@ if (__name__ == "__main__"):
     # this to draw the contours.
     #
     # print([np.array(shape.vertices) for shape in shapes])
-
+    print("Detected: " + str(len(shapes)) + " containers.")
     # Add shape type at midpoint of the shape.
     for shape in shapes:
         # If the shape has four vertices, then get the bounding rect.
         if (shape.type == "rectangle"):
-            (x, y, w, h) = cv2.boundingRect(shape.vertices)
-            cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),2)
+            (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
+            cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
         print(shape)
         cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
 
     # print("Found : " + str(len(containerContours)) + " shapes.")
-    cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,255,0))
+    cv2.drawContours(image, [np.array(shape.rawVertices) for shape in shapes], -1, (0,0,255))
 
     cv2.imshow('Image', image)
     cv2.waitKey(0)
