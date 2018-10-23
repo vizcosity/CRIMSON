@@ -1,5 +1,7 @@
 # This module extracts the coordinates of the vertices of the outermost container
 # in the image passed.
+#
+# References to explore: [https://stackoverflow.com/questions/29156091/opencv-edge-border-detection-based-on-color]
 
 import numpy as np
 import argparse
