@@ -8,19 +8,23 @@ import cv2
 
 class Shape:
 
-    def __init__(self, vertices):
+    def __init__(self, vertices, contained=None):
         if (type(vertices) != np.ndarray):
             vertices = np.array(vertices)
         self.rawVertices = vertices
         self.rawVertices = vertices.reshape(-1,2)
         self.type = self.determineShapeType()
-        self.vertices = self.tidyAndApproximate()
-        self.midpoint = self.calculateMidpoint()
         self.rawArea = self.calculateArea(self.rawVertices)
+        self.vertices = self.tidyAndApproximate()
+        self.edges = self.getEdges()
+        self.midpoint = self.calculateMidpoint()
         self.area = self.calculateArea(self.vertices)
         self.width = self.calculateWidth()
         self.height = self.calculateHeight()
         self.numSides = len(self.vertices)
+
+        # Holds shapes which are contained by the current shape.
+        self.contained = contained
 
     def calculateMidpoint(self):
         return [int(round(np.mean(self.vertices[:,0]))), int(round(np.mean(self.vertices[:,1])))]
@@ -39,6 +43,30 @@ class Shape:
     def calculateArea(self, vertices):
         return cv2.contourArea(vertices)
 
+    # Returns a list of edge lines that compose the shape.
+    def getEdges(self):
+        edges = []
+        print("Vertices: "+ str(self.vertices))
+        for i in range(0, len(self.vertices) -1):
+            edge = (self.vertices[i], self.vertices[i+1])
+            # print("Adding edge: "+ str(edge))
+            edges.append(edge)
+        edges.append((self.vertices[-1], self.vertices[0]))
+        return edges
+
+
+
+    # Returns true if the this contains the shape passed.
+    def contains(self,otherShape):
+        # Check if all vertices are contained within the current shape by using
+        # half-plane insideness. [CS324]
+
+        for edge in self.edges:
+            for vertex in otherShape.vertices:
+                if not pointWithinPlane(edge, vertex): return False
+
+        return True
+
     # Calculates euclidean distance between the midpoint of the current shape
     # and the other shape passed.
     def distance(self, shape):
@@ -52,8 +80,8 @@ class Shape:
             # Iterate over each x coordinate. If the x-coordinates diverge by
             # a small amount (< 5 pixels), then we average the two, keeping the
             # y values intact.
-            output[:,0] = straightenAlongAxis(output[:,0], 20)
-            output[:,1] = straightenAlongAxis(output[:,1], 20)
+            output[:,0] = straightenAlongAxis(output[:,0], int(self.rawArea) * 0.05)
+            output[:,1] = straightenAlongAxis(output[:,1], int(self.rawArea) * 0.05)
         return output
 
 
@@ -75,6 +103,54 @@ class Shape:
         return self.type == other.type and arrCompare(self.rawVertices, other.rawVertices) and \
             arrCompare(self.vertices, other.vertices) and self.midpoint == other.midpoint and \
             self.width == other.width and self.height == other.height and self.area == other.area
+
+# Returns a vector representing the equation of the implicit line equation of
+# the form ax + by + c, which will be used to test the insideness of points.
+def calulateImplicitLineEquation(line):
+    p1, p2 = line
+
+    # Fin
+    m = (p2[0] - p1[0]) / (p2[1] - p1[1])
+    c = p1[1] - (m * p1[0])
+
+    # Construct row vector.
+    eqn = [-m, 1, -c]
+    return eqn
+
+# Checks if the point passed is on or beneath the line.
+# If line is along an axis and pointing up, checks if the point is to the right of the line.
+# If line pointing right, checks if point below line.
+# where direction is taken from the start point to the end point of the line.
+def pointWithinPlane(line, p):
+    # Check if the line is along an axis.
+    startPoint, endPoint = line
+
+    # print("Line: "+ str(line))
+    # print("Stat : "+ str(startPoint) + ", End: "+ str(endPoint))
+    # print("Pt: "+str(p))
+
+    if (startPoint[0] == endPoint[0]):
+        # Determine direction of line.
+        if (startPoint[1] < endPoint[1]):
+            # Direction is up, check if point is to the right of line.
+            return p[0] > startPoint[0]
+        # Direction is down, check if point is to the left of the line.
+        else: return p[0] < startPoint[0]
+
+    if (startPoint[1] == endPoint[1]):
+        # Determine direction of line.
+        if (startPoint[0] < endPoint[0]):
+            # Line is pointing right, check if point is below line.
+            return p[1] < startPoint[1]
+        else:
+            # Direction is left, check if point is above line.
+            return p[1] > startPoint[1]
+
+    # If line not along axis, construct implicit equation.
+    eqn = calulateImplicitLineEquation(line)
+
+    return np.dot([p[0], p[1], 1], eqn) < 0
+
 
 # Returns true if two arrays are equal
 def arrCompare(arr1, arr2):

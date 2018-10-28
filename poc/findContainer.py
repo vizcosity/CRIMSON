@@ -115,11 +115,11 @@ if (__name__ == "__main__"):
         if (shape.type == "rectangle"):
             (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
             cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
-        print(shape)
+        # print(shape)
         cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
 
     # print("Found : " + str(len(containerContours)) + " shapes.")
-    cv2.drawContours(image, [np.array(shape.rawVertices) for shape in shapes], -1, (0,0,255))
+    # cv2.drawContours(image, [np.array(shape.rawVertices) for shape in shapes], -1, (0,0,255))
 
     cv2.imshow('Image', image)
     cv2.waitKey(0)
