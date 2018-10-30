@@ -8,9 +8,10 @@ import argparse
 import imutils
 import cv2
 import random
+import os
 import math
 from clean import removeInnerRectangles
-from shape import Shape
+from shape import Shape, nestShapes
 
 # Remove contours that are smaller than a given threshold, determined by the size
 # of the image
@@ -20,7 +21,7 @@ def filterContours(contours, imageSize):
     contours = np.array(contours)
 
     # Contours with area less than 1% of the image size will be removed.
-    threshold = 0.0025 * height * width
+    threshold = 0.001 * height * width
 
     booleanMask = [(cv2.contourArea(cont) > threshold) for cont in contours]
 
@@ -53,6 +54,9 @@ def getContainers(image):
     # Canny edge detection.
     canny = cv2.Canny(image, 100, 200)
 
+    cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.drawContours(image, cont2, -1, (255,0,0))
+
     # Finding contours based off of the result of the Canny edge detection.
     # Contour detection in OpenCV finds contours which are white, on a BLACK background.
     # The output of this is a numpy array of (x,y) coordinates of the boundary points
@@ -60,9 +64,14 @@ def getContainers(image):
     # CHAIN_APPROX_SIMPLE compresses the contours by only storing minimal information
     # about how to represent the lines that make it up (e.g. the endpoints of the lines).
     canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image, contours, -1, (255,0,0))
+
+    print("Found: "+ str(len(contours))+ " contours.")
 
     # Filter miniscule contours.
     contours = filterContours(contours, image.shape)
+
+    print("Remaining contours after filtering: "+ str(len(contours)))
 
     approximatedContours = []
     # Draw the contours to see what we found.
@@ -73,7 +82,7 @@ def getContainers(image):
 
         # Approximating with approxPolyDP.
         # Calculate epsilon as a fraction of the perimeter of the contour.
-        epsilon = 0.02 * cv2.arcLength(cont, True)
+        epsilon = 0.012 * cv2.arcLength(cont, True)
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
         # print("Contour: " + str(cont) + ". Averaged: " + str(approx))
@@ -81,45 +90,80 @@ def getContainers(image):
         approximatedContours.append(approx)
 
     # Create shapes.
-    shapes = [Shape(contour) for contour in approximatedContours]
+    shapes = [Shape(id=str(i), vertices=approximatedContours[i]) for i in range(0,len(approximatedContours))]
 
-    # Remove inner re
-    # ctangles detected from each container.
+    # Remove inner rectangles detected from each container.
     distanceThreshold = 0.001 * imgWidth * imgHeight
-    shapes = removeInnerRectangles(shapes, 0.1, distanceThreshold)
+    shapes = removeInnerRectangles(shapes, 0.95, distanceThreshold)
 
     return (shapes, approximatedContours)
+
+def annotateShapeTypes(shapes, image):
+    # Annotate shape type at midpoint of the shape.
+    for shape in shapes:
+        # If the shape has four vertices, then get the bounding rect.
+        # if (shape.type == "rectangle"):
+        #     (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
+        #     cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
+        # print(shape)
+        cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+
+# Annotates by shape name, adding information about what shape contains it if so.
+def annotateNestedShapes(shapes, owner=None, image=None):
+    if (len(shapes) == 0): return
+    print("Annotating nested shapes with owner : "+ str(owner))
+    for shape in shapes:
+        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        # Call recursively for all shapes that this shape contains.
+        annotateNestedShapes(shape.contained, owner=shape, image=image)
+
+
+
 
 if (__name__ == "__main__"):
     # Read in arguments
     args = argparse.ArgumentParser()
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--image", required=True, help="Input path.")
+    ap.add_argument("-o", "--output", required=False)
     args = vars(ap.parse_args())
 
     # Load the image.
     image = cv2.imread(args["image"])
     image = imutils.resize(image, width=300)
 
+    # Create white image.
+    whiteImg = np.zeros((image.shape[0],image.shape[1],3)) + 255
+
     # Find containers
     shapes, containerContours = getContainers(image)
 
+    shapes = [shape for shape in shapes if shape.area != 0]
+
+    print("Detected " + str(len(shapes)) + " shapes in image.")
+
+    for shape in shapes:
+        print(shape.area)
+
+    print("Nesting shapes contained within each other.")
+    nested = nestShapes(shapes)
+    print("Nested: " + str(nested))
+
+    print("Annotating nested shapes.")
+    annotateNestedShapes(nested, owner=None, image=image)
+    annotateNestedShapes(nested, owner=None, image=whiteImg)
+
     # Get the approximated container vertices from the shape objects and use
     # this to draw the contours.
-    #
-    # print([np.array(shape.vertices) for shape in shapes])
-    print("Detected: " + str(len(shapes)) + " containers.")
-    # Add shape type at midpoint of the shape.
-    for shape in shapes:
-        # If the shape has four vertices, then get the bounding rect.
-        if (shape.type == "rectangle"):
-            (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
-            cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
-        # print(shape)
-        cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+    cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
+    cv2.drawContours(whiteImg, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
 
-    # print("Found : " + str(len(containerContours)) + " shapes.")
-    # cv2.drawContours(image, [np.array(shape.rawVertices) for shape in shapes], -1, (0,0,255))
-
-    cv2.imshow('Image', image)
-    cv2.waitKey(0)
+    if (args['output']):
+        fileName = args['image'].split('/')[-1]
+        outputDir = "../test/output/"+fileName.split('.')[0]
+        if (not os.path.exists(outputDir)): os.makedirs(outputDir)
+        cv2.imwrite(outputDir+"/annotated.png", image)
+        cv2.imwrite(outputDir+"/containers.png", whiteImg)
+    else:
+        cv2.imshow('Image', image)
+        cv2.waitKey(0)
