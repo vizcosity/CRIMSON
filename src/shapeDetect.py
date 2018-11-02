@@ -23,6 +23,8 @@ image = imutils.resize(image, width=300)
 # Get containers.
 shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)
 
+print(shapes)
+
 # Get serialised hierarchy.
 jsonHierarchy = serialiseShapeHierachy(shapes)
 

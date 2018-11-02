@@ -33,6 +33,9 @@ def filterContours(contours, imageSize):
 
     return contours[booleanMask].tolist()
 
+# Apply convex hull to fill in any gaps in contours.
+def fillGaps(contours):
+    return [ cv2.convexHull(cont) for cont in contours ]
 
 def getContainers(image, annotate=False):
 
@@ -77,6 +80,8 @@ def getContainers(image, annotate=False):
     # Filter miniscule contours.
     contours = filterContours(contours, image.shape)
 
+    contours = fillGaps(contours)
+
     log("Remaining contours after filtering: "+ str(len(contours)))
 
     approximatedContours = []
@@ -104,11 +109,9 @@ def getContainers(image, annotate=False):
     # Remove inner rectangles detected from each container.
     distanceThreshold = 0.0001 * imgWidth * imgHeight
     print([cv2.contourArea(shape.vertices) for shape in shapes])
-    shapes = removeInnerRectangles(shapes, 0.9, distanceThreshold)
+    shapes = removeInnerRectangles(shapes, 0.7, distanceThreshold)
 
     whiteImg = createWhiteImg((imgHeight, imgWidth))
-
-
 
     # Nest the shapes within each other.
     shapes = nestShapes(shapes)

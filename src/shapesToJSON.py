@@ -12,7 +12,6 @@ import json
 import argparse
 
 def composeShapeHierarchy(containers):
-
     output = {}
 
     for container in containers:
