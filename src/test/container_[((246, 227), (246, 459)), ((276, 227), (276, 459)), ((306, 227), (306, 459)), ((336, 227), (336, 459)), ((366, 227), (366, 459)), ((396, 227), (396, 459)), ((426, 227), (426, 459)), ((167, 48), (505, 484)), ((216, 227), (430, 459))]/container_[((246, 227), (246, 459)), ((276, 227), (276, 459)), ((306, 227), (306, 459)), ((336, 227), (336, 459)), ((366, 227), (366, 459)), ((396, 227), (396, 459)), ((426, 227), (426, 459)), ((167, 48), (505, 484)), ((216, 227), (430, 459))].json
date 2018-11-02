@@ -1,0 +1,126 @@
+{
+  "rectangle0": {
+    "type": "rectangle",
+    "meta": {
+      "width": 200.0,
+      "height": 258.0,
+      "midpoint": [
+        197,
+        156
+      ],
+      "area": 51600.0,
+      "vertices": [
+        [
+          97,
+          27
+        ],
+        [
+          97,
+          285
+        ],
+        [
+          297,
+          285
+        ],
+        [
+          297,
+          27
+        ]
+      ]
+    },
+    "contains": [
+      {
+        "rectangle2": {
+          "type": "rectangle",
+          "meta": {
+            "width": 127.0,
+            "height": 138.0,
+            "midpoint": [
+              190,
+              201
+            ],
+            "area": 17526.0,
+            "vertices": [
+              [
+                126,
+                132
+              ],
+              [
+                126,
+                270
+              ],
+              [
+                253,
+                270
+              ],
+              [
+                253,
+                132
+              ]
+            ]
+          },
+          "contains": [
+            {
+              "rectangle8": {
+                "type": "rectangle",
+                "meta": {
+                  "width": 36.0,
+                  "height": 136.0,
+                  "midpoint": [
+                    162,
+                    201
+                  ],
+                  "area": 4896.0,
+                  "vertices": [
+                    [
+                      144,
+                      133
+                    ],
+                    [
+                      144,
+                      269
+                    ],
+                    [
+                      180,
+                      269
+                    ],
+                    [
+                      180,
+                      133
+                    ]
+                  ]
+                },
+                "contains": []
+              }
+            },
+            {
+              "polygon3": {
+                "type": "polygon",
+                "meta": {
+                  "width": 0.0,
+                  "height": 135.0,
+                  "midpoint": [
+                    250,
+                    200
+                  ],
+                  "area": 0.0,
+                  "vertices": [
+                    [
+                      250,
+                      133
+                    ],
+                    [
+                      250,
+                      268
+                    ]
+                  ]
+                },
+                "contains": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

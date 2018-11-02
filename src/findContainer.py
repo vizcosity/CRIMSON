@@ -13,6 +13,12 @@ import math
 from clean import removeInnerRectangles
 from shape import Shape, nestShapes
 
+_DEBUG = True
+
+# Logging.
+def log(message):
+    if (_DEBUG): print("FIND CONTAINER | "+str(message))
+
 # Remove contours that are smaller than a given threshold, determined by the size
 # of the image
 def filterContours(contours, imageSize):
@@ -28,7 +34,7 @@ def filterContours(contours, imageSize):
     return contours[booleanMask].tolist()
 
 
-def getContainers(image):
+def getContainers(image, annotate=False):
 
     imgHeight, imgWidth, channels = image.shape
 
@@ -64,14 +70,14 @@ def getContainers(image):
     # CHAIN_APPROX_SIMPLE compresses the contours by only storing minimal information
     # about how to represent the lines that make it up (e.g. the endpoints of the lines).
     canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(image, contours, -1, (255,0,0))
+    # cv2.drawContours(image, contours, -1, (255,0,0))
 
-    print("Found: "+ str(len(contours))+ " contours.")
+    log("Found: "+ str(len(contours))+ " contours.")
 
     # Filter miniscule contours.
     contours = filterContours(contours, image.shape)
 
-    print("Remaining contours after filtering: "+ str(len(contours)))
+    log("Remaining contours after filtering: "+ str(len(contours)))
 
     approximatedContours = []
     # Draw the contours to see what we found.
@@ -92,11 +98,27 @@ def getContainers(image):
     # Create shapes.
     shapes = [Shape(id=str(i), vertices=approximatedContours[i]) for i in range(0,len(approximatedContours))]
 
-    # Remove inner rectangles detected from each container.
-    distanceThreshold = 0.001 * imgWidth * imgHeight
-    shapes = removeInnerRectangles(shapes, 0.95, distanceThreshold)
+    # Filter shapes by removing those with area of 0.
+    shapes = [shape for shape in shapes if shape.area > 0]
 
-    return (shapes, approximatedContours)
+    # Remove inner rectangles detected from each container.
+    distanceThreshold = 0.0001 * imgWidth * imgHeight
+    print([cv2.contourArea(shape.vertices) for shape in shapes])
+    shapes = removeInnerRectangles(shapes, 0.9, distanceThreshold)
+
+    whiteImg = createWhiteImg((imgHeight, imgWidth))
+
+
+
+    # Nest the shapes within each other.
+    shapes = nestShapes(shapes)
+
+    # Annotate nested shapes if desired.
+    if (annotate):
+        annotateNestedShapes(shapes, owner=None, image=image)
+        annotateNestedShapes(shapes, owner=None, image=whiteImg)
+
+    return (shapes, approximatedContours, image, whiteImg)
 
 def annotateShapeTypes(shapes, image):
     # Annotate shape type at midpoint of the shape.
@@ -111,14 +133,22 @@ def annotateShapeTypes(shapes, image):
 # Annotates by shape name, adding information about what shape contains it if so.
 def annotateNestedShapes(shapes, owner=None, image=None):
     if (len(shapes) == 0): return
-    print("Annotating nested shapes with owner : "+ str(owner))
+    # print("Annotating nested shapes with owner : "+ str(owner))
     for shape in shapes:
+        # print("Annotating : "+ str(shape))
+        if (shape.type == 'rectangle'):
+            cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255))
+        else:
+            cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
         cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
         # Call recursively for all shapes that this shape contains.
         annotateNestedShapes(shape.contained, owner=shape, image=image)
 
 
 
+def createWhiteImg(size):
+    # Create white image.
+    return np.zeros((size[0], size[1],3)) + 255
 
 if (__name__ == "__main__"):
     # Read in arguments
@@ -138,7 +168,7 @@ if (__name__ == "__main__"):
     # Find containers
     shapes, containerContours = getContainers(image)
 
-    shapes = [shape for shape in shapes if shape.area != 0]
+    # shapes = [shape for shape in shapes if shape.area != 0]
 
     print("Detected " + str(len(shapes)) + " shapes in image.")
 

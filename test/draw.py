@@ -81,11 +81,23 @@ def drawRandomContainer(img, bound, minSizeProportion, nestedCount=0):
     return [drawnRect] + drawRandomContainer(img, drawnRect, minSizeProportion, nestedCount - 1) \
         if nestedCount > 0 else [drawnRect]
 
+def drawContainer(image, topLeft, bottomRight):
+    cv2.rectangle(image, topLeft, bottomRight, (0,0,0), 2)
+
 if (__name__ == "__main__"):
 
+    imgSize = (512,512)
+
     whiteImg = np.zeros((512,512,3)) + 255
-    rects = drawRandomContainer(whiteImg, bound=None, minSizeProportion=(0.5,0.5), nestedCount=1)
+
+    windowBound = ((10,10), (imgSize[0]-10, imgSize[0] - 10))
+
+    # Draw our main window.
+    drawContainer(whiteImg, windowBound[0], windowBound[1])
+
+    rects = drawRandomContainer(whiteImg, bound=windowBound, minSizeProportion=(0.5,0.5), nestedCount=1)
     grid = divideContainerIntoGrid(whiteImg, rects[len(rects) - 1], axis=random.randint(0,1), amount=random.randint(0,10))
     # grid = divideContainerIntoGrid(whiteImg, bound=None, axis=0, amount=5)
-    cv2.imwrite('containers/container_'+str(grid+rects)+'.png', whiteImg)
+    name = 'c_'+hex(hash(str(grid + rects)))
+    cv2.imwrite('containers/'+name+'.png', whiteImg)
     # cv2.waitKey(0)

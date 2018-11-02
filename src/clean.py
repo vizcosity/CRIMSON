@@ -18,7 +18,7 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
 
     output = shapes.copy()
 
-    for shape in shapes:
+    for shape in output:
 
         # areaThreshold = shape.area * areaPercentageThreshold
         # log("Distance threshold of " + str(distanceThreshold))
@@ -27,9 +27,8 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
         # Find the distance from this shape and every other shape of the same kind.
         for otherShape in output:
 
-            smallerShape = shape if shape.area < otherShape.area else otherShape
-            largerShape = shape if shape.area > otherShape.area else otherShape
-
+            # Skip iteration if otherShape is smaller than shape.
+            if (shape.area > otherShape.area): continue
             if (shape.type != otherShape.type or shape == otherShape): continue
 
             # areaDifference = abs(shape.area - otherShape.area)
@@ -38,14 +37,14 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
             # If the rectangles are similar, keep the larger one. It is desired
             # that the outermost bounding rectangle is kept in order to represent
             # containers as accurately as possible.
-            if (smallerShape.area / largerShape.area > areaPercentageThreshold and distance < distanceThreshold):
+            if (shape.area / otherShape.area > areaPercentageThreshold and distance < distanceThreshold):
 
-                log("Area Ration between " + str(shape) +"("+str(shape.area)+")" + " and " + str(otherShape) + "("+str(otherShape.area)+")"+ ": " + str(smallerShape.area / largerShape.area))
-                log("Distance between " + str(shape) + " and " + str(otherShape) + ": " + str(distance))
+                log("Area Ration between " + str(shape) +"("+str(shape.area)+")" + " and " + str(otherShape) + "("+str(otherShape.area)+")"+ ": " + str(shape.area / otherShape.area))
+                log("Distance between " + str(shape) + " and " + str(otherShape) + ": " + str(distance)+". Threshold: "+ str(distanceThreshold))
                 log("Midpoint " + str(shape) + " : " + str(shape.midpoint) + ", Midpoint " + str(otherShape) + ": " + str(otherShape.midpoint))
-                log("["+str(shape)+"]"+ " and " + "["+str(otherShape)+"]" + " deemed to be similar. Removing ["+str(smallerShape)+"]")
+                log("["+str(shape)+"]"+ " and " + "["+str(otherShape)+"]" + " deemed to be similar. Removing ["+str(shape)+"]")
 
-                output = [ shape for shape in output if shape != smallerShape ]
+                output = [ s for s in output if s != shape ]
 
                 log("Resulting output: " + str(output))
     return output

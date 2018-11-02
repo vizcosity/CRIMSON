@@ -8,6 +8,11 @@ from geometry import *
 from util import *
 import cv2
 
+_DEBUG = False
+
+def log(message):
+    if (_DEBUG): print("SHAPE | " + str(message))
+
 class Shape:
 
     def __init__(self, vertices, id=None):
@@ -111,7 +116,7 @@ def addContainedToShape(shape, originalShapeList):
         # Skip if the shapeToSeeIfContained is the shape we are adding to.
         if (shapeToSeeIfContained == shape): continue
         if (shape.contains(shapeToSeeIfContained)):
-            print("Adding:" + str([shapeToSeeIfContained]) + " to " + str([shape]))
+            log("Adding:" + str([shapeToSeeIfContained]) + " to " + str([shape]))
             shape.addContainedShape(shapeToSeeIfContained)
         else:
             # If shapeToSeeIfContained not contained in shape, then we add
