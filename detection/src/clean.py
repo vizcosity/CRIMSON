@@ -8,7 +8,7 @@ import numpy as np
 
 # Logging.
 def log(message):
-    # return
+    return
     print("CLEAN | " + str(message))
 
 # Given a set of contours, calculates the area for each contour and the midpoint.

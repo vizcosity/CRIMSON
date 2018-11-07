@@ -12,11 +12,12 @@ import json
 import argparse
 
 def composeShapeHierarchy(containers):
-    output = {}
 
+    output = []
     for container in containers:
 
-        output[str(container)] = {
+        output.append({
+            'id': str(container),
             'type': container.type,
             'meta': {
                 'width': float(container.width),
@@ -26,7 +27,7 @@ def composeShapeHierarchy(containers):
                 'vertices': container.vertices.tolist()
             },
             'contains': [ composeShapeHierarchy([shape]) for shape in container.contained]
-        }
+        })
 
     return output
 

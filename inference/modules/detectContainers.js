@@ -13,7 +13,7 @@ module.exports = async (imagePath) => {
 
   // Resolve path relative to root dir so that it can be interpreted correctly
   // by the python script.
-  imagePath = resolve(__dirname, imagePath);
+  // imagePath = resolve(__dirname, imagePath);
 
   log("Detecting shapes for "+ imagePath);
 

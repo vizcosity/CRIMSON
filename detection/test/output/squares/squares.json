@@ -1,5 +1,6 @@
-{
-  "rectangle9": {
+[
+  {
+    "id": "rectangle9",
     "type": "rectangle",
     "meta": {
       "width": 66.0,
@@ -30,7 +31,8 @@
     },
     "contains": []
   },
-  "rectangle3": {
+  {
+    "id": "rectangle3",
     "type": "rectangle",
     "meta": {
       "width": 55.0,
@@ -61,7 +63,8 @@
     },
     "contains": []
   },
-  "rectangle2": {
+  {
+    "id": "rectangle2",
     "type": "rectangle",
     "meta": {
       "width": 58.0,
@@ -92,7 +95,8 @@
     },
     "contains": []
   },
-  "rectangle0": {
+  {
+    "id": "rectangle0",
     "type": "rectangle",
     "meta": {
       "width": 55.0,
@@ -123,7 +127,8 @@
     },
     "contains": []
   },
-  "rectangle8": {
+  {
+    "id": "rectangle8",
     "type": "rectangle",
     "meta": {
       "width": 55.0,
@@ -154,7 +159,8 @@
     },
     "contains": []
   },
-  "rectangle6": {
+  {
+    "id": "rectangle6",
     "type": "rectangle",
     "meta": {
       "width": 50.0,
@@ -185,7 +191,8 @@
     },
     "contains": []
   },
-  "triangle5": {
+  {
+    "id": "triangle5",
     "type": "triangle",
     "meta": {
       "width": 56.0,
@@ -212,4 +219,4 @@
     },
     "contains": []
   }
-}
+]

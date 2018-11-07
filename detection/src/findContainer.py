@@ -13,7 +13,7 @@ import math
 from clean import removeInnerRectangles
 from shape import Shape, nestShapes
 
-_DEBUG = True
+_DEBUG = False
 
 # Logging.
 def log(message):
@@ -40,8 +40,6 @@ def fillGaps(contours):
 def getContainers(image, annotate=False):
 
     imgHeight, imgWidth, channels = image.shape
-
-    print(image.shape)
 
     # Convert the image to grayscale.
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -108,7 +106,7 @@ def getContainers(image, annotate=False):
 
     # Remove inner rectangles detected from each container.
     distanceThreshold = 0.0001 * imgWidth * imgHeight
-    print([cv2.contourArea(shape.vertices) for shape in shapes])
+    # print([cv2.contourArea(shape.vertices) for shape in shapes])
     shapes = removeInnerRectangles(shapes, 0.7, distanceThreshold)
 
     whiteImg = createWhiteImg((imgHeight, imgWidth))

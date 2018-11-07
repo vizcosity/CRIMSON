@@ -10,31 +10,40 @@ import imutils
 import json
 import argparse
 
-args = argparse.ArgumentParser()
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True, help="Input path.")
-ap.add_argument("-o", "--output", required=False)
-args = vars(ap.parse_args())
+def outputResultsToDir(dir, filename, json, annotated, containers):
+    # Output results.
 
-# Load the image.
-image = cv2.imread(args["image"])
-image = imutils.resize(image, width=300)
+    # If the output argument has been passed, then we write the output to the
+    # directory specified along with all the shape annotation. Otherwise we
+    # assume that the script is being called from another process and should
+    # simply print the produced JSON to the stdout stream.
+    if (not os.path.exists(dir+'/'+filename)):
+        os.makedirs(dir+'/'+filename)
+    jsonFile = open(dir+"/"+filename+"/"+filename+'.json', mode='w')
+    jsonFile.write(json)
 
-# Get containers.
-shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)
+    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_annotated.png', annotated)
 
-print(shapes)
+    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_containers.png', containers)
 
-# Get serialised hierarchy.
-jsonHierarchy = serialiseShapeHierachy(shapes)
 
-# Output results.
-filename = args['image'].split('/')[-1].split('.')[0]
-if (not os.path.exists(args['output']+'/'+filename)):
-    os.makedirs(args['output']+'/'+filename)
-jsonFile = open(args['output']+"/"+filename+"/"+filename+'.json', mode='w')
-jsonFile.write(jsonHierarchy)
+if (__name__ == "__main__"):
+    # print("WE DOIN IT FAM.")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True, help="Input path.")
+    ap.add_argument("-o", "--output", required=False)
+    args = vars(ap.parse_args())
+    # Load the image.
+    image = cv2.imread(args["image"])
+    image = imutils.resize(image, width=300)
 
-cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_annotated.png', image)
+    # Get containers.
+    shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)
 
-cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_containers.png', whiteImg)
+    # Get serialised hierarchy.
+    jsonHierarchy = serialiseShapeHierachy(shapes)
+
+    if (args['output']):
+        filename = args['image'].split('/')[-1].split('.')[0]
+        outputResultsToDir(args['output'], filename, jsonHierarchy, image, whiteImg)
+    else: print(json.dumps(jsonHierarchy, indent=4))
