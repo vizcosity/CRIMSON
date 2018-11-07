@@ -25,9 +25,22 @@ module.exports = async (imagePath) => {
     });
 
   // Initialise analysis and return result as a JSON object.
-  var result = await detectShapes();
+  var output = {};
+  var result;
 
-  return JSON.parse(result);
+  try {
+    result = await detectShapes();
+  } catch(e){
+    log("Error detecting shapes: ", e);
+  }
+
+  try {
+    output = JSON.parse(result);
+  } catch(e){
+    log("Error converting response to json:", result);
+  }
+
+  return output;
 }
 
 // Utility functions.

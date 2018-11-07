@@ -7,11 +7,11 @@ import numpy as np
 from geometry import *
 from util import *
 import cv2
-
-_DEBUG = False
+import os
 
 def log(message):
-    if (_DEBUG): print("SHAPE | " + str(message))
+    # if (os.environ['PY_DEBUG']): print("SHAPE | " + str(message))
+    pass
 
 class Shape:
 
@@ -28,14 +28,21 @@ class Shape:
         self.edges = getEdges(self.vertices)
         self.midpoint = calculateMidpoint(self.vertices)
         self.area = calculateArea(self.vertices)
-        self.width = calculateWidth(self.vertices)
-        self.height = calculateHeight(self.vertices)
+        self.width = float(calculateWidth(self.vertices))
+        self.height = float(calculateHeight(self.vertices))
+        # Relative height and width are fractions of the size of the container.
+        self.relativeHeight = 1.0
+        self.relativeWidth = 1.0
         self.numSides = len(self.vertices)
 
         # Holds shapes which are contained by the current shape.
         self.contained = []
 
     def addContainedShape(self,shape):
+
+        # Calculate relative width and height of child.
+        shape.relativeWidth = shape.width / self.width
+        shape.relativeHeight = shape.height / self.height
         self.contained.append(shape)
 
     # Returns true if the this contains the shape passed.
@@ -129,6 +136,18 @@ def addContainedToShape(shape, originalShapeList):
     # front of the shapes list and appending this to the back of the output list.
     return shape, output
 
+# Ensures that all shapes are contained within a global container.
+def nestWithinWindow(shapes, imgDimensions):
+    # If the output has more than a single shape, then we nest all the shapes within
+    # global container equal to the image size.
+    if (len(shapes) > 1):
+        window = Shape([ [0, 0], [0, imgDimensions[1]], [imgDimensions[0], imgDimensions[1]], [imgDimensions[0], 0] ])
+        window.id = "Main Container"
+        addContainedToShape(window, shapes)
+        shapes = [window]
+
+    return shapes
+
 # Iterates through each shape detected, checking to see if it contains other shapes.
 # Returns a dictionary of shapes representing the hierarchical structure.
 def nestShapes(shapes):
@@ -159,4 +178,6 @@ def nestShapes(shapes):
 
     # Process the rest of the list until it is empty, returning a list containing
     # shapes which contain all others.
+
+
     return [shape] + nestShapes(remaining)

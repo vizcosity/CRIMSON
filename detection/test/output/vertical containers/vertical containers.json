@@ -1,0 +1,139 @@
+[
+  {
+    "id": "Main Container",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 301.0,
+      "absoluteHeight": 224.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        150,
+        112
+      ],
+      "area": 67424.0,
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          224
+        ],
+        [
+          301,
+          224
+        ],
+        [
+          301,
+          0
+        ]
+      ]
+    },
+    "contains": [
+      {
+        "id": "4",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 276.0,
+          "absoluteHeight": 24.0,
+          "relativeWidth": "91.69435215946844%",
+          "relativeHeight": "10.714285714285714%",
+          "midpoint": [
+            150,
+            27
+          ],
+          "area": 6624.0,
+          "vertices": [
+            [
+              12,
+              15
+            ],
+            [
+              12,
+              39
+            ],
+            [
+              288,
+              39
+            ],
+            [
+              288,
+              15
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "2",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 276.0,
+          "absoluteHeight": 122.0,
+          "relativeWidth": "91.69435215946844%",
+          "relativeHeight": "54.46428571428571%",
+          "midpoint": [
+            150,
+            111
+          ],
+          "area": 33672.0,
+          "vertices": [
+            [
+              12,
+              50
+            ],
+            [
+              12,
+              172
+            ],
+            [
+              288,
+              172
+            ],
+            [
+              288,
+              50
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 276.0,
+          "absoluteHeight": 24.0,
+          "relativeWidth": "91.69435215946844%",
+          "relativeHeight": "10.714285714285714%",
+          "midpoint": [
+            150,
+            195
+          ],
+          "area": 6624.0,
+          "vertices": [
+            [
+              12,
+              183
+            ],
+            [
+              12,
+              207
+            ],
+            [
+              288,
+              207
+            ],
+            [
+              288,
+              183
+            ]
+          ]
+        },
+        "contains": []
+      }
+    ]
+  }
+]

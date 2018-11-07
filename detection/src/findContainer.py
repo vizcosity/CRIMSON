@@ -11,7 +11,8 @@ import random
 import os
 import math
 from clean import removeInnerRectangles
-from shape import Shape, nestShapes
+from util import *
+from shape import Shape, nestShapes, nestWithinWindow
 
 _DEBUG = False
 
@@ -111,8 +112,12 @@ def getContainers(image, annotate=False):
 
     whiteImg = createWhiteImg((imgHeight, imgWidth))
 
-    # Nest the shapes within each other.
+    # Nest the shapes within each other and ensure all live within a global window.
     shapes = nestShapes(shapes)
+    shapes = nestWithinWindow(shapes, (imgWidth, imgHeight))
+
+    # Sort shapes by vertical position.
+    shapes = sortShapesInVerticalAscendingOrder(shapes)
 
     # Annotate nested shapes if desired.
     if (annotate):

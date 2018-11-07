@@ -5,6 +5,7 @@
 
 from findContainer import getContainers
 from shape import nestShapes
+from functools import *
 import cv2
 import os
 import imutils
@@ -17,16 +18,18 @@ def composeShapeHierarchy(containers):
     for container in containers:
 
         output.append({
-            'id': str(container),
+            'id': str(container.id),
             'type': container.type,
             'meta': {
-                'width': float(container.width),
-                'height': float(container.height),
+                'absoluteWidth': float(container.width),
+                'absoluteHeight': float(container.height),
+                'relativeWidth': str(float(container.relativeWidth * 100))+ "%",
+                'relativeHeight': str(float(container.relativeHeight * 100)) + "%",
                 'midpoint': container.midpoint,
                 'area': float(container.area),
                 'vertices': container.vertices.tolist()
             },
-            'contains': [ composeShapeHierarchy([shape]) for shape in container.contained]
+            'contains': reduce(lambda prev, next : prev + next, [ composeShapeHierarchy([shape]) for shape in container.contained ], [])
         })
 
     return output

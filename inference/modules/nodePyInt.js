@@ -39,25 +39,28 @@ module.exports = (path, args, ops) => {
         // Notify end of data write.
         if (data) pyProc.stdin.end();
 
+        var output = "";
+
         // On successful data output, resolve the Promise.s
         pyProc.stdout.on('data', (data) => {
 
           data = data.toString('utf8');
 
+          output += data;
+        });
+
+        // On close, resolve the promise as empty.
+        pyProc.on('close', () => {
+
           // Attempt to parse as JSON.
           try {
-            data = JSON.parse(data);
+            output = JSON.parse(output);
           } catch(e){
             // Data is not JSON. Return raw string.
             log(`Warning: Data returned by ${path} is not in JSON format.`);
           }
 
-          resolve(data);
-        });
-
-        // On close, resolve the promise as empty.
-        pyProc.on('close', () => {
-          resolve();
+          resolve(output);
         });
 
 

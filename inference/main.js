@@ -7,7 +7,6 @@
 const detectContainers = require('./modules/detectContainers');
 const generateCode = require('./modules/generateCode');
 const fs = require('fs');
-const shapeMap = require('./config/shapeMap.json');
 const { resolve } = require('path');
 
 var imagePath = process.argv[2];
@@ -17,11 +16,13 @@ detectContainers(imagePath).then(containers => {
 
   var containerCode = generateCode(containers);
 
-  var HTMLOutput = `
-  <!DOCTYPE html>
+  var HTMLOutput = `<!DOCTYPE html>
   <html>
+    <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
     <body>
-      ${containerCode}
+    \t${containerCode}
     </body>
   </html>`
 
