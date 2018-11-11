@@ -1,0 +1,10 @@
+{
+  "grid":{
+    "cellBudget": 12
+  },
+  "shapeMap": {
+    "rectangle": "container",
+    "triangle": "triangle",
+    "polygon": "polygon"
+  }
+}

@@ -4,7 +4,10 @@
   "description": "An inference pipeline developed for the CRIMSON rapid UI prototyping tool.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "benchmark": "DEBUG=true node main.js ../detection/test/images/benchmark.png",
+    "gridsample" : "DEBUG=true node main.js ../detection/test/images/grid_sample_1.png",
+    "gridsample2" : "DEBUG=true node main.js ../detection/test/images/grid_sample_2.png"
   },
   "repository": {
     "type": "git",
