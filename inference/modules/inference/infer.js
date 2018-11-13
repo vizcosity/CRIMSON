@@ -17,7 +17,8 @@ module.exports = function inferProperties(shapes){
     shape.type = inferType(shape);
 
     // Infer grids.
-   shape = inferGrid(shape);
+    shape = inferGrid(shape);
+    
   });
 
   return shapes;

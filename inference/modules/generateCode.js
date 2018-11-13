@@ -12,10 +12,18 @@
  // Generate code for a single shape element.
  function generateShapeCode(container, containingCode){
 
+
+
    if (!container) return "";
+
+   if (!container.class) container.class = container.type;
+
    return `
-   <div style="height:${container.meta.relativeHeight};" class="${container.type}" data-id="${container.id}">
-   <label style="align-self:flex-start;">${container.id}</label>
+   <div style="height:${container.meta.relativeHeight};" class="${container.class}" data-id="${container.id}">
+
+   <span class="label-wrap">
+    <label style="align-self:flex-start;">${container.id}</label>
+   </span>
       ${indent(containingCode, 8)}
    </div>`;
 

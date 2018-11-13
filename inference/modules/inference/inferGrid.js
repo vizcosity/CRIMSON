@@ -23,6 +23,23 @@ const sortShapesAlongXAxis = (shapes) => {
     return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
 }
 
+// Use inferred grid properties to determine class.
+const serialiseClasses = shapes => {
+
+  var output = [];
+
+  shapes.forEach(shape => {
+    if (shape.gridCell && shape.gridCell.count)
+      shape.class = `col-${shape.gridCell.count}`;
+    output.push(shape);
+  });
+
+  // console.log(shapes);
+
+  return shapes;
+
+}
+
 
 module.exports = (row) => {
 
@@ -39,6 +56,7 @@ module.exports = (row) => {
   row.contains = sortShapesAlongXAxis(row.contains);
 
   var cellBudget = config.grid.cellBudget;
+  var totalBudget = config.grid.cellBudget;
   // For each cell; determine the size of the cell and assign this to the shape.
   // Divide the relative width by reciprocal of cell budget and floor this.
   // Keep track of clipping amount and re-assign leftover cells from budget
@@ -49,7 +67,7 @@ module.exports = (row) => {
       return false;
     }
     if (!shape.gridCell) shape.gridCell = {};
-    var {numCells, clipSize} = determineNumOfGridCells(shape, cellBudget);
+    var {numCells, clipSize} = determineNumOfGridCells(shape, totalBudget);
     shape.gridCell.count = numCells;
     shape.gridCell.clipSize = clipSize;
     cellBudget -= numCells;
@@ -58,13 +76,28 @@ module.exports = (row) => {
 
   // Assign leftover cells to shapes with largest clip amount.
   while (cellBudget > 0){
-    var mostClipped = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize)[0];
-    mostClipped.cellBudget++;
+    var {id} = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize)[0];
+    log(`Adding budget to `, id);
+    console.log(row.contains.filter(shape => shape.id == id));
+    var mostClipped = row.contains.filter(shape => shape.id == id)[0];
+
+    // Assign a new cell.
+    mostClipped.gridCell.count++;
+
+    // Update clipping.
+    mostClipped.gridCell.clipSize -= 1;
+
+    // Update budget.
     cellBudget--;
   };
 
+  log(`Budget`, cellBudget);
+
   // Assign type of row to parent.
   row.type = "row";
+
+  // Assign appropriate class based off of grid properties.
+  row.contains = serialiseClasses(row.contains);
 
   // Return row.
   return row;
