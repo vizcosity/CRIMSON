@@ -12,9 +12,9 @@ const { resolve } = require('path');
 var imagePath = process.argv[2];
 imagePath = resolve(__dirname, imagePath);
 
-detectContainers(imagePath).then(containers => {
+detectContainers(imagePath).then(async containers => {
 
-  var containerCode = generateCode(containers);
+  var containerCode = await generateCode(containers);
 
   var HTMLOutput = `<!DOCTYPE html>
   <html>

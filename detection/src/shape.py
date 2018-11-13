@@ -47,6 +47,14 @@ class Shape:
 
     # Returns true if the this contains the shape passed.
     def contains(self,otherShape):
+
+        # Firstly check that *most of* the otherShape is contained within this one.
+        # Drawn sketches will include irregularities that mean that there will
+        # inevitably be some overlap between shapes. If the distance between
+        # edges is within some threshold and *most* of the area of the otherShape
+        # is contained within this shape, then we can safely assume that it is
+        # meant to be contained within it.
+
         # Check if all vertices are contained within the current shape by using
         # half-plane insideness. [CS324]
         for edge in self.edges:

@@ -23,22 +23,22 @@ const sortShapesAlongXAxis = (shapes) => {
     return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
 }
 
-// Use inferred grid properties to determine class.
-const serialiseClasses = shapes => {
-
-  var output = [];
-
-  shapes.forEach(shape => {
-    if (shape.gridCell && shape.gridCell.count)
-      shape.class = `col-${shape.gridCell.count}`;
-    output.push(shape);
-  });
-
-  // console.log(shapes);
-
-  return shapes;
-
-}
+// // Use inferred grid properties to determine class.
+// const serialiseClasses = shapes => {
+//
+//   var output = [];
+//
+//   shapes.forEach(shape => {
+//     if (shape.gridCell && shape.gridCell.count)
+//       shape.class = `col-${shape.gridCell.count}`;
+//     output.push(shape);
+//   });
+//
+//   // console.log(shapes);
+//
+//   return shapes;
+//
+// }
 
 
 module.exports = (row) => {
@@ -54,6 +54,9 @@ module.exports = (row) => {
 
   // Sort the contained shapes along x axis from left to right.
   row.contains = sortShapesAlongXAxis(row.contains);
+
+  // TODO: Handle having more columns than permitted by the cell budget.
+
 
   var cellBudget = config.grid.cellBudget;
   var totalBudget = config.grid.cellBudget;
@@ -77,8 +80,6 @@ module.exports = (row) => {
   // Assign leftover cells to shapes with largest clip amount.
   while (cellBudget > 0){
     var {id} = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize)[0];
-    log(`Adding budget to `, id);
-    console.log(row.contains.filter(shape => shape.id == id));
     var mostClipped = row.contains.filter(shape => shape.id == id)[0];
 
     // Assign a new cell.
@@ -91,13 +92,11 @@ module.exports = (row) => {
     cellBudget--;
   };
 
-  log(`Budget`, cellBudget);
-
   // Assign type of row to parent.
   row.type = "row";
 
   // Assign appropriate class based off of grid properties.
-  row.contains = serialiseClasses(row.contains);
+  // row.contains = serialiseClasses(row.contains);
 
   // Return row.
   return row;

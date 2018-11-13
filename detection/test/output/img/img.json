@@ -1,0 +1,105 @@
+[
+  {
+    "id": "Main Container",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 301.0,
+      "absoluteHeight": 227.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        150,
+        114
+      ],
+      "area": 68327.0,
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          227
+        ],
+        [
+          301,
+          227
+        ],
+        [
+          301,
+          0
+        ]
+      ]
+    },
+    "contains": [
+      {
+        "id": "2",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 86.0,
+          "absoluteHeight": 84.0,
+          "relativeWidth": "28.57142857142857%",
+          "relativeHeight": "37.00440528634361%",
+          "midpoint": [
+            235,
+            65
+          ],
+          "area": 7224.0,
+          "vertices": [
+            [
+              192,
+              23
+            ],
+            [
+              192,
+              107
+            ],
+            [
+              278,
+              107
+            ],
+            [
+              278,
+              23
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 86.0,
+          "absoluteHeight": 83.0,
+          "relativeWidth": "28.57142857142857%",
+          "relativeHeight": "36.56387665198238%",
+          "midpoint": [
+            65,
+            160
+          ],
+          "area": 7138.0,
+          "vertices": [
+            [
+              22,
+              119
+            ],
+            [
+              22,
+              202
+            ],
+            [
+              108,
+              202
+            ],
+            [
+              108,
+              119
+            ]
+          ]
+        },
+        "contains": []
+      }
+    ]
+  }
+]
