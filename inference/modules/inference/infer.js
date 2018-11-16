@@ -14,11 +14,11 @@ module.exports = function inferProperties(shapes){
   shapes.forEach(shape => {
 
     // Infer types.
-    shape.type = inferType(shape);
+    shape.type = inferType(shape, shapes);
 
     // Infer grids.
     shape = inferGrid(shape);
-    
+
   });
 
   return shapes;

@@ -47,6 +47,38 @@ const getLowestY = shape => {
 //
 // };
 
+const isContainer = shape => {
+  return shape.type == "row" || shape.type == "container";
+}
+
+// Navigation specification:
+// Uppermost element which is of type container or derived.
+const isNavigation = (shape, shapes) => {
+
+  // If no shapes passed we can assume that this is the global window.
+  if (shapes.length == 0) return false;
+
+  // Find uppermost container.
+  var upperMostContainer = shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] < b.meta.vertices[1][1])[0];
+
+  log(shape.id, upperMostContainer);
+
+  return upperMostContainer && (shape.id == upperMostContainer.id);
+}
+
+// Footer specification:
+// Lowermost element which is of type container or derived.
+const isFooter = (shape, shapes) => {
+
+  // If no shapes passed we can assume that this is the global window.
+  if (shapes.length == 0) return false;
+
+  // Find uppermost container.
+  var lowerMostContainer = shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] < b.meta.vertices[1][1]).reverse()[0];
+
+  return lowerMostContainer && (shape.id == lowerMostContainer.id);
+}
+
 const isRow = shape => {
 
   // A row is a special case of a container, so shape must first be identified
@@ -76,9 +108,14 @@ const isRow = shape => {
 
 };
 
-module.exports = (shape) => {
+module.exports = (shape, shapes) => {
+
   shape.type = config.shapeMap[shape.type] ? config.shapeMap[shape.type] : shape.type;
+
   if (isRow(shape)) shape.type = "row";
+
+  // if (isNavigation(shape, shapes)) shape.type = "navigation";
+  // if (isFooter(shape, shapes)) shape.type = "footer";
 
   return shape.type;
 }
