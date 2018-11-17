@@ -1,222 +1,271 @@
 [
   {
-    "id": "rectangle9",
+    "id": "Main Container",
     "type": "rectangle",
     "meta": {
-      "width": 66.0,
-      "height": 62.0,
+      "absoluteWidth": 301.0,
+      "absoluteHeight": 198.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
       "midpoint": [
-        239,
-        37
+        150,
+        99
       ],
-      "area": 4092.0,
+      "area": 59598.0,
       "vertices": [
         [
-          206,
-          6
+          0,
+          0
         ],
         [
-          206,
-          68
+          0,
+          198
         ],
         [
-          272,
-          68
+          301,
+          198
         ],
         [
-          272,
-          6
+          301,
+          0
         ]
       ]
     },
-    "contains": []
-  },
-  {
-    "id": "rectangle3",
-    "type": "rectangle",
-    "meta": {
-      "width": 55.0,
-      "height": 64.0,
-      "midpoint": [
-        248,
-        144
-      ],
-      "area": 3520.0,
-      "vertices": [
-        [
-          220,
-          112
-        ],
-        [
-          220,
-          176
-        ],
-        [
-          275,
-          176
-        ],
-        [
-          275,
-          112
-        ]
-      ]
-    },
-    "contains": []
-  },
-  {
-    "id": "rectangle2",
-    "type": "rectangle",
-    "meta": {
-      "width": 58.0,
-      "height": 60.0,
-      "midpoint": [
-        61,
-        145
-      ],
-      "area": 3480.0,
-      "vertices": [
-        [
-          32,
-          115
-        ],
-        [
-          32,
-          175
-        ],
-        [
-          90,
-          175
-        ],
-        [
-          90,
-          115
-        ]
-      ]
-    },
-    "contains": []
-  },
-  {
-    "id": "rectangle0",
-    "type": "rectangle",
-    "meta": {
-      "width": 55.0,
-      "height": 57.0,
-      "midpoint": [
-        160,
-        148
-      ],
-      "area": 3135.0,
-      "vertices": [
-        [
-          132,
-          120
-        ],
-        [
-          132,
-          177
-        ],
-        [
-          187,
-          177
-        ],
-        [
-          187,
-          120
-        ]
-      ]
-    },
-    "contains": []
-  },
-  {
-    "id": "rectangle8",
-    "type": "rectangle",
-    "meta": {
-      "width": 55.0,
-      "height": 55.0,
-      "midpoint": [
-        58,
-        36
-      ],
-      "area": 3025.0,
-      "vertices": [
-        [
-          30,
-          9
-        ],
-        [
-          30,
-          64
-        ],
-        [
-          85,
-          64
-        ],
-        [
-          85,
-          9
-        ]
-      ]
-    },
-    "contains": []
-  },
-  {
-    "id": "rectangle6",
-    "type": "rectangle",
-    "meta": {
-      "width": 50.0,
-      "height": 60.0,
-      "midpoint": [
-        147,
-        38
-      ],
-      "area": 3000.0,
-      "vertices": [
-        [
-          122,
-          8
-        ],
-        [
-          122,
-          68
-        ],
-        [
-          172,
-          68
-        ],
-        [
-          172,
-          8
-        ]
-      ]
-    },
-    "contains": []
-  },
-  {
-    "id": "triangle5",
-    "type": "triangle",
-    "meta": {
-      "width": 56.0,
-      "height": 57.0,
-      "midpoint": [
-        70,
-        46
-      ],
-      "area": 1518.0,
-      "vertices": [
-        [
-          86,
-          9
-        ],
-        [
-          90,
-          63
-        ],
-        [
-          34,
-          66
-        ]
-      ]
-    },
-    "contains": []
+    "contains": [
+      {
+        "id": "8",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 55.0,
+          "absoluteHeight": 55.0,
+          "relativeWidth": "18.272425249169437%",
+          "relativeHeight": "27.77777777777778%",
+          "midpoint": [
+            58,
+            36
+          ],
+          "area": 3025.0,
+          "vertices": [
+            [
+              30,
+              9
+            ],
+            [
+              30,
+              64
+            ],
+            [
+              85,
+              64
+            ],
+            [
+              85,
+              9
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "9",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 66.0,
+          "absoluteHeight": 62.0,
+          "relativeWidth": "21.92691029900332%",
+          "relativeHeight": "31.313131313131315%",
+          "midpoint": [
+            239,
+            37
+          ],
+          "area": 4092.0,
+          "vertices": [
+            [
+              206,
+              6
+            ],
+            [
+              206,
+              68
+            ],
+            [
+              272,
+              68
+            ],
+            [
+              272,
+              6
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "6",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 50.0,
+          "absoluteHeight": 60.0,
+          "relativeWidth": "16.611295681063122%",
+          "relativeHeight": "30.303030303030305%",
+          "midpoint": [
+            147,
+            38
+          ],
+          "area": 3000.0,
+          "vertices": [
+            [
+              122,
+              8
+            ],
+            [
+              122,
+              68
+            ],
+            [
+              172,
+              68
+            ],
+            [
+              172,
+              8
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "5",
+        "type": "triangle",
+        "meta": {
+          "absoluteWidth": 56.0,
+          "absoluteHeight": 57.0,
+          "relativeWidth": "18.6046511627907%",
+          "relativeHeight": "28.78787878787879%",
+          "midpoint": [
+            70,
+            46
+          ],
+          "area": 1518.0,
+          "vertices": [
+            [
+              86,
+              9
+            ],
+            [
+              90,
+              63
+            ],
+            [
+              34,
+              66
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "3",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 55.0,
+          "absoluteHeight": 64.0,
+          "relativeWidth": "18.272425249169437%",
+          "relativeHeight": "32.323232323232325%",
+          "midpoint": [
+            248,
+            144
+          ],
+          "area": 3520.0,
+          "vertices": [
+            [
+              220,
+              112
+            ],
+            [
+              220,
+              176
+            ],
+            [
+              275,
+              176
+            ],
+            [
+              275,
+              112
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "2",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 58.0,
+          "absoluteHeight": 60.0,
+          "relativeWidth": "19.269102990033225%",
+          "relativeHeight": "30.303030303030305%",
+          "midpoint": [
+            61,
+            145
+          ],
+          "area": 3480.0,
+          "vertices": [
+            [
+              32,
+              115
+            ],
+            [
+              32,
+              175
+            ],
+            [
+              90,
+              175
+            ],
+            [
+              90,
+              115
+            ]
+          ]
+        },
+        "contains": []
+      },
+      {
+        "id": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 55.0,
+          "absoluteHeight": 57.0,
+          "relativeWidth": "18.272425249169437%",
+          "relativeHeight": "28.78787878787879%",
+          "midpoint": [
+            160,
+            148
+          ],
+          "area": 3135.0,
+          "vertices": [
+            [
+              132,
+              120
+            ],
+            [
+              132,
+              177
+            ],
+            [
+              187,
+              177
+            ],
+            [
+              187,
+              120
+            ]
+          ]
+        },
+        "contains": []
+      }
+    ]
   }
 ]

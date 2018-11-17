@@ -55,6 +55,9 @@ const isContainer = shape => {
 // Uppermost element which is of type container or derived.
 const isNavigation = (shape, shapes) => {
 
+  // Filter shapes so that we only deal with those at level 1.
+  shapes = shapes.filter(s => s.level == 1);
+
   // If no shapes passed we can assume that this is the global window.
   if (shapes.length == 0) return false;
 
@@ -70,10 +73,13 @@ const isNavigation = (shape, shapes) => {
 // Lowermost element which is of type container or derived.
 const isFooter = (shape, shapes) => {
 
+  // Filter shapes so that we only deal with those at level 1.
+  shapes = shapes.filter(s => s.level == 1);
+
   // If no shapes passed we can assume that this is the global window.
   if (shapes.length == 0) return false;
 
-  // Find uppermost container.
+  // Find lowermost container.
   var lowerMostContainer = shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] < b.meta.vertices[1][1]).reverse()[0];
 
   return lowerMostContainer && (shape.id == lowerMostContainer.id);
@@ -114,7 +120,8 @@ module.exports = (shape, shapes) => {
 
   if (isRow(shape)) shape.type = "row";
 
-  // if (isNavigation(shape, shapes)) shape.type = "navigation";
+  // Check if this is the uppermost row of the 'level 1' container.
+  if (isNavigation(shape, shapes)) shape.type = "navigation";
   // if (isFooter(shape, shapes)) shape.type = "footer";
 
   return shape.type;

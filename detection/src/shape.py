@@ -30,6 +30,12 @@ class Shape:
         self.area = calculateArea(self.vertices)
         self.width = float(calculateWidth(self.vertices))
         self.height = float(calculateHeight(self.vertices))
+        # Level describes the level at which the shape is currently nested.
+        # Level 0 refers to the global container, whereas level 1 represents
+        # all the containers within the containers at level 0, and so on.
+        # Analogous to the depth at which the container lives if it were to be
+        # represented with a tree.
+        self.level = 0
         # Relative height and width are fractions of the size of the container.
         self.relativeHeight = 1.0
         self.relativeWidth = 1.0
@@ -38,11 +44,20 @@ class Shape:
         # Holds shapes which are contained by the current shape.
         self.contained = []
 
+    def increaseNestLevel(self):
+        self.level += 1
+        for shape in self.contained:
+            shape.level += 1
+
     def addContainedShape(self,shape):
 
         # Calculate relative width and height of child.
         shape.relativeWidth = shape.width / self.width
         shape.relativeHeight = shape.height / self.height
+
+        # Add a level to the child shape.
+        shape.increaseNestLevel()
+
         self.contained.append(shape)
 
     # Returns true if the this contains the shape passed.

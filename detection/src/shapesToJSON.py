@@ -29,6 +29,7 @@ def composeShapeHierarchy(containers):
                 'area': float(container.area),
                 'vertices': container.vertices.tolist()
             },
+            'level': container.level,
             'contains': reduce(lambda prev, next : prev + next, [ composeShapeHierarchy([shape]) for shape in container.contained ], [])
         })
 
