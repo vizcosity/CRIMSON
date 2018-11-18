@@ -93,7 +93,7 @@ class Shape:
             # "Width: " + str(self.width) + "\n" + \
             # "Height: " + str(self.height) + "\n" +
     def __repr__(self):
-        return str(self.type)+str(self.id)
+        return str(self.type)[0]+str(self.id)
 
     # Implementing equality for shapes.
     def __eq__(self, other):

@@ -5,16 +5,16 @@
  */
 
 const inferGrid = require('./inferGrid');
-const inferType = require('./inferType');
+const inferTypes = require('./inferTypes');
 
 // Infer properties about the shapes which will then be generated into HTML code.
 module.exports = function inferProperties(shapes){
 
+  // Infer types.
+  shapes = inferTypes(shapes);
+
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {
-
-    // Infer types.
-    shape.type = inferType(shape, shapes);
 
     // Infer grids.
     shape = inferGrid(shape);

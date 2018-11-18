@@ -134,7 +134,7 @@ def annotateShapeTypes(shapes, image):
         #     (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
         #     cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
         # print(shape)
-        cv2.putText(image, shape.type, (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
 
 # Annotates by shape name, adding information about what shape contains it if so.
 def annotateNestedShapes(shapes, owner=None, image=None):
