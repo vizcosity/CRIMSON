@@ -146,7 +146,7 @@ def annotateNestedShapes(shapes, owner=None, image=None):
             cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255))
         else:
             cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.vertices[0][0] + 5, shape.vertices[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
         # Call recursively for all shapes that this shape contains.
         annotateNestedShapes(shape.contained, owner=shape, image=image)
 

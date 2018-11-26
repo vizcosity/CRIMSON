@@ -30,6 +30,7 @@ class Shape:
         self.area = calculateArea(self.vertices)
         self.width = float(calculateWidth(self.vertices))
         self.height = float(calculateHeight(self.vertices))
+
         # Level describes the level at which the shape is currently nested.
         # Level 0 refers to the global container, whereas level 1 represents
         # all the containers within the containers at level 0, and so on.
@@ -76,6 +77,14 @@ class Shape:
             for vertex in otherShape.vertices:
                 if not pointWithinPlane(edge, vertex): return False
         return True
+
+
+    # Currently only defined for triangles.
+    # Finds the 'bottom' of the triangle defined as the edge which most aligns
+    # with either the x or y axis, and returns the opposite direction to this
+    # (the direction in which the perpendicular vertex is pointing)
+    def getOrientation(self):
+        pass
 
     # Calculates euclidean distance between the midpoint of the current shape
     # and the other shape passed.
@@ -165,7 +174,7 @@ def nestWithinWindow(shapes, imgDimensions):
     # global container equal to the image size.
     if (len(shapes) > 1):
         window = Shape([ [0, 0], [0, imgDimensions[1]], [imgDimensions[0], imgDimensions[1]], [imgDimensions[0], 0] ])
-        window.id = "Main Container"
+        window.id = "window"
         addContainedToShape(window, shapes)
         shapes = [window]
 

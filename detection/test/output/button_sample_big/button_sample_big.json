@@ -1,0 +1,105 @@
+[
+  {
+    "id": "0",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 271.0,
+      "absoluteHeight": 309.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        156,
+        172
+      ],
+      "area": 83739.0,
+      "vertices": [
+        [
+          20,
+          17
+        ],
+        [
+          20,
+          326
+        ],
+        [
+          291,
+          326
+        ],
+        [
+          291,
+          17
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "2",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 249.0,
+          "absoluteHeight": 125.0,
+          "relativeWidth": "91.88191881918819%",
+          "relativeHeight": "40.45307443365696%",
+          "midpoint": [
+            156,
+            172
+          ],
+          "area": 31125.0,
+          "vertices": [
+            [
+              31,
+              109
+            ],
+            [
+              31,
+              234
+            ],
+            [
+              280,
+              234
+            ],
+            [
+              280,
+              109
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "4",
+            "type": "triangle",
+            "meta": {
+              "absoluteWidth": 83.0,
+              "absoluteHeight": 41.0,
+              "relativeWidth": "33.33333333333333%",
+              "relativeHeight": "32.800000000000004%",
+              "midpoint": [
+                154,
+                164
+              ],
+              "area": 1681.0,
+              "vertices": [
+                [
+                  196,
+                  151
+                ],
+                [
+                  154,
+                  191
+                ],
+                [
+                  113,
+                  150
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      }
+    ]
+  }
+]

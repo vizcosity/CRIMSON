@@ -1,6 +1,6 @@
 [
   {
-    "id": "Main Container",
+    "id": "window",
     "type": "rectangle",
     "meta": {
       "absoluteWidth": 301.0,
@@ -31,6 +31,7 @@
         ]
       ]
     },
+    "level": 0,
     "contains": [
       {
         "id": "8",
@@ -64,6 +65,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -98,6 +100,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -132,6 +135,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -162,6 +166,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -196,6 +201,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -230,6 +236,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       },
       {
@@ -264,6 +271,7 @@
             ]
           ]
         },
+        "level": 1,
         "contains": []
       }
     ]
