@@ -36,7 +36,7 @@ def filterContours(contours, imageSize):
 
 # Apply convex hull to fill in any gaps in contours.
 def fillGaps(contours):
-    return [ cv2.convexHull(cont) for cont in contours ]
+    return [ cv2.convexHull(np.array(cont)) for cont in contours ]
 
 def getContainers(image, annotate=False):
 
