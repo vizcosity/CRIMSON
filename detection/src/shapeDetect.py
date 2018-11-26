@@ -35,7 +35,7 @@ if (__name__ == "__main__"):
     args = vars(ap.parse_args())
     # Load the image.
     image = cv2.imread(args["image"])
-    image = imutils.resize(image, width=300)
+    # image = imutils.resize(image, width=800)
 
     # Get containers.
     shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)

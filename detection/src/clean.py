@@ -34,6 +34,14 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
             # areaDifference = abs(shape.area - otherShape.area)
             distance = shape.distance(otherShape)
 
+            # print(shape)
+            # print(otherShape)
+            # print("Shape distance: " + str(distance))
+            # print("Dist thresh:" + str(distanceThreshold))
+            # print("Area "+str(shape) + " " + str(shape.area) + " , " + str(otherShape)+ " " + str(otherShape.area))
+            # print("Area ratio: "+ str(shape.area / otherShape.area))
+            # print("Raw area ratio: "+ str(shape.rawArea / otherShape.rawArea))
+
             # If the rectangles are similar, keep the larger one. It is desired
             # that the outermost bounding rectangle is kept in order to represent
             # containers as accurately as possible.
@@ -47,4 +55,16 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
                 output = [ s for s in output if s != shape ]
 
                 log("Resulting output: " + str(output))
+    return output
+
+# Removes fragments which are smaller than 1% of the size of the container.
+def removeContainingFragments(container, shapes):
+    return [ shape for shape in shapes if shape.area > 0.001 * container.area]
+
+# Remove containing fragments for all shapes passed.
+def removeSmallShapes(shapes):
+    output = []
+    for shape in shapes:
+        shape.contained = removeContainingFragments(shape, shape.contained)
+        output.append(shape)
     return output

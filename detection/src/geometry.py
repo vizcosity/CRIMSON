@@ -17,6 +17,7 @@ def getEdges(vertices):
 # Returns a vector representing the equation of the implicit line equation of
 # the form ax + by + c, which will be used to test the insideness of points.
 def calulateImplicitLineEquation(line):
+
     p1, p2 = line
 
     # Fin
@@ -25,6 +26,7 @@ def calulateImplicitLineEquation(line):
 
     # Construct row vector.
     eqn = [-m, 1, -c]
+    # print(eqn)
     return eqn
 
 # Checks if the point passed is on or beneath the line.
@@ -32,12 +34,13 @@ def calulateImplicitLineEquation(line):
 # If line pointing right, checks if point below line.
 # where direction is taken from the start point to the end point of the line.
 def pointWithinPlane(line, p):
+
     # Check if the line is along an axis.
     startPoint, endPoint = line
 
-    # print("Line: "+ str(line))
-    # print("Stat : "+ str(startPoint) + ", End: "+ str(endPoint))
-    # print("Pt: "+str(p))
+    print("Line: "+ str(line))
+    print("Start : "+ str(startPoint) + ", End: "+ str(endPoint))
+    print("Pt: "+str(p))
 
     if (startPoint[0] == endPoint[0]):
         # Determine direction of line.
@@ -56,8 +59,14 @@ def pointWithinPlane(line, p):
             # Direction is left, check if point is above line.
             return p[1] > startPoint[1]
 
+    # When using insideness testing, we assume that the vertical axis has increasing
+    # y values along the upward direction. We flip the y-axis here to reflect this.
+    # line = ( (startPoint[0], -startPoint[1]), (endPoint[0], -endPoint[1]) )
+
     # If line not along axis, construct implicit equation.
     eqn = calulateImplicitLineEquation(line)
+
+    # print(np.dot([p[0], p[1], 1], eqn) < 0)
 
     return np.dot([p[0], p[1], 1], eqn) < 0
 

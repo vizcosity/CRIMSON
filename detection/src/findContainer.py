@@ -10,7 +10,7 @@ import cv2
 import random
 import os
 import math
-from clean import removeInnerRectangles
+from clean import *
 from util import *
 from shape import Shape, nestShapes, nestWithinWindow
 
@@ -77,7 +77,7 @@ def getContainers(image, annotate=False):
     log("Found: "+ str(len(contours))+ " contours.")
 
     # Filter miniscule contours.
-    contours = filterContours(contours, image.shape)
+    # contours = filterContours(contours, image.shape)
 
     contours = fillGaps(contours)
 
@@ -104,6 +104,10 @@ def getContainers(image, annotate=False):
 
     # Filter shapes by removing those with area of 0.
     shapes = [shape for shape in shapes if shape.area > 0]
+
+    # Filter shapes by removing shapes which are less than 1% of the size of their
+    # containers.
+    shapes = removeSmallShapes(shapes)
 
     # Remove inner rectangles detected from each container.
     distanceThreshold = 0.0001 * imgWidth * imgHeight

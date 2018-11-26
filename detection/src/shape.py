@@ -71,11 +71,21 @@ class Shape:
         # is contained within this shape, then we can safely assume that it is
         # meant to be contained within it.
 
+        print("Checking if " + str(otherShape) + " is within "+str(self))
+
         # Check if all vertices are contained within the current shape by using
         # half-plane insideness. [CS324]
         for edge in self.edges:
             for vertex in otherShape.vertices:
-                if not pointWithinPlane(edge, vertex): return False
+                print(edge)
+                print(vertex)
+                print(self.vertices)
+                print(otherShape.vertices)
+                if not pointWithinPlane(edge, vertex):
+                    print(str(otherShape) + " not within " + str(self))
+                    raise "ERR"
+                    return False
+        print(str(otherShape) + " is within " + str(self))
         return True
 
 
@@ -141,6 +151,7 @@ def sortShapesBySize(shapes):
     kvpArr[::-1].sort(order='area')
     return kvpArr['shape']
 
+
 # Adds all shapes in 'shapes' which are contained in the 'shape' arg passed,
 # returning a tuple containing the shape as well as remaining shapes.
 def addContainedToShape(shape, originalShapeList):
@@ -170,9 +181,9 @@ def addContainedToShape(shape, originalShapeList):
 
 # Ensures that all shapes are contained within a global container.
 def nestWithinWindow(shapes, imgDimensions):
-    # If the output has more than a single shape, then we nest all the shapes within
+    # If the highest level of the output has more than a single container, then we nest all the shapes within
     # global container equal to the image size.
-    if (len(shapes) > 1):
+    if (len(shapes) > 1 or (len(shapes) == 1 and shapes[0].type != "container")):
         window = Shape([ [0, 0], [0, imgDimensions[1]], [imgDimensions[0], imgDimensions[1]], [imgDimensions[0], 0] ])
         window.id = "window"
         addContainedToShape(window, shapes)
