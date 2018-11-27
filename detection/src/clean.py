@@ -64,7 +64,7 @@ def removeContainingFragments(container, shapes):
         # print("Checking " + str(shape) + " should be removed from " + str(container))
         # if (shape.area < 0.025 * container.area):
             # print(str(shape) + " is too small within " + str(container))
-    return [ shape for shape in shapes if shape.area > 0.025 * container.area]
+    return [ shape for shape in shapes if shape.area > 0.02 * container.area]
 
 # Remove containing fragments for all shapes passed.
 def removeSmallShapes(shapes):
