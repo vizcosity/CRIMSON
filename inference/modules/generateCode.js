@@ -9,6 +9,7 @@
  const inferProperties = require('./inference/infer');
  const indent = require('indent-string');
  const transform = require('./transformation/transform');
+ const fs = require('fs');
 
  // Given a transformed preNode, embeds this into serialised HTML.
  function embedCode(preNode){
@@ -64,11 +65,25 @@
 
  }
 
+ function generateACR(shapes){
+
+   if (!shapes || shapes.length == 0) return shapes;
+
+
+   var topLevelACR = inferProperties(shapes);
+
+   for (var i = 0; i < shapes.length; i++){
+     shapes[i].contains = generateACR(shapes[i].contains);
+   }
+
+   return topLevelACR;
+ }
+
  // Takes JSON representation of detected shapes and outputs serialised HTML.
  async function generateCode(shapes){
    if (!shapes || shapes.length == 0) return "";
 
-   // Collect properties for each shape.
+   // Generate ACR.
    shapes = inferProperties(shapes);
 
    var output = "";
@@ -86,4 +101,4 @@
  }
 
 // Configure module.
-module.exports = generateCode;
+module.exports = {generateCode, generateACR};

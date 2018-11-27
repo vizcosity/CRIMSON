@@ -116,6 +116,36 @@ const isRow = shape => {
 
 };
 
+
+// TODO: Will have to be updated when handwritten text recognition is implemented,
+// as it will also include the presence of text within the same container.
+const isDropdown = shape => {
+
+  // Check if there is a single triangle contained within the shape and that it is
+  // located within the right half of the container.
+  var containedTriangles = shape.contains.filter(s => s.type == "triangle");
+
+  if (!containedTriangles || containedTriangles.length == 0) return false;
+
+  if (containedTriangles.length > 0) log("WARN: Multiple triangles detected in isDropdown().");
+
+  var triangle = containedTriangles[0];
+
+  // Check that the triangle is within the right half of the container.
+  var containerMidPointX = shape.meta.midpoint[0];
+  if (triangle.meta.vertices.filter(vertex => vertex[0] > containerMidPointX).length != 0) return false;
+
+  // Check that the triangle is about 10% of the area size of its container.
+  if ((triangle.meta.area / shape.meta.area) > 0.1) return false;
+
+  return true;
+
+}
+
+const isButton = shape => {
+  return false;
+}
+
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
@@ -144,8 +174,18 @@ const inferFooter = shapes => {
   return shapes;
 }
 
+const inferButtonsAndDropdowns = shapes => {
+  shapes.forEach(shape => {
+    if (isDropdown(shape, shapes)) shape.type = "dropdown";
+    if (isButton(shape, shapes)) shape.type = "button";
+  });
+  return shapes;
+}
+
+// TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
 
+  // console.log(shapes);
 
   // Appropriate rows and containers must first be inferred.
   shapes = inferFromMap(shapes);
@@ -156,6 +196,8 @@ module.exports = (shapes) => {
   shapes = inferFooter(shapes);
 
   shapes = inferImages(shapes);
+
+  shapes = inferButtonsAndDropdowns(shapes);
 
   return shapes;
 }

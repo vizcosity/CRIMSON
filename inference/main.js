@@ -5,7 +5,7 @@
  */
 
 const detectContainers = require('./modules/detectContainers');
-const generateCode = require('./modules/generateCode');
+const {generateCode, generateACR } = require('./modules/generateCode');
 const fs = require('fs');
 const { resolve } = require('path');
 
@@ -13,6 +13,9 @@ var imagePath = process.argv[2];
 imagePath = resolve(__dirname, imagePath);
 
 detectContainers(imagePath).then(async containers => {
+
+  var ACR = generateACR(containers);
+  fs.writeFileSync('acr.json', JSON.stringify(ACR, null, 2));
 
   var containerCode = await generateCode(containers);
 
