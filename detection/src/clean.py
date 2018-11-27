@@ -59,12 +59,19 @@ def removeInnerRectangles(shapes, areaPercentageThreshold, distanceThreshold):
 
 # Removes fragments which are smaller than 1% of the size of the container.
 def removeContainingFragments(container, shapes):
-    return [ shape for shape in shapes if shape.area > 0.001 * container.area]
+    # print(shapes)
+    # for shape in shapes:
+        # print("Checking " + str(shape) + " should be removed from " + str(container))
+        # if (shape.area < 0.025 * container.area):
+            # print(str(shape) + " is too small within " + str(container))
+    return [ shape for shape in shapes if shape.area > 0.025 * container.area]
 
 # Remove containing fragments for all shapes passed.
 def removeSmallShapes(shapes):
+    if (shapes is None or len(shapes) == 0): return shapes
     output = []
     for shape in shapes:
-        shape.contained = removeContainingFragments(shape, shape.contained)
+        # shape.contained = removeSmallShapes(shapes.contained)
+        shape.contained = removeContainingFragments(shape,  removeSmallShapes(shape.contained))
         output.append(shape)
     return output

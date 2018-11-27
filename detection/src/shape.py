@@ -71,21 +71,21 @@ class Shape:
         # is contained within this shape, then we can safely assume that it is
         # meant to be contained within it.
 
-        print("Checking if " + str(otherShape) + " is within "+str(self))
+        # print("Checking if " + str(otherShape) + " is within "+str(self))
 
         # Check if all vertices are contained within the current shape by using
         # half-plane insideness. [CS324]
         for edge in self.edges:
             for vertex in otherShape.vertices:
-                print(edge)
-                print(vertex)
-                print(self.vertices)
-                print(otherShape.vertices)
+                # print(edge)
+                # print(vertex)
+                # print(self.vertices)
+                # print(otherShape.vertices)
                 if not pointWithinPlane(edge, vertex):
-                    print(str(otherShape) + " not within " + str(self))
-                    raise "ERR"
+                    # print(str(otherShape) + " not within " + str(self))
+                    # raise "ERR"
                     return False
-        print(str(otherShape) + " is within " + str(self))
+        # print(str(otherShape) + " is within " + str(self))
         return True
 
 

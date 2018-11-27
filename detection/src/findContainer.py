@@ -105,10 +105,6 @@ def getContainers(image, annotate=False):
     # Filter shapes by removing those with area of 0.
     shapes = [shape for shape in shapes if shape.area > 0]
 
-    # Filter shapes by removing shapes which are less than 1% of the size of their
-    # containers.
-    shapes = removeSmallShapes(shapes)
-
     # Remove inner rectangles detected from each container.
     distanceThreshold = 0.0001 * imgWidth * imgHeight
     # print([cv2.contourArea(shape.vertices) for shape in shapes])
@@ -119,6 +115,10 @@ def getContainers(image, annotate=False):
     # Nest the shapes within each other and ensure all live within a global window.
     shapes = nestShapes(shapes)
     shapes = nestWithinWindow(shapes, (imgWidth, imgHeight))
+
+    # Filter shapes by removing shapes which are less than 1% of the size of their
+    # containers.
+    shapes = removeSmallShapes(shapes)
 
     # Sort shapes by vertical position.
     shapes = sortShapesInVerticalAscendingOrder(shapes)

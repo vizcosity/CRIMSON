@@ -38,9 +38,9 @@ def pointWithinPlane(line, p):
     # Check if the line is along an axis.
     startPoint, endPoint = line
 
-    print("Line: "+ str(line))
-    print("Start : "+ str(startPoint) + ", End: "+ str(endPoint))
-    print("Pt: "+str(p))
+    # print("Line: "+ str(line))
+    # print("Start : "+ str(startPoint) + ", End: "+ str(endPoint))
+    # print("Pt: "+str(p))
 
     if (startPoint[0] == endPoint[0]):
         # Determine direction of line.
