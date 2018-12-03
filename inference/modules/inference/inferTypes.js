@@ -4,6 +4,7 @@
  *  @ Aaron Baw 2018
  */
 const config = require('../../config/config.json');
+const _FRAG_THRESH = config.thresholds.fragmentArea;
 
 const getHighestY = shape => {
   return shape.meta.vertices.sort((a, b) => a[1] < b[1])[0]
@@ -35,7 +36,7 @@ const isNavigation = (shape, shapes) => {
 
   // log(shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] < b.meta.vertices[1][1]).map(s => s.meta.vertices[1][1]))
 
-  if (upperMostContainer) log(shape.id, upperMostContainer.id, upperMostContainer.meta.vertices[1][1]);
+  // if (upperMostContainer) log(shape.id, upperMostContainer.id, upperMostContainer.meta.vertices[1][1]);
 
   return upperMostContainer && (shape.id == upperMostContainer.id);
 }
@@ -116,34 +117,82 @@ const isRow = shape => {
 
 };
 
+// Helper function to calculate the distance from left/uppemost parent boundary
+// in terms of percentage of parent size.
+const relativeDistance = (parent, child, axis=0) => {
+  var midpoint = parent.meta.midpoint[axis];
 
-// TODO: Will have to be updated when handwritten text recognition is implemented,
-// as it will also include the presence of text within the same container.
-const isDropdown = shape => {
+  var start = midpoint - (parent.meta.absoluteWidth / 2);
 
-  // Check if there is a single triangle contained within the shape and that it is
-  // located within the right half of the container.
-  var containedTriangles = shape.contains.filter(s => s.type == "triangle");
+  var dist = child.meta.midpoint[axis] - start;
 
-  if (!containedTriangles || containedTriangles.length == 0) return false;
+  // log(child.id, ` has dist of `, dist);
 
-  if (containedTriangles.length > 0) log("WARN: Multiple triangles detected in isDropdown().");
+  return dist / parent.meta.absoluteWidth;
+}
 
-  var triangle = containedTriangles[0];
+// Given a shape, determines if there is a fragment (defined as any polygon of
+// size around 1% of parent) between the percentiles chosen. This denotes
+// the boundaries in terms of the parent's width. E.g. a button would have a fragment
+// contained within the 0.4-0.6 percentile region.
+const getInnerFragmentsBetweenPercentiles = (shape, {start, end}, axis=0) => {
 
-  // Check that the triangle is within the right half of the container.
-  var containerMidPointX = shape.meta.midpoint[0];
-  if (triangle.meta.vertices.filter(vertex => vertex[0] > containerMidPointX).length != 0) return false;
+  // Filter by relative area.
+  var fragments = shape.contains.filter(s => {
+    var areaRatio = (s.meta.area / shape.meta.area);
+    // log(`Area ration of`, areaRatio, `between`, shape.id, `and`, s.id);
+    return areaRatio <= _FRAG_THRESH;
+  });
+  // log(`Found ${fragments.length} fragments.`);
 
-  // Check that the triangle is about 10% of the area size of its container.
-  if ((triangle.meta.area / shape.meta.area) > 0.1) return false;
+  // Filter by the position according to the percentiles given.
+  fragments = fragments.filter(s => {
+    var relDist = relativeDistance(shape, s);
+    // log(`RelDist of `, relDist);
+    return relDist < end && relDist > start;
+  });
 
-  return true;
+  // log(fragments.length, `fragments detected.`);
+
+  return fragments;
 
 }
 
+// TODO: Will have to be updated when handwritten text recognition is implemented,
+// as it will also include the presence of text within the same container.
+// const isDropdown = shape => {
+//
+//   // Check if there is a single triangle contained within the shape and that it is
+//   // located within the right half of the container.
+//   var containedTriangles = shape.contains.filter(s => s.type == "triangle");
+//
+//   if (!containedTriangles || containedTriangles.length == 0) return false;
+//
+//   if (containedTriangles.length > 0) log("WARN: Multiple triangles detected in isDropdown().");
+//
+//   var triangle = containedTriangles[0];
+//
+//   // Check that the triangle is within the right half of the container.
+//   var containerMidPointX = shape.meta.midpoint[0];
+//   if (triangle.meta.vertices.filter(vertex => vertex[0] > containerMidPointX).length != 0) return false;
+//
+//   // Check that the triangle is about 10% of the area size of its container.
+//   if ((triangle.meta.area / shape.meta.area) > 0.1) return false;
+//
+//   return true;
+//
+// }
+
+const isDropdown = shape => {
+  return getInnerFragmentsBetweenPercentiles(shape, {start: 0.8, end: 1}).length == 1;
+}
+
 const isButton = shape => {
-  return false;
+  return getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}).length == 1;
+}
+
+const isTextInput = shape => {
+  return getInnerFragmentsBetweenPercentiles(shape, {start: 0, end: 0.2}).length == 1;
 }
 
 const inferRows = shapes => {
@@ -155,7 +204,7 @@ const inferRows = shapes => {
 
 const inferFromMap = shapes => {
   shapes.forEach(shape => {
-    log(shape.type, config.shapeMap[shape.type]);
+    // log(shape.type, config.shapeMap[shape.type]);
     shape.type = config.shapeMap[shape.type] ? config.shapeMap[shape.type] : shape.type;
   });
   return shapes;
@@ -175,10 +224,12 @@ const inferFooter = shapes => {
   return shapes;
 }
 
-const inferButtonsAndDropdowns = shapes => {
+const inferInteractiveContainers = shapes => {
   shapes.forEach(shape => {
-    if (isDropdown(shape, shapes)) shape.type = "dropdown";
+    if (isDropdown(shape, shapes))  shape.type = "dropdown";
     if (isButton(shape, shapes)) shape.type = "button";
+    if (isTextInput(shape, shapes)) shape.type = "textInput";
+
   });
   return shapes;
 }
@@ -196,7 +247,7 @@ module.exports = (shapes) => {
 
   shapes = inferImages(shapes);
 
-  shapes = inferButtonsAndDropdowns(shapes);
+  shapes = inferInteractiveContainers(shapes);
 
   return shapes;
 }

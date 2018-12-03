@@ -11,6 +11,7 @@ const { resolve } = require('path');
 
 var imagePath = process.argv[2];
 imagePath = resolve(__dirname, imagePath);
+var fileName = imagePath.split('/')[imagePath.split('/').lenght - 1]
 
 detectContainers(imagePath).then(async containers => {
 
@@ -22,6 +23,7 @@ detectContainers(imagePath).then(async containers => {
   var HTMLOutput = `<!DOCTYPE html>
   <html>
     <head>
+      <meta source-file="${fileName}" />
       <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
       <link rel="stylesheet" type="text/css" href="style.css" />
     </head>

@@ -18,6 +18,9 @@ function log(...msg){
  // Given a transformed preNode, embeds this into serialised HTML.
  function embedCode(preNode){
 
+   // If preNode is a string, then inject this code directly.
+   if (typeof preNode == 'string') return preNode;
+
    var nodeType = preNode.elementType ? preNode.elementType : 'div';
 
    var serialisedAttributes = "";
@@ -32,10 +35,12 @@ function log(...msg){
       preNode.content.forEach(node => content += indent(`\n${embedCode(node)}`, 8));
     } else content = preNode.content;
 
-   return `
+   // If no content we assume a self-closed tag.
+   return preNode.content ? `
     <${nodeType}${serialisedAttributes}>${content}
     </${nodeType}>
-    `;
+    ` :
+    `<${nodeType}${serialisedAttributes} />`;
 
  }
 
@@ -73,7 +78,7 @@ function log(...msg){
 
    if (!shapes || shapes.length == 0) return shapes;
 
-   log(`Generating ACR at level`, shapes);
+   // log(`Generating ACR at level`, shapes);
 
    for (var i = 0; i < shapes.length; i++){
      // log(`About to gen code for `, shapes[i]);

@@ -6,5 +6,8 @@
     "rectangle": "container",
     "triangle": "triangle",
     "polygon": "polygon"
+  },
+  "thresholds": {
+    "fragmentArea": 0.08
   }
 }

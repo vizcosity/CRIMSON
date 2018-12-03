@@ -32,6 +32,10 @@ with columns to a new line */
   margin: 5px;
 }
 
-.row div {
+.row .container {
+  border: 1px solid green;
+}
+
+.row .row {
   border: 1px solid green;
 }

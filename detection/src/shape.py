@@ -11,8 +11,8 @@ import os
 
 def log(message):
     # if (os.environ['PY_DEBUG']):
-    print("SHAPE | " + str(message))
-    # pass
+    # print("SHAPE | " + str(message))
+    pass
 
 class Shape:
 

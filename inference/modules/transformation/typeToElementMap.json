@@ -1,5 +1,6 @@
 {
   "navigation": "nav",
   "footer": "footer",
-  "image": "img"
+  "image": "img",
+  "button": "button"
 }

@@ -3,15 +3,15 @@
     "id": "window",
     "type": "rectangle",
     "meta": {
-      "absoluteWidth": 521.0,
-      "absoluteHeight": 367.0,
+      "absoluteWidth": 301.0,
+      "absoluteHeight": 212.0,
       "relativeWidth": "100.0%",
       "relativeHeight": "100.0%",
       "midpoint": [
-        260,
-        184
+        150,
+        106
       ],
-      "area": 191207.0,
+      "area": 63812.0,
       "vertices": [
         [
           0,
@@ -19,14 +19,14 @@
         ],
         [
           0,
-          367
+          212
         ],
         [
-          521,
-          367
+          301,
+          212
         ],
         [
-          521,
+          301,
           0
         ]
       ]
@@ -37,27 +37,27 @@
         "id": "0",
         "type": "triangle",
         "meta": {
-          "absoluteWidth": 285.0,
-          "absoluteHeight": 142.0,
-          "relativeWidth": "54.702495201535505%",
-          "relativeHeight": "38.69209809264305%",
+          "absoluteWidth": 164.0,
+          "absoluteHeight": 82.0,
+          "relativeWidth": "54.48504983388705%",
+          "relativeHeight": "38.67924528301887%",
           "midpoint": [
-            264,
-            159
+            152,
+            92
           ],
-          "area": 20235.0,
+          "area": 6683.5,
           "vertices": [
             [
-              406,
-              112
+              234,
+              65
             ],
             [
-              264,
-              254
+              151,
+              146
             ],
             [
-              121,
-              112
+              70,
+              64
             ]
           ]
         },
