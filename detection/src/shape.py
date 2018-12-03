@@ -10,8 +10,9 @@ import cv2
 import os
 
 def log(message):
-    # if (os.environ['PY_DEBUG']): print("SHAPE | " + str(message))
-    pass
+    # if (os.environ['PY_DEBUG']):
+    print("SHAPE | " + str(message))
+    # pass
 
 class Shape:
 
@@ -183,7 +184,9 @@ def addContainedToShape(shape, originalShapeList):
 def nestWithinWindow(shapes, imgDimensions):
     # If the highest level of the output has more than a single container, then we nest all the shapes within
     # global container equal to the image size.
-    if (len(shapes) > 1 or (len(shapes) == 1 and shapes[0].type != "container")):
+    # log("Nesting within window")
+    # log(shapes[0].type)
+    if (len(shapes) > 1 or (len(shapes) == 1 and shapes[0].type != "rectangle")):
         window = Shape([ [0, 0], [0, imgDimensions[1]], [imgDimensions[0], imgDimensions[1]], [imgDimensions[0], 0] ])
         window.id = "window"
         addContainedToShape(window, shapes)
