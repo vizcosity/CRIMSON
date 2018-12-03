@@ -35,7 +35,7 @@ const isNavigation = (shape, shapes) => {
 
   // log(shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] < b.meta.vertices[1][1]).map(s => s.meta.vertices[1][1]))
 
-  log(shape.id, upperMostContainer.id, upperMostContainer.meta.vertices[1][1]);
+  if (upperMostContainer) log(shape.id, upperMostContainer.id, upperMostContainer.meta.vertices[1][1]);
 
   return upperMostContainer && (shape.id == upperMostContainer.id);
 }
@@ -155,6 +155,7 @@ const inferRows = shapes => {
 
 const inferFromMap = shapes => {
   shapes.forEach(shape => {
+    log(shape.type, config.shapeMap[shape.type]);
     shape.type = config.shapeMap[shape.type] ? config.shapeMap[shape.type] : shape.type;
   });
   return shapes;
@@ -184,8 +185,6 @@ const inferButtonsAndDropdowns = shapes => {
 
 // TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
-
-  // console.log(shapes);
 
   // Appropriate rows and containers must first be inferred.
   shapes = inferFromMap(shapes);

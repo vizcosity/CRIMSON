@@ -11,6 +11,10 @@
  const transform = require('./transformation/transform');
  const fs = require('fs');
 
+function log(...msg){
+  console.log(`GEN CODE |`, ...msg);
+}
+
  // Given a transformed preNode, embeds this into serialised HTML.
  function embedCode(preNode){
 
@@ -69,14 +73,14 @@
 
    if (!shapes || shapes.length == 0) return shapes;
 
-
-   var topLevelACR = inferProperties(shapes);
+   log(`Generating ACR at level`, shapes);
 
    for (var i = 0; i < shapes.length; i++){
+     // log(`About to gen code for `, shapes[i]);
      shapes[i].contains = generateACR(shapes[i].contains);
    }
 
-   return topLevelACR;
+   return inferProperties(shapes);
  }
 
  // Takes JSON representation of detected shapes and outputs serialised HTML.

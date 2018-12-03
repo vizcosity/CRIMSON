@@ -3,15 +3,15 @@
     "id": "window",
     "type": "row",
     "meta": {
-      "absoluteWidth": 845,
-      "absoluteHeight": 985,
+      "absoluteWidth": 521,
+      "absoluteHeight": 367,
       "relativeWidth": "100.0%",
       "relativeHeight": "100.0%",
       "midpoint": [
-        422,
-        492
+        260,
+        184
       ],
-      "area": 832325,
+      "area": 191207,
       "vertices": [
         [
           0,
@@ -19,91 +19,19 @@
         ],
         [
           0,
-          985
+          367
         ],
         [
-          845,
-          985
+          521,
+          367
         ],
         [
-          845,
+          521,
           0
         ]
       ]
     },
     "level": 0,
-    "contains": [
-      {
-        "id": "0",
-        "type": "navigation",
-        "meta": {
-          "absoluteWidth": 798,
-          "absoluteHeight": 916,
-          "relativeWidth": "94.43786982248521%",
-          "relativeHeight": "92.99492385786802%",
-          "midpoint": [
-            421,
-            492
-          ],
-          "area": 730968,
-          "vertices": [
-            [
-              22,
-              34
-            ],
-            [
-              22,
-              950
-            ],
-            [
-              820,
-              950
-            ],
-            [
-              820,
-              34
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": [
-          {
-            "id": "2",
-            "type": "container",
-            "meta": {
-              "absoluteWidth": 546,
-              "absoluteHeight": 118,
-              "relativeWidth": "68.42105263157895%",
-              "relativeHeight": "12.882096069868995%",
-              "midpoint": [
-                421,
-                492
-              ],
-              "area": 64428,
-              "vertices": [
-                [
-                  148,
-                  433
-                ],
-                [
-                  148,
-                  551
-                ],
-                [
-                  694,
-                  551
-                ],
-                [
-                  694,
-                  433
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          }
-        ]
-      }
-    ]
+    "contains": []
   }
 ]

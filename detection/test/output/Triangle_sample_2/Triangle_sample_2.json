@@ -3,15 +3,15 @@
     "id": "window",
     "type": "rectangle",
     "meta": {
-      "absoluteWidth": 301.0,
-      "absoluteHeight": 346.0,
+      "absoluteWidth": 1417.0,
+      "absoluteHeight": 1071.0,
       "relativeWidth": "100.0%",
       "relativeHeight": "100.0%",
       "midpoint": [
-        150,
-        173
+        708,
+        536
       ],
-      "area": 104146.0,
+      "area": 1517607.0,
       "vertices": [
         [
           0,
@@ -19,14 +19,14 @@
         ],
         [
           0,
-          346
+          1071
         ],
         [
-          301,
-          346
+          1417,
+          1071
         ],
         [
-          301,
+          1417,
           0
         ]
       ]

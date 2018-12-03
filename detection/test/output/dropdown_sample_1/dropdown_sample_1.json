@@ -1,147 +1,135 @@
 [
   {
-    "id": "0",
+    "id": "window",
     "type": "rectangle",
     "meta": {
-      "absoluteWidth": 284.0,
-      "absoluteHeight": 325.0,
+      "absoluteWidth": 845.0,
+      "absoluteHeight": 985.0,
       "relativeWidth": "100.0%",
       "relativeHeight": "100.0%",
       "midpoint": [
-        150,
-        174
+        422,
+        492
       ],
-      "area": 92300.0,
+      "area": 832325.0,
       "vertices": [
         [
-          8,
-          12
+          0,
+          0
         ],
         [
-          8,
-          337
+          0,
+          985
         ],
         [
-          292,
-          337
+          845,
+          985
         ],
         [
-          292,
-          12
+          845,
+          0
         ]
       ]
     },
     "level": 0,
     "contains": [
       {
-        "id": "2",
+        "id": "0",
         "type": "rectangle",
         "meta": {
-          "absoluteWidth": 195.0,
-          "absoluteHeight": 43.0,
-          "relativeWidth": "68.66197183098592%",
-          "relativeHeight": "13.230769230769232%",
+          "absoluteWidth": 798.0,
+          "absoluteHeight": 916.0,
+          "relativeWidth": "94.43786982248521%",
+          "relativeHeight": "92.99492385786802%",
           "midpoint": [
-            150,
-            174
+            421,
+            492
           ],
-          "area": 8385.0,
+          "area": 730968.0,
           "vertices": [
             [
-              52,
-              153
+              22,
+              34
             ],
             [
-              52,
-              196
+              22,
+              950
             ],
             [
-              247,
-              196
+              820,
+              950
             ],
             [
-              247,
-              153
+              820,
+              34
             ]
           ]
         },
         "level": 1,
         "contains": [
           {
-            "id": "4",
+            "id": "2",
             "type": "rectangle",
             "meta": {
-              "absoluteWidth": 29.0,
-              "absoluteHeight": 15.0,
-              "relativeWidth": "14.871794871794872%",
-              "relativeHeight": "34.883720930232556%",
+              "absoluteWidth": 546.0,
+              "absoluteHeight": 118.0,
+              "relativeWidth": "68.42105263157895%",
+              "relativeHeight": "12.882096069868995%",
               "midpoint": [
-                218,
-                174
+                421,
+                492
               ],
-              "area": 435.0,
+              "area": 64428.0,
               "vertices": [
                 [
-                  204,
-                  167
+                  148,
+                  433
                 ],
                 [
-                  204,
-                  182
+                  148,
+                  551
                 ],
                 [
-                  233,
-                  182
+                  694,
+                  551
                 ],
                 [
-                  233,
-                  167
+                  694,
+                  433
                 ]
               ]
             },
             "level": 2,
             "contains": [
               {
-                "id": "5",
-                "type": "polygon",
+                "id": "4",
+                "type": "triangle",
                 "meta": {
-                  "absoluteWidth": 21.0,
-                  "absoluteHeight": 11.0,
-                  "relativeWidth": "72.41379310344827%",
-                  "relativeHeight": "73.33333333333333%",
+                  "absoluteWidth": 82.0,
+                  "absoluteHeight": 41.0,
+                  "relativeWidth": "15.018315018315018%",
+                  "relativeHeight": "34.74576271186441%",
                   "midpoint": [
-                    218,
-                    172
+                    613,
+                    485
                   ],
-                  "area": 130.0,
+                  "area": 1681.0,
                   "vertices": [
                     [
-                      228,
-                      169
+                      654,
+                      471
                     ],
                     [
-                      218,
-                      179
+                      613,
+                      512
                     ],
                     [
-                      217,
-                      179
-                    ],
-                    [
-                      207,
-                      169
-                    ],
-                    [
-                      208,
-                      168
-                    ],
-                    [
-                      227,
-                      168
+                      572,
+                      471
                     ]
                   ]
                 },
-                "level": 3,
+                "level": 2,
                 "contains": []
               }
             ]

@@ -10,8 +10,6 @@ const inferTypes = require('./inferTypes');
 // Infer properties about the shapes which will then be generated into HTML code.
 module.exports = function inferProperties(shapes){
 
-  console.log(shapes);
-
   // Infer types.
   shapes = inferTypes(shapes);
 
