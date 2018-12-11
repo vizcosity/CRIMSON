@@ -114,7 +114,7 @@ def getContainers(image, annotate=False):
 
     # Nest the shapes within each other and ensure all live within a global window.
     shapes = nestShapes(shapes)
-    
+
     shapes = nestWithinWindow(shapes, (imgWidth, imgHeight))
 
     # Filter shapes by removing shapes which are less than 1% of the size of their

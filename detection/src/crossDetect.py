@@ -7,6 +7,8 @@ import cv2
 import random
 import os
 import math
+import importlib
+from isect_segments_bentley_ottmann import poly_point_isect as bot
 from shape import *
 
 _DEBUG = False
@@ -27,8 +29,30 @@ def log(message):
 #         output.append((x, y))
 #     return output
 
+# Given a list of lines extracted from an image, calculates the points at which
+# intersections between the lines take place, using the Bentley Ottman algorithm.
+# Ref: https://github.com/ideasman42/isect_segments-bentley_ottmann
+# TODO: Develop an understanding of how the algorithm works for the writeup.
+def detectIntersections(lines):
+    points = []
+    for line in lines:
+        # Convert lines obtained from HoughLinesP into a tuple of two points each
+        # defined with floats instead of ints.
+        for x1, y1, x2, y2 in line:
+            points.append(((x1 + 0.0, y1 + 0.0), (x2 + 0.0, y2 + 0.0)))
 
-def detectLines(image):
+    # Calculate intersections.
+    intersections = bot.isect_segments(points)
+
+    # for inter in intersections:
+    #     a, b = inter
+    #     for i in range(3):
+    #         for j in range(3):
+    #             image[int(b) + i, int(a) + j] = [0, 255, 0]
+
+    return points
+
+def detectLines(image, debug=False):
 
         imgHeight, imgWidth, channels = image.shape
 
@@ -49,23 +73,41 @@ def detectLines(image):
         # Invert the image so that our desired shapes are highlighted in white.
         invert = cv2.bitwise_not(thresh)
 
+        # Blur the image.
+        blurred = cv2.GaussianBlur(invert, (5,5), 0)
+
+        if (debug): cv2.imwrite('blurred.png', blurred)
+
+        # Erode the image to remove double line specifically around crosses.
+        # erode_kernel = np.ones((2,2))
+
+        # TODO: Here we attempt to extract what's known as the 'morphological' skeleton;
+        # This in essence is the shape which appears after we repeatedly erode and
+        # dilate a particular image with respect to a kernel designed to target
+        # particular structures. Here, we want to find the skeleton pertaining to
+        # imaegs, and so we use a 'cross' structuring element.
+        erode_kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+
+        eroded = cv2.erode(blurred, erode_kernel, iterations=2)
+        if (debug): cv2.imwrite('eroded.png', eroded)
+
         # Canny edge detection.
-        canny = cv2.Canny(image, 100, 200)
+        canny = cv2.Canny(eroded, 100, 200)
 
         cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
         # Detect lines.
-        lines = cv2.HoughLinesP(invert, 1, float(math.pi / 180) * float(1), 10)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 50, 10)
 
-        for line in lines:
-            line = line.ravel()
-            start = (line[0], line[1])
-            end = (line[2], line[3])
-            cv2.line(image, start, end, (0,0,255))
+        if (debug):
+            cv2.imwrite('intersection.png', image)
+            for line in lines:
+                line = line.ravel()
+                start = (line[0], line[1])
+                end = (line[2], line[3])
+                cv2.line(image, start, end, (0,0,255))
 
-        print(lines)
+        return lines
 
 
 
@@ -91,4 +133,4 @@ if (__name__ == "__main__"):
 
     # cv2.imshow('Lines', image)
     cv2.imwrite('lines.png', image)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
