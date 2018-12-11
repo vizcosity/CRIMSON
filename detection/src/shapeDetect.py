@@ -3,6 +3,7 @@
 # and their inferred hierarchy.
 
 from findContainer import getContainers, nestShapes
+from detectIntersections import detectAndNestIntersections
 from shapesToJSON import serialiseShapeHierachy
 import cv2
 import os
@@ -39,6 +40,12 @@ if (__name__ == "__main__"):
 
     # Get containers.
     shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)
+
+    # For each container, detect the intersections within the container in order to infer
+    # images in the inference pipeline.
+    # Need to pass in the 'lastShapeId' so that we enumerate intersection shape ids
+    # starting from the last detected shape id in the getContainers method.
+    shapes, intersections, image = detectAndNestIntersections(image, shapes, lastShapeId=len(appxConts), annotate=True)
 
     # Get serialised hierarchy.
     jsonHierarchy = serialiseShapeHierachy(shapes)

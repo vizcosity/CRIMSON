@@ -5,12 +5,65 @@
 
 import cv2
 import numpy as np
+from geometry import *
 
 # Logging.
 def log(message):
-    return
+    # return
     print("CLEAN | " + str(message))
 
+# Obtains points which are positioned nearby the point according to 'distance'.
+def getNearbyPoints(point, points, distance):
+
+    # log("Point: " + str(point) + ". Points: " + str(points))
+
+    nearbyX = getSimilarValuesWithinRange([x for x, y in points], point[0], distance)
+    nearbyY = getSimilarValuesWithinRange([y for x, y in points], point[1], distance)
+
+    log("NearbyX: " + str(nearbyX[:,1]))
+    log("NearbyY: " + str(nearbyY))
+
+    # Get intersection of indeces of points where the
+    # axis values which are 'distance' pixels away from the point
+    commonIndeces = np.intersect1d(nearbyX[:,1], nearbyY[:,1])
+
+    # Convert indeces to ints.
+    commonIndeces = [int(i) for i in commonIndeces]
+
+    log("Common indeces: " + str(commonIndeces))
+
+    nearby = np.array(points)[commonIndeces] if len(commonIndeces) > 0 else []
+
+    log("Nearby points from : " + str(point) + " : " + str(nearby))
+
+    # Return nearby points.
+    return nearby, commonIndeces
+
+# Averages all points within 'distance' pixels of each other.
+# TODO: Optimise performance by ensuring we are not re-looping over points which
+# have already been averaged...
+def filterOverlappingIntersections(intersections, distance):
+
+    filtered = []
+
+    for point in intersections:
+        toAverage, indeces = getNearbyPoints(point, intersections, distance)
+        # Average points.
+        averagedX = round(np.mean([x for x, y in toAverage]))
+        averagedY = round(np.mean([y for x, y in toAverage]))
+
+        # log("Averaged poitn: " + )
+        filtered.append((averagedX, averagedY))
+
+        log(len(filtered))
+
+    # Squash all unique points together.
+    filtered = list(set(filtered))
+
+    log("Filtered: " + str(len(intersections) - len(filtered)) + " intersections within \
+    a distance of " + str(distance)+".")
+
+    return filtered
 # Given a set of contours, calculates the area for each contour and the midpoint.
 # Where two rectangles are detected with similar midpoints and slightly different
 # areas, then the larger of the two is kept.

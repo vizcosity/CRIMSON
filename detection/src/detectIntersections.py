@@ -9,9 +9,10 @@ import os
 import math
 import importlib
 from isect_segments_bentley_ottmann import poly_point_isect as bot
+from clean import filterOverlappingIntersections
 from shape import *
 
-_DEBUG = False
+_DEBUG = True
 
 # Logging.
 def log(message):
@@ -29,6 +30,80 @@ def log(message):
 #         output.append((x, y))
 #     return output
 
+# Looks through shapes and nests the intersection within the shape of highest
+# nesting level. Returns the highest level shape containing the intersection.
+def nestIntersection(intersection, shapes):
+
+    if (len(shapes) == 0): return None
+
+    highestLevelShape = None
+
+    for shape in shapes:
+
+        if shape.containsPoint(intersection):
+            highestLevelShape = shape
+
+        if highestLevelShape is None: continue
+
+        # Check recursively for shapes which are contained.
+        highestLevelShapeContained = nestIntersection(intersection, highestLevelShape.contained)
+
+        if (highestLevelShapeContained is not None): highestLevelShape = highestLevelShapeContained
+
+    return highestLevelShape
+
+def nestIntersections(intersections, shapes, image, lastShapeId, annotate):
+
+    for i in range(0, len(intersections)):
+
+        intersection = intersections[i]
+
+        highestLevelContainingShape = nestIntersection(intersection, shapes)
+
+        # Intersection could not be nested.
+        if (highestLevelContainingShape is None):
+            log('Intersection ' + str(intersection) +  ' could not be nested.')
+            continue
+
+        log("Adding intersection " + str(intersection) + " to " + str(highestLevelContainingShape))
+
+        intersectionShape = Shape([intersection], id=lastShapeId + i, shapeType="intersection")
+
+        # Add the intersection to the shape.
+        highestLevelContainingShape.addContainedShape(intersectionShape)
+
+        # Annotate intersection.
+        if annotate:
+            cv2.putText(image, str(highestLevelContainingShape) + ":" + str(intersectionShape), (intersectionShape.midpoint[0] - 20, intersectionShape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+
+
+    return shapes
+
+def drawIntersections(intersections, image, annotate):
+    for inter in intersections:
+        a, b = inter
+        for i in range(3):
+            for j in range(3):
+                # print(i >= image.shape[0])
+                if i+int(b) >= image.shape[0] or j+int(a)>= image.shape[1]: continue
+                image[int(b) + i, int(a) + j] = [0, 255, 0]
+    return image
+
+# Detects intersections and nests them within shapes that contain the intersection
+# points of the highest nesting level.
+def detectAndNestIntersections(image, shapes, lastShapeId, annotate):
+
+    # Detect lines.
+    lines = detectLines(image)
+
+    # Detect intersections.
+    intersections = detectIntersections(lines)
+
+    # Draw intersections on image.
+    image = drawIntersections(intersections, image, annotate)
+
+    return nestIntersections(intersections, shapes, image, lastShapeId, annotate), intersections, image
+
 # Given a list of lines extracted from an image, calculates the points at which
 # intersections between the lines take place, using the Bentley Ottman algorithm.
 # Ref: https://github.com/ideasman42/isect_segments-bentley_ottmann
@@ -44,13 +119,11 @@ def detectIntersections(lines):
     # Calculate intersections.
     intersections = bot.isect_segments(points)
 
-    # for inter in intersections:
-    #     a, b = inter
-    #     for i in range(3):
-    #         for j in range(3):
-    #             image[int(b) + i, int(a) + j] = [0, 255, 0]
+    # Filter intersections within a window defined by the size of the image.
+    # Intersections which are positions close to each other are averaged out.
+    intersections = filterOverlappingIntersections(intersections, 10)
 
-    return points
+    return intersections
 
 def detectLines(image, debug=False):
 
@@ -97,7 +170,7 @@ def detectLines(image, debug=False):
         cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # Detect lines.
-        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 50, 10)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 40, 10)
 
         if (debug):
             cv2.imwrite('intersection.png', image)

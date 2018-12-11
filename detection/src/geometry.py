@@ -121,9 +121,11 @@ def calculateHeight(vertices):
     return vertices[:,1].max() - vertices[:,1].min()
 
 def determineShapeType(vertices):
+    if (len(vertices) == 1): return "point"
+    if (len(vertices) == 2): return "line"
     if (len(vertices) == 3): return "triangle"
     if (len(vertices) == 4): return "rectangle"
     else: return "polygon"
 
 def calculateArea(vertices):
-    return cv2.contourArea(vertices)
+    return cv2.contourArea(vertices) if len(vertices) > 2 else 0

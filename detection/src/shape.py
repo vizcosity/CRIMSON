@@ -16,14 +16,14 @@ def log(message):
 
 class Shape:
 
-    def __init__(self, vertices, id=None):
+    def __init__(self, vertices, id=None, shapeType=None):
         if (type(vertices) != np.ndarray):
             vertices = np.array(vertices)
 
         self.id = id
         self.rawVertices = vertices
         self.rawVertices = vertices.reshape(-1,2)
-        self.type = determineShapeType(self.rawVertices)
+        self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
         self.rawArea = calculateArea(self.rawVertices)
         self.vertices = tidyAndApproximate(self.rawVertices, self.type)
         self.edges = getEdges(self.vertices)
@@ -54,8 +54,9 @@ class Shape:
     def addContainedShape(self,shape):
 
         # Calculate relative width and height of child.
-        shape.relativeWidth = shape.width / self.width
-        shape.relativeHeight = shape.height / self.height
+        if (shape.area != 0):
+            shape.relativeWidth = shape.width / self.width
+            shape.relativeHeight = shape.height / self.height
 
         # Add a level to the child shape.
         shape.increaseNestLevel()
@@ -87,6 +88,13 @@ class Shape:
                     # raise "ERR"
                     return False
         # print(str(otherShape) + " is within " + str(self))
+        return True
+
+    # Method uses insideness testing as described above.
+    def containsPoint(self, point):
+        for edge in self.edges:
+            if not pointWithinPlane(edge, point):
+                return False
         return True
 
 
@@ -127,6 +135,7 @@ class Shape:
 
     def __gt__(self, other):
         return self.area > other.area
+
 
 
 # Given the raw vertices detected by cv2.findContour(), and the shape type,
