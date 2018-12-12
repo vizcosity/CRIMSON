@@ -73,7 +73,7 @@ def pointWithinPlane(line, p):
 
 def euclideanDistance(point1, point2):
     dist = math.sqrt( (point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2 )
-    print("Distance between " + str(point1) + ", and " + str(point2) + ": " + str(dist))
+    # print("Distance between " + str(point1) + ", and " + str(point2) + ": " + str(dist))
     return dist
 
 # For each coordinate along some axis, find the similar coordinates within a

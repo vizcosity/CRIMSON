@@ -14,7 +14,7 @@ from isect_segments_bentley_ottmann import poly_point_isect as bot
 from clean import filterOverlappingIntersections
 from shape import *
 
-_DEBUG = True
+_DEBUG = False
 
 # Logging.
 def log(message):

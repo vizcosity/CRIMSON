@@ -68,12 +68,15 @@ const isFooter = (shape, shapes) => {
 // on every triangle).
 const isImage = shape => {
 
-  if (shape.type != "container") return false;
-  if (shape.contains.filter(s => s.type == 'triangle').length !== 4) return false;
+  if (shape.type != "container" || shape.type != "row") return false;
+  // if (shape.contains.filter(s => s.type == 'triangle').length !== 4) return false;
 
-  shape.contains.forEach(triangle => {
+  // shape.contains.forEach(triangle => {
+  //
+  // });
 
-  });
+  // Examine to see if the container contains any centered intersections.
+  if (shape.contains.filter(s => s.type == 'centered_intersection').length == 0) return false;
 
   return true;
 
@@ -140,6 +143,10 @@ const getInnerFragmentsBetweenPercentiles = (shape, {start, end}, axis=0) => {
 
   // Filter by relative area.
   var fragments = shape.contains.filter(s => {
+
+    // Skip if the prospective fragment is a point.
+    if (s.meta.vertices.length == 1) return false;
+
     var areaRatio = (s.meta.area / shape.meta.area);
     // log(`Area ration of`, areaRatio, `between`, shape.id, `and`, s.id);
     return areaRatio <= _FRAG_THRESH;
@@ -189,6 +196,7 @@ const isDropdown = shape => {
 }
 
 const isButton = shape => {
+  // console.log(shape.id, getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}));
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}).length == 1;
 }
 

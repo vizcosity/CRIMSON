@@ -9,5 +9,15 @@
   },
   "thresholds": {
     "fragmentArea": 0.08
-  }
+  },
+  "inheritance": {
+    "point": ["intersection", "centered_intersection"],
+    "line": [],
+    "polygon": ["triangle", "line", {
+        "rectangle": [{
+            "container": ["row"]
+          }]
+      }]
+  },
+  "filter": ["point", "intersection", "centered_intersection"]
 }

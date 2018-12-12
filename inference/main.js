@@ -6,6 +6,7 @@
 
 const detectContainers = require('./modules/detectContainers');
 const {generateCode, generateACR } = require('./modules/generateCode');
+const filterPrimitives = require('./modules/filterPrimitives');
 const fs = require('fs');
 const { resolve } = require('path');
 
@@ -17,6 +18,14 @@ detectContainers(imagePath).then(async containers => {
 
   var ACR = generateACR(containers);
   fs.writeFileSync('acr.json', JSON.stringify(ACR, null, 2));
+
+  // Filter leftover primitives which have been used for inference but should not
+  // be embedded as code.
+  containers = filterPrimitives(containers);
+
+  // console.log('filtered');
+
+  // console.log(containers);
 
   var containerCode = await generateCode(containers);
 
