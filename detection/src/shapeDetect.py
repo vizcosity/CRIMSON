@@ -41,11 +41,16 @@ if (__name__ == "__main__"):
     # Get containers.
     shapes, appxConts, image, whiteImg = getContainers(image, annotate=True)
 
+    print("SHAPES BEFORE NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
+
+
     # For each container, detect the intersections within the container in order to infer
     # images in the inference pipeline.
     # Need to pass in the 'lastShapeId' so that we enumerate intersection shape ids
     # starting from the last detected shape id in the getContainers method.
     shapes, intersections, image = detectAndNestIntersections(image, shapes, lastShapeId=len(appxConts), annotate=True)
+
+    print("SHAPES AFTER NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
 
     # Get serialised hierarchy.
     jsonHierarchy = serialiseShapeHierachy(shapes)

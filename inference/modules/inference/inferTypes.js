@@ -7,11 +7,13 @@ const config = require('../../config/config.json');
 const _FRAG_THRESH = config.thresholds.fragmentArea;
 
 const getHighestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] < b[1])[0]
+  // shape.meta.vertices.forEach(v => console.log(v[0], 'm'))
+  // console.log(shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1])
+  return shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1]
 };
 
 const getLowestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] > b[1])[0];
+  return shape.meta.vertices.sort((a, b) => a[1] > b[1])[0][1];
 };
 
 const isContainer = shape => {
@@ -92,6 +94,7 @@ const isRow = shape => {
 
   // A row is a special case of a container, so shape must first be identified
   // as a container before specialising.
+  // log(`${shape.id} is type ${shape.type} at row inference point.`)
   if (shape.type != "container") return false;
 
   // For each shape contained, ensure that there is no vertical gaps between the current
@@ -101,8 +104,6 @@ const isRow = shape => {
       if (i == j) continue;
       // log(`${shape.contains[i].id}`,getHighestY(shape.contains[i]), `${shape.contains[i].id}`,getLowestY(shape.contains[i]));
       // log(getLowestY(shape.contains[j]), getHighestY(shape.contains[j]));
-
-
 
       // The highestY of the shape should not be below the lowestY of the other shape.
       if (getHighestY(shape.contains[i]) < getLowestY(shape.contains[j])) return false;

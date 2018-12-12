@@ -59,12 +59,16 @@ class Shape:
             shape.relativeHeight = shape.height / self.height
 
         # Add a level to the child shape.
-        shape.increaseNestLevel()
+        # shape.increaseNestLevel()
+        shape.level = self.level + 1
 
         self.contained.append(shape)
 
     # Returns true if the this contains the shape passed.
     def contains(self,otherShape):
+
+        # Edge case: if self is a point or line, then return false always.
+        if (len(self.vertices) <= 2): return False
 
         # Firstly check that *most of* the otherShape is contained within this one.
         # Drawn sketches will include irregularities that mean that there will
@@ -92,6 +96,8 @@ class Shape:
 
     # Method uses insideness testing as described above.
     def containsPoint(self, point):
+        # Insideness testing for line or point shapes disabled.
+        if (len(self.vertices) <= 2): return False
         for edge in self.edges:
             if not pointWithinPlane(edge, point):
                 return False

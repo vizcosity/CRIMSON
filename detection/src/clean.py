@@ -9,7 +9,7 @@ from geometry import *
 
 # Logging.
 def log(message):
-    # return
+    return
     print("CLEAN | " + str(message))
 
 # Obtains points which are positioned nearby the point according to 'distance'.

@@ -16,6 +16,8 @@ module.exports = function inferProperties(shapes){
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {
 
+    // console.log(`Inferring grid.`);
+
     // Infer grids.
     shape = inferGrid(shape);
 

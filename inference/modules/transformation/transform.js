@@ -46,8 +46,10 @@ function BootstrapObject(shape){
       return "btn btn-primary"
     }
 
-    // Highest level element of a dropdown is div with 'form-group class'.
-    if (shape.type == "dropdown"){
+    if (shape.type == "dropdown") return "dropdown";
+
+    // Highest level element of an input is div with 'form-group class'.
+    if (shape.type == "input"){
       return "form-group";
     }
 
@@ -76,6 +78,46 @@ function BootstrapObject(shape){
     }
 
     if (shape.type == "dropdown"){
+      return [{
+        elementType: 'button',
+        attributes: {
+          class: "btn btn-secondary dropdown-toggle",
+          id: `dropdown_${shape.id}`,
+          'data-toggle': "dropdown",
+          'arias-haspopup': "true",
+          'aria-expanded':"false"
+        },
+        content: `Dropdown ${shape.id}`
+      },
+      {
+        elementType: 'div',
+        attributes: {
+          class: 'dropdown-menu',
+          'aria-labelledby': `dropdown_${shape.id}`
+        },
+        content: [
+          {
+            elementType: 'a',
+            attributes: {
+              class: 'dropdown-item',
+              href: "#"
+            },
+            content: 'Item 1'
+          },
+          {
+            elementType: 'a',
+            attributes: {
+              class: 'dropdown-item',
+              href: "#"
+            },
+            content: 'Item 2'
+          }
+        ]
+      }
+    ]
+    }
+
+    if (shape.type == "input"){
       return [{
         elementType: 'label',
         attributes: {

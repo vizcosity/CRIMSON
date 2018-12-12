@@ -43,11 +43,12 @@ const sortShapesAlongXAxis = (shapes) => {
 
 module.exports = (row) => {
 
+
   // Return if row is not a container.
   if (row.type != "row") {
-    // log(`Row passed is not of type row.`, row);
     return row;
   }
+
 
   // Return if no contained shapes or just a single shape.
   if (row.contains.length <= 1) return row;
@@ -56,7 +57,6 @@ module.exports = (row) => {
   row.contains = sortShapesAlongXAxis(row.contains);
 
   // TODO: Handle having more columns than permitted by the cell budget.
-
 
   var cellBudget = config.grid.cellBudget;
   var totalBudget = config.grid.cellBudget;

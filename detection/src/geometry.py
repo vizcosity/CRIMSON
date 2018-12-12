@@ -3,6 +3,7 @@
 
 import numpy as np
 import cv2
+import math
 
 # Returns a list of edge lines that compose the shape.
 def getEdges(vertices):
@@ -69,6 +70,11 @@ def pointWithinPlane(line, p):
     # print(np.dot([p[0], p[1], 1], eqn) < 0)
 
     return np.dot([p[0], p[1], 1], eqn) < 0
+
+def euclideanDistance(point1, point2):
+    dist = math.sqrt( (point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2 )
+    print("Distance between " + str(point1) + ", and " + str(point2) + ": " + str(dist))
+    return dist
 
 # For each coordinate along some axis, find the similar coordinates within a
 # distance of 5 pixels, then group and average them out.

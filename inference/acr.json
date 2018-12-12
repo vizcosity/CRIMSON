@@ -70,7 +70,7 @@
       },
       {
         "id": "5",
-        "type": "container",
+        "type": "row",
         "meta": {
           "absoluteWidth": 226,
           "absoluteHeight": 116,
@@ -102,113 +102,6 @@
         },
         "level": 1,
         "contains": [
-          {
-            "id": "6",
-            "type": "row",
-            "meta": {
-              "absoluteWidth": 81,
-              "absoluteHeight": 94,
-              "relativeWidth": "35.84070796460177%",
-              "relativeHeight": "81.03448275862068%",
-              "midpoint": [
-                220,
-                138
-              ],
-              "area": 7614,
-              "vertices": [
-                [
-                  179,
-                  185
-                ],
-                [
-                  260,
-                  185
-                ],
-                [
-                  179,
-                  91
-                ],
-                [
-                  260,
-                  91
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": [
-              {
-                "id": "9",
-                "type": "button",
-                "meta": {
-                  "absoluteWidth": 75,
-                  "absoluteHeight": 20,
-                  "relativeWidth": "92.5925925925926%",
-                  "relativeHeight": "21.27659574468085%",
-                  "midpoint": [
-                    220,
-                    172
-                  ],
-                  "area": 1500,
-                  "vertices": [
-                    [
-                      182,
-                      162
-                    ],
-                    [
-                      182,
-                      182
-                    ],
-                    [
-                      257,
-                      182
-                    ],
-                    [
-                      257,
-                      162
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": [
-                  {
-                    "id": "10",
-                    "type": "row",
-                    "meta": {
-                      "absoluteWidth": 13,
-                      "absoluteHeight": 6,
-                      "relativeWidth": "17.333333333333336%",
-                      "relativeHeight": "30.0%",
-                      "midpoint": [
-                        220,
-                        172
-                      ],
-                      "area": 78,
-                      "vertices": [
-                        [
-                          213,
-                          169
-                        ],
-                        [
-                          213,
-                          175
-                        ],
-                        [
-                          226,
-                          175
-                        ],
-                        [
-                          226,
-                          169
-                        ]
-                      ]
-                    },
-                    "level": 4,
-                    "contains": []
-                  }
-                ]
-              }
-            ]
-          },
           {
             "id": "12",
             "type": "row",
@@ -314,7 +207,122 @@
                   }
                 ]
               }
-            ]
+            ],
+            "gridCell": {
+              "count": 7,
+              "clipSize": -0.41592920353982343
+            }
+          },
+          {
+            "id": "6",
+            "type": "row",
+            "meta": {
+              "absoluteWidth": 81,
+              "absoluteHeight": 94,
+              "relativeWidth": "35.84070796460177%",
+              "relativeHeight": "81.03448275862068%",
+              "midpoint": [
+                220,
+                138
+              ],
+              "area": 7614,
+              "vertices": [
+                [
+                  179,
+                  185
+                ],
+                [
+                  260,
+                  185
+                ],
+                [
+                  179,
+                  91
+                ],
+                [
+                  260,
+                  91
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": [
+              {
+                "id": "9",
+                "type": "button",
+                "meta": {
+                  "absoluteWidth": 75,
+                  "absoluteHeight": 20,
+                  "relativeWidth": "92.5925925925926%",
+                  "relativeHeight": "21.27659574468085%",
+                  "midpoint": [
+                    220,
+                    172
+                  ],
+                  "area": 1500,
+                  "vertices": [
+                    [
+                      182,
+                      162
+                    ],
+                    [
+                      182,
+                      182
+                    ],
+                    [
+                      257,
+                      182
+                    ],
+                    [
+                      257,
+                      162
+                    ]
+                  ]
+                },
+                "level": 3,
+                "contains": [
+                  {
+                    "id": "10",
+                    "type": "row",
+                    "meta": {
+                      "absoluteWidth": 13,
+                      "absoluteHeight": 6,
+                      "relativeWidth": "17.333333333333336%",
+                      "relativeHeight": "30.0%",
+                      "midpoint": [
+                        220,
+                        172
+                      ],
+                      "area": 78,
+                      "vertices": [
+                        [
+                          213,
+                          169
+                        ],
+                        [
+                          213,
+                          175
+                        ],
+                        [
+                          226,
+                          175
+                        ],
+                        [
+                          226,
+                          169
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  }
+                ]
+              }
+            ],
+            "gridCell": {
+              "count": 5,
+              "clipSize": -0.6991150442477876
+            }
           }
         ]
       },

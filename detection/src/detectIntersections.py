@@ -8,6 +8,8 @@ import random
 import os
 import math
 import importlib
+from geometry import euclideanDistance
+from shape import Shape
 from isect_segments_bentley_ottmann import poly_point_isect as bot
 from clean import filterOverlappingIntersections
 from shape import *
@@ -36,29 +38,89 @@ def nestIntersection(intersection, shapes):
 
     if (len(shapes) == 0): return None
 
-    highestLevelShape = None
+    # Notion of not having a containing shape.
+    highestLevelShape = Shape([(-1,-1)])
+    highestLevelShape.level = -1
 
     for shape in shapes:
 
-        if shape.containsPoint(intersection):
+        if shape.containsPoint(intersection) and shape.level > highestLevelShape.level:
             highestLevelShape = shape
+            log(str(shape) + " contains " + str(intersection))
 
-        if highestLevelShape is None: continue
+        if highestLevelShape.level == -1: continue
 
         # Check recursively for shapes which are contained.
         highestLevelShapeContained = nestIntersection(intersection, highestLevelShape.contained)
 
         if (highestLevelShapeContained is not None): highestLevelShape = highestLevelShapeContained
 
-    return highestLevelShape
+    return highestLevelShape if highestLevelShape.level != -1 else None
+
+# The same as the method above, except the intersections are added the shape of highest
+# nest level where the intersection is located roughly around the center.
+def nestCenteredIntersection(intersection, shapes):
+
+    if (len(shapes) == 0): return None
+
+    # Notion of not having a containing shape.
+    highestLevelShape = Shape([(-1,-1)])
+    highestLevelShape.level = -1
+
+    # log(shapes)
+
+    for shape in shapes:
+
+        # Only interested in assigning centered intersections into prospective
+        # containers.
+        # if not shape.type == "rectangle": continue
+        if not shape.containsPoint(intersection): continue
+
+        log("Checking if " + str(intersection) + " centered within " + str(shape))
+
+        # Recursively examine all the contained shapes to extract the containing shape
+        # with the highest level.
+        highestLevelShapeContainingCenteredPoint = nestCenteredIntersection(intersection, shape.contained)
+        # Reassign to shape with same level as highestLevelShape if method returns
+        # None.
+        highestLevelShapeContainingCenteredPoint = \
+            highestLevelShape if highestLevelShapeContainingCenteredPoint is None \
+            else highestLevelShapeContainingCenteredPoint
+
+        # Check to see if the current shape is a candidate for housing the intersection
+        # at its centre. If so, we assign it to the 'higehstLevelShape'. It will get
+        # compared and replaced by any higher level shapes in the comparison
+        # below.
+        if (shape.level > highestLevelShape.level \
+            and euclideanDistance(shape.midpoint, intersection) <= 25):
+            highestLevelShape = shape
+
+        # Check recursively for shapes which are contained.
+        # highestLevelShapeContained = nestCenteredIntersection(intersection, highestLevelShape.contained)
+
+        # If both the current shape and any of its contained children do not house
+        # the intersection at their centre, we skip the iteratin.
+        if highestLevelShape.level == -1 \
+         and highestLevelShapeContainingCenteredPoint.level == -1: continue
+
+        # If highestLevelShapeContainingCenteredPoint is assigned a value, then it
+        # will be of a higher level, and so we can make this the highestLevelShape
+        # and return it.
+        if (highestLevelShapeContainingCenteredPoint.level > highestLevelShape.level):
+            highestLevelShape = highestLevelShapeContainingCenteredPoint
+
+    # log("Found centered shape: " + str(highestLevelShape if highestLevelShape.level != -1 else None))
+    return highestLevelShape if highestLevelShape.level != -1 else None
 
 def nestIntersections(intersections, shapes, image, lastShapeId, annotate):
 
+    idIndex = lastShapeId
     for i in range(0, len(intersections)):
 
         intersection = intersections[i]
 
         highestLevelContainingShape = nestIntersection(intersection, shapes)
+        highestLevelShapeContainingIntAtCentre = nestCenteredIntersection(intersection, shapes)
 
         # Intersection could not be nested.
         if (highestLevelContainingShape is None):
@@ -66,11 +128,17 @@ def nestIntersections(intersections, shapes, image, lastShapeId, annotate):
             continue
 
         log("Adding intersection " + str(intersection) + " to " + str(highestLevelContainingShape))
+        log("Adding (centered) intersection " + str(intersection) + " to " + str(highestLevelShapeContainingIntAtCentre))
 
-        intersectionShape = Shape([intersection], id=lastShapeId + i, shapeType="intersection")
+        intersectionShape = Shape([intersection], id=lastShapeId + idIndex, shapeType="intersection")
+        idIndex += 1
+        centeredIntersectionShape = Shape([intersection], id=lastShapeId + idIndex, shapeType="centered_intersection")
+        idIndex += 1
 
-        # Add the intersection to the shape.
+        # Add the intersections to the shapes.
         highestLevelContainingShape.addContainedShape(intersectionShape)
+        if (highestLevelShapeContainingIntAtCentre is not None):
+            highestLevelShapeContainingIntAtCentre.addContainedShape(centeredIntersectionShape)
 
         # Annotate intersection.
         if annotate:
@@ -170,6 +238,8 @@ def detectLines(image, debug=False):
         cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # Detect lines.
+        # The 2nd last paramter is the minimum line length, while the lat parameter
+        # refers to the maximum gap between lines to warrant a 'grouping'.
         lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 40, 10)
 
         if (debug):
