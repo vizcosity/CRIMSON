@@ -203,7 +203,6 @@ const isDropdown = shape => {
 }
 
 const isButton = shape => {
-  if (shape.id == 13) console.log(shape.id, getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6})[0].meta.midpoint);
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}).length == 1;
 }
 
@@ -242,6 +241,16 @@ const inferFooter = shapes => {
 
 const inferInteractiveContainers = shapes => {
   shapes.forEach(shape => {
+
+    // if (shape.id == 13) log(shape.contains)
+
+    // Interactive container detection depends on the presence of fragments
+    // within the container, placed at a certain position. If the shape contains
+    // more than a single child element, then we skip the shape as it is likely
+    // a container containing other shape elements that happen to be fairly small.
+    if (shape.contains.length > 1) return false;
+
+
     if (isDropdown(shape, shapes))  shape.type = "dropdown";
     if (isButton(shape, shapes)) shape.type = "button";
     if (isTextInput(shape, shapes)) shape.type = "textInput";
