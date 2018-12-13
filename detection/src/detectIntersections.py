@@ -180,11 +180,13 @@ def detectAndNestIntersections(image, shapes, lastShapeId, annotate):
 def detectIntersections(lines):
 
     points = []
-    for line in lines:
-        # Convert lines obtained from HoughLinesP into a tuple of two points each
-        # defined with floats instead of ints.
-        for x1, y1, x2, y2 in line:
-            points.append(((x1 + 0.0, y1 + 0.0), (x2 + 0.0, y2 + 0.0)))
+
+    if (lines is not None):
+        for line in lines:
+            # Convert lines obtained from HoughLinesP into a tuple of two points each
+            # defined with floats instead of ints.
+            for x1, y1, x2, y2 in line:
+                points.append(((x1 + 0.0, y1 + 0.0), (x2 + 0.0, y2 + 0.0)))
 
     # Calculate intersections.
     intersections = bot.isect_segments(points)
