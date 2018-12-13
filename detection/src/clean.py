@@ -39,6 +39,10 @@ def getNearbyPoints(point, points, distance):
     # Return nearby points.
     return nearby, commonIndeces
 
+# Alternative implementation which uses Euclidean distane.
+def getNearbyEucPoints(point, points, distance):
+    return [pt for pt in points if euclideanDistance(point, pt) <= distance]
+
 # Averages all points within 'distance' pixels of each other.
 # TODO: Optimise performance by ensuring we are not re-looping over points which
 # have already been averaged...
@@ -47,7 +51,9 @@ def filterOverlappingIntersections(intersections, distance):
     filtered = []
 
     for point in intersections:
-        toAverage, indeces = getNearbyPoints(point, intersections, distance)
+        # toAverage, indeces = getNearbyPoints(point, intersections, distance)
+        toAverage = getNearbyEucPoints(point, intersections, distance)
+
         # Average points.
         averagedX = round(np.mean([x for x, y in toAverage]))
         averagedY = round(np.mean([y for x, y in toAverage]))

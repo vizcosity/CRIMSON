@@ -148,6 +148,7 @@ def nestIntersections(intersections, shapes, image, lastShapeId, annotate):
     return shapes
 
 def drawIntersections(intersections, image, annotate):
+    log("Drawing " + str(len(intersections)) + " intersections.")
     for inter in intersections:
         a, b = inter
         for i in range(3):
@@ -177,6 +178,7 @@ def detectAndNestIntersections(image, shapes, lastShapeId, annotate):
 # Ref: https://github.com/ideasman42/isect_segments-bentley_ottmann
 # TODO: Develop an understanding of how the algorithm works for the writeup.
 def detectIntersections(lines):
+
     points = []
     for line in lines:
         # Convert lines obtained from HoughLinesP into a tuple of two points each
@@ -189,7 +191,7 @@ def detectIntersections(lines):
 
     # Filter intersections within a window defined by the size of the image.
     # Intersections which are positions close to each other are averaged out.
-    intersections = filterOverlappingIntersections(intersections, 10)
+    intersections = filterOverlappingIntersections(intersections, 20)
 
     return intersections
 
@@ -240,21 +242,28 @@ def detectLines(image, debug=False):
         # Detect lines.
         # The 2nd last paramter is the minimum line length, while the lat parameter
         # refers to the maximum gap between lines to warrant a 'grouping'.
-        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 40, 10)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 40, 8)
+
+        # if (debug):
+        #     cv2.imwrite('intersection.png', image)
+        #     for line in lines:
+        #         line = line.ravel()
+        #         start = (line[0], line[1])
+        #         end = (line[2], line[3])
+        #         cv2.line(image, start, end, (0,0,255))
 
         if (debug):
-            cv2.imwrite('intersection.png', image)
-            for line in lines:
-                line = line.ravel()
-                start = (line[0], line[1])
-                end = (line[2], line[3])
-                cv2.line(image, start, end, (0,0,255))
+            intersections = detectIntersections(lines)
+            cv2.imwrite('intersections.png', drawIntersections(intersections, image, True))
 
         return lines
 
 
 
 if (__name__ == "__main__"):
+
+    _DEBUG = True
+
     # Read in arguments
     args = argparse.ArgumentParser()
     ap = argparse.ArgumentParser()
@@ -271,7 +280,7 @@ if (__name__ == "__main__"):
     # this to draw the contours.
     # cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
     # cv2.drawContours(whiteImg, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-    detectLines(image)
+    detectLines(image, debug=True)
     # print(detectLines(image))
 
     # cv2.imshow('Lines', image)
