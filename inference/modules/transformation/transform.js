@@ -12,6 +12,8 @@ const typeMap = require('./typeToElementMap.json');
 
 function BootstrapObject(shape){
 
+  // log("Transforming shape of type", shape.type);
+
   this.shape = shape;
 
   this.elementType = typeMap[shape.type] ? typeMap[shape.type] : 'div';

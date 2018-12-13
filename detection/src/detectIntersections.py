@@ -242,7 +242,7 @@ def detectLines(image, debug=False):
         # Detect lines.
         # The 2nd last paramter is the minimum line length, while the lat parameter
         # refers to the maximum gap between lines to warrant a 'grouping'.
-        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 40, 8)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 7)
 
         # if (debug):
         #     cv2.imwrite('intersection.png', image)

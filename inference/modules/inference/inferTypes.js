@@ -68,7 +68,9 @@ const isFooter = (shape, shapes) => {
 // on every triangle).
 const isImage = shape => {
 
-  if (shape.type != "container" || shape.type != "row") return false;
+  // if (shape.id == 34) log(`Checking if ${shape.id} is an image, in method.`);
+  // log(shape.type);
+  if (shape.type != "container" && shape.type != "row") return false;
   // if (shape.contains.filter(s => s.type == 'triangle').length !== 4) return false;
 
   // shape.contains.forEach(triangle => {
@@ -76,7 +78,8 @@ const isImage = shape => {
   // });
 
   // Examine to see if the container contains any centered intersections.
-  if (shape.contains.filter(s => s.type == 'centered_intersection').length == 0) return false;
+  // log(`Checking if ${shape.id}(${shape.type}) is an image.`);
+  if (shape.contains.filter(s => s.type === 'centered_intersection').length == 0) return false;
 
   return true;
 
@@ -84,10 +87,14 @@ const isImage = shape => {
 
 const inferImages = shapes => {
   shapes.forEach(shape => {
-    if (isImage(shape)) shape.type = "image";
 
-    // Clear contained triangles.
-    shape.contains = shape.contains.filter(s => s.type != "triangle");
+    if (isImage(shape)) {
+      shape.type = "image";
+      // Clear contained shapes.
+      shape.contains = [];
+    }
+
+
 
   });
   return shapes;
@@ -196,7 +203,7 @@ const isDropdown = shape => {
 }
 
 const isButton = shape => {
-  // console.log(shape.id, getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}));
+  if (shape.id == 13) console.log(shape.id, getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6})[0].meta.midpoint);
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}).length == 1;
 }
 

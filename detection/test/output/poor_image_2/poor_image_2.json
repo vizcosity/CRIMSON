@@ -254,13 +254,13 @@
                   "relativeWidth": "100.0%",
                   "relativeHeight": "100.0%",
                   "midpoint": [
-                    95,
+                    94,
                     120
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
-                      95.0,
+                      94.0,
                       120.0
                     ]
                   ]
@@ -277,13 +277,13 @@
                   "relativeWidth": "100.0%",
                   "relativeHeight": "100.0%",
                   "midpoint": [
-                    95,
+                    94,
                     120
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
-                      95.0,
+                      94.0,
                       120.0
                     ]
                   ]
@@ -304,14 +304,14 @@
           "relativeWidth": "100.0%",
           "relativeHeight": "100.0%",
           "midpoint": [
-            245,
-            142
+            272,
+            267
           ],
           "area": 0.0,
           "vertices": [
             [
-              245.0,
-              142.0
+              272.0,
+              267.0
             ]
           ]
         },
