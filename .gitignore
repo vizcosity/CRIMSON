@@ -2,3 +2,4 @@ sketch-code/data
 sketch-code/bin
 pix2code/datasets
 *.pyc
+inference/node_modules/*

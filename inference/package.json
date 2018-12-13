@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "benchmark": "DEBUG=true node main.js ../detection/test/images/benchmark.png",
-    "gridsample" : "DEBUG=true node main.js ../detection/test/images/grid_sample_1.png",
-    "gridsample2" : "DEBUG=true node main.js ../detection/test/images/grid_sample_2.png"
+    "gridsample": "DEBUG=true node main.js ../detection/test/images/grid_sample_1.png",
+    "gridsample2": "DEBUG=true node main.js ../detection/test/images/grid_sample_2.png"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,12 @@
   },
   "homepage": "https://github.com/Vizcosity/CRIMSON#readme",
   "dependencies": {
-    "indent-string": "^3.2.0"
+    "commander": "^2.19.0",
+    "generator": "^1.0.1",
+    "indent-string": "^3.2.0",
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.10.3"
   }
 }

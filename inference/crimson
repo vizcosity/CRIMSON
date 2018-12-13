@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+
+/**
+ * Inference pipeline entry point for CRIMSON rapid ui prototyping tool.
+ *
+ *  @ Aaron Baw 2018
+ */
+
+const args = require('commander');
+const package = require('./package.json');
+const detectContainers = require('./modules/detectContainers');
+const {generateCode, generateACR } = require('./modules/generateCode');
+const filterPrimitives = require('./modules/filterPrimitives');
+const fs = require('fs');
+const { resolve } = require('path');
+const mkdir = require('mkdirp');
+const generator = require('generator');
+
+// Parse arguments.
+args
+  .version(package.version)
+  .usage("--image <image path> --output [output directory] [--context , --project]")
+  .option('-i, --image <image path>', 'Source image.')
+  .option('-o, --output [output path]', 'Output directory.', './')
+  .option('-c, --context [vanilla, bootstrap, react]', 'Context type ("vanilla", "bootstrap", "react")', 'vanilla')
+  .option('-p, --project [static, server]', 'Output type ("static", "server")', 'server')
+  .parse(process.argv)
+
+if (!args.image) return args.help();
+var imagePath = args.image;
+imagePath = resolve(__dirname, imagePath);
+var file = imagePath.split('/')[imagePath.split('/').length - 1]
+var fileName = file.split('.')[0].substring(0, file.split('.')[0].length);
+
+detectContainers(imagePath).then(async containers => {
+
+  var ACR = generateACR(containers);
+  fs.writeFileSync('acr.json', JSON.stringify(ACR, null, 2));
+
+  // Filter leftover primitives which have been used for inference but should not
+  // be embedded as code.
+  containers = filterPrimitives(containers);
+
+  // console.log('filtered');
+
+  // console.log(containers);
+
+  var containerCode = await generateCode(containers);
+
+  var HTMLOutput = `
+  <!-- Skeleton Code generated below via CRIMSON prototyping tool ${package.version} -->
+  <!-- Tool available at ${package.homepage} -->
+  <!-- Copyright @ Aaron Baw 2018 -->
+  <!DOCTYPE html>
+  <html>
+    <head>
+
+      <!-- Metadata -->
+      <meta source-filename="${file}" />
+      <meta source-path="${imagePath}" />
+      <meta context="${args.context}" />
+      <meta output-type="${args.project}" />
+
+      <title>${fileName[0].toUpperCase() + fileName.substring(1, fileName.length)}</title>
+
+      <!-- CSS -->
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+      <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+    \t${containerCode}
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+  </html>`
+
+  log(`Creating dir: ${fileName} in ${args.output}.`);
+  mkdirp.sync(resolve(__dirname, args.output, fileName));
+  fs.writeFileSync(resolve(__dirname, args.output, fileName, '/index.html'), HTMLOutput);
+
+
+}).catch(console.err);
