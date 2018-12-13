@@ -19,5 +19,9 @@
           }]
       }]
   },
-  "filter": ["point", "intersection", "centered_intersection"]
+  "filter": ["point", "intersection", "centered_intersection"],
+  "globalAssetMap": {
+    "css": "style",
+    "js": "main"
+  }
 }

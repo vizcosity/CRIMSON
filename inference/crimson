@@ -8,14 +8,17 @@
  */
 
 const args = require('commander');
+const bundle = require('./modules/bundle');
 const package = require('./package.json');
 const detectContainers = require('./modules/detectContainers');
 const {generateCode, generateACR } = require('./modules/generateCode');
 const filterPrimitives = require('./modules/filterPrimitives');
 const fs = require('fs');
-const { resolve } = require('path');
+const { resolve, basename } = require('path');
 const mkdir = require('mkdirp');
-const generator = require('generator');
+// const exec = require('util').promisify(require('child_process').exec);
+const {exec} = require('child_process');
+// const generator = require('generator');
 
 // Parse arguments.
 args
@@ -30,13 +33,17 @@ args
 if (!args.image) return args.help();
 var imagePath = args.image;
 imagePath = resolve(__dirname, imagePath);
-var file = imagePath.split('/')[imagePath.split('/').length - 1]
-var fileName = file.split('.')[0].substring(0, file.split('.')[0].length);
+const file = imagePath.split('/')[imagePath.split('/').length - 1]
+const fileName = file.split('.')[0].substring(0, file.split('.')[0].length);
+const outputDir = resolve(__dirname, args.output, fileName);
+
+// Create output directory.
+mkdir.sync(outputDir);
 
 detectContainers(imagePath).then(async containers => {
 
   var ACR = generateACR(containers);
-  fs.writeFileSync('acr.json', JSON.stringify(ACR, null, 2));
+  fs.writeFileSync(resolve(outputDir,'acr.json'), JSON.stringify(ACR, null, 2));
 
   // Filter leftover primitives which have been used for inference but should not
   // be embedded as code.
@@ -78,9 +85,26 @@ detectContainers(imagePath).then(async containers => {
     </body>
   </html>`
 
-  log(`Creating dir: ${fileName} in ${args.output}.`);
-  mkdirp.sync(resolve(__dirname, args.output, fileName));
-  fs.writeFileSync(resolve(__dirname, args.output, fileName, '/index.html'), HTMLOutput);
+
+  await bundle({outputDir, context: args.context, targets: {source: HTMLOutput, name: 'index.html'}});
+
+  // Run parcel-bundler in output dir.
+  if (args.project == 'server'){
+    log(`Running parcel-bundler.`, resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') + ' ' + resolve(outputDir, 'index.html') + ' -d ' + resolve(outputDir, 'dist'));
+    exec(
+      resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') +
+      ' ' +
+      resolve(outputDir, 'index.html') +
+      ' -d ' +
+      resolve(outputDir, 'dist')
+    ).stdout.pipe(process.stdout);
+  }
 
 
 }).catch(console.err);
+
+
+// Logging.
+function log(...msg){
+  if (process.env.DEBUG) console.log(basename(__filename.split('.')[0]).toUpperCase(), '|', ...msg);
+}
