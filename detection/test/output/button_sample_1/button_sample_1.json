@@ -139,8 +139,89 @@
                 },
                 "level": 3,
                 "contains": []
+              },
+              {
+                "id": "10",
+                "type": "centered_line",
+                "meta": {
+                  "absoluteWidth": 11.0,
+                  "absoluteHeight": 11.0,
+                  "relativeWidth": "100.0%",
+                  "relativeHeight": "100.0%",
+                  "midpoint": [
+                    154,
+                    172
+                  ],
+                  "area": 0.0,
+                  "vertices": [
+                    [
+                      149,
+                      177
+                    ],
+                    [
+                      160,
+                      166
+                    ]
+                  ]
+                },
+                "level": 3,
+                "contains": []
               }
             ]
+          },
+          {
+            "id": "8",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 18.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "100.0%",
+              "relativeHeight": "100.0%",
+              "midpoint": [
+                145,
+                162
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  136,
+                  162
+                ],
+                [
+                  154,
+                  162
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "9",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 27.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "100.0%",
+              "relativeHeight": "100.0%",
+              "midpoint": [
+                148,
+                165
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  134,
+                  165
+                ],
+                [
+                  161,
+                  165
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
           }
         ]
       }

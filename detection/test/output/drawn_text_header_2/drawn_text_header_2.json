@@ -1,0 +1,210 @@
+[
+  {
+    "id": "0",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 287.0,
+      "absoluteHeight": 422.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        150,
+        219
+      ],
+      "area": 121114.0,
+      "vertices": [
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          430
+        ],
+        [
+          294,
+          430
+        ],
+        [
+          294,
+          8
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "4",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 154.0,
+          "absoluteHeight": 43.0,
+          "relativeWidth": "53.65853658536586%",
+          "relativeHeight": "10.189573459715639%",
+          "midpoint": [
+            124,
+            186
+          ],
+          "area": 6622.0,
+          "vertices": [
+            [
+              47,
+              164
+            ],
+            [
+              47,
+              207
+            ],
+            [
+              201,
+              207
+            ],
+            [
+              201,
+              164
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "12",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "100.0%",
+              "relativeHeight": "100.0%",
+              "midpoint": [
+                48,
+                183
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  48.0,
+                  183.0
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 174.0,
+          "absoluteHeight": 138.0,
+          "relativeWidth": "60.62717770034843%",
+          "relativeHeight": "32.70142180094787%",
+          "midpoint": [
+            130,
+            302
+          ],
+          "area": 24012.0,
+          "vertices": [
+            [
+              43,
+              233
+            ],
+            [
+              43,
+              371
+            ],
+            [
+              217,
+              371
+            ],
+            [
+              217,
+              233
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "14",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "100.0%",
+              "relativeHeight": "100.0%",
+              "midpoint": [
+                65,
+                303
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  65.0,
+                  303.0
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "12",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 39.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            278,
+            234
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              278,
+              254
+            ],
+            [
+              278,
+              215
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "30",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 19.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            279,
+            204
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              279,
+              214
+            ],
+            [
+              279,
+              195
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

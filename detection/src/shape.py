@@ -54,9 +54,10 @@ class Shape:
     def addContainedShape(self,shape):
 
         # Calculate relative width and height of child.
-        if (shape.area != 0):
-            shape.relativeWidth = shape.width / self.width
-            shape.relativeHeight = shape.height / self.height
+        # if (shape.area != 0):
+        #     if ()
+        shape.relativeWidth = shape.width / self.width if shape.width != 0 else 0
+        shape.relativeHeight = shape.height / self.height if shape.height != 0 else 0
 
         # Add a level to the child shape.
         # shape.increaseNestLevel()

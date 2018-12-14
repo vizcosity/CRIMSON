@@ -3,7 +3,7 @@
 # and their inferred hierarchy.
 
 from findContainer import getContainers, nestShapes
-from detectIntersections import detectAndNestIntersections
+from detectLine import detectAndNestIntersections, detectAndNestLines
 from shapesToJSON import serialiseShapeHierachy
 import cv2
 import os
@@ -11,7 +11,7 @@ import imutils
 import json
 import argparse
 
-def outputResultsToDir(dir, filename, json, annotated, containers, intersections):
+def outputResultsToDir(dir, filename, json, annotated, containers, intersections, lines):
     # Output results.
 
     # If the output argument has been passed, then we write the output to the
@@ -28,6 +28,14 @@ def outputResultsToDir(dir, filename, json, annotated, containers, intersections
     cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_containers.png', containers)
 
     cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_intersections.png', intersections)
+
+    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_lines.png', lines)
+
+
+def getFreshImage(imagePath):
+    image = cv2.imread(imagePath)
+    image = imutils.resize(image, width=300)
+    return image
 
 if (__name__ == "__main__"):
     # print("WE DOIN IT FAM.")
@@ -54,6 +62,10 @@ if (__name__ == "__main__"):
     # starting from the last detected shape id in the getContainers method.
     shapes, intersections, intersectionImg = detectAndNestIntersections(originalImg, shapes, lastShapeId=len(appxConts), annotate=True)
 
+    # For each container, detect lines and nest horizontal lines which occur
+    # roughly around the vertical center of the container.
+    shapes, lines, lineImg = detectAndNestLines(getFreshImage(args["image"]), shapes, lastShapeId=len(intersections), annotate=True)
+
     # print("SHAPES AFTER NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
 
     # Get serialised hierarchy.
@@ -61,5 +73,5 @@ if (__name__ == "__main__"):
 
     if (args['output']):
         filename = args['image'].split('/')[-1].split('.')[0]
-        outputResultsToDir(args['output'], filename, jsonHierarchy, containerImg, whiteImg, intersectionImg)
+        outputResultsToDir(args['output'], filename, jsonHierarchy, containerImg, whiteImg, intersectionImg, lineImg)
     else: print(json.dumps(jsonHierarchy, indent=4))

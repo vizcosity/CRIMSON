@@ -1,0 +1,436 @@
+[
+  {
+    "id": "0",
+    "type": "container",
+    "meta": {
+      "absoluteWidth": 289,
+      "absoluteHeight": 180,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        152,
+        98
+      ],
+      "area": 52020,
+      "vertices": [
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          188
+        ],
+        [
+          296,
+          188
+        ],
+        [
+          296,
+          8
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "4",
+        "type": "navigation",
+        "meta": {
+          "absoluteWidth": 129,
+          "absoluteHeight": 23,
+          "relativeWidth": "44.636678200692046%",
+          "relativeHeight": "12.777777777777777%",
+          "midpoint": [
+            102,
+            56
+          ],
+          "area": 2967,
+          "vertices": [
+            [
+              38,
+              44
+            ],
+            [
+              38,
+              67
+            ],
+            [
+              167,
+              67
+            ],
+            [
+              167,
+              44
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "3",
+        "type": "footer",
+        "meta": {
+          "absoluteWidth": 89,
+          "absoluteHeight": 57,
+          "relativeWidth": "30.79584775086505%",
+          "relativeHeight": "31.666666666666664%",
+          "midpoint": [
+            84,
+            122
+          ],
+          "area": 5073,
+          "vertices": [
+            [
+              39,
+              93
+            ],
+            [
+              39,
+              150
+            ],
+            [
+              128,
+              150
+            ],
+            [
+              128,
+              93
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "12",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                71,
+                110
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  71,
+                  110
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "13",
+            "type": "centered_intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                71,
+                110
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  71,
+                  110
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "14",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                69,
+                109
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  69,
+                  109
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "15",
+            "type": "centered_intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                69,
+                109
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  69,
+                  109
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "16",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                66,
+                108
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  66,
+                  108
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "17",
+            "type": "centered_intersection",
+            "meta": {
+              "absoluteWidth": 0,
+              "absoluteHeight": 0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                66,
+                108
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  66,
+                  108
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "22",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 39,
+              "absoluteHeight": 1,
+              "relativeWidth": "43.82022471910113%",
+              "relativeHeight": "1.7543859649122806%",
+              "midpoint": [
+                102,
+                110
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  82,
+                  110
+                ],
+                [
+                  121,
+                  109
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "30",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 19,
+              "absoluteHeight": 1,
+              "relativeWidth": "21.34831460674157%",
+              "relativeHeight": "1.7543859649122806%",
+              "midpoint": [
+                96,
+                108
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  87,
+                  108
+                ],
+                [
+                  106,
+                  107
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "45",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 19,
+              "absoluteHeight": 1,
+              "relativeWidth": "21.34831460674157%",
+              "relativeHeight": "1.7543859649122806%",
+              "midpoint": [
+                112,
+                108
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  102,
+                  108
+                ],
+                [
+                  121,
+                  107
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "55",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 18,
+              "absoluteHeight": 0,
+              "relativeWidth": "20.224719101123593%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                76,
+                112
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  67,
+                  112
+                ],
+                [
+                  85,
+                  112
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "64",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 10,
+              "absoluteHeight": 0,
+              "relativeWidth": "11.235955056179774%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                84,
+                111
+              ],
+              "area": 0,
+              "vertices": [
+                [
+                  79,
+                  111
+                ],
+                [
+                  89,
+                  111
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "14",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 30,
+          "absoluteHeight": 0,
+          "relativeWidth": "10.380622837370241%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            53,
+            108
+          ],
+          "area": 0,
+          "vertices": [
+            [
+              38,
+              108
+            ],
+            [
+              68,
+              108
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "28",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 30,
+          "absoluteHeight": 0,
+          "relativeWidth": "10.380622837370241%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            53,
+            107
+          ],
+          "area": 0,
+          "vertices": [
+            [
+              38,
+              107
+            ],
+            [
+              68,
+              107
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

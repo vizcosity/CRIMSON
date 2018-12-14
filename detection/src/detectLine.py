@@ -57,6 +57,39 @@ def nestIntersection(intersection, shapes):
 
     return highestLevelShape if highestLevelShape.level != -1 else None
 
+# Looks through the shapes and returns shape of highest level such
+# that the shape contains the line at its vertical centre.
+def getHighestLvlShapeContainingLineAtCentre(line, shapes):
+
+    if (len(shapes) == 0): return None
+
+    # Notion of not having a containing shape.
+    highestLevelShape = Shape([-1,-1])
+    highestLevelShape.level = -1
+
+    for shape in shapes:
+
+        # Check if shape contains the line.
+        if shape.contains(line):
+
+            # Get the highest level shape recursively from contained components.
+            highestLevelContainedShape = getHighestLvlShapeContainingLineAtCentre(line, shape.contained)
+            if highestLevelContainedShape is None: highestLevelContainedShape = highestLevelShape
+
+            # Ensure that the line is roughly around the vertical centre of the
+            # containing shape.
+            if abs(line.midpoint[1] - shape.midpoint[1]) <= 15:
+                # New shape candidate.
+                if shape.level > highestLevelShape.level: highestLevelShape = shape
+
+                # Check that any contained shapes do not contain the line at some
+                # higher nesting level.
+                if highestLevelContainedShape.level > highestLevelShape.level:
+                    highestLevelShape = highestLevelContainedShape
+
+    return highestLevelShape if highestLevelShape.level != -1 else None
+
+
 # The same as the method above, except the intersections are added the shape of highest
 # nest level where the intersection is located roughly around the center.
 def nestCenteredIntersection(intersection, shapes):
@@ -189,7 +222,11 @@ def detectIntersections(lines):
                 points.append(((x1 + 0.0, y1 + 0.0), (x2 + 0.0, y2 + 0.0)))
 
     # Calculate intersections.
-    intersections = bot.isect_segments(points)
+    try:
+        intersections = bot.isect_segments(points)
+    except:
+        log("Could not find intersections for " + str(len(lines)) + " detected.")
+        intersections = []
 
     # Filter intersections within a window defined by the size of the image.
     # Intersections which are positions close to each other are averaged out.
@@ -197,7 +234,54 @@ def detectIntersections(lines):
 
     return intersections
 
-def detectLines(image, debug=False):
+def drawLines(lines, image):
+
+    for line in lines:
+        x1, y1, x2, y2 = line.ravel()
+        cv2.line(image, (x1, y1), (x2, y2), (100,200,10))
+
+    return image
+
+def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
+
+    idIndex = lastShapeId
+
+    for line in lines:
+        x1, y1, x2, y2 = line.ravel()
+        line = Shape([[x1, y1], [x2, y2]], shapeType="centered_line", id=idIndex)
+
+        # Skip if the line is not horizontal.
+        if line.height > line.width: continue
+
+        idIndex += 1
+
+        # Get highest level containing shape (at centre)
+        containingShape = getHighestLvlShapeContainingLineAtCentre(line, shapes)
+
+        if containingShape is None: continue
+
+        containingShape.addContainedShape(line)
+
+    return shapes
+
+def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
+
+    # Detect lines.
+    lines = detectLines(image, erode=False)
+
+    # Draw the lines.
+    if annotate: drawLines(lines, image)
+
+    # cv2.imshow('image', image)
+    # cv2.waitKey(0)
+
+    # Nest lines within shapes.
+    shapes = nestCenteredLines(lines, shapes, image, lastShapeId, annotate)
+
+    # Return shapes, lines and image.
+    return shapes, lines, image
+
+def detectLines(image, debug=False, erode=True):
 
         imgHeight, imgWidth, channels = image.shape
 
@@ -225,19 +309,19 @@ def detectLines(image, debug=False):
 
         # Erode the image to remove double line specifically around crosses.
         # erode_kernel = np.ones((2,2))
-
-        # TODO: Here we attempt to extract what's known as the 'morphological' skeleton;
-        # This in essence is the shape which appears after we repeatedly erode and
-        # dilate a particular image with respect to a kernel designed to target
-        # particular structures. Here, we want to find the skeleton pertaining to
-        # imaegs, and so we use a 'cross' structuring element.
-        erode_kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
-
-        eroded = cv2.erode(blurred, erode_kernel, iterations=2)
-        if (debug): cv2.imwrite('eroded.png', eroded)
+        preCannyImage = blurred
+        if erode:
+            # TODO: Here we attempt to extract what's known as the 'morphological' skeleton;
+            # This in essence is the shape which appears after we repeatedly erode and
+            # dilate a particular image with respect to a kernel designed to target
+            # particular structures. Here, we want to find the skeleton pertaining to
+            # imaegs, and so we use a 'cross' structuring element.
+            erode_kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+            preCannyImage = cv2.erode(blurred, erode_kernel, iterations=2)
+            if (debug): cv2.imwrite('eroded.png', preCannyImage)
 
         # Canny edge detection.
-        canny = cv2.Canny(eroded, 100, 200)
+        canny = cv2.Canny(preCannyImage, 100, 200)
 
         cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -245,6 +329,9 @@ def detectLines(image, debug=False):
         # The 2nd last paramter is the minimum line length, while the lat parameter
         # refers to the maximum gap between lines to warrant a 'grouping'.
         lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 7)
+        # lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 20)
+
+        log("Detected " + str(len(lines)) + " lines.")
 
         # if (debug):
         #     cv2.imwrite('intersection.png', image)
@@ -282,9 +369,14 @@ if (__name__ == "__main__"):
     # this to draw the contours.
     # cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
     # cv2.drawContours(whiteImg, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-    detectLines(image, debug=True)
+    lines = detectLines(image, debug=True, erode=False)
     # print(detectLines(image))
 
-    # cv2.imshow('Lines', image)
-    cv2.imwrite('lines.png', image)
+    # Write detected lines to image.
+    lineImage = cv2.imread(args["image"])
+    lineImage = imutils.resize(lineImage, width=300)
+    for line in lines:
+        x1, y1, x2, y2 = line.ravel()
+        cv2.line(lineImage, (x1, y1), (x2, y2), (0,0,255))
+    cv2.imwrite('lines.png', lineImage)
     # cv2.waitKey(0)

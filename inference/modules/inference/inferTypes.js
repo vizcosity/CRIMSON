@@ -63,14 +63,33 @@ const isFooter = (shape, shapes) => {
   return lowerMostContainer && (shape.id == lowerMostContainer.id);
 }
 
+// Text header specification:
+// Must contain a single centered horizontal line which takes up at least 33% of the
+// width of the parent container.
+const isHeader = shape => {
+
+  log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
+
+  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.relativeWidth) >= 33).length == 1;
+
+}
+
+// Paragraph component specification:
+// Must contain more than a single contained horizontal line which takes up
+// at least 33% of the width of the parent container.
+const isParagraph = shape => {
+
+  return shape.contains.filter(s => s.type == "horizontal_line" && parseFloat(s.relativeWidth) >= 33).length >= 2;
+
+}
+
 // Image specification:
 // Container containing four triangles at all orientations. (tip facing inwards
 // on every triangle).
 const isImage = shape => {
 
-  // if (shape.id == 34) log(`Checking if ${shape.id} is an image, in method.`);
-  // log(shape.type);
   if (shape.type != "container" && shape.type != "row") return false;
+
   // if (shape.contains.filter(s => s.type == 'triangle').length !== 4) return false;
 
   // shape.contains.forEach(triangle => {
@@ -83,6 +102,19 @@ const isImage = shape => {
 
   return true;
 
+};
+
+const inferText = shapes => {
+
+  // console.log('inferring text on', shapes.length);
+  shapes.forEach(shape => {
+    if (isHeader(shape)) shape.type = "header";
+    if (isParagraph(shape)) shape.type = "paragraph";
+
+    // log(`Inferring if text: `, shape);
+  });
+
+  return shapes;
 };
 
 const inferImages = shapes => {
@@ -273,6 +305,8 @@ module.exports = (shapes) => {
   shapes = inferImages(shapes);
 
   shapes = inferInteractiveContainers(shapes);
+
+  shapes = inferText(shapes);
 
   return shapes;
 }

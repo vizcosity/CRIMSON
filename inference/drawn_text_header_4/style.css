@@ -1,0 +1,41 @@
+html, body {
+  margin:0;
+  width: 100%;
+  height: 100%;
+  font-family: "Avenir", sans-serif;
+}
+
+.container, .row {
+  border: 1px solid #37474F;
+  padding: 10px;
+  /*
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fill-available;
+  width: -moz-fill-available;
+  width: -webkit-fill-available;
+  margin: 5px; */
+}
+
+/* Wrap labels in a container so that we don't push a completely filled row
+with columns to a new line */
+.label-wrap {
+  border: 0px;
+  width: 100%;
+}
+
+.row {
+  border: 1px solid red;
+  align-items: center;
+  margin: 5px;
+}
+
+.row .container {
+  border: 1px solid green;
+}
+
+.row .row {
+  border: 1px solid green;
+}
