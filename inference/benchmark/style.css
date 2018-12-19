@@ -19,24 +19,6 @@ html, body {
   margin: 5px; */
 }
 
-/* ID Labels are hidden by default, toggled with a keypress */
-span.label-wrap {
-  display: none;
-}
-
-/* Panels are full-height containers */
-.panel {
-  height: 100%;
-}
-
-/* Navigation bar must not exceed 60 pixels in height */
-nav {
-  height: 70px;
-}
-
-img {
-  max-height: 100%;
-}
 /* Wrap labels in a container so that we don't push a completely filled row
 with columns to a new line */
 .label-wrap {

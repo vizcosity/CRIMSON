@@ -1,5 +1,5 @@
 /**
- * Container detecter wrapper which interfaces with the python detection scripts.
+ * Primitive detecter wrapper which interfaces with the python detection scripts.
  */
 
 // Dependencies.

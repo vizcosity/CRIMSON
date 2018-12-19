@@ -3,3 +3,7 @@ sketch-code/bin
 pix2code/datasets
 *.pyc
 inference/node_modules/*
+detection/src/clf/training_data/squiggle_pos/*.png
+detection/src/clf/training_data/squiggle_neg/*.png
+detection/src/clf/training_data/squiggle_yolo/*.png
+detection/src/clf/training_data/squiggle_yolo/*.txt

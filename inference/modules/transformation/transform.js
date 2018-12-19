@@ -20,7 +20,7 @@ function BootstrapObject(shape){
 
   this.attributes = {
     'class': resolveClass(shape),
-    'style': shape.level != 0 ? `height:${shape.meta.relativeHeight}` : "",
+    // 'style': shape.level != 0 ? `height:${shape.meta.relativeHeight}` : "",
     'data-id': shape.id,
     ...resolveCustomAttributes(shape)
   }
@@ -75,6 +75,12 @@ function BootstrapObject(shape){
   }
 
   function resolveCustomContent(shape){
+
+    switch(shape.type){
+      case "navigation":
+      // Navigation bar itself must not exceed 60px in height.
+    }
+
     if (shape.type == "button"){
       return `Button ${shape.id}`
     }

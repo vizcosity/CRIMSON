@@ -10,7 +10,7 @@
 const args = require('commander');
 const bundle = require('./modules/bundle');
 const package = require('./package.json');
-const detectContainers = require('./modules/detectContainers');
+const detectPrimitives = require('./modules/detectPrimitives');
 const {generateCode, generateACR } = require('./modules/generateCode');
 const filterPrimitives = require('./modules/filterPrimitives');
 const fs = require('fs');
@@ -40,20 +40,40 @@ const outputDir = resolve(__dirname, args.output, fileName);
 // Create output directory.
 mkdir.sync(outputDir);
 
-detectContainers(imagePath).then(async containers => {
+// Generate the ACR JSON file, and return the path of the generated file.
+// Any changes made by the user will be made to this file using the interactive
+// platform.
+detectPrimitives(imagePath).then(async primitives => {
 
-  var ACR = generateACR(containers);
-  fs.writeFileSync(resolve(outputDir,'acr.json'), JSON.stringify(ACR, null, 2));
+  log(`Generating ACR for`, fileName);
+  var ACR = generateACR(primitives);
+  var outputFilePath = resolve(outputDir,'acr.json')
+  fs.writeFileSync(outputFilePath, JSON.stringify(ACR, null, 2));
 
+  log(`Generated ACR.`);
+
+  // Return the path of the ACR file generated.
+  return outputFilePath;
+
+}).then(async acrFilePath => {
+
+  log(`Loading ACR file for`, fileName);
+
+  // Load primitives from ACR file.
+  var primitives = JSON.parse(fs.readFileSync(acrFilePath));
+
+  log(`Loaded.`);
+
+
+  log(`Filtering unused primitives.`);
   // Filter leftover primitives which have been used for inference but should not
   // be embedded as code.
-  containers = filterPrimitives(containers);
+  primitives = filterPrimitives(primitives);
 
-  // console.log('filtered');
+  log(`Generating code for`, fileName);
 
-  // console.log(containers);
+  var code = await generateCode(primitives);
 
-  var containerCode = await generateCode(containers);
 
   var HTMLOutput = `
   <!-- Skeleton Code generated below via CRIMSON prototyping tool ${package.version} -->
@@ -76,7 +96,7 @@ detectContainers(imagePath).then(async containers => {
       <link rel="stylesheet" type="text/css" href="style.css" />
     </head>
     <body>
-    \t${containerCode}
+    \t${code}
 
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -85,7 +105,8 @@ detectContainers(imagePath).then(async containers => {
     </body>
   </html>`
 
-
+  log(`Generated Code.`);
+  log(`Bundling project and saving output to`, outputDir);
   await bundle({outputDir, context: args.context, targets: {source: HTMLOutput, name: 'index.html'}});
 
   // Run parcel-bundler in output dir.
@@ -100,8 +121,9 @@ detectContainers(imagePath).then(async containers => {
     ).stdout.pipe(process.stdout);
   }
 
+})
 
-}).catch(console.err);
+.catch(console.err);
 
 
 // Logging.

@@ -242,6 +242,18 @@ const isTextInput = shape => {
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0, end: 0.2}).length == 1;
 }
 
+const inferPanels = shapes => {
+  // All highest level containers should be panels.
+  // During primitive detection, we nest all shapes within our top level
+  // containers, or 'windows'. These essentially form panels that will serve to
+  // represent content 'pages' (keeping in mind that the entire page is still
+  // a signle page static site).
+  shapes.filter(s => s.level == 0).forEach(shape => {
+    shape.type = "panel";
+  });
+  return shapes;
+}
+
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
@@ -293,6 +305,9 @@ const inferInteractiveContainers = shapes => {
 
 // TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
+
+  // Detect presence of *panels*, which are full-height containers / pages.
+  shapes = inferPanels(shapes);
 
   // Appropriate rows and containers must first be inferred.
   shapes = inferFromMap(shapes);
