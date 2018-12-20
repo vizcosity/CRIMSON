@@ -33,7 +33,7 @@ function BootstrapObject(shape){
     if (shape.gridCell && shape.gridCell.count) return `col-${shape.gridCell.count}`;
 
     if (shape.type == "navigation"){
-      return "navbar navbar-expand-lg navbar-light bg-light";
+      return "navbar navbar-expand-lg navbar-dark bg-dark";
     }
 
     if (shape.type == "footer"){
@@ -60,6 +60,14 @@ function BootstrapObject(shape){
   }
 
   function resolveCustomAttributes(shape){
+
+    // If shape is a type of container, we want to preserve the relative height.
+    if (["container", "row"].indexOf(shape.type) !== -1) {
+      return {
+        style: `height:${shape.meta.relativeHeight}`
+      }
+    }
+
     if (shape.type == "image"){
       // Use template image for now.
       return {
@@ -78,7 +86,14 @@ function BootstrapObject(shape){
 
     switch(shape.type){
       case "navigation":
-      // Navigation bar itself must not exceed 60px in height.
+      return [{
+        elementType: 'a',
+        attributes: {
+          href: '#',
+          class: "navbar-brand"
+        },
+        content: "Nav"
+      }]
     }
 
     if (shape.type == "button"){

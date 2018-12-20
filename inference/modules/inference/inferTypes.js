@@ -9,11 +9,12 @@ const _FRAG_THRESH = config.thresholds.fragmentArea;
 const getHighestY = shape => {
   // shape.meta.vertices.forEach(v => console.log(v[0], 'm'))
   // console.log(shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1])
-  return shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1]
+  console.log(shape.meta.vertices);
+  return shape.meta.vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1]
 };
 
 const getLowestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] > b[1])[0][1];
+  return shape.meta.vertices.sort((a, b) => a[1] < b[1] ? -1 : 1)[0][1];
 };
 
 const isContainer = shape => {
@@ -68,7 +69,7 @@ const isFooter = (shape, shapes) => {
 // width of the parent container.
 const isHeader = shape => {
 
-  log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
+  // log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
 
   return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.relativeWidth) >= 33).length == 1;
 
@@ -144,8 +145,14 @@ const isRow = shape => {
   for (var i = 0; i < shape.contains.length; i++){
     for (var j = 0; j < shape.contains.length; j++){
       if (i == j) continue;
+
+      if (shape.id == 13){
       // log(`${shape.contains[i].id}`,getHighestY(shape.contains[i]), `${shape.contains[i].id}`,getLowestY(shape.contains[i]));
-      // log(getLowestY(shape.contains[j]), getHighestY(shape.contains[j]));
+      // log(`${shape.contains[j].id}`,getHighestY(shape.contains[j]), `${shape.contains[j].id}`,getLowestY(shape.contains[i]));
+
+
+      log(shape.contains[i].id, getHighestY(shape.contains[i]), shape.contains[j].id, getLowestY(shape.contains[j]));
+      log(shape.contains[i].id, getLowestY(shape.contains[i]), shape.contains[j].id, getHighestY(shape.contains[j]));}
 
       // The highestY of the shape should not be below the lowestY of the other shape.
       if (getHighestY(shape.contains[i]) < getLowestY(shape.contains[j])) return false;
@@ -257,6 +264,7 @@ const inferPanels = shapes => {
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
+    if (shape.id == 13) log(`Shape type: `, shape.type);
   });
   return shapes;
 }

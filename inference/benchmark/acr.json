@@ -1,7 +1,7 @@
 [
   {
     "id": "0",
-    "type": "container",
+    "type": "panel",
     "meta": {
       "absoluteWidth": 294,
       "absoluteHeight": 256,

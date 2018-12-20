@@ -5,5 +5,10 @@ pix2code/datasets
 inference/node_modules/*
 detection/src/clf/training_data/squiggle_pos/*.png
 detection/src/clf/training_data/squiggle_neg/*.png
-detection/src/clf/training_data/squiggle_yolo/*.png
-detection/src/clf/training_data/squiggle_yolo/*.txt
+detection/src/clf/training_data/squiggle_yolo/images/*.png
+detection/src/clf/training_data/squiggle_yolo/images/*.txt
+detection/src/clf/training_data/squiggle_yolo/labels/*.txt
+detection/src/clf/training_data/squiggle_pos/
+detection/src/clf/training_data/squiggle_neg/
+inference/.cache
+inference/output/*

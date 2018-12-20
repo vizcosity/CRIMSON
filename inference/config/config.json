@@ -19,7 +19,7 @@
           }]
       }]
   },
-  "filter": ["point", "intersection", "centered_intersection", "centered_line", "line", "horizontal_line"],
+  "filter": ["polygon", "point", "intersection", "centered_intersection", "centered_line", "line", "horizontal_line"],
   "globalAssetMap": {
     "css": "style",
     "js": "main"
