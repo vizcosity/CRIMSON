@@ -7,7 +7,7 @@ import imutils
 import numpy as np
 
 # Read in sample with a squiggly line (propsective text header)
-headerImage = cv2.imread('training_data/samples/drawn.png')
+headerImage = cv2.imread('training_data/samples/squiggly_sample_1.png')
 headerImage = imutils.resize(headerImage, width=300)
 # convert to grayscale
 headerImage = cv2.cvtColor(headerImage, cv2.COLOR_BGR2GRAY)
@@ -27,7 +27,7 @@ invert = cv2.bitwise_not(thresh)
 squiggle_cascade = cv2.CascadeClassifier('training_data/cascade/cascade.xml')
 
 # Find squiggles in image.
-squiggles = squiggle_cascade.detectMultiScale(invert, 1.5, 10)
+squiggles = squiggle_cascade.detectMultiScale(invert, 10, 10)
 
 for (x, y, w, h) in squiggles:
       cv2.rectangle(invert,(x,y),(x+w,y+h),(255,0,0),2)
