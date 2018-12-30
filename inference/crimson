@@ -2,7 +2,7 @@
 
 
 /**
- * Inference pipeline entry point for CRIMSON rapid ui prototyping tool.
+ * Inference pipeline CLI wrapper.
  *
  *  @ Aaron Baw 2018
  */

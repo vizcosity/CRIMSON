@@ -12,3 +12,5 @@ detection/src/clf/training_data/squiggle_pos/
 detection/src/clf/training_data/squiggle_neg/
 inference/.cache
 inference/output/*
+web-platform/.uploads/*
+web-platform/node_modules/*
