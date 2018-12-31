@@ -9,6 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mkdir = require('mkdirp').sync;
+const { exec } = require('child_process');
 const package = require('./package.json');
 const endpointPrefix = `/api/v${package['api-version']}`;
 const multer = require('multer');
@@ -65,18 +66,19 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     }catch(e){
       return res.json({success: false, error: e});
     }
-  }
+  } else if (req.body.acr) req.body.acr = JSON.parse(req.body.acr);
 
   if (!req.body.acr) return res.json({success: false, error: "No ACR or image file passed."});
+  if (!req.body.fileName && !req.file) return res.json({success: false, error: "'fileName' field must be passed with ACR object."});
 
-  var fileName = basename(req.file.originalname).split('.')[0];
+  var fileName = req.body.fileName ? req.body.fileName : basename(req.file.originalname).split('.')[0];
   log(`Generating code for`, fileName);
 
   // Generate the codes and return the output directory.
   var outputDir = await crimson.generateCode(req.body.acr, {
     fileName: fileName,
-    file: req.file.originalname,
-    imgPath: req.file.path,
+    file: req.file ? req.file.originalname : null,
+    imgPath: req.file ? req.file.path : null,
     outputDir: function(){
       var projectDir = _DEFAULT_OUTPUT_DIR + '/' + fileName;
       mkdir(projectDir);
@@ -100,13 +102,13 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
     log(`Generated live preview.`);
 
-    return resolve({
+    return res.json({
       success: true
     });
   }
 
   // Return zipped file.
-  if (req.body.zip){
+  else if (req.body.zip){
     log(`Generated zip file. Sending download.`);
     return res.download(`${outputDir}/${fileName}.zip`);
   }
