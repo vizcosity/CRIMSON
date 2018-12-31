@@ -14,3 +14,4 @@ inference/.cache
 inference/output/*
 web-platform/.uploads/*
 web-platform/node_modules/*
+web-platform/.generated/*
