@@ -10,7 +10,7 @@
  const {generateCode, generateACR } = require('./modules/generateCode');
  const mkdir = require('mkdirp');
  const { resolve, basename } = require('path');
- const filterPrimitives = require('./modules/filterPrimitives');
+ const {filterPrimitives, markDisplayablePrimitives} = require('./modules/filterPrimitives');
  const fs = require('fs');
 
 module.exports = {
@@ -18,8 +18,12 @@ module.exports = {
 
     // Detect primitives.
     var primitives = await detectPrimitives(imgPath);
+    // Mark shapes which should be drawn by the interactive ACR customiser
+    // tool.
+    primitives = markDisplayablePrimitives(primitives);
 
     log(`Detected primitives`, primitives);
+
 
     // Generate ACR from detected primitives.
     return generateACR(primitives);
@@ -34,7 +38,7 @@ module.exports = {
    * @type {String} - Output directory path.
    */
   generateCode: async (acr, {
-    fileName, file, outputDir, context, project, imgPath
+    fileName, file, outputDir, context, project, imgPath, zip
   }) => {
 
     // Filter unwanted primitives used for inference.
@@ -54,7 +58,7 @@ module.exports = {
 
         <!-- Metadata -->
         ${file ? `<meta source-filename="${file}" />` : ""}
-        ${imgPath ? `<meta source-path="${imagePath}" />` : ''}
+        ${imgPath ? `<meta source-path="${imgPath}" />` : ''}
         <meta context="${context}" />
         <meta output-type="${project}" />
 
@@ -85,9 +89,9 @@ module.exports = {
     mkdir.sync(outputDir);
 
     log(`Bundling project and saving output to`, outputDir);
-    await bundle({outputDir, context: context, targets: {source: HTMLOutput, name: 'index.html'}});
+    var zipPath = await bundle({zip, outputDir, context: context, targets: {source: HTMLOutput, name: 'index.html'}});
 
-    return outputDir;
+    return zipPath ? zipPath : outputDir;
 
   }
 };

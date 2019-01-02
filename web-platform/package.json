@@ -5,6 +5,7 @@
   "description": "Interactive web platform for the CRIMSON prototyping inference engine, allowing users to customise and adjust inferred componenets for extra practicality.",
   "main": "app.js",
   "scripts": {
+    "api": "DEBUG=true node api.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

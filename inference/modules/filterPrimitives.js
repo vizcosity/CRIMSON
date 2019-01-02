@@ -39,4 +39,19 @@ function filterPrimitives(shapes){
   return shapes;
 }
 
-module.exports = filterPrimitives;
+// Adds a field 'draw' equal to true to indicate that the primitive should be
+// displayed by the ACR customisation tool.
+function markDisplayablePrimitives(shapes){
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes = shapes.map(shape => {
+    shape.contains = markDisplayablePrimitives(shape.contains);
+    shape.draw = !config.filter.includes(shape.type);
+    return shape;
+  });
+
+  return shapes;
+}
+
+module.exports = {filterPrimitives, markDisplayablePrimitives};

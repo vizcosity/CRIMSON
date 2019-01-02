@@ -9,13 +9,17 @@
 
 const fs = require('fs');
 const config = require('../config/config');
+const { spawn, exec } = require('child_process');
 const {resolve, join, basename} = require('path');
+const resolvePath = resolve;
 const glob = require('glob');
 
-module.exports = ({outputDir, context, targets}) => new Promise((resolve, reject) => {
+module.exports = ({outputDir, context, targets, zip=false}) => new Promise((resolve, reject) => {
+
+  const projectName = outputDir.split('/')[outputDir.split('/').length - 1];
 
   // Collect global assets for context.
-  glob(join(__dirname, '../global')+'/'+context+'.*', (err, files) => {
+  glob(join(__dirname, '../global')+'/'+context+'.*', async (err, files) => {
     files.forEach(file => {
       // log('Copying', file, 'to', outputDir+'/'+basename(file));
 
@@ -41,7 +45,16 @@ module.exports = ({outputDir, context, targets}) => new Promise((resolve, reject
       fs.writeFileSync(outputDir+'/'+target.name, target.source);
     });
 
-    return resolve();
+    // Zip project.
+    if (zip) {
+      log(`Zipping ${resolvePath(outputDir, '../')}.`);
+      var zipCmd = spawn('zip', ['-r', `${projectName}/${projectName}.zip`, `./${projectName}`], {
+        cwd: resolvePath(outputDir, '../')
+      });
+      zipCmd.on('close', () => resolve());
+      zipCmd.on('stdout', data => log(data.toString()));
+      // var zipProc = spaw(`zip ${outputDir}/${projectName}.zip ${outputDir}/*`);
+    } else resolve();
   });
 
 });

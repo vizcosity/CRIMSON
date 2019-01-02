@@ -109,15 +109,15 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // Return zipped file.
   else if (req.body.zip){
-    log(`Generated zip file. Sending download.`);
+    log(`Generated zip file. Sending download from`, outputDir);
     return res.download(`${outputDir}/${fileName}.zip`);
   }
 
 });
 
 
-app.listen(process.env.PORT ? process.env.PORT : 3000, () => log(`Listening on`,
-process.env.PORT ? process.env.PORT : 3000));
+app.listen(process.env.PORT ? process.env.PORT : 3715, () => log(`Listening on`,
+process.env.PORT ? process.env.PORT : 3715));
 
 // Logging.
 function log(...msg){

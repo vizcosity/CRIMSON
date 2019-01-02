@@ -331,7 +331,7 @@ def detectLines(image, debug=False, erode=True):
         lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 7)
         # lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 20)
 
-        log("Detected " + str(len(lines)) + " lines.")
+        # log("Detected " + str(len(lines)) + " lines.")
 
         # if (debug):
         #     cv2.imwrite('intersection.png', image)
