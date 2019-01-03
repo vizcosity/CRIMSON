@@ -12,19 +12,58 @@ import Reactable from 'reactablejs';
 import InteractWrapper from 'react-interactjs-wrapper';
 import interact from 'interactjs';
 
+// TODO: Refactor geometric methods to ./geometry.js.
 
+// Converts absolute distances into relative values so that proportions
+// are maintained as we resize the window.
+function getRelativeDistance(parent, shape){
+
+  if (typeof parent.meta.absoluteWidth == "string"){
+    parent.meta.absoluteWidth = 1;
+    parent.meta.absoluteHeight = 1;
+  }
+
+  const [ox, oy] = getUpperLeftmostVertex(shape.meta.vertices);
+  const [px, py] = getUpperLeftmostVertex(parent.meta.vertices);
+
+  const absX = ox - px;
+  const absY = oy - py;
+
+  // Distance as a proportion of the parent's width and height.
+  const left = (absX / parent.meta.absoluteWidth) * 100;
+  const top = (absY / parent.meta.absoluteHeight) * 100;
+
+  // console.log("Parent", parent.id, px, py);
+  // console.log('Shape', shape.id, ox, oy);
+  // console.log(absX, absY, left, top);
+
+  return {left, top};
+
+}
+
+// Given an ACR object and a change in x, y, translates the object.
+function moveACRObject(primitive, dx, dy){
+  // Move all of the vertices & the midpoint.
+  primitive.meta.vertices = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
+  primitive.meta.midpoint[0] += dx;
+  primitive.meta.midpoint[1] += dy;
+
+  // Move all containing primitives by the same amount, recursively.
+  if (primitive.contains && primitive.contains.length > 0)
+    primitive.contains.forEach(innerPrimitive => moveACRObject(innerPrimitive, dx, dy));
+
+}
+
+// Grabs the upperleftmost vertex.
+function getUpperLeftmostVertex(vertices){
+  return vertices.sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1).sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1)[0]
+}
 
 const BoundingBoxComponent = ({shape, parent, level, contains, getRef, children}) => {
 
 var meta = shape.meta;
-const origin = getUpperLeftmostVertex(meta.vertices);
-const parentOrigin = getUpperLeftmostVertex(parent.meta.vertices);
-var parentHeight = (parent ? parent.meta.absoluteHeight : 1);
-var parentWidth = (parent ? parent.meta.absoluteWidth : 1);
-var top = parent ? (((origin[1] - parentOrigin[1]) / (typeof parentHeight !== "string" ? parentHeight : 1)) * 100) : 0;
-var left = parent ? (((origin[0] - parentOrigin[0]) / (typeof parentWidth !== "string" ? parentWidth : 1)) * 100) : 0;
 
-console.log(shape.id, origin, parentHeight, parentWidth, left, top);
+var {left, top} = getRelativeDistance(parent, shape);
 
 return (<div
 ref={getRef}
@@ -83,7 +122,8 @@ class InteractiveACRModifier extends Component {
       absoluteWidth: this.state.canvasWidth,
       absoluteHeight: this.state.canvasHeight,
       vertices: [[0,0]]
-    }
+    },
+    id: "canvas"
   }){
 
     if (!acr || acr.length === 0) return "";
@@ -94,8 +134,8 @@ class InteractiveACRModifier extends Component {
     return acr.map((primitive, i) =>
       primitive.draw ? <BoundingBox
       parent={parent}
-      children={this.drawPrimitives(primitive.contains, primitive)}
       shape={primitive}
+      children={this.drawPrimitives(primitive.contains, primitive)}
       key={i}
       draggable
       onDragMove={({dx, dy}) => this.movePrimitive(primitive, {dx, dy, width:0, height:0})}
@@ -149,17 +189,3 @@ class InteractiveACRModifier extends Component {
 }
 
 export default InteractiveACRModifier;
-
-// Given an ACR object and a change in x, y, translates the object.
-function moveACRObject(primitive, dx, dy){
-  // Move all of the vertices & the midpoint.
-  primitive.meta.vertices = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
-  primitive.meta.midpoint[0] += dx;
-  primitive.meta.midpoint[1] += dy;
-}
-
-// Grabs the upperleftmost vertex.
-function getUpperLeftmostVertex(vertices){
-  console.log(vertices.sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1).sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1));
-  return vertices.sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1).sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1)[0]
-}
