@@ -13,12 +13,14 @@ p {
 
 h1 {
   margin: 0;
+  font-family: "Futura", sans-serif;
 }
 
 h2 {
   margin: 0;
   opacity: 0.7;
   font-weight: normal;
+  font-family: "Futura", sans-serif;
 }
 
 /*  Landing page styling */
@@ -63,13 +65,54 @@ h2 {
   align-items: center;
 }
 
+.acr-right-panel {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20%;
+  padding-bottom: 20%;
+  padding: 20px;
+}
+
+.continue-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #c4c6ce;
+  height: 15px;
+}
+
+.continue-button, .arrow {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  color: #c4c6ce;
+  fill: #c4c6ce;
+}
+
+.continue-button:hover {
+  color: grey;
+}
+
 /** Bounding Box styling */
 .bounding-box {
   border: 2px dashed #78909C;
-  background-color: rgba(240, 248, 255, 0.5);
+  background-color: rgba(240, 248, 255, 0.8);
   position: absolute;
   z-index: 1;
   box-sizing: border-box;
+  display: flex;
+  transition: 0.05s ease-in-out;
+}
+
+.bounding-box:hover{
+  background-color: rgba(240, 248, 255, 0.2);
+}
+
+/** Label styling. */
+.shape-type-label {
+  margin: auto;
+  font-size: calc(1.3vw);
+  color: cornflowerblue;
 }
 
 /** Footer Styling */

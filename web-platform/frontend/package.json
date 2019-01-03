@@ -11,7 +11,9 @@
     "react-resize-detector": "^3.2.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.2",
-    "reactablejs": "0.0.3"
+    "reactablejs": "0.0.3",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.84.0"
   },
   "scripts": {
     "start": "react-scripts start",

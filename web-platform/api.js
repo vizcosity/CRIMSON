@@ -27,11 +27,21 @@ const upload = multer({
   })
 });
 const crimson = require('crimson-inference');
+const config = require('crimson-inference/config/config.json');
+
 
 // Defaults.
 const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
 
 app.use(bodyParser.json());
+
+// Register GET point to fetch list of supported primitives.
+app.get(`${endpointPrefix}/getSupportedPrimitives`, (req, res, params) => {
+
+  return res.json(config.supportedPrimitives);
+
+});
+
 // Register a POST endpoint for generating the ACR.
 app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req, res, params) => {
 

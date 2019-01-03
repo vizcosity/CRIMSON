@@ -9,8 +9,9 @@
 import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
-import InteractWrapper from 'react-interactjs-wrapper';
-import interact from 'interactjs';
+import { Arrow } from './Icons.js';
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { Dropdown } from 'semantic-ui-react';
 
 // TODO: Refactor geometric methods to ./geometry.js.
 
@@ -33,6 +34,9 @@ function getRelativeDistance(parent, shape){
   const left = (absX / parent.meta.absoluteWidth) * 100;
   const top = (absY / parent.meta.absoluteHeight) * 100;
 
+
+  // if (shape.id == "13") console.log(shape);
+  //
   // console.log("Parent", parent.id, px, py);
   // console.log('Shape', shape.id, ox, oy);
   // console.log(absX, absY, left, top);
@@ -56,7 +60,7 @@ function moveACRObject(primitive, dx, dy){
 
 // Grabs the upperleftmost vertex.
 function getUpperLeftmostVertex(vertices){
-  return vertices.sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1).sort(([x1, y1], [x2, y2]) => x1 > x2 ? 1 : -1)[0]
+  return vertices.sort(([x1, y1], [x2, y2]) => (x1 - x2) + (y1 - y2))[0]
 }
 
 const BoundingBoxComponent = ({shape, parent, level, contains, getRef, children}) => {
@@ -81,6 +85,7 @@ style={{
   // transform: `translateX(${meta.vertices[0][0]}px) translateY(${meta.vertices[0][1]}px)`
 }}>
 {children}
+<label className="shape-type-label">{shape.type}</label>
 </div>)}
 const BoundingBox = Reactable(BoundingBoxComponent);
 
@@ -97,9 +102,16 @@ class InteractiveACRModifier extends Component {
     this.imageRef = React.createRef();
     this.state = {
       canvasWidth: '100%',
-      canvasHeight: '100%'
+      canvasHeight: '100%',
+      modifyingPrimitive: null,
+      doubleTap: {
+        x: 0,
+        y: 0
+      }
     };
     this.onResize = this.onResize.bind(this);
+    this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+
   }
 
   onResize(x, y){
@@ -108,6 +120,44 @@ class InteractiveACRModifier extends Component {
       canvasHeight: this.imageRef.height
     });
 
+  }
+
+  async initPrimitiveSelection(e, primitive){
+    if (!this.availablePrimitives){
+      // Fetch available primitives from the backend.
+      var primitives = await fetch('/api/v1/getSupportedPrimitives').then(res => res.json());
+      this.availablePrimitives = primitives.map(primitive => Object({
+        text: primitive,
+        value: primitive
+      }));
+    }
+
+    this.setState({
+      ...this.state,
+      doubleTap: {
+        x: e.x,
+        y: e.y
+      },
+      modifyingPrimitive: primitive
+    });
+
+    // Prevent event from bubbling up div hierachy.
+    e.stopPropagation();
+
+    console.log(e, this.availablePrimitives);
+
+  }
+
+  endPrimitiveSelection(e, data){
+
+    // Set the primitive type.
+    this.state.modifyingPrimitive.type = data.value;
+
+    // Set the state to end primitive selection.
+    this.setState({
+      ...this.state,
+      modifyingPrimitive: null
+    });
   }
 
   movePrimitive(primitive, {dx, dy, width, height}){
@@ -139,6 +189,7 @@ class InteractiveACRModifier extends Component {
       key={i}
       draggable
       onDragMove={({dx, dy}) => this.movePrimitive(primitive, {dx, dy, width:0, height:0})}
+      onDoubleTap={e => this.initPrimitiveSelection(e, primitive)}
       {...primitive} /> : "")
 
   }
@@ -148,6 +199,25 @@ class InteractiveACRModifier extends Component {
       <div className="acr-mod-container">
 
         <div className="acr-image-container">
+
+          {
+            /* Display dropdown on double click. */
+            this.state.modifyingPrimitive ?
+            <Dropdown
+              style={{
+                position: 'absolute',
+                zIndex: 10,
+                width: '200px',
+                top: this.state.doubleTap.y,
+                left: this.state.doubleTap.x
+              }}
+              fluid selection compact open
+              onChange={(e, val) => this.endPrimitiveSelection(e, val)}
+              defaultValue={this.state.modifyingPrimitive.type}
+              options={this.availablePrimitives}
+              />
+            : ""
+          }
 
           <ResizeDetector handleWidth handleHeight onResize={this.onResize}>
 
@@ -172,15 +242,32 @@ class InteractiveACRModifier extends Component {
           </ResizeDetector>
         </div>
 
-        <div style={{
-          margin: '20px'
-        }} className="acr-header-container">
+        <div className="acr-right-panel">
+
+        <div className="acr-header-container">
           <h1>Editing {this.props.project.source.name}</h1>
           <p>
             Adjust the bounding boxes and shape primitive classification type
-            before continuing.
+            before continuing. 
           </p>
-          </div>
+        </div>
+
+        <div className="continue-container">
+          <Link className="continue-button" style={{
+            // display: 'flex',
+            // flexDirection: 'column',
+            // justifyContent: 'center',
+            // alignItems: 'center'
+            // marginLeft: 'auto',
+            // marginRight: '20px'
+          }} to="/generate-code">Continue</Link>
+          <Arrow style={{
+            marginTop: '5px',
+            marginLeft: '10px'
+          }} />
+        </div>
+
+        </div>
 
       </div>
     );
