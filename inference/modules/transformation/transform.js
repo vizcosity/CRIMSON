@@ -177,7 +177,7 @@ function BootstrapObject(shape){
     return [{
       elementType: 'span',
       attributes: {
-        'class': 'label-wrap'
+        'class': 'meta hidden'
       },
       content: {
         elementType: 'label',

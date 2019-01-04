@@ -1,32 +1,11 @@
-/**
- * Show the borders and positions of all of the shape primitives for debugging.
- */
-
- html, body {
-   margin:0;
-   width: 100% !important;
-   height: 100% !important;
-   font-family: "Avenir", sans-serif;
+ /* ID Labels are hidden by default, toggled with a keypress */
+ .hidden {
+   display: none;
  }
 
- .panel {
-   height: 100vh;
-   width: 100vw;
- }
-
- .container, .row {
-   border: 1px solid #37474F;
-   padding: 10px;
-   /*
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   width: fill-available;
-   width: -moz-fill-available;
-   width: -webkit-fill-available;
-   margin: 5px; */
- }
+/* Add some spacing to see borders easier. */
+.show-border {
+}
 
  /* Wrap labels in a container so that we don't push a completely filled row
  with columns to a new line */
@@ -35,20 +14,22 @@
    width: 100% !important;
  }
 
- .row {
+ .row.show-border {
    border: 1px solid red;
-   align-items: center;
-   margin: 5px;
+   margin: 10px;
  }
 
- .row .column {
+ .row .column.show-border {
    border: 1px solid green;
+   margin: 10px;
  }
 
- .row .container {
+ .row .container.show-border {
    border: 1px solid green;
+   margin: 10px;
  }
 
- .row .row {
+ .row .row.show-border {
    border: 1px solid green;
+   margin: 10px;
  }
