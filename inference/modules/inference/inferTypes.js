@@ -22,6 +22,8 @@ const isContainer = shape => {
 // Uppermost element which is of type container or derived.
 const isNavigation = (shape, shapes) => {
 
+
+
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
 
@@ -47,6 +49,8 @@ const isFooter = (shape, shapes) => {
 
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
+
+  log(`Checking footer with surrounding shapes`, shapes.length);
 
   // If no shapes passed we can assume that this is the global window or empty,
   // in which case we should return.
@@ -234,31 +238,6 @@ const getInnerFragmentsBetweenPercentiles = (shape, {start, end}, axis=0) => {
 
 }
 
-// TODO: Will have to be updated when handwritten text recognition is implemented,
-// as it will also include the presence of text within the same container.
-// const isDropdown = shape => {
-//
-//   // Check if there is a single triangle contained within the shape and that it is
-//   // located within the right half of the container.
-//   var containedTriangles = shape.contains.filter(s => s.type == "triangle");
-//
-//   if (!containedTriangles || containedTriangles.length == 0) return false;
-//
-//   if (containedTriangles.length > 0) log("WARN: Multiple triangles detected in isDropdown().");
-//
-//   var triangle = containedTriangles[0];
-//
-//   // Check that the triangle is within the right half of the container.
-//   var containerMidPointX = shape.meta.midpoint[0];
-//   if (triangle.meta.vertices.filter(vertex => vertex[0] > containerMidPointX).length != 0) return false;
-//
-//   // Check that the triangle is about 10% of the area size of its container.
-//   if ((triangle.meta.area / shape.meta.area) > 0.1) return false;
-//
-//   return true;
-//
-// }
-
 const isDropdown = shape => {
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0.8, end: 1}).length == 1;
 }
@@ -300,15 +279,27 @@ const inferFromMap = shapes => {
 }
 
 const inferNavigation = shapes => {
-  shapes.forEach(shape => {
-    if (isNavigation(shape, shapes)) shape.type = "navigation";
+
+  // Ensure we are working at the top level, with panels.
+  if (shapes.filter(s => s.type == "panel").length == 0) return shapes;
+
+  // Infer navigation on the children of the first panel.
+  shapes[0].contains.forEach(shape => {
+    if (isNavigation(shape, shapes[0].contains)) shape.type = "navigation";
   });
   return shapes;
 }
 
 const inferFooter = shapes => {
-  shapes.forEach(shape => {
-    if (isFooter(shape, shapes)) shape.type = "footer";
+
+  // Ensure we are working at the top level, with panels.
+  if (shapes.filter(s => s.type == "panel").length == 0) return shapes;
+
+  // log(`Inferring footer with shapes`, shapes.map(s => s.id));
+
+  // Infer footer on the children of the last panel.
+  shapes[shapes.length - 1].contains.forEach(shape => {
+    if (isFooter(shape, shapes[shapes.length - 1].contains)) shape.type = "footer";
   });
   return shapes;
 }
@@ -336,6 +327,8 @@ const inferInteractiveContainers = shapes => {
 // TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
 
+  log(`Inferring from`, shapes.length, `shapes.`);
+
   // Detect presence of *panels*, which are full-height containers / pages.
   shapes = inferPanels(shapes);
 
@@ -343,8 +336,10 @@ module.exports = (shapes) => {
   shapes = inferFromMap(shapes);
   shapes = inferRows(shapes);
 
-  // Check if this is the uppermost row of the 'level 1' container.
+  // Infer navigation on the topmost panel only.
   shapes = inferNavigation(shapes);
+
+  // Infer footer on the last panel only.
   shapes = inferFooter(shapes);
 
   shapes = inferImages(shapes);
