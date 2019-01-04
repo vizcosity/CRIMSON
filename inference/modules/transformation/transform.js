@@ -30,7 +30,7 @@ function BootstrapObject(shape){
 
   function resolveClass(shape){
 
-    if (shape.gridCell && shape.gridCell.count) return `col-${shape.gridCell.count}`;
+    if (shape.gridCell && shape.gridCell.count) return `column container col-${shape.gridCell.count}`;
 
     if (shape.type == "navigation"){
       return "navbar navbar-expand-lg navbar-dark bg-dark";
@@ -158,6 +158,20 @@ function BootstrapObject(shape){
         }
       }
       ]
+    }
+
+    if (shape.type == "header"){
+      return [{
+        elementType: 'h1',
+        content: 'Header'
+      }]
+    }
+
+    if (shape.type == "paragraph"){
+      return [{
+        elementType: 'p',
+        content: "Lorem ipsum dolor amet"
+      }]
     }
 
     return [{

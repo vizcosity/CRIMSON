@@ -19,7 +19,7 @@ module.exports = ({outputDir, context, targets, zip=false}) => new Promise((reso
   const projectName = outputDir.split('/')[outputDir.split('/').length - 1];
 
   // Collect global assets for context.
-  glob(join(__dirname, '../global')+'/'+context+'.*', async (err, files) => {
+  glob(join(__dirname, '../global')+'/'+context+'*.*', async (err, files) => {
     files.forEach(file => {
       // log('Copying', file, 'to', outputDir+'/'+basename(file));
 

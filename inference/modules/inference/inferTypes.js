@@ -7,9 +7,6 @@ const config = require('../../config/config.json');
 const _FRAG_THRESH = config.thresholds.fragmentArea;
 
 const getHighestY = shape => {
-  // shape.meta.vertices.forEach(v => console.log(v[0], 'm'))
-  // console.log(shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1])
-  console.log(shape.meta.vertices);
   return shape.meta.vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1]
 };
 
@@ -70,8 +67,15 @@ const isFooter = (shape, shapes) => {
 const isHeader = shape => {
 
   // log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
+  //
+  // if (shape.id == "4") log(shape.contains.filter(s => (s.type == "centered_line") && (parseFloat(s.meta.relativeWidth) >= 33)));
+  // if (shape.id == "4"){
+  //   // var centered_lines = shape.contains.filter(s => s.type == "centered_line");
+  //   // centered_lines.forEach(line => log(parseFloat(line.meta.relativeWidth)));
+  //   // log(line);
+  // }
 
-  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.relativeWidth) >= 33).length == 1;
+  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.meta.relativeWidth) >= 33).length == 1;
 
 }
 
@@ -100,6 +104,24 @@ const isImage = shape => {
   // Examine to see if the container contains any centered intersections.
   // log(`Checking if ${shape.id}(${shape.type}) is an image.`);
   if (shape.contains.filter(s => s.type === 'centered_intersection').length == 0) return false;
+
+  // Lower level containers may be mistakenly classified as images, since they
+  // are most likely to contain intersections, despite also containing
+  // a variety of other drawable shapes. Here, we examine how many drawable
+  // shapes are contained, and if there do not appear to be more than 3, then
+  // we classify the container as an image. We can also make use of the fact that
+  // images are likely to contain triangles & other polygons at the immediately
+  // succeeding nest level.
+  var containedDrawableShapes = shape.contains.filter(s => config.filter.indexOf(s.type) === -1);
+  log(`Candidate image ${shape.id} contains ${containedDrawableShapes.length} drawable shapes.`);
+
+  if (containedDrawableShapes.length > 2){
+    log(containedDrawableShapes);
+    // Check if any polygons or triangles have been detected, as this is typically
+    // a good sign that the primitive is an image.
+    if (containedDrawableShapes.filter(s => s.type == "triangle" || s.type == "polygon").length == 0)
+      return false
+  }
 
   return true;
 

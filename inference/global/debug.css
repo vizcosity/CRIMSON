@@ -1,0 +1,54 @@
+/**
+ * Show the borders and positions of all of the shape primitives for debugging.
+ */
+
+ html, body {
+   margin:0;
+   width: 100% !important;
+   height: 100% !important;
+   font-family: "Avenir", sans-serif;
+ }
+
+ .panel {
+   height: 100vh;
+   width: 100vw;
+ }
+
+ .container, .row {
+   border: 1px solid #37474F;
+   padding: 10px;
+   /*
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   width: fill-available;
+   width: -moz-fill-available;
+   width: -webkit-fill-available;
+   margin: 5px; */
+ }
+
+ /* Wrap labels in a container so that we don't push a completely filled row
+ with columns to a new line */
+ .label-wrap {
+   border: 0px !important;
+   width: 100% !important;
+ }
+
+ .row {
+   border: 1px solid red;
+   align-items: center;
+   margin: 5px;
+ }
+
+ .row .column {
+   border: 1px solid green;
+ }
+
+ .row .container {
+   border: 1px solid green;
+ }
+
+ .row .row {
+   border: 1px solid green;
+ }
