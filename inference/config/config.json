@@ -25,6 +25,6 @@
     "js": "main"
   },
   "supportedPrimitives": [
-    "rectangle", "container", "row", "triangle", "image", "dropdown", "button", "input", "navigation", "footer", "header", "paragraph"
+    "panel", "rectangle", "container", "row", "triangle", "image", "dropdown", "button", "input", "navigation", "footer", "header", "paragraph"
   ]
 }

@@ -10,58 +10,10 @@ import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { getRelativeDistance, findACRObjectById, moveACRObject } from './geometry.js';
+import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
 
-// TODO: Refactor geometric methods to ./geometry.js.
-
-// Converts absolute distances into relative values so that proportions
-// are maintained as we resize the window.
-function getRelativeDistance(parent, shape){
-
-  if (typeof parent.meta.absoluteWidth == "string"){
-    parent.meta.absoluteWidth = 1;
-    parent.meta.absoluteHeight = 1;
-  }
-
-  const [ox, oy] = getUpperLeftmostVertex(shape.meta.vertices);
-  const [px, py] = getUpperLeftmostVertex(parent.meta.vertices);
-
-  const absX = ox - px;
-  const absY = oy - py;
-
-  // Distance as a proportion of the parent's width and height.
-  const left = (absX / parent.meta.absoluteWidth) * 100;
-  const top = (absY / parent.meta.absoluteHeight) * 100;
-
-
-  // if (shape.id == "13") console.log(shape);
-  //
-  // console.log("Parent", parent.id, px, py);
-  // console.log('Shape', shape.id, ox, oy);
-  // console.log(absX, absY, left, top);
-
-  return {left, top};
-
-}
-
-// Given an ACR object and a change in x, y, translates the object.
-function moveACRObject(primitive, dx, dy){
-  // Move all of the vertices & the midpoint.
-  primitive.meta.vertices = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
-  primitive.meta.midpoint[0] += dx;
-  primitive.meta.midpoint[1] += dy;
-
-  // Move all containing primitives by the same amount, recursively.
-  if (primitive.contains && primitive.contains.length > 0)
-    primitive.contains.forEach(innerPrimitive => moveACRObject(innerPrimitive, dx, dy));
-
-}
-
-// Grabs the upperleftmost vertex.
-function getUpperLeftmostVertex(vertices){
-  return vertices.sort(([x1, y1], [x2, y2]) => (x1 - x2) + (y1 - y2))[0]
-}
 
 const BoundingBoxComponent = ({shape, parent, level, contains, getRef, children}) => {
 
@@ -85,6 +37,7 @@ style={{
   // transform: `translateX(${meta.vertices[0][0]}px) translateY(${meta.vertices[0][1]}px)`
 }}>
 {children}
+<label className="shape-type-label">{shape.id}</label>
 <label className="shape-type-label">{shape.type}</label>
 </div>)}
 const BoundingBox = Reactable(BoundingBoxComponent);
@@ -109,17 +62,39 @@ class InteractiveACRModifier extends Component {
         y: 0
       }
     };
+    this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
+    this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
+    this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
+    this.sourceImageWidth = this.panelWidth !== 0 ? this.panelWidth / (parseFloat(this.props.project.acr[0].meta.relativeWidth) / 100) : 0;
     this.onResize = this.onResize.bind(this);
+    this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
 
   }
 
-  onResize(x, y){
+  componentDidMount(){
+    this.updateImageSizeProperties();
+  }
+
+  updateImageSizeProperties(){
     this.setState({
       canvasWidth: this.imageRef.width,
-      canvasHeight: this.imageRef.height
+      canvasHeight: this.imageRef.height,
+      drawScaleFactor: {
+        x: this.sourceImageWidth / this.imageRef.width,
+        y: this.sourceImageHeight / this.imageRef.height
+      }
     });
 
+    // console.log(this.panelWidth);
+    // console.log(this.imageRef.width);
+    console.log(this.state.drawScaleFactor);
+  }
+
+  onResize(x, y){
+    this.updateImageSizeProperties();
+    // console.log(this.panelWidth);
+    // console.log(`Draw scale factor X:`, this.state.drawScaleFactor.x, `Y:`, this.state.drawScaleFactor.y);
   }
 
   async initPrimitiveSelection(e, primitive){
@@ -150,9 +125,6 @@ class InteractiveACRModifier extends Component {
 
   endPrimitiveSelection(e, data){
 
-    // Set the primitive type.
-    this.state.modifyingPrimitive.type = data.value;
-
     // Set the state to end primitive selection.
     this.setState({
       ...this.state,
@@ -160,11 +132,38 @@ class InteractiveACRModifier extends Component {
     });
   }
 
-  movePrimitive(primitive, {dx, dy, width, height}){
+  movePrimitive({primitive, parent}, {dx, dy}){
 
-    moveACRObject(primitive, dx, dy);
+    // console.log(this.state.drawScaleFactor);
+
+    // Scale dx and dy by the width and height of the parent window.
+    dx *= this.state.drawScaleFactor.x;
+    dy *= this.state.drawScaleFactor.y;
+    moveACRObject({primitive, parent}, dx, dy);
     // Force a redraw.
     this.setState(this.state);
+  }
+
+  // Nests the primitive within the new parent.
+  nestWithinNewParent(primitive, oldParent, newParentDiv){
+
+    // Find the newParent object given the id.
+    var newParentId = newParentDiv.getAttribute('data-id');
+    var newParent = findACRObjectById(this.props.project.acr, newParentId);
+
+    console.log(`Found new parent`, newParent, `from id`, newParentId);
+
+    console.log(`Removing`, primitive.id, `from`, oldParent.id);
+    // Remove the primitive from the oldParent.
+    oldParent.contains = oldParent.contains.filter(shape => shape.id !== primitive.id);
+
+    // Add the primitive to the new parent.
+    newParent.contains.push(primitive);
+
+    // Force a redraw so that the div is now placed inside the parent.
+    this.setState(this.state);
+
+
   }
 
   drawPrimitives(acr, parent = {
@@ -173,9 +172,9 @@ class InteractiveACRModifier extends Component {
       absoluteHeight: this.state.canvasHeight,
       vertices: [[0,0]]
     },
-    id: "canvas"
+    id: "canvas",
+    contains: []
   }){
-
     if (!acr || acr.length === 0) return "";
 
     // We keep the acr object as a prop so that we do not have to call
@@ -188,7 +187,17 @@ class InteractiveACRModifier extends Component {
       children={this.drawPrimitives(primitive.contains, primitive)}
       key={i}
       draggable
-      onDragMove={({dx, dy}) => this.movePrimitive(primitive, {dx, dy, width:0, height:0})}
+      dropzone={{
+        ondropactivate: event => {
+          event.target.classList.add('drop-active')
+        },
+        ondropdeactivate: event => {
+          event.target.classList.remove('drop-active')
+        },
+
+        // ondrop: event => this.nestWithinNewParent(primitive, parent, event.relatedTarget)
+      }}
+      onDragMove={({dx, dy}) => this.movePrimitive({primitive, parent}, {dx, dy, width:0, height:0})}
       onDoubleTap={e => this.initPrimitiveSelection(e, primitive)}
       {...primitive} /> : "")
 
@@ -234,8 +243,8 @@ class InteractiveACRModifier extends Component {
           </div>
 
           <img ref={ref => this.imageRef = ref} style={{
-            width: '80%',
-            height: 'auto'
+            width: 'unset',
+            height: '-webkit-fill-available'
           }}
           src={this.props.project.source.url} />
 
@@ -248,7 +257,7 @@ class InteractiveACRModifier extends Component {
           <h1>Editing {this.props.project.source.name}</h1>
           <p>
             Adjust the bounding boxes and shape primitive classification type
-            before continuing. 
+            before continuing.
           </p>
         </div>
 
