@@ -14,7 +14,7 @@ from isect_segments_bentley_ottmann import poly_point_isect as bot
 from clean import filterOverlappingIntersections
 from shape import *
 
-_DEBUG = True
+_DEBUG = False
 
 # Logging.
 def log(message):
@@ -275,6 +275,8 @@ def drawHorizontalLines(lines, image, colour = (100,200,0)):
 
 def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
 
+    if lines is None: lines = []
+
     idIndex = lastShapeId
 
     centered_lines = []
@@ -312,7 +314,7 @@ def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
 def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
 
     # Detect lines.
-    lines = detectLines(image, erode=True)
+    lines = detectLines(image, erode=False)
 
     # Draw the lines.
     # if annotate: drawLines(lines, image, colour=(100,200,0))
@@ -377,7 +379,7 @@ def detectLines(image, debug=False, erode=True):
         # Detect lines.
         # The 2nd last paramter is the minimum line length, while the lat parameter
         # refers to the maximum gap between lines to warrant a 'grouping'.
-        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 7)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 6, 20)
         # lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 20)
 
         # log("Detected " + str(len(lines)) + " lines.")

@@ -29,6 +29,24 @@
           297,
           4
         ]
+      ],
+      "relativeVertices": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
       ]
     },
     "level": 0,
@@ -63,10 +81,251 @@
               295,
               6
             ]
+          ],
+          "relativeVertices": [
+            [
+              0.006802721088435374,
+              0.0078125
+            ],
+            [
+              0.006802721088435374,
+              0.19921875
+            ],
+            [
+              0.9931972789115646,
+              0.19921875
+            ],
+            [
+              0.9931972789115646,
+              0.0078125
+            ]
           ]
         },
         "level": 1,
-        "contains": []
+        "contains": [
+          {
+            "id": "44",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 60.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "20.689655172413794%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                151,
+                33
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  121,
+                  33
+                ],
+                [
+                  181,
+                  33
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.4,
+                  0.5510204081632653
+                ],
+                [
+                  0.6068965517241379,
+                  0.5510204081632653
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "45",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 57.0,
+              "absoluteHeight": 3.0,
+              "relativeWidth": "19.655172413793103%",
+              "relativeHeight": "6.122448979591836%",
+              "midpoint": [
+                144,
+                30
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  116,
+                  31
+                ],
+                [
+                  173,
+                  28
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.38275862068965516,
+                  0.5102040816326531
+                ],
+                [
+                  0.5793103448275863,
+                  0.4489795918367347
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "48",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 61.0,
+              "absoluteHeight": 3.0,
+              "relativeWidth": "21.03448275862069%",
+              "relativeHeight": "6.122448979591836%",
+              "midpoint": [
+                146,
+                30
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  116,
+                  32
+                ],
+                [
+                  177,
+                  29
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.38275862068965516,
+                  0.5306122448979592
+                ],
+                [
+                  0.593103448275862,
+                  0.46938775510204084
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "54",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 62.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "21.379310344827587%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                152,
+                32
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  121,
+                  32
+                ],
+                [
+                  183,
+                  32
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.4,
+                  0.5306122448979592
+                ],
+                [
+                  0.6137931034482759,
+                  0.5306122448979592
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "59",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 48.0,
+              "absoluteHeight": 3.0,
+              "relativeWidth": "16.551724137931036%",
+              "relativeHeight": "6.122448979591836%",
+              "midpoint": [
+                140,
+                28
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  116,
+                  30
+                ],
+                [
+                  164,
+                  27
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.38275862068965516,
+                  0.4897959183673469
+                ],
+                [
+                  0.5482758620689655,
+                  0.42857142857142855
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "66",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 26.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "8.96551724137931%",
+              "relativeHeight": "2.0408163265306123%",
+              "midpoint": [
+                129,
+                28
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  116,
+                  28
+                ],
+                [
+                  142,
+                  27
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.38275862068965516,
+                  0.4489795918367347
+                ],
+                [
+                  0.4724137931034483,
+                  0.42857142857142855
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
       },
       {
         "id": "10",
@@ -97,6 +356,24 @@
             [
               295,
               56
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.006802721088435374,
+              0.203125
+            ],
+            [
+              0.006802721088435374,
+              0.87109375
+            ],
+            [
+              0.9931972789115646,
+              0.87109375
+            ],
+            [
+              0.9931972789115646,
+              0.203125
             ]
           ]
         },
@@ -132,6 +409,24 @@
                   118,
                   63
                 ]
+              ],
+              "relativeVertices": [
+                [
+                  0.020689655172413793,
+                  0.04093567251461988
+                ],
+                [
+                  0.020689655172413793,
+                  0.4444444444444444
+                ],
+                [
+                  0.3896551724137931,
+                  0.4444444444444444
+                ],
+                [
+                  0.3896551724137931,
+                  0.04093567251461988
+                ]
               ]
             },
             "level": 2,
@@ -166,10 +461,140 @@
                       116,
                       65
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.028985507246376812
+                    ],
+                    [
+                      0.018691588785046728,
+                      0.463768115942029
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.463768115942029
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.028985507246376812
+                    ]
                   ]
                 },
                 "level": 3,
-                "contains": []
+                "contains": [
+                  {
+                    "id": "47",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 41.0,
+                      "absoluteHeight": 3.0,
+                      "relativeWidth": "39.80582524271845%",
+                      "relativeHeight": "10.0%",
+                      "midpoint": [
+                        58,
+                        82
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          38,
+                          80
+                        ],
+                        [
+                          79,
+                          83
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.24271844660194175,
+                          0.5
+                        ],
+                        [
+                          0.6407766990291263,
+                          0.6
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "51",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 48.0,
+                      "absoluteHeight": 3.0,
+                      "relativeWidth": "46.601941747572816%",
+                      "relativeHeight": "10.0%",
+                      "midpoint": [
+                        64,
+                        78
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          40,
+                          77
+                        ],
+                        [
+                          88,
+                          80
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.2621359223300971,
+                          0.4
+                        ],
+                        [
+                          0.7281553398058253,
+                          0.5
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "67",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 39.0,
+                      "absoluteHeight": 4.0,
+                      "relativeWidth": "37.86407766990291%",
+                      "relativeHeight": "13.333333333333334%",
+                      "midpoint": [
+                        58,
+                        80
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          38,
+                          78
+                        ],
+                        [
+                          77,
+                          82
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.24271844660194175,
+                          0.43333333333333335
+                        ],
+                        [
+                          0.6213592233009708,
+                          0.5666666666666667
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  }
+                ]
               },
               {
                 "id": "48",
@@ -201,42 +626,112 @@
                       116,
                       96
                     ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "188",
-                "type": "intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    13,
-                    65
                   ],
-                  "area": 0.0,
-                  "vertices": [
+                  "relativeVertices": [
                     [
-                      13.0,
-                      65.0
+                      0.018691588785046728,
+                      0.4782608695652174
+                    ],
+                    [
+                      0.018691588785046728,
+                      0.9710144927536232
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.9710144927536232
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.4782608695652174
                     ]
                   ]
                 },
                 "level": 3,
-                "contains": []
+                "contains": [
+                  {
+                    "id": "58",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 28.0,
+                      "absoluteHeight": 0.0,
+                      "relativeWidth": "27.184466019417474%",
+                      "relativeHeight": "0.0%",
+                      "midpoint": [
+                        63,
+                        112
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          49,
+                          112
+                        ],
+                        [
+                          77,
+                          112
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.34951456310679613,
+                          0.47058823529411764
+                        ],
+                        [
+                          0.6213592233009708,
+                          0.47058823529411764
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "61",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 28.0,
+                      "absoluteHeight": 0.0,
+                      "relativeWidth": "27.184466019417474%",
+                      "relativeHeight": "0.0%",
+                      "midpoint": [
+                        63,
+                        114
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          49,
+                          114
+                        ],
+                        [
+                          77,
+                          114
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.34951456310679613,
+                          0.5294117647058824
+                        ],
+                        [
+                          0.6213592233009708,
+                          0.5294117647058824
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  }
+                ]
               },
               {
-                "id": "198",
+                "id": "202",
                 "type": "intersection",
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
                     13,
                     95
@@ -247,19 +742,25 @@
                       13.0,
                       95.0
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.463768115942029
+                    ]
                   ]
                 },
                 "level": 3,
                 "contains": []
               },
               {
-                "id": "208",
+                "id": "212",
                 "type": "intersection",
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
                     13,
                     129
@@ -270,28 +771,48 @@
                       13.0,
                       129.0
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.9565217391304348
+                    ]
                   ]
                 },
                 "level": 3,
                 "contains": []
               },
               {
-                "id": "214",
-                "type": "intersection",
+                "id": "46",
+                "type": "centered_line",
                 "meta": {
-                  "absoluteWidth": 0.0,
+                  "absoluteWidth": 104.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "97.19626168224299%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
-                    116,
-                    95
+                    64,
+                    94
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
-                      116.0,
-                      95.0
+                      12,
+                      94
+                    ],
+                    [
+                      116,
+                      94
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.009345794392523364,
+                      0.4492753623188406
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.4492753623188406
                     ]
                   ]
                 },
@@ -330,6 +851,24 @@
                   282,
                   63
                 ]
+              ],
+              "relativeVertices": [
+                [
+                  0.41379310344827586,
+                  0.04093567251461988
+                ],
+                [
+                  0.41379310344827586,
+                  0.9064327485380117
+                ],
+                [
+                  0.9551724137931035,
+                  0.9064327485380117
+                ],
+                [
+                  0.9551724137931035,
+                  0.04093567251461988
+                ]
               ]
             },
             "level": 2,
@@ -359,6 +898,20 @@
                     [
                       129,
                       66
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.9808917197452229,
+                      0.02027027027027027
+                    ],
+                    [
+                      0.5031847133757962,
+                      0.49324324324324326
+                    ],
+                    [
+                      0.025477707006369428,
+                      0.02027027027027027
                     ]
                   ]
                 },
@@ -391,6 +944,20 @@
                       203,
                       137
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.025477707006369428,
+                      0.9662162162162162
+                    ],
+                    [
+                      0.01910828025477707,
+                      0.02027027027027027
+                    ],
+                    [
+                      0.4968152866242038,
+                      0.5
+                    ]
                   ]
                 },
                 "level": 3,
@@ -401,17 +968,23 @@
                     "meta": {
                       "absoluteWidth": 0.0,
                       "absoluteHeight": 0.0,
-                      "relativeWidth": "100.0%",
-                      "relativeHeight": "100.0%",
+                      "relativeWidth": "0.0%",
+                      "relativeHeight": "0.0%",
                       "midpoint": [
-                        203,
-                        136
+                        178,
+                        112
                       ],
                       "area": 0.0,
                       "vertices": [
                         [
-                          203.0,
-                          136.0
+                          178.0,
+                          112.0
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.6533333333333333,
+                          -0.6714285714285714
                         ]
                       ]
                     },
@@ -446,6 +1019,20 @@
                       278,
                       68
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.9745222929936306,
+                      0.9662162162162162
+                    ],
+                    [
+                      0.5031847133757962,
+                      0.5
+                    ],
+                    [
+                      0.9745222929936306,
+                      0.033783783783783786
+                    ]
                   ]
                 },
                 "level": 3,
@@ -477,28 +1064,19 @@
                       203,
                       138
                     ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "174",
-                "type": "intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    127,
-                    206
                   ],
-                  "area": 0.0,
-                  "vertices": [
+                  "relativeVertices": [
                     [
-                      127.0,
-                      206.0
+                      0.9745222929936306,
+                      0.972972972972973
+                    ],
+                    [
+                      0.025477707006369428,
+                      0.972972972972973
+                    ],
+                    [
+                      0.4968152866242038,
+                      0.5067567567567568
                     ]
                   ]
                 },
@@ -506,22 +1084,28 @@
                 "contains": []
               },
               {
-                "id": "195",
-                "type": "centered_intersection",
+                "id": "180",
+                "type": "intersection",
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
                     203,
-                    136
+                    137
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
                       203.0,
-                      136.0
+                      137.0
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.4968152866242038,
+                      0.5
                     ]
                   ]
                 },
@@ -529,45 +1113,28 @@
                 "contains": []
               },
               {
-                "id": "216",
-                "type": "intersection",
+                "id": "181",
+                "type": "centered_intersection",
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
-                    279,
-                    66
+                    203,
+                    137
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
-                      279.0,
-                      66.0
+                      203.0,
+                      137.0
                     ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "222",
-                "type": "intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    127,
-                    129
                   ],
-                  "area": 0.0,
-                  "vertices": [
+                  "relativeVertices": [
                     [
-                      127.0,
-                      129.0
+                      0.4968152866242038,
+                      0.5
                     ]
                   ]
                 },
@@ -606,6 +1173,24 @@
                   118,
                   141
                 ]
+              ],
+              "relativeVertices": [
+                [
+                  0.020689655172413793,
+                  0.49707602339181284
+                ],
+                [
+                  0.020689655172413793,
+                  0.8947368421052632
+                ],
+                [
+                  0.3896551724137931,
+                  0.8947368421052632
+                ],
+                [
+                  0.3896551724137931,
+                  0.49707602339181284
+                ]
               ]
             },
             "level": 2,
@@ -640,10 +1225,103 @@
                       116,
                       142
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.014705882352941176
+                    ],
+                    [
+                      0.018691588785046728,
+                      0.45588235294117646
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.45588235294117646
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.014705882352941176
+                    ]
                   ]
                 },
                 "level": 3,
-                "contains": []
+                "contains": [
+                  {
+                    "id": "52",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 50.0,
+                      "absoluteHeight": 1.0,
+                      "relativeWidth": "48.54368932038835%",
+                      "relativeHeight": "3.3333333333333335%",
+                      "midpoint": [
+                        63,
+                        156
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          38,
+                          157
+                        ],
+                        [
+                          88,
+                          156
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.24271844660194175,
+                          0.5
+                        ],
+                        [
+                          0.7281553398058253,
+                          0.4666666666666667
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "56",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 48.0,
+                      "absoluteHeight": 1.0,
+                      "relativeWidth": "46.601941747572816%",
+                      "relativeHeight": "3.3333333333333335%",
+                      "midpoint": [
+                        64,
+                        158
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          40,
+                          159
+                        ],
+                        [
+                          88,
+                          158
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.2621359223300971,
+                          0.5666666666666667
+                        ],
+                        [
+                          0.7281553398058253,
+                          0.5333333333333333
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  }
+                ]
               },
               {
                 "id": "12",
@@ -675,10 +1353,103 @@
                       116,
                       173
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.47058823529411764
+                    ],
+                    [
+                      0.018691588785046728,
+                      0.9705882352941176
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.9705882352941176
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.47058823529411764
+                    ]
                   ]
                 },
                 "level": 3,
-                "contains": []
+                "contains": [
+                  {
+                    "id": "60",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 28.0,
+                      "absoluteHeight": 2.0,
+                      "relativeWidth": "27.184466019417474%",
+                      "relativeHeight": "5.88235294117647%",
+                      "midpoint": [
+                        64,
+                        189
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          50,
+                          188
+                        ],
+                        [
+                          78,
+                          190
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.3592233009708738,
+                          0.4411764705882353
+                        ],
+                        [
+                          0.6310679611650486,
+                          0.5
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "65",
+                    "type": "centered_line",
+                    "meta": {
+                      "absoluteWidth": 28.0,
+                      "absoluteHeight": 0.0,
+                      "relativeWidth": "27.184466019417474%",
+                      "relativeHeight": "0.0%",
+                      "midpoint": [
+                        63,
+                        191
+                      ],
+                      "area": 0.0,
+                      "vertices": [
+                        [
+                          49,
+                          191
+                        ],
+                        [
+                          77,
+                          191
+                        ]
+                      ],
+                      "relativeVertices": [
+                        [
+                          0.34951456310679613,
+                          0.5294117647058824
+                        ],
+                        [
+                          0.6213592233009708,
+                          0.5294117647058824
+                        ]
+                      ]
+                    },
+                    "level": 4,
+                    "contains": []
+                  }
+                ]
               },
               {
                 "id": "192",
@@ -686,8 +1457,8 @@
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
                     13,
                     206
@@ -698,19 +1469,54 @@
                       13.0,
                       206.0
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.9558823529411765
+                    ]
                   ]
                 },
                 "level": 3,
                 "contains": []
               },
               {
-                "id": "202",
+                "id": "196",
                 "type": "intersection",
                 "meta": {
                   "absoluteWidth": 0.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
+                  "midpoint": [
+                    115,
+                    172
+                  ],
+                  "area": 0.0,
+                  "vertices": [
+                    [
+                      115.0,
+                      172.0
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.9719626168224299,
+                      0.45588235294117646
+                    ]
+                  ]
+                },
+                "level": 3,
+                "contains": []
+              },
+              {
+                "id": "206",
+                "type": "intersection",
+                "meta": {
+                  "absoluteWidth": 0.0,
+                  "absoluteHeight": 0.0,
+                  "relativeWidth": "0.0%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
                     13,
                     172
@@ -721,28 +1527,85 @@
                       13.0,
                       172.0
                     ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.018691588785046728,
+                      0.45588235294117646
+                    ]
                   ]
                 },
                 "level": 3,
                 "contains": []
               },
               {
-                "id": "212",
-                "type": "intersection",
+                "id": "40",
+                "type": "centered_line",
                 "meta": {
-                  "absoluteWidth": 0.0,
+                  "absoluteWidth": 104.0,
                   "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
+                  "relativeWidth": "97.19626168224299%",
+                  "relativeHeight": "0.0%",
                   "midpoint": [
-                    116,
-                    172
+                    64,
+                    173
                   ],
                   "area": 0.0,
                   "vertices": [
                     [
-                      116.0,
-                      172.0
+                      12,
+                      173
+                    ],
+                    [
+                      116,
+                      173
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.009345794392523364,
+                      0.47058823529411764
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.47058823529411764
+                    ]
+                  ]
+                },
+                "level": 3,
+                "contains": []
+              },
+              {
+                "id": "42",
+                "type": "centered_line",
+                "meta": {
+                  "absoluteWidth": 104.0,
+                  "absoluteHeight": 0.0,
+                  "relativeWidth": "97.19626168224299%",
+                  "relativeHeight": "0.0%",
+                  "midpoint": [
+                    64,
+                    171
+                  ],
+                  "area": 0.0,
+                  "vertices": [
+                    [
+                      12,
+                      171
+                    ],
+                    [
+                      116,
+                      171
+                    ]
+                  ],
+                  "relativeVertices": [
+                    [
+                      0.009345794392523364,
+                      0.4411764705882353
+                    ],
+                    [
+                      0.9813084112149533,
+                      0.4411764705882353
                     ]
                   ]
                 },
@@ -757,17 +1620,23 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                9,
-                59
+                118,
+                130
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  9.0,
-                  59.0
+                  118.0,
+                  130.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.3896551724137931,
+                  0.4327485380116959
                 ]
               ]
             },
@@ -775,22 +1644,28 @@
             "contains": []
           },
           {
-            "id": "178",
+            "id": "174",
             "type": "intersection",
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                11,
-                64
+                290,
+                211
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  11.0,
-                  64.0
+                  290.0,
+                  211.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9827586206896551,
+                  0.9064327485380117
                 ]
               ]
             },
@@ -798,22 +1673,28 @@
             "contains": []
           },
           {
-            "id": "180",
+            "id": "182",
             "type": "intersection",
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                122,
-                95
+                125,
+                65
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  122.0,
-                  95.0
+                  125.0,
+                  65.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.41379310344827586,
+                  0.05263157894736842
                 ]
               ]
             },
@@ -821,22 +1702,57 @@
             "contains": []
           },
           {
-            "id": "186",
+            "id": "188",
             "type": "intersection",
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                124,
-                172
+                290,
+                208
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  124.0,
-                  172.0
+                  290.0,
+                  208.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9827586206896551,
+                  0.8888888888888888
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "198",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                288,
+                63
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  288.0,
+                  63.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9758620689655172,
+                  0.04093567251461988
                 ]
               ]
             },
@@ -849,17 +1765,23 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                122,
-                172
+                8,
+                60
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  122.0,
-                  172.0
+                  8.0,
+                  60.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.010344827586206896,
+                  0.023391812865497075
                 ]
               ]
             },
@@ -872,17 +1794,52 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                10,
+                289,
                 62
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  10.0,
+                  289.0,
                   62.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9793103448275862,
+                  0.03508771929824561
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "208",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                120,
+                96
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  120.0,
+                  96.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.39655172413793105,
+                  0.23391812865497075
                 ]
               ]
             },
@@ -895,17 +1852,52 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                124,
-                95
+                287,
+                63
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  124.0,
-                  95.0
+                  287.0,
+                  63.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9724137931034482,
+                  0.04093567251461988
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "216",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                291,
+                213
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  291.0,
+                  213.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.9862068965517241,
+                  0.9181286549707602
                 ]
               ]
             },
@@ -918,17 +1910,23 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
                 294,
-                209
+                216
               ],
               "area": 0.0,
               "vertices": [
                 [
                   294.0,
-                  209.0
+                  216.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.996551724137931,
+                  0.935672514619883
                 ]
               ]
             },
@@ -941,17 +1939,97 @@
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
-                10,
-                60
+                125,
+                207
               ],
               "area": 0.0,
               "vertices": [
                 [
-                  10.0,
-                  60.0
+                  125.0,
+                  207.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.41379310344827586,
+                  0.8830409356725146
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "39",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 110.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "37.93103448275862%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                70,
+                131
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  15,
+                  131
+                ],
+                [
+                  125,
+                  131
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.034482758620689655,
+                  0.43859649122807015
+                ],
+                [
+                  0.41379310344827586,
+                  0.43859649122807015
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "41",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 104.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "35.86206896551724%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                64,
+                129
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  12,
+                  129
+                ],
+                [
+                  116,
+                  129
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.02413793103448276,
+                  0.4269005847953216
+                ],
+                [
+                  0.38275862068965516,
+                  0.4269005847953216
                 ]
               ]
             },
@@ -990,18 +2068,36 @@
               295,
               228
             ]
+          ],
+          "relativeVertices": [
+            [
+              0.006802721088435374,
+              0.875
+            ],
+            [
+              0.006802721088435374,
+              0.9921875
+            ],
+            [
+              0.9931972789115646,
+              0.9921875
+            ],
+            [
+              0.9931972789115646,
+              0.875
+            ]
           ]
         },
         "level": 1,
         "contains": [
           {
-            "id": "176",
+            "id": "178",
             "type": "intersection",
             "meta": {
               "absoluteWidth": 0.0,
               "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
               "midpoint": [
                 294,
                 257
@@ -1012,6 +2108,255 @@
                   294.0,
                   257.0
                 ]
+              ],
+              "relativeVertices": [
+                [
+                  0.996551724137931,
+                  0.9666666666666667
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "214",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                152,
+                243
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  152.0,
+                  243.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.506896551724138,
+                  0.5
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "215",
+            "type": "centered_intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                152,
+                243
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  152.0,
+                  243.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.506896551724138,
+                  0.5
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "49",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 34.0,
+              "absoluteHeight": 2.0,
+              "relativeWidth": "11.724137931034482%",
+              "relativeHeight": "6.666666666666667%",
+              "midpoint": [
+                147,
+                244
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  130,
+                  243
+                ],
+                [
+                  164,
+                  245
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.43103448275862066,
+                  0.5
+                ],
+                [
+                  0.5482758620689655,
+                  0.5666666666666667
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "50",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 37.0,
+              "absoluteHeight": 2.0,
+              "relativeWidth": "12.758620689655173%",
+              "relativeHeight": "6.666666666666667%",
+              "midpoint": [
+                150,
+                241
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  131,
+                  240
+                ],
+                [
+                  168,
+                  242
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.43448275862068964,
+                  0.4
+                ],
+                [
+                  0.5620689655172414,
+                  0.4666666666666667
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "53",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 30.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "10.344827586206897%",
+              "relativeHeight": "3.3333333333333335%",
+              "midpoint": [
+                152,
+                244
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  137,
+                  245
+                ],
+                [
+                  167,
+                  244
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.45517241379310347,
+                  0.5666666666666667
+                ],
+                [
+                  0.5586206896551724,
+                  0.5333333333333333
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "57",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 36.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "12.413793103448276%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                149,
+                241
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  131,
+                  241
+                ],
+                [
+                  167,
+                  241
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.43448275862068964,
+                  0.43333333333333335
+                ],
+                [
+                  0.5586206896551724,
+                  0.43333333333333335
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "64",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 31.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "10.689655172413794%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                148,
+                242
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  133,
+                  242
+                ],
+                [
+                  164,
+                  242
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.4413793103448276,
+                  0.4666666666666667
+                ],
+                [
+                  0.5482758620689655,
+                  0.4666666666666667
+                ]
               ]
             },
             "level": 2,
@@ -1020,22 +2365,28 @@
         ]
       },
       {
-        "id": "182",
+        "id": "176",
         "type": "intersection",
         "meta": {
           "absoluteWidth": 0.0,
           "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
+          "relativeWidth": "0.0%",
+          "relativeHeight": "0.0%",
           "midpoint": [
-            294,
-            55
+            5,
+            6
           ],
           "area": 0.0,
           "vertices": [
             [
-              294.0,
-              55.0
+              5.0,
+              6.0
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.006802721088435374,
+              0.0078125
             ]
           ]
         },
@@ -1048,8 +2399,8 @@
         "meta": {
           "absoluteWidth": 0.0,
           "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
+          "relativeWidth": "0.0%",
+          "relativeHeight": "0.0%",
           "midpoint": [
             5,
             257
@@ -1059,6 +2410,41 @@
             [
               5.0,
               257.0
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.006802721088435374,
+              0.98828125
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "186",
+        "type": "intersection",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "0.0%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            295,
+            215
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              295.0,
+              215.0
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.9931972789115646,
+              0.82421875
             ]
           ]
         },
@@ -1071,8 +2457,8 @@
         "meta": {
           "absoluteWidth": 0.0,
           "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
+          "relativeWidth": "0.0%",
+          "relativeHeight": "0.0%",
           "midpoint": [
             294,
             6
@@ -1083,28 +2469,11 @@
               294.0,
               6.0
             ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "196",
-        "type": "intersection",
-        "meta": {
-          "absoluteWidth": 0.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
-          "midpoint": [
-            294,
-            227
           ],
-          "area": 0.0,
-          "vertices": [
+          "relativeVertices": [
             [
-              294.0,
-              227.0
+              0.9897959183673469,
+              0.0078125
             ]
           ]
         },
@@ -1112,13 +2481,13 @@
         "contains": []
       },
       {
-        "id": "206",
+        "id": "222",
         "type": "intersection",
         "meta": {
           "absoluteWidth": 0.0,
           "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
+          "relativeWidth": "0.0%",
+          "relativeHeight": "0.0%",
           "midpoint": [
             5,
             227
@@ -1129,28 +2498,11 @@
               5.0,
               227.0
             ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "223",
-        "type": "centered_intersection",
-        "meta": {
-          "absoluteWidth": 0.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
-          "midpoint": [
-            127,
-            129
           ],
-          "area": 0.0,
-          "vertices": [
+          "relativeVertices": [
             [
-              127.0,
-              129.0
+              0.006802721088435374,
+              0.87109375
             ]
           ]
         },

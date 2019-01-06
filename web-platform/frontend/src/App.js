@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import InteractiveACRModifier from './ModifyACR.js';
 import ACRSample from './acr.json';
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import Landing from './Landing.js';
+import InteractiveACRModifier from './ModifyACR.js';
+import CodeGenerator from './CodeGeneration.js';
 import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
@@ -76,6 +77,10 @@ class App extends Component {
           () => <InteractiveACRModifier project={this.project}/>
         }
           />
+
+        <Route exact path="/generate-code"
+        render={() => <CodeGenerator project={this.project} /> } />
+
       </div>
     </Router>);
   }

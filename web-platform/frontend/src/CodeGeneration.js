@@ -13,6 +13,7 @@ import React, { Component } from 'react';
 class CodeGenerator extends Component {
   render(){
 
+    return (<div></div>);
 
   }
 }
