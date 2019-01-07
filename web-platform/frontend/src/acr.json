@@ -2,6 +2,7 @@
   {
     "id": "0",
     "type": "rectangle",
+    "parentId": null,
     "draw": true,
     "meta": {
       "absoluteWidth": 254.0,
@@ -55,6 +56,7 @@
       {
         "id": "7",
         "draw": true,
+        "parentId": "0",
         "type": "rectangle",
         "meta": {
           "absoluteWidth": 198.0,
@@ -108,6 +110,7 @@
       },
       {
         "id": "6",
+        "parentId": "0",
         "type": "rectangle",
         "draw": true,
         "meta": {
@@ -161,6 +164,7 @@
         "contains": [
           {
             "id": "4",
+            "parentId": "6",
             "draw": true,
             "type": "rectangle",
             "meta": {
@@ -215,6 +219,7 @@
           },
           {
             "id": "2",
+            "parentId": "6",
             "type": "rectangle",
             "draw": true,
             "meta": {

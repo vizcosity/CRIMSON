@@ -86,15 +86,10 @@ class InteractiveACRModifier extends Component {
       }
     });
 
-    // console.log(this.panelWidth);
-    // console.log(this.imageRef.width);
-    console.log(this.state.drawScaleFactor);
   }
 
   onResize(x, y){
     this.updateImageSizeProperties();
-    // console.log(this.panelWidth);
-    // console.log(`Draw scale factor X:`, this.state.drawScaleFactor.x, `Y:`, this.state.drawScaleFactor.y);
   }
 
   async initPrimitiveSelection(e, primitive){
@@ -134,28 +129,42 @@ class InteractiveACRModifier extends Component {
 
   movePrimitive({primitive, parent}, {dx, dy}){
 
-    // console.log(this.state.drawScaleFactor);
+    console.log(`Moving`, primitive.id, `with parent`, parent.id);
 
     // Scale dx and dy by the width and height of the parent window.
     dx *= this.state.drawScaleFactor.x;
     dy *= this.state.drawScaleFactor.y;
+
     moveACRObject({primitive, parent}, dx, dy);
     // Force a redraw.
     this.setState(this.state);
   }
 
   // Nests the primitive within the new parent.
-  nestWithinNewParent(primitive, oldParent, newParentDiv){
+  nestWithinNewParent(primitiveDiv, newParentDiv){
 
-    // Find the newParent object given the id.
+    // Find the newParent, primitive, and oldParent object given the id.
+    var primitiveId = primitiveDiv.getAttribute('data-id');
+    var primitive = findACRObjectById(this.props.project.acr, primitiveId);
     var newParentId = newParentDiv.getAttribute('data-id');
     var newParent = findACRObjectById(this.props.project.acr, newParentId);
+    var oldParent = findACRObjectById(this.props.project.acr, primitive.parentId);
 
-    console.log(`Found new parent`, newParent, `from id`, newParentId);
+    // Prevent shapes from being nested within themselves or from being added
+    // to shapes which they are already nested within.
+    if (primitive.id === newParent.id) return;
+    if (newParent.contains.map(s => s.id).indexOf(primitive.id) !== -1) return;
 
+    console.log(`Nesting`, primitive.id, `within`, newParent.id);
     console.log(`Removing`, primitive.id, `from`, oldParent.id);
+
+    // If oldParent is null, we are likely trying to nest a panel.
     // Remove the primitive from the oldParent.
-    oldParent.contains = oldParent.contains.filter(shape => shape.id !== primitive.id);
+    if (oldParent)
+      oldParent.contains = oldParent.contains.filter(shape => shape.id !== primitive.id);
+
+    // Set the primitive's new parent.
+    primitive.parentId = newParent.id;
 
     // Add the primitive to the new parent.
     newParent.contains.push(primitive);
@@ -174,8 +183,11 @@ class InteractiveACRModifier extends Component {
     },
     id: "canvas",
     contains: []
-  }){
+  })
+  {
     if (!acr || acr.length === 0) return "";
+
+
 
     // We keep the acr object as a prop so that we do not have to call
     // setState when moving the primitive, as we would not be able to do
@@ -190,12 +202,17 @@ class InteractiveACRModifier extends Component {
       dropzone={{
         ondropactivate: event => {
           event.target.classList.add('drop-active')
+          // console.log(primitive.id, `is active for dropping.`);
         },
         ondropdeactivate: event => {
-          event.target.classList.remove('drop-active')
+          event.target.classList.remove('drop-active');
+          // console.log(primitive.id, `no longer active for dropping.`);
         },
 
-        // ondrop: event => this.nestWithinNewParent(primitive, parent, event.relatedTarget)
+        ondrop: event => {
+          // console.log(`Dropping`, event.relatedTarget, `Into`, event.target, primitive.id, `Parent`, parent.id);
+          this.nestWithinNewParent(event.relatedTarget, event.target)
+        }
       }}
       onDragMove={({dx, dy}) => this.movePrimitive({primitive, parent}, {dx, dy, width:0, height:0})}
       onDoubleTap={e => this.initPrimitiveSelection(e, primitive)}
@@ -262,14 +279,7 @@ class InteractiveACRModifier extends Component {
         </div>
 
         <div className="continue-container">
-          <Link className="continue-button" style={{
-            // display: 'flex',
-            // flexDirection: 'column',
-            // justifyContent: 'center',
-            // alignItems: 'center'
-            // marginLeft: 'auto',
-            // marginRight: '20px'
-          }} to="/generate-code">Continue</Link>
+          <Link className="continue-button" to="/generate-code">Continue</Link>
           <Arrow style={{
             marginTop: '5px',
             marginLeft: '10px'
