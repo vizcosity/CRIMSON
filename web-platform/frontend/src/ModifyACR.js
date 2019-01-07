@@ -120,6 +120,13 @@ class InteractiveACRModifier extends Component {
 
   endPrimitiveSelection(e, data){
 
+    // Change the type of the modifying primitive. We are not changing the state
+    // so much as a reference to an object contained within the state, so
+    // warnings about mutation of the state can safely be ignored.
+    this.state.modifyingPrimitive.type = data.value;
+
+    console.log(this.state.modifyingPrimitive.id, `type set to`, data.value);
+
     // Set the state to end primitive selection.
     this.setState({
       ...this.state,
