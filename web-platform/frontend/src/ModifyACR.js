@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
 
 
-const BoundingBoxComponent = ({shape, parent, level, contains, getRef, children}) => {
+const BoundingBoxComponent = ({shape, className, parent, level, contains, getRef, children}) => {
 
 var meta = shape.meta;
 
@@ -23,7 +23,7 @@ var {left, top} = getRelativeDistance(parent, shape);
 
 return (<div
 ref={getRef}
-className="bounding-box"
+className={"bounding-box " + className}
 data-x={left}
 data-y={top}
 data-height={meta.relativeHeight}
@@ -56,7 +56,7 @@ class InteractiveACRModifier extends Component {
     this.state = {
       canvasWidth: '100%',
       canvasHeight: '100%',
-      modifyingPrimitive: null,
+      selectedPrimitive: null,
       doubleTap: {
         x: 0,
         y: 0
@@ -69,6 +69,9 @@ class InteractiveACRModifier extends Component {
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+
+    // Register key listener for deleting primitives.
+    document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
 
   }
 
@@ -92,6 +95,32 @@ class InteractiveACRModifier extends Component {
     this.updateImageSizeProperties();
   }
 
+  removeSelectedPrimitive(){
+    if (!this.state.selectedPrimitive) return;
+
+    var parent = findACRObjectById(this.props.project.acr, this.state.selectedPrimitive.parentId);
+
+    parent.contains = parent.contains.filter(s => s.id !== this.state.selectedPrimitive.id);
+
+    // Clear selected primitive.
+    this.clearSelectedPrimitive();
+  }
+
+  selectPrimitive(primitive, changingType = false){
+    this.setState({
+      ...this.state,
+      selectedPrimitive: primitive,
+      changingType
+    })
+  }
+
+  clearSelectedPrimitive(){
+    this.setState({
+      ...this.state,
+      selectedPrimitive: null
+    })
+  }
+
   async initPrimitiveSelection(e, primitive){
     if (!this.availablePrimitives){
       // Fetch available primitives from the backend.
@@ -108,8 +137,11 @@ class InteractiveACRModifier extends Component {
         x: e.x,
         y: e.y
       },
-      modifyingPrimitive: primitive
+      selectedPrimitive: primitive
     });
+
+    // Select the current primitive, and set 'changingType' to true.
+    this.selectPrimitive(primitive, true);
 
     // Prevent event from bubbling up div hierachy.
     e.stopPropagation();
@@ -123,20 +155,20 @@ class InteractiveACRModifier extends Component {
     // Change the type of the modifying primitive. We are not changing the state
     // so much as a reference to an object contained within the state, so
     // warnings about mutation of the state can safely be ignored.
-    this.state.modifyingPrimitive.type = data.value;
+    this.state.selectedPrimitive.type = data.value;
 
-    console.log(this.state.modifyingPrimitive.id, `type set to`, data.value);
+    console.log(`Changing`, this.state.selectedPrimitive.id, `type to`, data.value);
 
     // Set the state to end primitive selection.
     this.setState({
       ...this.state,
-      modifyingPrimitive: null
+      selectedPrimitive: null
     });
   }
 
   movePrimitive({primitive, parent}, {dx, dy}){
 
-    console.log(`Moving`, primitive.id, `with parent`, parent.id);
+    // Select the current primitive.
 
     // Scale dx and dy by the width and height of the parent window.
     dx *= this.state.drawScaleFactor.x;
@@ -201,6 +233,7 @@ class InteractiveACRModifier extends Component {
     // so by using a reference to some shape object.
     return acr.map((primitive, i) =>
       primitive.draw ? <BoundingBox
+      className={this.state.selectedPrimitive && (this.state.selectedPrimitive.id == primitive.id) ? 'selected' : ''}
       parent={parent}
       shape={primitive}
       children={this.drawPrimitives(primitive.contains, primitive)}
@@ -222,7 +255,8 @@ class InteractiveACRModifier extends Component {
         }
       }}
       onDragMove={({dx, dy}) => this.movePrimitive({primitive, parent}, {dx, dy, width:0, height:0})}
-      onDoubleTap={e => this.initPrimitiveSelection(e, primitive)}
+      onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, primitive)}
+      onUp={e =>  e.stopPropagation() || this.selectPrimitive(primitive)}
       {...primitive} /> : "")
 
   }
@@ -235,7 +269,7 @@ class InteractiveACRModifier extends Component {
 
           {
             /* Display dropdown on double click. */
-            this.state.modifyingPrimitive ?
+            this.state.selectedPrimitive && this.state.changingType ?
             <Dropdown
               style={{
                 position: 'absolute',
@@ -246,7 +280,7 @@ class InteractiveACRModifier extends Component {
               }}
               fluid selection compact open
               onChange={(e, val) => this.endPrimitiveSelection(e, val)}
-              defaultValue={this.state.modifyingPrimitive.type}
+              defaultValue={this.state.selectedPrimitive.type}
               options={this.availablePrimitives}
               />
             : ""
