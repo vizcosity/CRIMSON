@@ -98,4 +98,48 @@ function sortVertices(vertices){
 
 }
 
-export {getRelativeDistance, findACRObjectById, moveACRObject, getUpperLeftmostVertex};
+// Traverses the ACR to find the largest ID.
+function getLastACRObjectId(acr){
+
+  if (!acr || acr.length === 0) return 0;
+
+  var id = acr[0].id;
+
+  acr.forEach(shape => {
+    if (shape.id > id) id = shape.id;
+    var largestContainedId = getLastACRObjectId(shape.contains);
+    if (largestContainedId > id) id = largestContainedId;
+  });
+
+  return parseInt(id);
+
+}
+
+function resizeACRObject(primitive, parent, width, height){
+
+  var dX = width - primitive.meta.absoluteWidth;
+  var dY = height - primitive.meta.absoluteHeight;
+
+  primitive.meta.absoluteHeight = height;
+  primitive.meta.absoluteWidth = width;
+
+  // Adjust the vertices.
+  primitive.meta.vertices[1][1] += dY;
+  primitive.meta.vertices[2][0] += dX;
+  primitive.meta.vertices[2][1] += dY;
+  primitive.meta.vertices[3][0] += dY;
+
+  // Update the relative height and width.
+  primitive.meta.relativeHeight = `${(height / parent.meta.absoluteHeight) * 100}%`;
+  primitive.meta.relativeWidth = `${(width / parent.meta.absoluteWidth) * 100}%`;
+
+}
+
+export {
+  getRelativeDistance,
+  findACRObjectById,
+  moveACRObject,
+  getUpperLeftmostVertex,
+  getLastACRObjectId,
+  resizeACRObject
+};

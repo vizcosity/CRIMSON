@@ -10,7 +10,8 @@ import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
-import { getRelativeDistance, findACRObjectById, moveACRObject } from './geometry.js';
+import Primitive from './Primitive.js';
+import { getRelativeDistance, findACRObjectById, moveACRObject, resizeACRObject, getLastACRObjectId } from './geometry.js';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
 
@@ -95,6 +96,12 @@ class InteractiveACRModifier extends Component {
     this.updateImageSizeProperties();
   }
 
+  // Creates a new container primitive and adds to the ACR.
+  createPrimitive(parent){
+    var newPrimitive = new Primitive(getLastACRObjectId(this.props.project.acr) + 1, parent)
+    parent.contains.push(newPrimitive);
+  }
+
   removeSelectedPrimitive(){
     if (!this.state.selectedPrimitive) return;
 
@@ -136,8 +143,7 @@ class InteractiveACRModifier extends Component {
       doubleTap: {
         x: e.x,
         y: e.y
-      },
-      selectedPrimitive: primitive
+      }
     });
 
     // Select the current primitive, and set 'changingType' to true.
@@ -146,7 +152,8 @@ class InteractiveACRModifier extends Component {
     // Prevent event from bubbling up div hierachy.
     e.stopPropagation();
 
-    console.log(e, this.availablePrimitives);
+    console.log(this.state.selectedPrimitive);
+    console.log(this.state.changingType);
 
   }
 
@@ -164,6 +171,12 @@ class InteractiveACRModifier extends Component {
       ...this.state,
       selectedPrimitive: null
     });
+  }
+
+  resizePrimitive(primitive, parent, height, width){
+    resizeACRObject(primitive, parent, height*this.state.drawScaleFactor.y, width*this.state.drawScaleFactor.x);
+    // Redraw.
+    this.setState(this.state);
   }
 
   movePrimitive({primitive, parent}, {dx, dy}){
@@ -193,9 +206,6 @@ class InteractiveACRModifier extends Component {
     // to shapes which they are already nested within.
     if (primitive.id === newParent.id) return;
     if (newParent.contains.map(s => s.id).indexOf(primitive.id) !== -1) return;
-
-    console.log(`Nesting`, primitive.id, `within`, newParent.id);
-    console.log(`Removing`, primitive.id, `from`, oldParent.id);
 
     // If oldParent is null, we are likely trying to nest a panel.
     // Remove the primitive from the oldParent.
@@ -239,6 +249,14 @@ class InteractiveACRModifier extends Component {
       children={this.drawPrimitives(primitive.contains, primitive)}
       key={i}
       draggable
+      resizable={{
+        edges: {
+          top: true,
+          right: true,
+          bottom: true,
+          left: true
+        }
+      }}
       dropzone={{
         ondropactivate: event => {
           event.target.classList.add('drop-active')
@@ -257,6 +275,15 @@ class InteractiveACRModifier extends Component {
       onDragMove={({dx, dy}) => this.movePrimitive({primitive, parent}, {dx, dy, width:0, height:0})}
       onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, primitive)}
       onUp={e =>  e.stopPropagation() || this.selectPrimitive(primitive)}
+      onHold={e => e.stopPropagation() || this.createPrimitive(primitive)}
+      onResizeMove={
+        e => e.stopPropagation() ||
+        this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height) ||
+        this.movePrimitive({primitive, parent}, {
+          dx: (e.deltaRect.left * 2) * this.state.drawScaleFactor.x,
+          dy: (e.deltaRect.top * 2) * this.state.drawScaleFactor.y
+        })
+      }
       {...primitive} /> : "")
 
   }
@@ -270,6 +297,7 @@ class InteractiveACRModifier extends Component {
           {
             /* Display dropdown on double click. */
             this.state.selectedPrimitive && this.state.changingType ?
+            console.log(`Drawing dropdown at`,this.state.doubleTap.x, `and`, this.state.doubleTap.y) ||
             <Dropdown
               style={{
                 position: 'absolute',

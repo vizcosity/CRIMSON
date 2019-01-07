@@ -12,12 +12,53 @@ export default class Primitive {
   }){
     this.id = id;
     this.parentId = parent.id;
+    this.type = type;
     this.draw = true;
     this.meta = {
       ...meta,
-      relativeWidth: `${(meta.absoluteWidth / parent.absoluteWidth) * 100}%`,
-      relativeHeight: `${(meta.absoluteHeight / parent.absoluteHeight) * 100}%`,
+      relativeWidth: `${(meta.absoluteWidth / parent.meta.absoluteWidth) * 100}%`,
+      relativeHeight: `${(meta.absoluteHeight / parent.meta.absoluteHeight) * 100}%`,
+      area: meta.absoluteWidth * meta.absoluteHeight,
+      vertices: [
+        [
+          parent.meta.midpoint[0] - (meta.absoluteWidth / 2),
+          parent.meta.midpoint[1] - (meta.absoluteHeight / 2)
+        ],
+        [
+          parent.meta.midpoint[0] - (meta.absoluteWidth / 2),
+          parent.meta.midpoint[1] + (meta.absoluteHeight / 2)
+        ],
+        [
+          parent.meta.midpoint[0] + (meta.absoluteWidth / 2),
+          parent.meta.midpoint[1] + (meta.absoluteHeight / 2)
+        ],
+        [
+          parent.meta.midpoint[0] + (meta.absoluteWidth / 2),
+          parent.meta.midpoint[1] - (meta.absoluteHeight / 2)
+        ]
+      ],
+      midpoint: parent.meta.midpoint,
+      relativeVertices: [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ],
     };
+      this.level = parent.level + 1;
+      this.contains = [];
 
   }
 }
