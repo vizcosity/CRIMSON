@@ -145,16 +145,17 @@ class InteractiveACRModifier extends Component {
       doubleTap: {
         x: e.x,
         y: e.y
-      }
+      },
+      modifyingPrimitive: primitive
     });
 
     // Select the current primitive, and set 'changingType' to true.
-    this.selectPrimitive(primitive, true);
+    // this.selectPrimitive(primitive, true);
 
     // Prevent event from bubbling up div hierachy.
     e.stopPropagation();
 
-    console.log(this.state.selectedPrimitive);
+    console.log(this.state.modifyingPrimitive);
     console.log(this.state.changingType);
 
   }
@@ -164,21 +165,21 @@ class InteractiveACRModifier extends Component {
     // Change the type of the modifying primitive. We are not changing the state
     // so much as a reference to an object contained within the state, so
     // warnings about mutation of the state can safely be ignored.
-    this.state.selectedPrimitive.type = data.value;
+    this.state.modifyingPrimitive.type = data.value;
 
-    console.log(`Changing`, this.state.selectedPrimitive.id, `type to`, data.value);
+    console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
 
     // Set the state to end primitive selection.
     this.setState({
       ...this.state,
-      selectedPrimitive: null
+      modifyingPrimitive: null
     });
   }
 
   resizePrimitive(primitive, parent, height, width){
     if (parent.id !== "canvas") height *= this.state.drawScaleFactor.y;
     if (parent.id !== "canvas") width *= this.state.drawScaleFactor.x;
-    log(`Resizing`, primitive.id, `to`, height, `and`, width);
+
     resizeACRObject(primitive, parent, height, width);
     // Redraw.
     this.setState(this.state);
@@ -303,7 +304,7 @@ class InteractiveACRModifier extends Component {
 
           {
             /* Display dropdown on double click. */
-            this.state.selectedPrimitive && this.state.changingType ?
+            (this.state.modifyingPrimitive) ?
             console.log(`Drawing dropdown at`,this.state.doubleTap.x, `and`, this.state.doubleTap.y) ||
             <Dropdown
               style={{
@@ -315,7 +316,7 @@ class InteractiveACRModifier extends Component {
               }}
               fluid selection compact open
               onChange={(e, val) => this.endPrimitiveSelection(e, val)}
-              defaultValue={this.state.selectedPrimitive.type}
+              defaultValue={this.state.modifyingPrimitive.type}
               options={this.availablePrimitives}
               />
             : ""
