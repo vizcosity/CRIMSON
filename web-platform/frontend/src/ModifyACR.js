@@ -77,6 +77,9 @@ class InteractiveACRModifier extends Component {
 
   componentDidMount(){
     this.updateImageSizeProperties();
+    this.setState({
+      ready: true
+    })
   }
 
   updateImageSizeProperties(){
@@ -173,7 +176,10 @@ class InteractiveACRModifier extends Component {
   }
 
   resizePrimitive(primitive, parent, height, width){
-    resizeACRObject(primitive, parent, height*this.state.drawScaleFactor.y, width*this.state.drawScaleFactor.x);
+    if (parent.id !== "canvas") height *= this.state.drawScaleFactor.y;
+    if (parent.id !== "canvas") width *= this.state.drawScaleFactor.x;
+    log(`Resizing`, primitive.id, `to`, height, `and`, width);
+    resizeACRObject(primitive, parent, height, width);
     // Redraw.
     this.setState(this.state);
   }
@@ -223,10 +229,14 @@ class InteractiveACRModifier extends Component {
 
   }
 
-  drawPrimitives(acr, parent = {
+  drawPrimitives(acr,
+    // By default, if there is no parent, then this must be the highest level
+    // primitive - in which case we create a 'pseudo' primitive which will
+    // contain it - the canvas.
+    parent = {
     meta: {
-      absoluteWidth: this.state.canvasWidth,
-      absoluteHeight: this.state.canvasHeight,
+      absoluteWidth: this.imageRef.width * this.state.drawScaleFactor.x,
+      absoluteHeight: this.imageRef.height * this.state.drawScaleFactor.y,
       vertices: [[0,0]]
     },
     id: "canvas",
@@ -234,8 +244,6 @@ class InteractiveACRModifier extends Component {
   })
   {
     if (!acr || acr.length === 0) return "";
-
-
 
     // We keep the acr object as a prop so that we do not have to call
     // setState when moving the primitive, as we would not be able to do
@@ -322,7 +330,7 @@ class InteractiveACRModifier extends Component {
           }} className="acr-object-canvas">
           {
             /* Draw ACR Bounding boxes */
-            this.drawPrimitives(this.props.project.acr)
+            this.state.ready ? this.drawPrimitives(this.props.project.acr) : ""
           }
 
           </div>

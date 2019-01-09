@@ -55,10 +55,6 @@ function moveACRObject({primitive, parent}, dx, dy){
   // Generate updated vertex coordinates.
   var updatedVertices = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
 
-  // TODO: Check if the primitive is within the parent container
-  // before updating the vertices.
-
-
   // Move all of the vertices & the midpoint.
   primitive.meta.vertices = updatedVertices
   primitive.meta.midpoint[0] += dx;
@@ -120,6 +116,9 @@ function resizeACRObject(primitive, parent, width, height){
   var dX = width - primitive.meta.absoluteWidth;
   var dY = height - primitive.meta.absoluteHeight;
 
+  var parentWidth = parent.meta.absoluteWidth;
+  var parentHeight = parent.meta.absoluteHeight;
+
   primitive.meta.absoluteHeight = height;
   primitive.meta.absoluteWidth = width;
 
@@ -129,9 +128,12 @@ function resizeACRObject(primitive, parent, width, height){
   primitive.meta.vertices[2][1] += dY;
   primitive.meta.vertices[3][0] += dY;
 
+  // console.log(`Primitive`, primitive.id, `parent:`, parent);
+  // console.log(`Primitive height:`, height, `parent height:`, parent.meta.absoluteHeight);
+
   // Update the relative height and width.
-  primitive.meta.relativeHeight = `${(height / parent.meta.absoluteHeight) * 100}%`;
-  primitive.meta.relativeWidth = `${(width / parent.meta.absoluteWidth) * 100}%`;
+  primitive.meta.relativeHeight = parent.id !== "canvas" ? `${(height / parentHeight) * 100}%` : `${height}px`;
+  primitive.meta.relativeWidth = parent.id !== "canvas" ? `${(width / parentWidth) * 100}%` : `${width}px`;
 
 }
 
