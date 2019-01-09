@@ -7,8 +7,7 @@ import CodeGenerator from './CodeGeneration.js';
 import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
-const Package = require('../package.json');
-
+import Package from '../package.json';
 
 class App extends Component {
 
@@ -22,8 +21,8 @@ class App extends Component {
       }
     };
     this.project = {acr: ACRSample, source: {
-      name: "Loading",
-      url: `https://i.imgur.com/z0J73nL.png`
+      name: "Sample_wireframe.png",
+      data: `https://i.imgur.com/z0J73nL.png`
     }};
     this.onRecieveACRHandler = this.onRecieveACRHandler.bind(this);
   }
@@ -64,10 +63,7 @@ class App extends Component {
 
         <Route exact path="/" component={
           () => <Landing
-          api={{
-            generateCode: '/api/v1/generateCode',
-            generateACR: '/api/v1/generateACR'
-          }}
+          api={Package.api}
           onRecieveACR={this.onRecieveACRHandler}
 
           />
@@ -79,7 +75,7 @@ class App extends Component {
           />
 
         <Route exact path="/generate-code"
-        render={() => <CodeGenerator project={this.project} /> } />
+        render={() => <CodeGenerator api={Package.api} project={this.project} /> } />
 
       </div>
     </Router>);

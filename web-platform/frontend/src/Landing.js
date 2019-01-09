@@ -48,11 +48,13 @@ class Uploader extends Component {
       body: data
     }).then(async res => {
       res = await res.json();
+      log(this.state.selectedFile);
       log(`Recieved`, res, `from server.`);
       // download(res, this.state.selectedFile.name.split('.')[0]+'.zip');
-      if (this.props.onEndUpload) this.props.onEndUpload({acr:res, source: {
+      if (this.props.onEndUpload) this.props.onEndUpload({acr:res.acr, source: {
         name: this.state.selectedFile.name,
-        url: await readFile(this.state.selectedFile)
+        data: await readFile(this.state.selectedFile),
+        ...res.file
       }});
 
     });

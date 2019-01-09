@@ -9,7 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mkdir = require('mkdirp').sync;
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 const package = require('./package.json');
 const endpointPrefix = `/api/v${package['api-version']}`;
 const multer = require('multer');
@@ -28,6 +28,9 @@ const upload = multer({
 });
 const crimson = require('crimson-inference');
 const config = require('crimson-inference/config/config.json');
+
+// Keep track of running processes, ensuring to kill them once used.
+var runningProcesses = {};
 
 
 // Defaults.
@@ -58,7 +61,7 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
     res.json({success: false, error: e});
   }
   // Send ACR as response.
-  res.json(acr);
+  res.json({acr, file: req.file});
 });
 
 // Register POST endpoint to generate code from ACR representation.
@@ -66,6 +69,8 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
 // the given options, and returns a zip file with the generated project,
 // as well as a live URL with the generated page, if desired.
 app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (req, res, params) => {
+
+  log(`Recieved request to generate code with body:`, req.body);
 
   // If an image is passed to the request, it will be stored under the
   // req.file field.
@@ -83,12 +88,14 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   var fileName = req.body.fileName ? req.body.fileName : basename(req.file.originalname).split('.')[0];
   log(`Generating code for`, fileName);
+  log(`Image Path for`, fileName, `:`, req.body.imgPath);
 
   // Generate the codes and return the output directory.
   var outputDir = await crimson.generateCode(req.body.acr, {
     fileName: fileName,
+    context: req.body.context,
     file: req.file ? req.file.originalname : null,
-    imgPath: req.file ? req.file.path : null,
+    imgPath: req.body.imgPath ? req.body.imgPath : (req.file ? req.file.path : null),
     outputDir: function(){
       var projectDir = _DEFAULT_OUTPUT_DIR + '/' + fileName;
       mkdir(projectDir);
@@ -100,21 +107,32 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     ...req.body
   });
 
+  log(`Output directory for generated code`, outputDir);
+
   // Launch a live webserver if the param has passed.
   if (req.body.livePreview){
-    await exec(
-      resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') +
-      ' ' +
-      resolve(outputDir, 'index.html') +
-      ' -d ' +
+    var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
+      resolve(outputDir, 'index.html'),
+      '-d',
       resolve(outputDir, 'dist')
-    );
+    ]);
 
-    log(`Generated live preview.`);
+    runningProcesses[fileName] = parcelBundelerProc;
 
-    return res.json({
-      success: true
+    log(`Generated live preview. Waiting for parcel-bundler to return live preview url.`);
+
+    parcelBundelerProc.stdout.on('data', data => {
+      data = data.toString();
+      log(`[Parcel Bundler]`, data);
+      if (data.match(/http\S+/g)) return res.json({
+        url: data.match(/http\S+/g)[0]
+      });
     });
+
+    // Legacy URL.
+    // return res.json({
+    //   url: `http://localhost:1234`
+    // });
   }
 
   // Return zipped file.

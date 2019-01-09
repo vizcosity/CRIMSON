@@ -46,6 +46,8 @@ module.exports = {
 
     log(`Generating code for`, fileName);
 
+    log(`Code generation parameters:`, fileName, file, outputDir, context, project, imgPath, zip);
+
     var code = await generateCode(acr);
 
     var HTMLOutput = `
@@ -57,8 +59,8 @@ module.exports = {
       <head>
 
         <!-- Metadata -->
-        ${file ? `<meta source-filename="${file}" />` : ""}
-        ${imgPath ? `<meta source-path="${imgPath}" />` : ''}
+        <meta source-filename="${file}" />
+        <meta source-path="${imgPath}" />
         <meta context="${context}" />
         <meta output-type="${project}" />
 
@@ -66,17 +68,32 @@ module.exports = {
 
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="style.css" />
+        {{cssEmbed}}
       </head>
       <body>
       \t${code}
+
+      <div id="source-image-preview" style="
+        background-image: url('{{bgImagePath}}');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+        z-index: -1;
+      " class="meta hidden"></div>
 
       <!-- JS -->
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      {{jsEmbed}}
       </body>
-    </html>`;
+    </html>`
 
     log(`Generated Code.`);
 
@@ -89,9 +106,9 @@ module.exports = {
     mkdir.sync(outputDir);
 
     log(`Bundling project and saving output to`, outputDir);
-    var zipPath = await bundle({zip, outputDir, context: context, targets: {source: HTMLOutput, name: 'index.html'}});
+    var zipPath = await bundle({zip, outputDir, imgPath, context: context, targets: {source: HTMLOutput, name: 'index.html'}});
 
-    return zipPath ? zipPath : outputDir;
+    return zip ? zipPath : outputDir;
 
   }
 };

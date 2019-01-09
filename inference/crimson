@@ -16,9 +16,7 @@ const {filterPrimitives} = require('./modules/filterPrimitives');
 const fs = require('fs');
 const { resolve, basename } = require('path');
 const mkdir = require('mkdirp');
-// const exec = require('util').promisify(require('child_process').exec);
-const {exec} = require('child_process');
-// const generator = require('generator');
+const { exec, spawn } = require('child_process');
 
 // Parse arguments.
 args
@@ -123,20 +121,27 @@ detectPrimitives(imagePath).then(async primitives => {
 
   log(`Generated Code.`);
   log(`Bundling project and saving output to`, outputDir);
-  await bundle({outputDir, context: args.context, imagePath, targets: {source: HTMLOutput, name: 'index.html'}});
+  await bundle({outputDir, context: args.context, imgPath: imagePath, targets: {source: HTMLOutput, name: 'index.html'}});
 
 
   // Run parcel-bundler in output dir.
   if (args.project == 'server'){
     log(`Running parcel-bundler.`, resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') + ' ' + resolve(outputDir, 'index.html') + ' -d ' + resolve(outputDir, 'dist'));
-    exec(
-      resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') +
-      ' ' +
-      resolve(outputDir, 'index.html') +
-      ' -d ' +
+
+    var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
+      resolve(outputDir, 'index.html'),
+      '-d',
       resolve(outputDir, 'dist')
-    ).stdout.pipe(process.stdout);
+    ]);
+
+    parcelBundelerProc.stdout.on('data', data => log(`[Parcel Bundler]`, data.toString()));
   }
+
+  var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
+    resolve(outputDir, 'index.html'),
+    '-d',
+    resolve(outputDir, 'dist')
+  ]);
 
 })
 

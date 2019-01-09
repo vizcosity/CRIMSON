@@ -27,7 +27,7 @@ function generateBundleEmbed(files){
 
 }
 
-module.exports = ({outputDir, context, imagePath, targets, zip=false}) => new Promise((resolve, reject) => {
+module.exports = ({outputDir, context, imgPath, targets, zip=false}) => new Promise((resolve, reject) => {
 
   const projectName = outputDir.split('/')[outputDir.split('/').length - 1];
 
@@ -52,12 +52,12 @@ module.exports = ({outputDir, context, imagePath, targets, zip=false}) => new Pr
     });
 
     // Copy the image over to the bundle.
-    fs.copyFileSync(imagePath, outputDir+'/'+basename(imagePath));
-    bundled.push(basename(imagePath));
+    fs.copyFileSync(imgPath, outputDir+'/'+basename(imgPath));
+    bundled.push(basename(imgPath));
 
     bundled = {
       ...generateBundleEmbed(bundled),
-      bgImagePath: basename(imagePath)
+      bgImagePath: basename(imgPath)
     };
 
     // Write files to outputDir.
@@ -84,7 +84,7 @@ module.exports = ({outputDir, context, imagePath, targets, zip=false}) => new Pr
       var zipCmd = spawn('zip', ['-r', `${projectName}/${projectName}.zip`, `./${projectName}`], {
         cwd: resolvePath(outputDir, '../')
       });
-      zipCmd.on('close', () => resolve(bundled));
+      zipCmd.on('close', () => resolve(resolvePath(outputDir, '../')));
       zipCmd.on('stdout', data => log(data.toString()));
       // var zipProc = spaw(`zip ${outputDir}/${projectName}.zip ${outputDir}/*`);
     } else resolve(bundled);

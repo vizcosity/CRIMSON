@@ -21,6 +21,7 @@ class Shape:
             vertices = np.array(vertices)
 
         self.id = id
+        self.parentId = None
         self.rawVertices = vertices
         self.rawVertices = vertices.reshape(-1,2)
         self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
@@ -63,6 +64,9 @@ class Shape:
         # Add a level to the child shape.
         # shape.increaseNestLevel()
         shape.level = self.level + 1
+
+        # Mark the parent id for the shape being added.
+        shape.parentId = self.id
 
         # Set the relativeVertices with respect to the upperleftmost vertex of
         # the container being used as the origin point.

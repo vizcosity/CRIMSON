@@ -19,6 +19,7 @@ def composeShapeHierarchy(containers):
 
         output.append({
             'id': str(container.id),
+            'parentId': str(container.parentId),
             'type': container.type,
             'meta': {
                 'absoluteWidth': float(container.width),

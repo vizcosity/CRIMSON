@@ -38,7 +38,6 @@ style={{
   // transform: `translateX(${meta.vertices[0][0]}px) translateY(${meta.vertices[0][1]}px)`
 }}>
 {children}
-<label className="shape-type-label">{shape.id}</label>
 <label className="shape-type-label">{shape.type}</label>
 </div>)}
 const BoundingBox = Reactable(BoundingBoxComponent);
@@ -332,7 +331,7 @@ class InteractiveACRModifier extends Component {
             width: 'unset',
             height: '-webkit-fill-available'
           }}
-          src={this.props.project.source.url} />
+          src={this.props.project.source.data} />
 
           </ResizeDetector>
         </div>
@@ -364,3 +363,8 @@ class InteractiveACRModifier extends Component {
 }
 
 export default InteractiveACRModifier;
+
+// Logging
+function log(...msg){
+  console.log(`MODIFY ACR |`, ...msg);
+}

@@ -24,6 +24,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "api": {
+    "generateACR": "/api/v1/generateACR",
+    "generateCode": "/api/v1/generateCode"
+  },
   "proxy": "http://localhost:3715",
   "browserslist": [
     ">0.2%",
