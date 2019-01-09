@@ -1,0 +1,73 @@
+[
+  {
+    "id": "window",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 401.0,
+      "absoluteHeight": 439.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        200,
+        220
+      ],
+      "area": 176039.0,
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          439
+        ],
+        [
+          401,
+          439
+        ],
+        [
+          401,
+          0
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 291.0,
+          "absoluteHeight": 346.0,
+          "relativeWidth": "72.56857855361596%",
+          "relativeHeight": "78.81548974943053%",
+          "midpoint": [
+            184,
+            202
+          ],
+          "area": 100686.0,
+          "vertices": [
+            [
+              39,
+              29
+            ],
+            [
+              39,
+              375
+            ],
+            [
+              330,
+              375
+            ],
+            [
+              330,
+              29
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

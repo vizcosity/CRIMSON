@@ -1,0 +1,962 @@
+[
+  {
+    "id": "0",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 287.0,
+      "absoluteHeight": 422.0,
+      "relativeWidth": "95.66666666666667%",
+      "relativeHeight": "96.78899082568807%",
+      "midpoint": [
+        150,
+        219
+      ],
+      "area": 121114.0,
+      "vertices": [
+        [
+          7,
+          8
+        ],
+        [
+          7,
+          430
+        ],
+        [
+          294,
+          430
+        ],
+        [
+          294,
+          8
+        ]
+      ],
+      "relativeVertices": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "4",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 154.0,
+          "absoluteHeight": 43.0,
+          "relativeWidth": "53.65853658536586%",
+          "relativeHeight": "10.189573459715639%",
+          "midpoint": [
+            124,
+            186
+          ],
+          "area": 6622.0,
+          "vertices": [
+            [
+              47,
+              164
+            ],
+            [
+              47,
+              207
+            ],
+            [
+              201,
+              207
+            ],
+            [
+              201,
+              164
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.13937282229965156,
+              0.3696682464454976
+            ],
+            [
+              0.13937282229965156,
+              0.471563981042654
+            ],
+            [
+              0.6759581881533101,
+              0.471563981042654
+            ],
+            [
+              0.6759581881533101,
+              0.3696682464454976
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "12",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                48,
+                183
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  48.0,
+                  183.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.006493506493506494,
+                  0.4418604651162791
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "14",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 31.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "20.12987012987013%",
+              "relativeHeight": "2.3255813953488373%",
+              "midpoint": [
+                170,
+                184
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  154,
+                  184
+                ],
+                [
+                  185,
+                  185
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.6948051948051948,
+                  0.46511627906976744
+                ],
+                [
+                  0.8961038961038961,
+                  0.4883720930232558
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "16",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 18.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "11.688311688311687%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                144,
+                186
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  135,
+                  186
+                ],
+                [
+                  153,
+                  186
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.5714285714285714,
+                  0.5116279069767442
+                ],
+                [
+                  0.6883116883116883,
+                  0.5116279069767442
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "39",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 53.0,
+              "absoluteHeight": 3.0,
+              "relativeWidth": "34.41558441558442%",
+              "relativeHeight": "6.976744186046512%",
+              "midpoint": [
+                102,
+                184
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  75,
+                  183
+                ],
+                [
+                  128,
+                  186
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.18181818181818182,
+                  0.4418604651162791
+                ],
+                [
+                  0.525974025974026,
+                  0.5116279069767442
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "54",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 11.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "7.142857142857142%",
+              "relativeHeight": "2.3255813953488373%",
+              "midpoint": [
+                68,
+                184
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  63,
+                  183
+                ],
+                [
+                  74,
+                  184
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.1038961038961039,
+                  0.4418604651162791
+                ],
+                [
+                  0.17532467532467533,
+                  0.46511627906976744
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "62",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 27.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "17.532467532467532%",
+              "relativeHeight": "2.3255813953488373%",
+              "midpoint": [
+                170,
+                188
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  156,
+                  187
+                ],
+                [
+                  183,
+                  188
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.7077922077922078,
+                  0.5348837209302325
+                ],
+                [
+                  0.8831168831168831,
+                  0.5581395348837209
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 174.0,
+          "absoluteHeight": 138.0,
+          "relativeWidth": "60.62717770034843%",
+          "relativeHeight": "32.70142180094787%",
+          "midpoint": [
+            130,
+            302
+          ],
+          "area": 24012.0,
+          "vertices": [
+            [
+              43,
+              233
+            ],
+            [
+              43,
+              371
+            ],
+            [
+              217,
+              371
+            ],
+            [
+              217,
+              233
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.1254355400696864,
+              0.533175355450237
+            ],
+            [
+              0.1254355400696864,
+              0.8601895734597157
+            ],
+            [
+              0.7317073170731707,
+              0.8601895734597157
+            ],
+            [
+              0.7317073170731707,
+              0.533175355450237
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "14",
+            "type": "intersection",
+            "meta": {
+              "absoluteWidth": 0.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "0.0%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                65,
+                303
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  65.0,
+                  303.0
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.12643678160919541,
+                  0.5072463768115942
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "7",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 15.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "8.620689655172415%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                112,
+                301
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  104,
+                  301
+                ],
+                [
+                  119,
+                  301
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.3505747126436782,
+                  0.4927536231884058
+                ],
+                [
+                  0.4367816091954023,
+                  0.4927536231884058
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "29",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 16.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "9.195402298850574%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                95,
+                300
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  87,
+                  300
+                ],
+                [
+                  103,
+                  300
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.25287356321839083,
+                  0.4855072463768116
+                ],
+                [
+                  0.3448275862068966,
+                  0.4855072463768116
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "38",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 40.0,
+              "absoluteHeight": 4.0,
+              "relativeWidth": "22.988505747126435%",
+              "relativeHeight": "2.898550724637681%",
+              "midpoint": [
+                66,
+                299
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  46,
+                  297
+                ],
+                [
+                  86,
+                  301
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.017241379310344827,
+                  0.463768115942029
+                ],
+                [
+                  0.2471264367816092,
+                  0.4927536231884058
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "40",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 32.0,
+              "absoluteHeight": 3.0,
+              "relativeWidth": "18.39080459770115%",
+              "relativeHeight": "2.1739130434782608%",
+              "midpoint": [
+                123,
+                302
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  107,
+                  304
+                ],
+                [
+                  139,
+                  301
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.367816091954023,
+                  0.5144927536231884
+                ],
+                [
+                  0.5517241379310345,
+                  0.4927536231884058
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "46",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 23.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "13.218390804597702%",
+              "relativeHeight": "0.7246376811594203%",
+              "midpoint": [
+                90,
+                304
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  79,
+                  304
+                ],
+                [
+                  102,
+                  303
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.20689655172413793,
+                  0.5144927536231884
+                ],
+                [
+                  0.3390804597701149,
+                  0.5072463768115942
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "52",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 17.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "9.770114942528735%",
+              "relativeHeight": "0.7246376811594203%",
+              "midpoint": [
+                132,
+                298
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  124,
+                  299
+                ],
+                [
+                  141,
+                  298
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.46551724137931033,
+                  0.4782608695652174
+                ],
+                [
+                  0.5632183908045977,
+                  0.47101449275362317
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "71",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 32.0,
+              "absoluteHeight": 5.0,
+              "relativeWidth": "18.39080459770115%",
+              "relativeHeight": "3.6231884057971016%",
+              "midpoint": [
+                62,
+                302
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  46,
+                  299
+                ],
+                [
+                  78,
+                  304
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.017241379310344827,
+                  0.4782608695652174
+                ],
+                [
+                  0.20114942528735633,
+                  0.5144927536231884
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "81",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 14.0,
+              "absoluteHeight": 0.0,
+              "relativeWidth": "8.045977011494253%",
+              "relativeHeight": "0.0%",
+              "midpoint": [
+                149,
+                299
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  142,
+                  299
+                ],
+                [
+                  156,
+                  299
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.5689655172413793,
+                  0.4782608695652174
+                ],
+                [
+                  0.6494252873563219,
+                  0.4782608695652174
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "86",
+            "type": "centered_line",
+            "meta": {
+              "absoluteWidth": 11.0,
+              "absoluteHeight": 1.0,
+              "relativeWidth": "6.321839080459771%",
+              "relativeHeight": "0.7246376811594203%",
+              "midpoint": [
+                92,
+                302
+              ],
+              "area": 0.0,
+              "vertices": [
+                [
+                  87,
+                  303
+                ],
+                [
+                  98,
+                  302
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.25287356321839083,
+                  0.5072463768115942
+                ],
+                [
+                  0.3160919540229885,
+                  0.5
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "12",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 54.0,
+          "absoluteHeight": 2.0,
+          "relativeWidth": "18.81533101045296%",
+          "relativeHeight": "0.47393364928909953%",
+          "midpoint": [
+            74,
+            198
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              47,
+              197
+            ],
+            [
+              101,
+              199
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.13937282229965156,
+              0.44786729857819907
+            ],
+            [
+              0.32752613240418116,
+              0.45260663507109006
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "27",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 153.0,
+          "absoluteHeight": 8.0,
+          "relativeWidth": "53.31010452961672%",
+          "relativeHeight": "1.8957345971563981%",
+          "midpoint": [
+            124,
+            203
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              47,
+              199
+            ],
+            [
+              200,
+              207
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.13937282229965156,
+              0.45260663507109006
+            ],
+            [
+              0.6724738675958188,
+              0.471563981042654
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "37",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 77.0,
+          "absoluteHeight": 5.0,
+          "relativeWidth": "26.82926829268293%",
+          "relativeHeight": "1.1848341232227488%",
+          "midpoint": [
+            162,
+            202
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              123,
+              200
+            ],
+            [
+              200,
+              205
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.40418118466898956,
+              0.4549763033175355
+            ],
+            [
+              0.6724738675958188,
+              0.466824644549763
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "70",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 14.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "4.878048780487805%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            63,
+            201
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              56,
+              201
+            ],
+            [
+              70,
+              201
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.17073170731707318,
+              0.45734597156398105
+            ],
+            [
+              0.21951219512195122,
+              0.45734597156398105
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "75",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 11.0,
+          "absoluteHeight": 2.0,
+          "relativeWidth": "3.8327526132404177%",
+          "relativeHeight": "0.47393364928909953%",
+          "midpoint": [
+            56,
+            199
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              51,
+              200
+            ],
+            [
+              62,
+              198
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.15331010452961671,
+              0.4549763033175355
+            ],
+            [
+              0.1916376306620209,
+              0.45023696682464454
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "84",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 11.0,
+          "absoluteHeight": 1.0,
+          "relativeWidth": "3.8327526132404177%",
+          "relativeHeight": "0.23696682464454977%",
+          "midpoint": [
+            108,
+            200
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              102,
+              199
+            ],
+            [
+              113,
+              200
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.3310104529616725,
+              0.45260663507109006
+            ],
+            [
+              0.3693379790940767,
+              0.4549763033175355
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]
