@@ -1,0 +1,349 @@
+{
+  "rectangle0": {
+    "type": "rectangle",
+    "meta": {
+      "width": 290.0,
+      "height": 290.0,
+      "midpoint": [
+        150,
+        150
+      ],
+      "area": 84100.0,
+      "vertices": [
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          295
+        ],
+        [
+          295,
+          295
+        ],
+        [
+          295,
+          5
+        ]
+      ]
+    },
+    "contains": [
+      {
+        "polygon10": {
+          "type": "polygon",
+          "meta": {
+            "width": 287.0,
+            "height": 287.0,
+            "midpoint": [
+              175,
+              159
+            ],
+            "area": 50116.5,
+            "vertices": [
+              [
+                6,
+                7
+              ],
+              [
+                292,
+                6
+              ],
+              [
+                292,
+                83
+              ],
+              [
+                108,
+                83
+              ],
+              [
+                108,
+                254
+              ],
+              [
+                292,
+                255
+              ],
+              [
+                293,
+                292
+              ],
+              [
+                7,
+                293
+              ]
+            ]
+          },
+          "contains": []
+        }
+      },
+      {
+        "rectangle1": {
+          "type": "rectangle",
+          "meta": {
+            "width": 185.0,
+            "height": 172.0,
+            "midpoint": [
+              202,
+              169
+            ],
+            "area": 31820.0,
+            "vertices": [
+              [
+                109,
+                83
+              ],
+              [
+                109,
+                255
+              ],
+              [
+                294,
+                255
+              ],
+              [
+                294,
+                83
+              ]
+            ]
+          },
+          "contains": [
+            {
+              "rectangle2": {
+                "type": "rectangle",
+                "meta": {
+                  "width": 94.0,
+                  "height": 100.0,
+                  "midpoint": [
+                    217,
+                    194
+                  ],
+                  "area": 9400.0,
+                  "vertices": [
+                    [
+                      170,
+                      144
+                    ],
+                    [
+                      170,
+                      244
+                    ],
+                    [
+                      264,
+                      244
+                    ],
+                    [
+                      264,
+                      144
+                    ]
+                  ]
+                },
+                "contains": [
+                  {
+                    "rectangle9": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 34.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          188,
+                          194
+                        ],
+                        "area": 3332.0,
+                        "vertices": [
+                          [
+                            171,
+                            145
+                          ],
+                          [
+                            171,
+                            243
+                          ],
+                          [
+                            205,
+                            243
+                          ],
+                          [
+                            205,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  },
+                  {
+                    "rectangle4": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 12.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          254,
+                          194
+                        ],
+                        "area": 1176.0,
+                        "vertices": [
+                          [
+                            248,
+                            145
+                          ],
+                          [
+                            248,
+                            243
+                          ],
+                          [
+                            260,
+                            243
+                          ],
+                          [
+                            260,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  },
+                  {
+                    "rectangle5": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 12.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          243,
+                          194
+                        ],
+                        "area": 1176.0,
+                        "vertices": [
+                          [
+                            237,
+                            145
+                          ],
+                          [
+                            237,
+                            243
+                          ],
+                          [
+                            249,
+                            243
+                          ],
+                          [
+                            249,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  },
+                  {
+                    "rectangle6": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 12.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          232,
+                          194
+                        ],
+                        "area": 1176.0,
+                        "vertices": [
+                          [
+                            226,
+                            145
+                          ],
+                          [
+                            226,
+                            243
+                          ],
+                          [
+                            238,
+                            243
+                          ],
+                          [
+                            238,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  },
+                  {
+                    "rectangle7": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 12.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          221,
+                          194
+                        ],
+                        "area": 1176.0,
+                        "vertices": [
+                          [
+                            215,
+                            145
+                          ],
+                          [
+                            215,
+                            243
+                          ],
+                          [
+                            227,
+                            243
+                          ],
+                          [
+                            227,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  },
+                  {
+                    "rectangle8": {
+                      "type": "rectangle",
+                      "meta": {
+                        "width": 12.0,
+                        "height": 98.0,
+                        "midpoint": [
+                          210,
+                          194
+                        ],
+                        "area": 1176.0,
+                        "vertices": [
+                          [
+                            204,
+                            145
+                          ],
+                          [
+                            204,
+                            243
+                          ],
+                          [
+                            216,
+                            243
+                          ],
+                          [
+                            216,
+                            145
+                          ]
+                        ]
+                      },
+                      "contains": []
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

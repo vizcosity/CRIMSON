@@ -1,0 +1,37 @@
+[
+  {
+    "id": "window",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 301.0,
+      "absoluteHeight": 346.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        150,
+        173
+      ],
+      "area": 104146.0,
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          346
+        ],
+        [
+          301,
+          346
+        ],
+        [
+          301,
+          0
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": []
+  }
+]

@@ -1,0 +1,250 @@
+[
+  {
+    "id": "window",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 843.0,
+      "absoluteHeight": 739.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        422,
+        370
+      ],
+      "area": 622977.0,
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          739
+        ],
+        [
+          843,
+          739
+        ],
+        [
+          843,
+          0
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 790.0,
+          "absoluteHeight": 664.0,
+          "relativeWidth": "93.7129300118624%",
+          "relativeHeight": "89.851150202977%",
+          "midpoint": [
+            421,
+            365
+          ],
+          "area": 524560.0,
+          "vertices": [
+            [
+              26,
+              33
+            ],
+            [
+              26,
+              697
+            ],
+            [
+              816,
+              697
+            ],
+            [
+              816,
+              33
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "7",
+            "type": "rectangle",
+            "meta": {
+              "absoluteWidth": 742.0,
+              "absoluteHeight": 148.0,
+              "relativeWidth": "93.92405063291139%",
+              "relativeHeight": "22.289156626506024%",
+              "midpoint": [
+                421,
+                134
+              ],
+              "area": 109816.0,
+              "vertices": [
+                [
+                  50,
+                  60
+                ],
+                [
+                  50,
+                  208
+                ],
+                [
+                  792,
+                  208
+                ],
+                [
+                  792,
+                  60
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          },
+          {
+            "id": "4",
+            "type": "rectangle",
+            "meta": {
+              "absoluteWidth": 742.0,
+              "absoluteHeight": 230.0,
+              "relativeWidth": "93.92405063291139%",
+              "relativeHeight": "34.63855421686747%",
+              "midpoint": [
+                421,
+                366
+              ],
+              "area": 170660.0,
+              "vertices": [
+                [
+                  50,
+                  251
+                ],
+                [
+                  50,
+                  481
+                ],
+                [
+                  792,
+                  481
+                ],
+                [
+                  792,
+                  251
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": [
+              {
+                "id": "5",
+                "type": "rectangle",
+                "meta": {
+                  "absoluteWidth": 370.0,
+                  "absoluteHeight": 228.0,
+                  "relativeWidth": "49.865229110512125%",
+                  "relativeHeight": "99.1304347826087%",
+                  "midpoint": [
+                    606,
+                    366
+                  ],
+                  "area": 84360.0,
+                  "vertices": [
+                    [
+                      421,
+                      252
+                    ],
+                    [
+                      421,
+                      480
+                    ],
+                    [
+                      791,
+                      480
+                    ],
+                    [
+                      791,
+                      252
+                    ]
+                  ]
+                },
+                "level": 2,
+                "contains": []
+              },
+              {
+                "id": "6",
+                "type": "rectangle",
+                "meta": {
+                  "absoluteWidth": 370.0,
+                  "absoluteHeight": 228.0,
+                  "relativeWidth": "49.865229110512125%",
+                  "relativeHeight": "99.1304347826087%",
+                  "midpoint": [
+                    236,
+                    366
+                  ],
+                  "area": 84360.0,
+                  "vertices": [
+                    [
+                      51,
+                      252
+                    ],
+                    [
+                      51,
+                      480
+                    ],
+                    [
+                      421,
+                      480
+                    ],
+                    [
+                      421,
+                      252
+                    ]
+                  ]
+                },
+                "level": 2,
+                "contains": []
+              }
+            ]
+          },
+          {
+            "id": "2",
+            "type": "rectangle",
+            "meta": {
+              "absoluteWidth": 742.0,
+              "absoluteHeight": 148.0,
+              "relativeWidth": "93.92405063291139%",
+              "relativeHeight": "22.289156626506024%",
+              "midpoint": [
+                421,
+                598
+              ],
+              "area": 109816.0,
+              "vertices": [
+                [
+                  50,
+                  524
+                ],
+                [
+                  50,
+                  672
+                ],
+                [
+                  792,
+                  672
+                ],
+                [
+                  792,
+                  524
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      }
+    ]
+  }
+]

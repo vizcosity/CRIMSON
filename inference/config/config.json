@@ -1,0 +1,30 @@
+{
+  "grid":{
+    "cellBudget": 12
+  },
+  "shapeMap": {
+    "rectangle": "container",
+    "triangle": "triangle",
+    "polygon": "polygon"
+  },
+  "thresholds": {
+    "fragmentArea": 0.08
+  },
+  "inheritance": {
+    "point": ["intersection", "centered_intersection"],
+    "line": [],
+    "polygon": ["triangle", "line", {
+        "rectangle": [{
+            "container": ["row"]
+          }]
+      }]
+  },
+  "filter": ["polygon", "point", "intersection", "centered_intersection", "centered_line", "line", "horizontal_line"],
+  "globalAssetMap": {
+    "css": "style",
+    "js": "main"
+  },
+  "supportedPrimitives": [
+    "panel", "rectangle", "container", "row", "triangle", "image", "dropdown", "button", "input", "navigation", "footer", "header", "paragraph"
+  ]
+}

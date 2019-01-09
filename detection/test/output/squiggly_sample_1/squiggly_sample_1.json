@@ -1,0 +1,551 @@
+[
+  {
+    "id": "0",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 280.0,
+      "absoluteHeight": 229.0,
+      "relativeWidth": "100.0%",
+      "relativeHeight": "100.0%",
+      "midpoint": [
+        149,
+        130
+      ],
+      "area": 64120.0,
+      "vertices": [
+        [
+          9,
+          15
+        ],
+        [
+          9,
+          244
+        ],
+        [
+          289,
+          244
+        ],
+        [
+          289,
+          15
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "2",
+        "type": "triangle",
+        "meta": {
+          "absoluteWidth": 184.0,
+          "absoluteHeight": 44.0,
+          "relativeWidth": "65.71428571428571%",
+          "relativeHeight": "19.213973799126638%",
+          "midpoint": [
+            118,
+            136
+          ],
+          "area": 4048.0,
+          "vertices": [
+            [
+              241,
+              150
+            ],
+            [
+              57,
+              151
+            ],
+            [
+              57,
+              107
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "6",
+        "type": "intersection",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            99,
+            129
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              99.0,
+              129.0
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "6",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 223.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            11,
+            128
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              11,
+              240
+            ],
+            [
+              11,
+              17
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "8",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 223.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            287,
+            128
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              287,
+              240
+            ],
+            [
+              287,
+              17
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "11",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 20.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            108,
+            129
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              98,
+              129
+            ],
+            [
+              118,
+              129
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "12",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 20.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            123,
+            128
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              113,
+              128
+            ],
+            [
+              133,
+              128
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "13",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 44.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            56,
+            129
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              56,
+              151
+            ],
+            [
+              56,
+              107
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "14",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 18.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            108,
+            130
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              99,
+              130
+            ],
+            [
+              117,
+              130
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "15",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 34.0,
+          "absoluteHeight": 2.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            86,
+            129
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              69,
+              130
+            ],
+            [
+              103,
+              128
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "16",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 14.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            66,
+            128
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              59,
+              128
+            ],
+            [
+              73,
+              128
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "17",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 0.0,
+          "absoluteHeight": 34.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            59,
+            131
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              59,
+              148
+            ],
+            [
+              59,
+              114
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "18",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 18.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            93,
+            127
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              84,
+              127
+            ],
+            [
+              102,
+              127
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "19",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 32.0,
+          "absoluteHeight": 2.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            144,
+            128
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              128,
+              129
+            ],
+            [
+              160,
+              127
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "20",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 10.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            123,
+            125
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              118,
+              125
+            ],
+            [
+              128,
+              125
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "21",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 19.0,
+          "absoluteHeight": 1.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            138,
+            130
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              129,
+              130
+            ],
+            [
+              148,
+              129
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "22",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 10.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            93,
+            125
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              88,
+              125
+            ],
+            [
+              98,
+              125
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "23",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 10.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            67,
+            127
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              62,
+              127
+            ],
+            [
+              72,
+              127
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "24",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 10.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            138,
+            132
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              133,
+              132
+            ],
+            [
+              143,
+              132
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "25",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 10.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "100.0%",
+          "relativeHeight": "100.0%",
+          "midpoint": [
+            78,
+            132
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              73,
+              132
+            ],
+            [
+              83,
+              132
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

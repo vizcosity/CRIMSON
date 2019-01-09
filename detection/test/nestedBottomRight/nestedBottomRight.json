@@ -1,0 +1,99 @@
+{
+  "rectangle0": {
+    "type": "rectangle",
+    "meta": {
+      "width": 195.0,
+      "height": 179.0,
+      "midpoint": [
+        180,
+        186
+      ],
+      "area": 34905.0,
+      "vertices": [
+        [
+          82,
+          97
+        ],
+        [
+          82,
+          276
+        ],
+        [
+          277,
+          276
+        ],
+        [
+          277,
+          97
+        ]
+      ]
+    },
+    "contains": []
+  },
+  "rectangle1": {
+    "type": "rectangle",
+    "meta": {
+      "width": 117.0,
+      "height": 94.0,
+      "midpoint": [
+        214,
+        225
+      ],
+      "area": 10998.0,
+      "vertices": [
+        [
+          156,
+          178
+        ],
+        [
+          156,
+          272
+        ],
+        [
+          273,
+          272
+        ],
+        [
+          273,
+          178
+        ]
+      ]
+    },
+    "contains": []
+  },
+  "polygon2": {
+    "type": "polygon",
+    "meta": {
+      "width": 192.0,
+      "height": 176.0,
+      "midpoint": [
+        174,
+        203
+      ],
+      "area": 22927.0,
+      "vertices": [
+        [
+          83,
+          99
+        ],
+        [
+          274,
+          98
+        ],
+        [
+          155,
+          271
+        ],
+        [
+          275,
+          273
+        ],
+        [
+          84,
+          274
+        ]
+      ]
+    },
+    "contains": []
+  }
+}
