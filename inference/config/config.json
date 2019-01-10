@@ -2,6 +2,7 @@
   "grid":{
     "cellBudget": 12
   },
+  "padding": 5,
   "shapeMap": {
     "rectangle": "container",
     "triangle": "triangle",

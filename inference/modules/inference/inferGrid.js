@@ -6,6 +6,8 @@
  * @ Aaron Baw 2018
  */
 
+const { sortShapesAlongXAxis } = require('../geometry.js');
+
 const config = require('../../config/config.json');
 
  // Assumes that there is a maximum of one container along the vertical axis.
@@ -18,11 +20,6 @@ const determineNumOfGridCells = (shape, budget) => {
     clipSize: numCells - Math.floor(numCells)
   };
 }
-
-const sortShapesAlongXAxis = (shapes) => {
-    return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
-}
-
 // // Use inferred grid properties to determine class.
 // const serialiseClasses = shapes => {
 //
