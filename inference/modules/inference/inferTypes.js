@@ -3,16 +3,14 @@
  *
  *  @ Aaron Baw 2018
  */
+
+// Dependencies.
 const config = require('../../config/config.json');
+const isSubtypeOf = require('../subtypes.js');
+const { getLowestY, getHighestY } = require('../geometry.js');
+
+// Default values.
 const _FRAG_THRESH = config.thresholds.fragmentArea;
-
-const getHighestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1]
-};
-
-const getLowestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] < b[1] ? -1 : 1)[0][1];
-};
 
 const isContainer = shape => {
   return shape.type == "row" || shape.type == "container";
@@ -21,8 +19,6 @@ const isContainer = shape => {
 // Navigation specification:
 // Uppermost element which is of type container or derived.
 const isNavigation = (shape, shapes) => {
-
-
 
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
@@ -315,6 +311,10 @@ const inferInteractiveContainers = shapes => {
     // a container containing other shape elements that happen to be fairly small.
     if (shape.contains.length > 1) return false;
 
+    // An interactive container must first be a container, or a derived type
+    // thereof. Navigation bars and footers, for example, will likely contain
+    // links (<a> tags) which may be misclassified as fragments.
+    if (shape.type !== "container" || shape.type !== "row") return false;
 
     if (isDropdown(shape, shapes))  shape.type = "dropdown";
     if (isButton(shape, shapes)) shape.type = "button";

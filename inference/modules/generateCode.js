@@ -6,6 +6,7 @@
 
  // Dependencies.
  const shapeMap = require('../config/config.json').shapeMap;
+ const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./inference/implicitNest');
  const inferProperties = require('./inference/infer');
  const indent = require('indent-string');
  const transform = require('./transformation/transform');
@@ -78,8 +79,6 @@ function log(...msg){
 
    if (!shapes || shapes.length == 0) return shapes;
 
-   // log(`Generating ACR at level`, shapes);
-
    for (var i = 0; i < shapes.length; i++){
      // log(`About to gen code for `, shapes[i]);
      shapes[i].contains = generateACR(shapes[i].contains);
@@ -93,7 +92,7 @@ function log(...msg){
    if (!shapes || shapes.length == 0) return "";
 
    // Generate ACR.
-   shapes = inferProperties(shapes);
+   // shapes = inferProperties(shapes);
 
    var output = "";
 
