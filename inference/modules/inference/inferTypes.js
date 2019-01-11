@@ -46,7 +46,7 @@ const isFooter = (shape, shapes) => {
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
 
-  log(`Checking footer with surrounding shapes`, shapes.length);
+  // log(`Checking footer with surrounding shapes`, shapes.length);
 
   // If no shapes passed we can assume that this is the global window or empty,
   // in which case we should return.
@@ -261,7 +261,6 @@ const inferPanels = shapes => {
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
-    if (shape.id == 13) log(`Shape type: `, shape.type);
   });
   return shapes;
 }

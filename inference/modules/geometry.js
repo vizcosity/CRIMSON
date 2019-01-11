@@ -28,6 +28,10 @@ const sortShapesAlongXAxis = (shapes) => {
    return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
 };
 
+const sortshapesAlongYAxis = shapes => {
+  return shapes.concat().sort((a, b) => a.meta.vertices[0][1] < b.meta.vertices[0][1] ? -1 : 1);
+};
+
 const sortShapesBySize = shapes => {
   return shapes.concat().sort((a, b) => a.meta.area > b.meta.area ? -1 : 1);
 };
@@ -86,7 +90,7 @@ const getLastACRObjectId = acr => {
 
 }
 
-module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId };
+module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId };
 
 function log(...msg){
   if (process.env.DEBUG) console.log(`GEOMETRY |`, ...msg);
