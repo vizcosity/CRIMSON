@@ -31,7 +31,7 @@ function implicitlyNestIntoVerticalContainers(lastId, shapesAtLevel, parent){
 
   if (!shapesAtLevel || shapesAtLevel.length === 0) return shapesAtLevel;
 
-  // log(`Implicitly nesting into vertical containers at level`, shapesAtLevel[0].level);
+  log(`Implicitly nesting ${shapesAtLevel.length} shapes into vertical containers at level`, shapesAtLevel[0].level);
 
   var shapesByWidth = shapesAtLevel.sort((a, b) => a.meta.absoluteWidth < b.meta.absoluteWidth ? 1 : -1);
 
@@ -47,13 +47,10 @@ function implicitlyNestIntoVerticalContainers(lastId, shapesAtLevel, parent){
   // container. We need to do this because we can't create the container until
   // we know how tall and wide it needs to be.
   var containerBuffer = [];
-
   containerBuffer.push(widestShape);
-  // Remove widestShape from current shape level.
-  shapesAtLevel = shapesAtLevel.filter(s => s.id !== widestShape.id);
 
   // Nest all shapes which share a vertical overlapping with the widest shape.
-  shapesAtLevel.forEach(shape => {
+  shapesAtLevel.filter(s => s.id !== widestShape.id).forEach(shape => {
     if (doesVerticallyOverlap(widestShape, shape)){
       containerBuffer.push(shape);
     }
@@ -76,8 +73,6 @@ function implicitlyNestIntoVerticalContainers(lastId, shapesAtLevel, parent){
   // Find the height and width of the container.
   var allVertices = containerBuffer.map(shape => shape.meta.vertices).flat();
 
-  // log(`All Vertices in buffer:`, allVertices);
-
   var containerHeight = getHighestY(allVertices) - getLowestY(allVertices) + padding;
   var containerWidth = getHighestX(allVertices) - getLowestX(allVertices) + padding;
 
@@ -93,9 +88,11 @@ function implicitlyNestIntoVerticalContainers(lastId, shapesAtLevel, parent){
 
   // Add container buffer shapes to container.
   containerBuffer.forEach(shape => {
+    // log(`Adding ${shape.id} to the container buffer.`);
     container.addContainingShape(shape);
     // Remove the shape we add from the shapesAtLevel array.
     shapesAtLevel = shapesAtLevel.filter(s => s.id !== shape.id);
+    // log(`Removing ${shape.id} from the current level, as it is in the container.`);
   });
 
   // Add the container to the array of shapes at the current level.
@@ -127,13 +124,10 @@ function implicitlyNestIntoRows(lastId, shapesAtLevel, parent){
     // container. We need to do this because we can't create the container until
     // we know how tall and wide it needs to be.
     var rowBuffer = [];
-
     rowBuffer.push(tallestShape);
-    // Remove widestShape from current shape level.
-    shapesAtLevel = shapesAtLevel.filter(s => s.id !== tallestShape.id);
 
     // Nest all shapes which share a vertical overlapping with the widest shape.
-    shapesAtLevel.forEach(shape => {
+    shapesAtLevel.filter(s => s.id !== tallestShape.id).forEach(shape => {
       if (doesHorizontallyOverlap(tallestShape, shape)){
         rowBuffer.push(shape);
       }
@@ -147,7 +141,7 @@ function implicitlyNestIntoRows(lastId, shapesAtLevel, parent){
     // test for this by comparing the containerBuffer to the shapes which are contained
     // by the parent of the current shape level. If they match, then we can infer
     // that the shapes have already been nested, and return them as they are.
-    if (shapeArraysEqual(containerBuffer, parent.contains)) {
+    if (shapeArraysEqual(rowBuffer, parent.contains)) {
       log(`Refusing to nest ${containerBuffer.length} children of ${parent.id} as container would match parent.`);
       return shapesAtLevel;
     }

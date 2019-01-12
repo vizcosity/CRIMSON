@@ -12,8 +12,6 @@ const inferTypes = require('./inferTypes');
 // Infer properties about the shapes which will then be generated into HTML code.
 module.exports = function inferProperties(shapes){
 
-  console.log(`ACR:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
-
   // // Nest into rows and vertical containers.
   // shapes.forEach(prospectivePanel => {
   //
@@ -38,10 +36,12 @@ module.exports = function inferProperties(shapes){
   // this constraint.
   shapes = sortshapesAlongYAxis(shapes);
 
+  console.log(`ACR:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
+
   // Infer types.
   shapes = inferTypes(shapes);
 
-  // console.log(`ACR After inferring types:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
+  console.log(`ACR After inferring types:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
 
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {
