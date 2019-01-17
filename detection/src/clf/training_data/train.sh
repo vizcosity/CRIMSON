@@ -1,1 +1,0 @@
-opencv_traincascade -data ./ -vec ../squiggle_pos/samples.vec -bg negatives.txt -numPos 1000 -numNeg 100 -numStages 20  -numThreads 4 -w 28 -h 28 -minHitRate 0.99 -maxFalseAlarmRate 0.5 -weightTrimRate 0.95 -maxDepth 1 -mode ALL

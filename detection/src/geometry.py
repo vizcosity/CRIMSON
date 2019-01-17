@@ -5,6 +5,33 @@ import numpy as np
 import cv2
 import math
 
+# Calculates the intersectio over union score for two given boxes. Neither of
+# these boxes represent ground truth, and so the score is simply used as
+# an estimate of how much the two boxes overlap with each other.
+#
+# Method by PyImageSearch:
+# https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
+def calc_iou(boxVerts, otherBoxVerts):
+    (bx1, by1), _, (bx3, by3), _ = boxVerts
+    (ox1, oy1), _, (ox3, oy3), _ = otherBoxVerts
+
+    i1 = [max(bx1, ox1), max(by1, oy1)]
+    i3 = [min(bx3, ox3), min(by3, oy3)]
+
+    intersection_vertices = [i1, [i1[0], i3[1]], i3, [i3[0], i1[1]]]
+    # print("Intersection: " + str(intersection_vertices))
+    intersection_area = (i3[1] - i1[1]) * (i3[0] - i1[0])
+
+    # print("intersection area: " + str(intersection_area))
+    box_area = (by3 - by1) * (bx3 - bx1)
+    # print("box area: " + str(box_area))
+    otherBox_area = (oy3 - oy1) * (ox3 - ox1)
+    # print("other box area: " + str(otherBox_area))
+    # Return IOU. We remove the intersection_area from the added box areas so that
+    # we dont count the intersection area twice. (Since we are interested in
+    # the union of the two areas).
+    return intersection_area / (box_area + otherBox_area -  intersection_area)
+
 # Returns a list of edge lines that compose the shape.
 def getEdges(vertices):
     edges = []

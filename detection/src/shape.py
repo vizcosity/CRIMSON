@@ -25,6 +25,7 @@ class Shape:
         self.rawVertices = vertices.reshape(-1,2)
         self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
         self.rawArea = calculateArea(self.rawVertices)
+        self.boundingBox = cv2.boundingRect(self.rawVertices) if len(self.rawVertices) > 1 else []
         self.vertices = tidyAndApproximate(self.rawVertices, self.type)
         self.edges = getEdges(self.vertices)
         self.midpoint = calculateMidpoint(self.vertices)
@@ -103,6 +104,21 @@ class Shape:
             if not pointWithinPlane(edge, point):
                 return False
         return True
+
+    # Attempts to nest the passed shape as deeply within the current shape
+    # as possible.
+    def nest(self, shape):
+
+        if not self.contains(shape): return False
+
+        for contained in self.contained:
+            if contained.nest(shape): return True
+
+        self.addContainedShape(shape)
+        return True
+
+    def calc_iou(self, otherShape):
+        return calc_iou(self.vertices, otherShape.vertices)
 
 
     # Currently only defined for triangles.

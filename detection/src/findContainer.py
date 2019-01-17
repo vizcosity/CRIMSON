@@ -61,8 +61,8 @@ def getContainers(image, annotate=False):
 
     # Canny edge detection.
     canny = cv2.Canny(image, 100, 200)
-
-    cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # print("Detecting contours for image: " +str(canny))
+    cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(image, cont2, -1, (255,0,0))
 
     # Finding contours based off of the result of the Canny edge detection.
@@ -71,7 +71,7 @@ def getContainers(image, annotate=False):
     # of the contours.
     # CHAIN_APPROX_SIMPLE compresses the contours by only storing minimal information
     # about how to represent the lines that make it up (e.g. the endpoints of the lines).
-    canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(image, contours, -1, (255,0,0))
 
     log("Found: "+ str(len(contours))+ " contours.")

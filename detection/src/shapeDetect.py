@@ -5,6 +5,8 @@
 from findContainer import getContainers, nestShapes
 from detectLine import detectAndNestIntersections, detectAndNestLines
 from shapesToJSON import serialiseShapeHierachy
+from clf.yolo_cnn_detector import predict_primitives
+from primitiveDetect import resolveShapesUsingPredictions
 import cv2
 import os
 import imutils
@@ -53,20 +55,34 @@ if (__name__ == "__main__"):
     # Get containers.
     shapes, appxConts, containerImg, whiteImg = getContainers(image, annotate=True)
 
-    # print("SHAPES BEFORE NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
+    # Detect presence of complex shape primitives using YOLO CNN.
+    primitives = predict_primitives(getFreshImage(args['image']))
 
+    lastShapeId = len(appxConts)
 
     # For each container, detect the intersections within the container in order to infer
     # images in the inference pipeline.
     # Need to pass in the 'lastShapeId' so that we enumerate intersection shape ids
     # starting from the last detected shape id in the getContainers method.
-    shapes, intersections, intersectionImg = detectAndNestIntersections(originalImg, shapes, lastShapeId=len(appxConts), annotate=True)
+    shapes, intersections, intersectionImg = detectAndNestIntersections(originalImg, shapes, lastShapeId=lastShapeId, annotate=True)
+
+    # Update lastShapeId
+    lastShapeId += len(intersections)
 
     # For each container, detect lines and nest horizontal lines which occur
     # roughly around the vertical center of the container.
-    shapes, lines, lineImg = detectAndNestLines(getFreshImage(args["image"]), shapes, lastShapeId=len(intersections), annotate=True)
+    shapes, lines, lineImg = detectAndNestLines(getFreshImage(args["image"]), shapes, lastShapeId=lastShapeId, annotate=True)
 
     # print("SHAPES AFTER NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
+
+    lastShapeId += len(lines)
+
+    print(shapes)
+    
+    # Given the predicted primitives and the shapes collected from the previous
+    # step, attempt to identify each shape correctly using bounding box information
+    # and the set of predicted primitives from CNN classification.
+    shapes = resolveShapesUsingPredictions(primitives, shapes, lastShapeId)
 
     # Get serialised hierarchy.
     jsonHierarchy = serialiseShapeHierachy(shapes)
