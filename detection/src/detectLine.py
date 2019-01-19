@@ -66,6 +66,8 @@ def getHighestLvlShapeContainingLineAtCentre(line, shapes):
     # Notion of not having a containing shape.
     highestLevelShape = Shape([-1,-1])
     highestLevelShape.level = -1
+    highestLevelShape.id = "NULL"
+    highestLevelShape.type = "NULL"
 
     for shape in shapes:
 
@@ -74,18 +76,30 @@ def getHighestLvlShapeContainingLineAtCentre(line, shapes):
 
             # Get the highest level shape recursively from contained components.
             highestLevelContainedShape = getHighestLvlShapeContainingLineAtCentre(line, shape.contained)
+
+            if (line.id == 40): log(str(shape)+": Highest level shape containing line: " + str(highestLevelContainedShape))
+
             if highestLevelContainedShape is None: highestLevelContainedShape = highestLevelShape
 
             # Ensure that the line is roughly around the vertical centre of the
-            # containing shape.
-            if abs(line.midpoint[1] - shape.midpoint[1]) <= 15:
+            # containing shape. For this to be the case, the line must reside
+            # within 10% of the vertical height (in pixels) of the midpoint
+            # of the shape.
+            if abs(line.midpoint[1] - shape.midpoint[1]) <= (0.1 * shape.height):
+
                 # New shape candidate.
                 if shape.level > highestLevelShape.level: highestLevelShape = shape
 
-                # Check that any contained shapes do not contain the line at some
-                # higher nesting level.
-                if highestLevelContainedShape.level > highestLevelShape.level:
-                    highestLevelShape = highestLevelContainedShape
+            # Check that any contained shapes do not contain the line at some
+            # higher nesting level.
+            if highestLevelContainedShape.level > highestLevelShape.level:
+                highestLevelShape = highestLevelContainedShape
+
+                # if (shape.id == "4"):
+                #     log(highestLevelShape.level)
+
+    if (line.id == 40 or line.id == "40"):
+        log("Shape " + str(highestLevelShape) + " contains line at centre.")
 
     return highestLevelShape if highestLevelShape.level != -1 else None
 
@@ -183,12 +197,16 @@ def nestIntersections(intersections, shapes, image, lastShapeId, annotate):
 def drawIntersections(intersections, image, annotate):
     log("Drawing " + str(len(intersections)) + " intersections.")
     for inter in intersections:
-        a, b = inter
-        for i in range(3):
-            for j in range(3):
-                # print(i >= image.shape[0])
-                if i+int(b) >= image.shape[0] or j+int(a)>= image.shape[1]: continue
-                image[int(b) + i, int(a) + j] = [0, 255, 0]
+        drawPoint(inter, image)
+    return image
+
+def drawPoint(point, image):
+    a, b = point
+    for i in range(3):
+        for j in range(3):
+            # print(i >= image.shape[0])
+            if i+int(b) >= image.shape[0] or j+int(a)>= image.shape[1]: continue
+            image[int(b) + i, int(a) + j] = [0, 255, 0]
     return image
 
 # Detects intersections and nests them within shapes that contain the intersection
@@ -234,24 +252,41 @@ def detectIntersections(lines):
 
     return intersections
 
-def drawLines(lines, image):
+def drawLines(lines, image, colour = (100,200,0)):
+
+    for line in lines:
+        # print("Drawing " + str(line))
+        x1, y1, x2, y2 = line.ravel()
+        cv2.line(image, (x1, y1), (x2, y2), colour)
+        drawPoint((x1, y1), image)
+        drawPoint((x2, y2), image)
+
+    return image
+
+def drawHorizontalLines(lines, image, colour = (100,200,0)):
 
     for line in lines:
         x1, y1, x2, y2 = line.ravel()
-        cv2.line(image, (x1, y1), (x2, y2), (100,200,10))
+        # Skip vertical lines.
+        if abs(x2 - x1) < abs(y2 - y1): continue
+        cv2.line(image, (x1, y1), (x2, y2), colour)
 
     return image
 
 def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
 
+    if lines is None: lines = []
+
     idIndex = lastShapeId
 
-    for line in lines:
-        x1, y1, x2, y2 = line.ravel()
+    centered_lines = []
+
+    for rawLine in lines:
+        x1, y1, x2, y2 = rawLine.ravel()
         line = Shape([[x1, y1], [x2, y2]], shapeType="centered_line", id=idIndex)
 
         # Skip if the line is not horizontal.
-        if line.height > line.width: continue
+        if line.height > 5: continue
 
         idIndex += 1
 
@@ -262,7 +297,19 @@ def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
 
         containingShape.addContainedShape(line)
 
-    return shapes
+        centered_lines.append(rawLine)
+
+        # If annotate set to true, draw the line.
+        if annotate:
+            cv2.line(image, (x1, y1), (x2, y2), (255,255,0))
+            drawHorizontalLines([rawLine], image)
+            drawPoint((x1,y1), image)
+            drawPoint((x2, y2), image)
+            cv2.putText(image, str(line), (x2, y2), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (50,50,50))
+
+
+
+    return shapes, centered_lines
 
 def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
 
@@ -270,13 +317,17 @@ def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
     lines = detectLines(image, erode=False)
 
     # Draw the lines.
-    if annotate: drawLines(lines, image)
+    # if annotate: drawLines(lines, image, colour=(100,200,0))
+    # if annotate: drawHorizontalLines(lines, image, colour=(0,0,255))
 
     # cv2.imshow('image', image)
     # cv2.waitKey(0)
 
     # Nest lines within shapes.
-    shapes = nestCenteredLines(lines, shapes, image, lastShapeId, annotate)
+    shapes, centered_lines = nestCenteredLines(lines, shapes, image, lastShapeId, annotate)
+
+    # Annotate the centered lines.
+    if annotate: drawLines(centered_lines, image, (255, 0, 0))
 
     # Return shapes, lines and image.
     return shapes, lines, image
@@ -328,10 +379,10 @@ def detectLines(image, debug=False, erode=True):
         # Detect lines.
         # The 2nd last paramter is the minimum line length, while the lat parameter
         # refers to the maximum gap between lines to warrant a 'grouping'.
-        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 7)
+        lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 6, 20)
         # lines = cv2.HoughLinesP(canny, 1, float(math.pi / 180) * float(1), 10, np.array([]), 10, 20)
 
-        log("Detected " + str(len(lines)) + " lines.")
+        # log("Detected " + str(len(lines)) + " lines.")
 
         # if (debug):
         #     cv2.imwrite('intersection.png', image)

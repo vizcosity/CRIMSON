@@ -1,0 +1,76 @@
+html, body {
+  margin:0;
+  width: 100%;
+  height: 100%;
+  font-family: "Avenir", sans-serif;
+}
+
+.container, .row {
+  border: 1px solid #37474F;
+  padding: 10px;
+  /*
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fill-available;
+  width: -moz-fill-available;
+  width: -webkit-fill-available;
+  margin: 5px; */
+}
+
+/* ID Labels are hidden by default, toggled with a keypress */
+span.label-wrap {
+  display: none;
+}
+
+/* Panels are full-height containers. These are 'pages' within the single page,
+and so it is desireable to have all of the content centered vertically within it. */
+.panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Navigation bar must be sticky and not exceed 60 pixels in height */
+nav {
+  height: 70px;
+  position: absolute !important;
+  top:0;
+  width: 100%;
+}
+
+/* Footer should be sticky and have a minimum height of ~60px */
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 60px;
+  background-color: #1d1e1f;
+}
+
+img {
+  max-height: 100%;
+}
+
+/* Wrap labels in a container so that we don't push a completely filled row
+with columns to a new line */
+.label-wrap {
+  border: 0px;
+  width: 100%;
+}
+
+.row {
+  border: 1px solid red;
+  align-items: center;
+  margin: 5px;
+}
+
+.row .container {
+  border: 1px solid green;
+}
+
+.row .row {
+  border: 1px solid green;
+}

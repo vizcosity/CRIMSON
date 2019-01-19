@@ -96,7 +96,8 @@ def getContainers(image, annotate=False):
         epsilon = 0.012 * cv2.arcLength(cont, True)
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
-        # print("Contour: " + str(cont) + ". Averaged: " + str(approx))
+        # Add a bounding box to each contour. This will be represented by its
+        # own shape type in the ACR.
 
         approximatedContours.append(approx)
 
@@ -116,7 +117,11 @@ def getContainers(image, annotate=False):
     # Nest the shapes within each other and ensure all live within a global window.
     shapes = nestShapes(shapes)
 
-    shapes = nestWithinWindow(shapes, (imgWidth, imgHeight))
+    # shapes = nestWithinWindow(shapes, (imgWidth, imgHeight))
+    # Set the relative height and width of the top level panels.
+    for shape in shapes:
+        shape.relativeHeight = shape.height / imgHeight
+        shape.relativeWidth = shape.width / imgWidth
 
     # Filter shapes by removing shapes which are less than 1% of the size of their
     # containers.
@@ -137,8 +142,8 @@ def annotateShapeTypes(shapes, image):
     for shape in shapes:
         # If the shape has four vertices, then get the bounding rect.
         # if (shape.type == "rectangle"):
-        #     (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
-        #     cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
+            # (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
+            # cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
         # print(shape)
         cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, _LINE_THICKNESS, (50,50,50))
 
@@ -147,7 +152,11 @@ def annotateNestedShapes(shapes, owner=None, image=None):
     if (len(shapes) == 0): return
     # print("Annotating nested shapes with owner : "+ str(owner))
     for shape in shapes:
-        # print("Annotating : "+ str(shape))
+
+        # Annotate bounding box for the shape.
+        (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
+        cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
+
         if (shape.type == 'rectangle'):
             cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255), thickness=_LINE_THICKNESS)
         else:

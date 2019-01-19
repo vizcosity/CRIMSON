@@ -172,6 +172,16 @@ def calculateWidth(vertices):
 def calculateHeight(vertices):
     return vertices[:,1].max() - vertices[:,1].min()
 
+# Given absolute vertex coordinates, and the parent container, calculates the
+# coordinates of the vertices as a % distance from the top left vertex.
+def calculateRelativeVertices(origin, width, height, parentVertices, vertices):
+    return [
+        [
+            ((x - parentVertices[0][0]) / width) if width != 0 else 0,
+            ((y - parentVertices[0][1]) / height) if height != 0 else 0
+        ] for [x, y] in vertices
+    ]
+
 def determineShapeType(vertices):
     if (len(vertices) == 1): return "point"
     if (len(vertices) == 2): return "line"

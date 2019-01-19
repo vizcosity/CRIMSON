@@ -6,6 +6,8 @@
 
  // Dependencies.
  const shapeMap = require('../config/config.json').shapeMap;
+ const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./inference/implicitNest');
+const { getLastACRObjectId, sortshapesAlongYAxis } = require('./geometry');
  const inferProperties = require('./inference/infer');
  const indent = require('indent-string');
  const transform = require('./transformation/transform');
@@ -74,15 +76,39 @@ function log(...msg){
 
  }
 
+ // We have a separate method which first performs some pre-processing on
+ // the shape primitives returned by the detection pipeline. We then pass these
+ // onto the recursive generateACRObjects method.
  function generateACR(shapes){
 
    if (!shapes || shapes.length == 0) return shapes;
 
-   // log(`Generating ACR at level`, shapes);
+   console.log(`ACR Before pre-processing:`, shapes[0].contains.map(s => s.id));
+
+   // Pre processing.
+   shapes.forEach(topLevelShape => {
+     var lastId = getLastACRObjectId(shapes);
+     log(`Implicitly nesting rows and vertical containers for ${topLevelShape.contains.length} children of`, topLevelShape.id, `with lasttId:`, lastId);
+
+     topLevelShape.contains = implicitlyNestIntoVerticalContainers(lastId, topLevelShape.contains, topLevelShape);
+     lastId = getLastACRObjectId(shapes);
+
+     log(`LastID Now`, lastId);
+
+     // topLevelShape.contains = implicitlyNestIntoRows(lastId, topLevelShape.contains, topLevelShape);
+   });
+
+   // Generate ACR for the objects after performing the implicit nesting.
+   return generateACRObjects(shapes);
+ }
+
+ function generateACRObjects(shapes){
+
+   if (!shapes || shapes.length == 0) return shapes;
 
    for (var i = 0; i < shapes.length; i++){
      // log(`About to gen code for `, shapes[i]);
-     shapes[i].contains = generateACR(shapes[i].contains);
+     shapes[i].contains = generateACRObjects(shapes[i].contains);
    }
 
    return inferProperties(shapes);
@@ -93,7 +119,7 @@ function log(...msg){
    if (!shapes || shapes.length == 0) return "";
 
    // Generate ACR.
-   shapes = inferProperties(shapes);
+   // shapes = inferProperties(shapes);
 
    var output = "";
 
