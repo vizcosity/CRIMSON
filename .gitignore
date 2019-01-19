@@ -15,3 +15,4 @@ inference/output/*
 detection/clf/squiggle_legacy
 detection/src/clf/squiggle_legacy
 detection/src/clf/PrimitiveDetect
+.DS_Store
