@@ -33,6 +33,7 @@ class Shape:
         self.area = calculateArea(self.vertices)
         self.width = float(calculateWidth(self.vertices))
         self.height = float(calculateHeight(self.vertices))
+        self.relativeVertices = calculateRelativeVertices(self.vertices[0][0], self.width, self.height, self.vertices, self.vertices)
 
         # Level describes the level at which the shape is currently nested.
         # Level 0 refers to the global container, whereas level 1 represents
@@ -65,7 +66,12 @@ class Shape:
         # shape.increaseNestLevel()
         shape.level = self.level + 1
 
+        # Mark the parent id for the shape being added.
         shape.parentId = self.id
+
+        # Set the relativeVertices with respect to the upperleftmost vertex of
+        # the container being used as the origin point.
+        shape.relativeVertices = calculateRelativeVertices(self.vertices[0][0], self.width, self.height, self.vertices, shape.vertices)
 
         self.contained.append(shape)
 
@@ -236,6 +242,10 @@ def nestWithinWindow(shapes, imgDimensions):
         window.id = "window"
         addContainedToShape(window, shapes)
         shapes = [window]
+
+    # Set the relativeWidth and relativeHeight relative to the image height and width.
+    shapes[0].relativeWidth = shapes[0].width / imgDimensions[0]
+    shapes[0].relativeHeight = shapes[0].height / imgDimensions[1]
 
     return shapes
 

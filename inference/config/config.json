@@ -2,6 +2,7 @@
   "grid":{
     "cellBudget": 12
   },
+  "padding": 5,
   "shapeMap": {
     "rectangle": "container",
     "triangle": "triangle",
@@ -23,5 +24,8 @@
   "globalAssetMap": {
     "css": "style",
     "js": "main"
-  }
+  },
+  "supportedPrimitives": [
+    "panel", "rectangle", "container", "row", "triangle", "image", "dropdown", "button", "input", "navigation", "footer", "header", "paragraph"
+  ]
 }

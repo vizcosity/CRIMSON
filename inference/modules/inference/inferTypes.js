@@ -3,19 +3,14 @@
  *
  *  @ Aaron Baw 2018
  */
+
+// Dependencies.
 const config = require('../../config/config.json');
+const isSubtypeOf = require('../subtypes.js');
+const { getLowestY, getHighestY } = require('../geometry.js');
+
+// Default values.
 const _FRAG_THRESH = config.thresholds.fragmentArea;
-
-const getHighestY = shape => {
-  // shape.meta.vertices.forEach(v => console.log(v[0], 'm'))
-  // console.log(shape.meta.vertices.sort((a, b) => a[1] < b[1])[0][1])
-  console.log(shape.meta.vertices);
-  return shape.meta.vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1]
-};
-
-const getLowestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] < b[1] ? -1 : 1)[0][1];
-};
 
 const isContainer = shape => {
   return shape.type == "row" || shape.type == "container";
@@ -51,6 +46,8 @@ const isFooter = (shape, shapes) => {
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
 
+  // log(`Checking footer with surrounding shapes`, shapes.length);
+
   // If no shapes passed we can assume that this is the global window or empty,
   // in which case we should return.
   if (shapes.length == 0) return false;
@@ -70,8 +67,15 @@ const isFooter = (shape, shapes) => {
 const isHeader = shape => {
 
   // log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
+  //
+  // if (shape.id == "4") log(shape.contains.filter(s => (s.type == "centered_line") && (parseFloat(s.meta.relativeWidth) >= 33)));
+  // if (shape.id == "4"){
+  //   // var centered_lines = shape.contains.filter(s => s.type == "centered_line");
+  //   // centered_lines.forEach(line => log(parseFloat(line.meta.relativeWidth)));
+  //   // log(line);
+  // }
 
-  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.relativeWidth) >= 33).length == 1;
+  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.meta.relativeWidth) >= 33).length == 1;
 
 }
 
@@ -100,6 +104,24 @@ const isImage = shape => {
   // Examine to see if the container contains any centered intersections.
   // log(`Checking if ${shape.id}(${shape.type}) is an image.`);
   if (shape.contains.filter(s => s.type === 'centered_intersection').length == 0) return false;
+
+  // Lower level containers may be mistakenly classified as images, since they
+  // are most likely to contain intersections, despite also containing
+  // a variety of other drawable shapes. Here, we examine how many drawable
+  // shapes are contained, and if there do not appear to be more than 3, then
+  // we classify the container as an image. We can also make use of the fact that
+  // images are likely to contain triangles & other polygons at the immediately
+  // succeeding nest level.
+  var containedDrawableShapes = shape.contains.filter(s => config.filter.indexOf(s.type) === -1);
+  log(`Candidate image ${shape.id} contains ${containedDrawableShapes.length} drawable shapes.`);
+
+  if (containedDrawableShapes.length > 2){
+    log(containedDrawableShapes);
+    // Check if any polygons or triangles have been detected, as this is typically
+    // a good sign that the primitive is an image.
+    if (containedDrawableShapes.filter(s => s.type == "triangle" || s.type == "polygon").length == 0)
+      return false
+  }
 
   return true;
 
@@ -212,31 +234,6 @@ const getInnerFragmentsBetweenPercentiles = (shape, {start, end}, axis=0) => {
 
 }
 
-// TODO: Will have to be updated when handwritten text recognition is implemented,
-// as it will also include the presence of text within the same container.
-// const isDropdown = shape => {
-//
-//   // Check if there is a single triangle contained within the shape and that it is
-//   // located within the right half of the container.
-//   var containedTriangles = shape.contains.filter(s => s.type == "triangle");
-//
-//   if (!containedTriangles || containedTriangles.length == 0) return false;
-//
-//   if (containedTriangles.length > 0) log("WARN: Multiple triangles detected in isDropdown().");
-//
-//   var triangle = containedTriangles[0];
-//
-//   // Check that the triangle is within the right half of the container.
-//   var containerMidPointX = shape.meta.midpoint[0];
-//   if (triangle.meta.vertices.filter(vertex => vertex[0] > containerMidPointX).length != 0) return false;
-//
-//   // Check that the triangle is about 10% of the area size of its container.
-//   if ((triangle.meta.area / shape.meta.area) > 0.1) return false;
-//
-//   return true;
-//
-// }
-
 const isDropdown = shape => {
   return getInnerFragmentsBetweenPercentiles(shape, {start: 0.8, end: 1}).length == 1;
 }
@@ -264,7 +261,6 @@ const inferPanels = shapes => {
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
-    if (shape.id == 13) log(`Shape type: `, shape.type);
   });
   return shapes;
 }
@@ -278,15 +274,27 @@ const inferFromMap = shapes => {
 }
 
 const inferNavigation = shapes => {
-  shapes.forEach(shape => {
-    if (isNavigation(shape, shapes)) shape.type = "navigation";
+
+  // Ensure we are working at the top level, with panels.
+  if (shapes.filter(s => s.type == "panel").length == 0) return shapes;
+
+  // Infer navigation on the children of the first panel.
+  shapes[0].contains.forEach(shape => {
+    if (isNavigation(shape, shapes[0].contains)) shape.type = "navigation";
   });
   return shapes;
 }
 
 const inferFooter = shapes => {
-  shapes.forEach(shape => {
-    if (isFooter(shape, shapes)) shape.type = "footer";
+
+  // Ensure we are working at the top level, with panels.
+  if (shapes.filter(s => s.type == "panel").length == 0) return shapes;
+
+  // log(`Inferring footer with shapes`, shapes.map(s => s.id));
+
+  // Infer footer on the children of the last panel.
+  shapes[shapes.length - 1].contains.forEach(shape => {
+    if (isFooter(shape, shapes[shapes.length - 1].contains)) shape.type = "footer";
   });
   return shapes;
 }
@@ -302,6 +310,10 @@ const inferInteractiveContainers = shapes => {
     // a container containing other shape elements that happen to be fairly small.
     if (shape.contains.length > 1) return false;
 
+    // An interactive container must first be a container, or a derived type
+    // thereof. Navigation bars and footers, for example, will likely contain
+    // links (<a> tags) which may be misclassified as fragments.
+    if (shape.type !== "container" || shape.type !== "row") return false;
 
     if (isDropdown(shape, shapes))  shape.type = "dropdown";
     if (isButton(shape, shapes)) shape.type = "button";
@@ -314,6 +326,8 @@ const inferInteractiveContainers = shapes => {
 // TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
 
+  log(`Inferring from`, shapes.length, `shapes.`);
+
   // Detect presence of *panels*, which are full-height containers / pages.
   shapes = inferPanels(shapes);
 
@@ -321,8 +335,10 @@ module.exports = (shapes) => {
   shapes = inferFromMap(shapes);
   shapes = inferRows(shapes);
 
-  // Check if this is the uppermost row of the 'level 1' container.
+  // Infer navigation on the topmost panel only.
   shapes = inferNavigation(shapes);
+
+  // Infer footer on the last panel only.
   shapes = inferFooter(shapes);
 
   shapes = inferImages(shapes);
