@@ -4,17 +4,17 @@
  * @ Aaron Baw 2018
  */
 
- // Dependencies.
- const shapeMap = require('../config/config.json').shapeMap;
- const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./inference/implicitNest');
+// Dependencies.
+const shapeMap = require('../config/config.json').shapeMap;
+const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./inference/implicitNest');
 const { getLastACRObjectId, sortshapesAlongYAxis } = require('./geometry');
- const inferProperties = require('./inference/infer');
- const indent = require('indent-string');
- const transform = require('./transformation/transform');
- const fs = require('fs');
+const inferProperties = require('./inference/infer');
+const indent = require('indent-string');
+const transform = require('./transformation/transform');
+const fs = require('fs');
 
 function log(...msg){
-  console.log(`GEN CODE |`, ...msg);
+  if (process.env.debug) console.log(`GEN CODE |`, ...msg);
 }
 
  // Given a transformed preNode, embeds this into serialised HTML.
@@ -65,15 +65,6 @@ function log(...msg){
 
    return embedCode(preNode);
 
-   // return `
-   // <div style="height:${container.meta.relativeHeight};" class="${container.class}" data-id="${container.id}">
-   //
-   // <span class="label-wrap">
-   //  <label style="align-self:flex-start;">${container.id}</label>
-   // </span>
-   //    ${indent(containingCode, 8)}
-   // </div>`;
-
  }
 
  // We have a separate method which first performs some pre-processing on
@@ -83,14 +74,14 @@ function log(...msg){
 
    if (!shapes || shapes.length == 0) return shapes;
 
-   console.log(`ACR Before pre-processing:`, shapes[0].contains.map(s => s.id));
+   // console.log(`ACR Before pre-processing:`, shapes[0].contains.map(s => s.id));
 
    // Pre processing.
    shapes.forEach(topLevelShape => {
      var lastId = getLastACRObjectId(shapes);
      log(`Implicitly nesting rows and vertical containers for ${topLevelShape.contains.length} children of`, topLevelShape.id, `with lasttId:`, lastId);
 
-     topLevelShape.contains = implicitlyNestIntoVerticalContainers(lastId, topLevelShape.contains, topLevelShape);
+     // topLevelShape.contains = implicitlyNestIntoVerticalContainers(lastId, topLevelShape.contains, topLevelShape);
      lastId = getLastACRObjectId(shapes);
 
      log(`LastID Now`, lastId);
