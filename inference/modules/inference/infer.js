@@ -36,12 +36,12 @@ module.exports = function inferProperties(shapes){
   // this constraint.
   shapes = sortshapesAlongYAxis(shapes);
 
-  console.log(`ACR:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
+  // console.log(`ACR:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
 
   // Infer types.
   shapes = inferTypes(shapes);
 
-  console.log(`ACR After inferring types:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
+  // console.log(`ACR After inferring types:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
 
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {

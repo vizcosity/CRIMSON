@@ -121,7 +121,7 @@ detectPrimitives(imagePath).then(async primitives => {
 
   log(`Generated Code.`);
   log(`Bundling project and saving output to`, outputDir);
-  await bundle({outputDir, context: args.context, imgPath: imagePath, targets: {source: HTMLOutput, name: 'index.html'}});
+  await bundle({outputDir, context: args.context, filteredACR: primitives, imgPath: imagePath, targets: {source: HTMLOutput, name: 'index.html'}});
 
 
   // Run parcel-bundler in output dir.
