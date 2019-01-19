@@ -15,6 +15,7 @@ from util import *
 from shape import Shape, nestShapes, nestWithinWindow
 
 _DEBUG = False
+_LINE_THICKNESS = 2
 
 # Logging.
 def log(message):
@@ -139,7 +140,7 @@ def annotateShapeTypes(shapes, image):
         #     (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
         #     cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
         # print(shape)
-        cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, _LINE_THICKNESS, (50,50,50))
 
 # Annotates by shape name, adding information about what shape contains it if so.
 def annotateNestedShapes(shapes, owner=None, image=None):
@@ -148,10 +149,10 @@ def annotateNestedShapes(shapes, owner=None, image=None):
     for shape in shapes:
         # print("Annotating : "+ str(shape))
         if (shape.type == 'rectangle'):
-            cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255))
+            cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255), thickness=_LINE_THICKNESS)
         else:
             cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.vertices[0][0] + 5, shape.vertices[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.vertices[0][0] + 5, shape.vertices[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (50,50,50), thickness=_LINE_THICKNESS)
         # Call recursively for all shapes that this shape contains.
         annotateNestedShapes(shape.contained, owner=shape, image=image)
 

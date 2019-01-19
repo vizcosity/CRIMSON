@@ -15,7 +15,7 @@ import numpy as np
 # Shapes with an IOU score greater than the below will be resolved into a single
 # classification.
 _IOU_THRESHOLD = 0.5
-_DEBUG = True
+_DEBUG = False
 
 def addNewShape(shapes, newShape):
     log("No intersecting shapes for " + str(newShape) + ". Creating one now.")
@@ -29,6 +29,53 @@ def addNewShape(shapes, newShape):
     log("No shapes contain newShape " + str(newShape) + ". Adding it to the highest level.")
     shapes.append(newShape)
 
+# Returns a list of shapes and their ious which intersect with the primitive.
+# Shape IDs are also returned in case the objects added to the array are not
+# references to the objects in the shape array.
+def getIntersectingShapes(primitive, shapes, iou_threshold):
+
+    intersecting_shapes = []
+
+    if shapes is None or len(shapes) == 0: return intersecting_shapes
+
+    for shape in shapes:
+
+        # log("Examining intersection between primitive "+str(primitive.type) + " and shape " + str(shape))
+
+        intersecting_shapes_contained_within_shape = getIntersectingShapes(primitive, shape.contained, iou_threshold)
+
+        # log("Currenet intersecting shapes: "+ str(intersecting_shapes))
+        # log("Intersecting shapes contained within " +str(shape) + ": " + str(intersecting_shapes_contained_within_shape))
+
+
+        # Call recursively on children of the current shape.
+        intersecting_shapes = intersecting_shapes + intersecting_shapes_contained_within_shape
+
+        # intersecting_shapes = np.concatenate([intersecting_shapes, intersecting_shapes_contained_within_shape]).tolist()
+
+        iou_val = shape.calc_iou(primitive)
+        if iou_val >= iou_threshold:
+            intersecting_shapes.append((shape, iou_val))
+
+    return intersecting_shapes
+
+def mergeShapeWithPrimitive(primitiveShape, intersectingShape, iou):
+
+    intersectingShape.type = primitiveShape.type
+
+    log("Classifying "+str(intersectingShape) + " as " + str(primitiveShape.type))
+
+    # Set the vertices of the intersectingshape to its bounding box.
+    intersectingShape.vertices = intersectingShape.boundingBox
+
+    # TODO: Examine if we should consult the confidence score & iou in order to see
+    # if we should instead keep the bounding box produced by the neural network.
+
+    # Once we classify a shape, since it can no longer be a container, we
+    # remove all the containing shapes.
+    intersectingShape.contained = []
+
+
 def resolveShapesUsingPredictions(primitives, shapes, lastShapeId):
 
     # For each primitive we detect using the CNN, match it up to a corresponding
@@ -37,31 +84,30 @@ def resolveShapesUsingPredictions(primitives, shapes, lastShapeId):
     # is a high degree of intersection.
     for primitive in primitives:
         box, vertices, label, id, confidence = primitive
+        log("Resolving predicted primitive: " + str(label))
         predictedShape = Shape(vertices, id=lastShapeId, shapeType=label)
         lastShapeId = lastShapeId + 1
 
-        intersecting_shapes = [
-                (shape, shape.calc_iou(predictedShape)) for shape in shapes
-                if shape.calc_iou(predictedShape) >= _IOU_THRESHOLD
-            ]
+        # intersecting_shapes = [
+        #         (shape, shape.calc_iou(predictedShape)) for shape in shapes
+        #         if shape.calc_iou(predictedShape) >= _IOU_THRESHOLD
+        #     ]
+        intersecting_shapes = getIntersectingShapes(predictedShape, shapes, _IOU_THRESHOLD)
+
+        # Sort intersecting shapes by largest intersections.
+        intersecting_shapes = np.array(intersecting_shapes, dtype=[('shape', Shape), ('iou', float)])
+        intersecting_shapes.sort(order='iou')
 
         log("Intersecting shapes: " + str(intersecting_shapes))
 
-        # Sort intersecting shapes by largest intersections.
-        intersecting_shapes = np.array(intersecting_shapes, dtype=[('shapes', list), ('iou', float)]).sort(order='iou')
-
         if (intersecting_shapes is None or len(intersecting_shapes) == 0):
-            return addNewShape(shapes, predictedShape)
+            addNewShape(shapes, predictedShape)
+        elif (len(intersecting_shapes) >= 1):
 
-        if (len(intersecting_shapes) >= 1):
-            log("Multiple intersecting shapes for predicted primitive :" + label)
-
-
-
-        # Assign the shape with the largest overlap the classification from
-        # the predicted primitive.
-        intersecting_shapes[-1].type = label
-        log("Classifying "+str(intersecting_shapes[-1] + " as " + label))
+            # Assign the shape with the largest overlap the classification from
+            # the predicted primitive.
+            intersecting_shape, iou_val = intersecting_shapes[-1]
+            mergeShapeWithPrimitive(predictedShape, intersecting_shape, iou_val)
 
     return shapes
 

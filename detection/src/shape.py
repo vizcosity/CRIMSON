@@ -21,11 +21,12 @@ class Shape:
             vertices = np.array(vertices)
 
         self.id = id
+        self.parentId = None
         self.rawVertices = vertices
         self.rawVertices = vertices.reshape(-1,2)
         self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
         self.rawArea = calculateArea(self.rawVertices)
-        self.boundingBox = cv2.boundingRect(self.rawVertices) if len(self.rawVertices) > 1 else []
+        self.boundingBox = getBoundingBox(self.rawVertices) if len(self.rawVertices) > 1 else np.array([])
         self.vertices = tidyAndApproximate(self.rawVertices, self.type)
         self.edges = getEdges(self.vertices)
         self.midpoint = calculateMidpoint(self.vertices)
@@ -64,6 +65,8 @@ class Shape:
         # shape.increaseNestLevel()
         shape.level = self.level + 1
 
+        shape.parentId = self.id
+
         self.contained.append(shape)
 
     # Returns true if the this contains the shape passed.
@@ -74,7 +77,7 @@ class Shape:
 
         # Firstly check that *most of* the otherShape is contained within this one.
         # Drawn sketches will include irregularities that mean that there will
-        # inevitably be some overlap between shapes. If the distance between
+        # inevitably be sfome overlap between shapes. If the distance between
         # edges is within some threshold and *most* of the area of the otherShape
         # is contained within this shape, then we can safely assume that it is
         # meant to be contained within it.
@@ -118,7 +121,9 @@ class Shape:
         return True
 
     def calc_iou(self, otherShape):
-        return calc_iou(self.vertices, otherShape.vertices)
+        if (len(self.boundingBox) != 4 or len(otherShape.boundingBox) != 4):
+            return 0
+        return calc_iou(self.boundingBox, otherShape.boundingBox)
 
 
     # Currently only defined for triangles.
@@ -132,6 +137,15 @@ class Shape:
     # and the other shape passed.
     def distance(self, shape):
         return np.sqrt( ((shape.midpoint[0] - self.midpoint[0]) ** 2) + ((shape.midpoint[1] - self.midpoint[1]) ** 2) )
+
+    # Given an image, draws the bounding box of the shape onto the image, along
+    # with the shape type.
+    def drawOnImage(self, image):
+
+        if (len(self.boundingBox) != 4): return
+
+        cv2.rectangle(image, tuple(self.boundingBox[0]), tuple(self.boundingBox[2]), color=(0,255,0), thickness=2)
+        cv2.putText(image, (str(self.parentId) + ": " if self.parentId is not None else "") + str(self), (self.boundingBox[0][0] + 5, self.boundingBox[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (50,50,50), 2)
 
     def __str__(self):
         if (self.id is not None): return self.__repr__()
@@ -172,8 +186,7 @@ def tidyAndApproximate(vertices, type):
     # successive lines and then average out all the angles to produce a shape with
     # equal angles and straigtened out lines.
     if (type == "rectangle"):
-        (x, y, w, h) = cv2.boundingRect(vertices)
-        output = np.array([[x, y], [x, y+h], [x+w, y+h], [x+w, y]]).reshape(-1,2)
+        output = getBoundingBox(vertices)
 
     # print("Tidied: " + str(output))
     return output

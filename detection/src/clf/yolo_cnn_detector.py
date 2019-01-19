@@ -23,15 +23,18 @@ names = open(_OBJECT_NAMES, 'r').read().split('\n')
 # Draws predictions on screen
 def draw_pred(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
 
+    font_size = 1 if img.shape[1] > 300 else 0.4
+    line_thickness = 2 if img.shape[1] > 300 else 1
+
     label = names[class_id]
 
     # print("Drawing " + label + " at " + str((x, y)) + "("+str(confidence)+")")
 
     color = (255,0,0)
 
-    cv2.rectangle(img, (x,y), (x_plus_w,y_plus_h), color, 2)
+    cv2.rectangle(img, (x,y), (x_plus_w,y_plus_h), color, line_thickness)
 
-    cv2.putText(img, label + ' ['+str(round(confidence, 2))+']', (x-10,y-10), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+    cv2.putText(img, label + ' ['+str(round(confidence, 2))+']', (x-10,y-10), cv2.FONT_HERSHEY_SIMPLEX, font_size, color, line_thickness)
 
 # Get the names of the output layers.
 def getOutputsNames(net):
@@ -97,7 +100,9 @@ def convertBoxToVertex(box):
     x, y, w, h = box
     return [[x, y], [x, y+h], [x+w, y+h], [x+w, y]]
 
-def predict_primitives(image, conf_threshold = _CONFIDENCE_THRESHOLD, nms_threshold = 0.1):
+def predict_primitives(image, canvasShape, conf_threshold = _CONFIDENCE_THRESHOLD, nms_threshold = 0.1):
+
+    if (canvasShape is None): canvasShape = image.shape
 
     # Load the neural network weights & config.
     # yolo_net = cv2.dnn.readNetFromDarknet(_WEIGHTS_FILE, _CONFIG_FILE)
@@ -121,7 +126,7 @@ def predict_primitives(image, conf_threshold = _CONFIDENCE_THRESHOLD, nms_thresh
     outs = yolo_net.forward(getOutputsNames(yolo_net))
     # print(len(outs[1]))
 
-    boxes, confidences, class_ids = processCNNOutput(outs, conf_threshold, Width, Height)
+    boxes, confidences, class_ids = processCNNOutput(outs, conf_threshold, canvasShape[1], canvasShape[0])
 
     boxes, confidences, class_ids = applyNonMaxSupression(boxes, confidences, class_ids, conf_threshold, nms_threshold)
 
