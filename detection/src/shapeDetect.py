@@ -13,7 +13,7 @@ import imutils
 import json
 import argparse
 
-def outputResultsToDir(dir, filename, json, annotated, containers, intersections, lines, cnn_preds, full_detections):
+def outputResultsToDir(dir, filename, json, annotated=None, containers=None, intersections=None, lines=None, cnn_preds=None, full_detections=None):
     # Output results.
 
     # If the output argument has been passed, then we write the output to the
@@ -25,17 +25,17 @@ def outputResultsToDir(dir, filename, json, annotated, containers, intersections
     jsonFile = open(dir+"/"+filename+"/"+filename+'.json', mode='w')
     jsonFile.write(json)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_annotated.png', annotated)
+    if (annotated is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_annotated.png', annotated)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_containers.png', containers)
+    if (containers is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_containers.png', containers)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_intersections.png', intersections)
+    if (intersections is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_intersections.png', intersections)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_lines.png', lines)
+    if (lines is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_lines.png', lines)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_cnn_preds.png', cnn_preds)
+    if (cnn_preds is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_cnn_preds.png', cnn_preds)
 
-    cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_full_detection.png', full_detections)
+    if (full_detections is not None): cv2.imwrite(args['output']+'/'+filename+'/'+filename+'_full_detection.png', full_detections)
 
 
 def getFreshImage(imagePath, resize=False):
@@ -89,18 +89,18 @@ if (__name__ == "__main__"):
     # images in the inference pipeline.
     # Need to pass in the 'lastShapeId' so that we enumerate intersection shape ids
     # starting from the last detected shape id in the getContainers method.
-    shapes, intersections, intersectionImg = detectAndNestIntersections(originalImg, shapes, lastShapeId=lastShapeId, annotate=True)
+    # _, intersections, intersectionImg = detectAndNestIntersections(originalImg, shapes, lastShapeId=lastShapeId, annotate=True)
 
     # Update lastShapeId
-    lastShapeId += len(intersections)
+    # lastShapeId += len(intersections)
 
     # For each container, detect lines and nest horizontal lines which occur
     # roughly around the vertical center of the container.
-    shapes, lines, lineImg = detectAndNestLines(getFreshImage(args["image"]), shapes, lastShapeId=lastShapeId, annotate=True)
+    # _, lines, lineImg = detectAndNestLines(getFreshImage(args["image"]), shapes, lastShapeId=lastShapeId, annotate=True)
 
     # print("SHAPES AFTER NESTING INTERSECTIONS:  "+ str(shapes) + ", " + str(shapes[0].contained))
 
-    lastShapeId += len(lines)
+    # lastShapeId += len(lines)
 
     # Given the predicted primitives and the shapes collected from the previous
     # step, attempt to identify each shape correctly using bounding box information
@@ -115,5 +115,5 @@ if (__name__ == "__main__"):
 
     if (args['output']):
         filename = args['image'].split('/')[-1].split('.')[0]
-        outputResultsToDir(args['output'], filename, jsonHierarchy, containerImg, whiteImg, intersectionImg, lineImg, cnnPredsImg, fullPrimitivesImg)
+        outputResultsToDir(args['output'], filename, jsonHierarchy, annotated=containerImg, containers=whiteImg, cnn_preds=cnnPredsImg, full_detections=fullPrimitivesImg)
     else: print(json.dumps(jsonHierarchy, indent=4))

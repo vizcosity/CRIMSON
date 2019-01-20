@@ -78,13 +78,13 @@ function log(...msg){
 
    // Pre processing.
    shapes.forEach(topLevelShape => {
-     var lastId = getLastACRObjectId(shapes);
-     log(`Implicitly nesting rows and vertical containers for ${topLevelShape.contains.length} children of`, topLevelShape.id, `with lasttId:`, lastId);
+     // var lastId = getLastACRObjectId(shapes);
+     // log(`Implicitly nesting rows and vertical containers for ${topLevelShape.contains.length} children of`, topLevelShape.id, `with lasttId:`, lastId);
 
      // topLevelShape.contains = implicitlyNestIntoVerticalContainers(lastId, topLevelShape.contains, topLevelShape);
-     lastId = getLastACRObjectId(shapes);
+     // lastId = getLastACRObjectId(shapes);
 
-     log(`LastID Now`, lastId);
+     // log(`LastID Now`, lastId);
 
      // topLevelShape.contains = implicitlyNestIntoRows(lastId, topLevelShape.contains, topLevelShape);
    });

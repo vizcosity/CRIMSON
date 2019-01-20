@@ -38,6 +38,8 @@ nav {
 
 /* Footer should be sticky and have a minimum height of ~60px */
 footer {
+  /* We want footers to behave like a row; only one item along the vertical axis. */
+  display: flex;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -54,4 +56,26 @@ with columns to a new line */
 .label-wrap {
   border: 0px;
   width: 100%;
+}
+
+/**
+ * Ensure that text placed within a dark footer is readable.
+ */
+footer p {
+  color: #424242;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+footer h1 {
+  color: #757575;
+  font-size: 20px;
+}
+
+/* Ensure that text is centered horizontally and vertically. */
+h1, p {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }

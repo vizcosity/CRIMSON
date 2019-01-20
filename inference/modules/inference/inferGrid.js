@@ -14,28 +14,12 @@ const config = require('../../config/config.json');
 const determineNumOfGridCells = (shape, budget) => {
   var width = parseFloat(shape.meta.relativeWidth) / 100;
   var numCells = width / (1 / budget);
-  log(numCells, shape.meta.relativeWidth);
+  log(`Assigning ${Math.floor(numCells)} cells to ${shape.id} which has relative width:`, shape.meta.relativeWidth);
   return {
     numCells: Math.floor(numCells),
     clipSize: numCells - Math.floor(numCells)
   };
-}
-// // Use inferred grid properties to determine class.
-// const serialiseClasses = shapes => {
-//
-//   var output = [];
-//
-//   shapes.forEach(shape => {
-//     if (shape.gridCell && shape.gridCell.count)
-//       shape.class = `col-${shape.gridCell.count}`;
-//     output.push(shape);
-//   });
-//
-//   // console.log(shapes);
-//
-//   return shapes;
-//
-// }
+};
 
 
 module.exports = (row) => {
@@ -76,8 +60,10 @@ module.exports = (row) => {
 
   // Assign leftover cells to shapes with largest clip amount.
   while (cellBudget > 0){
-    var {id} = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize)[0];
-    var mostClipped = row.contains.filter(shape => shape.id == id)[0];
+    var mostClipped = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize ? 1 : -1)[0];
+    // var mostClipped = row.contains.filter(shape => shape.id == id)[0];
+
+    // log(`Most clipped shape is ${mostClipped.id} with gridcell object`,mostClipped.gridCell);
 
     // Assign a new cell.
     mostClipped.gridCell.count++;

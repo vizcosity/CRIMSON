@@ -78,7 +78,7 @@ def getContainers(image, annotate=False):
     log("Found: "+ str(len(contours))+ " contours.")
 
     # Filter miniscule contours.
-    # contours = filterContours(contours, image.shape)
+    contours = filterContours(contours, image.shape)
 
     contours = fillGaps(contours)
 

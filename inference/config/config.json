@@ -5,8 +5,8 @@
   "padding": 5,
   "shapeMap": {
     "rectangle": "container",
-    "triangle": "triangle",
-    "polygon": "polygon"
+    "triangle": "container",
+    "polygon": "container"
   },
   "thresholds": {
     "fragmentArea": 0.08

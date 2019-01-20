@@ -25,7 +25,7 @@ const getLowestX = shape => {
 }
 
 const sortShapesAlongXAxis = (shapes) => {
-   return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
+   return shapes.concat().sort((a, b) => a.meta.vertices[0][0] < b.meta.vertices[0][0] ? -1 : 1);
 };
 
 const sortshapesAlongYAxis = shapes => {

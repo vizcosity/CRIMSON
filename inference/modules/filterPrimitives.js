@@ -10,7 +10,6 @@ function filterLevel(shapes){
   if (!shapes) return shapes;
   // console.log('shapes', shapes);
   return shapes.filter(s => {
-    console.log('Checking if should keep', s.type, config.filter.indexOf(s.type) === -1);
     return config.filter.indexOf(s.type) === -1
   });
 
