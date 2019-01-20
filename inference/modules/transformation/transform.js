@@ -53,6 +53,9 @@ function BootstrapObject(shape){
       case "input":
         classes += " form-group";
         break;
+      case "card_text_button":
+        classes += "card";
+        break;
       default:
         classes += shape.type;
     }
@@ -171,6 +174,35 @@ function BootstrapObject(shape){
     if (shape.type == "paragraph"){
       return [{
         content: "Lorem ipsum dolor amet"
+      }]
+    }
+
+    if (shape.type == "card_text_button"){
+      return [{
+        elementType: 'div',
+        content: {
+          elementType: 'div',
+          attributes: {
+            class: 'card-body'
+          },
+          content: [
+            {
+              elementType: 'h5',
+              attributes: { class: 'card-title' },
+              // If there is content attatched to the shape, then we embed it.
+              // Otherwise we use placeholder text.
+              content: shape.contains[0].content ? shape.contains[0].content : 'Card Title'
+            }, {
+              elementType: 'p',
+              attributes: { class: 'card-text' },
+              content: shape.contains[1].content ? shape.contains[1].content : 'Card Body Text. Lorem Ipsum dolor amet.'
+            }, {
+              elementType: 'a',
+              attributes: { class: 'btn btn-primary' },
+              content: shape.contains[2].content ? shape.contains[2].content : 'Card Button'
+            }
+          ]
+        }
       }]
     }
 

@@ -8,6 +8,7 @@ const inferGrid = require('./inferGrid');
 const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./implicitNest');
 const { getLastACRObjectId, sortshapesAlongYAxis } = require('../geometry');
 const inferTypes = require('./inferTypes');
+const inferCompoundPrimitives = require('./inferCompound');
 
 // Infer properties about the shapes which will then be generated into HTML code.
 module.exports = function inferProperties(shapes){
@@ -42,6 +43,9 @@ module.exports = function inferProperties(shapes){
   shapes = inferTypes(shapes);
 
   // console.log(`ACR After inferring types:`, shapes.map(shape => Object({id: shape.id, type: shape.type})));
+
+  // Infer compound primitives, such as cards, heros, jumbotrons and media objects.
+  shapes = inferCompoundPrimitives(shapes);
 
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {

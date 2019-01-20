@@ -10,7 +10,7 @@ const inheritance = require("../config/config.json").inheritance;
 
 function getDerivationSubTree(tree, type){
 
-  console.log("Getting subtree from ", type, tree);
+  // console.log("Getting subtree from ", type, tree);
   // return false;
 
   if (Array.isArray(tree)) {
@@ -20,7 +20,7 @@ function getDerivationSubTree(tree, type){
       if (typeof item == "object") converted = {...item, ...converted};
       else converted[item] = {}
     });
-    console.log('Converted', tree, 'to', converted);
+    // console.log('Converted', tree, 'to', converted);
     tree = converted;
     // console.log('')
   }
@@ -29,8 +29,8 @@ function getDerivationSubTree(tree, type){
   // console.log(typeof subtree);
   // if (typeof subtree != 'undefined') return subtree;
   if (tree[type]) {
-    console.log(tree)
-    console.log(JSON.stringify(tree[type]))
+    // console.log(tree)
+    // console.log(JSON.stringify(tree[type]))
     return JSON.parse(JSON.stringify((tree[type])))
   };
 
@@ -61,7 +61,7 @@ const isSubtypeOf = (type, shape) => {
   // type.
   const subtree = getDerivationSubTree(inheritance, type);
 
-  console.log("Obtained subtree", getDerivationSubTree(inheritance, type));
+  // console.log("Obtained subtree", getDerivationSubTree(inheritance, type));
 
   if (!subtree) return false;
 
