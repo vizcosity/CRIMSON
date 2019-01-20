@@ -30,32 +30,34 @@ function BootstrapObject(shape){
 
   function resolveClass(shape){
 
-    if (shape.gridCell && shape.gridCell.count) return `column container col-${shape.gridCell.count}`;
+    var classes = "";
 
-    if (shape.type == "navigation"){
-      return "navbar navbar-expand-lg navbar-dark bg-dark";
+    if (shape.gridCell && shape.gridCell.count) classes +=  `column container col-${shape.gridCell.count}`;
+
+    switch (shape.type){
+      case "navigation":
+        classes += " navbar navbar-expand-lg navbar-dark bg-dark";
+        break;
+      case "footer":
+        classes +=  " bd-footer";
+        break;
+      case "image":
+        classes += " img-fluid";
+        break;
+      case "button":
+        classes += " btn btn-primary";
+        break;
+      case "dropdown":
+        classes += " dropdown";
+        break;
+      case "input":
+        classes += " form-group";
+        break;
+      default:
+        classes += shape.type;
     }
 
-    if (shape.type == "footer"){
-      return "bd-footer";
-    }
-
-    if (shape.type == "image"){
-      return "img-fluid";
-    }
-
-    if (shape.type == "button"){
-      return "btn btn-primary"
-    }
-
-    if (shape.type == "dropdown") return "dropdown";
-
-    // Highest level element of an input is div with 'form-group class'.
-    if (shape.type == "input"){
-      return "form-group";
-    }
-
-    return shape.type;
+    return classes;
 
   }
 
@@ -162,14 +164,12 @@ function BootstrapObject(shape){
 
     if (shape.type == "header"){
       return [{
-        elementType: 'h1',
         content: 'Header'
       }]
     }
 
     if (shape.type == "paragraph"){
       return [{
-        elementType: 'p',
         content: "Lorem ipsum dolor amet"
       }]
     }

@@ -1,861 +1,559 @@
 [
   {
-    "id": "25",
+    "id": "16",
+    "parentId": "None",
     "type": "rectangle",
     "meta": {
-      "absoluteWidth": 288.0,
-      "absoluteHeight": 374.0,
-      "relativeWidth": "100.0%",
-      "relativeHeight": "100.0%",
+      "absoluteWidth": 1080.0,
+      "absoluteHeight": 1404.0,
+      "relativeWidth": "96.0%",
+      "relativeHeight": "96.3623884694578%",
       "midpoint": [
-        151,
-        190
+        566,
+        715
       ],
-      "area": 107712.0,
+      "area": 1516320.0,
       "vertices": [
         [
-          7,
-          3
+          26,
+          13
         ],
         [
-          7,
-          377
+          26,
+          1417
         ],
         [
-          295,
-          377
+          1106,
+          1417
         ],
         [
-          295,
-          3
+          1106,
+          13
+        ]
+      ],
+      "boundingBox": [
+        [
+          26,
+          13
+        ],
+        [
+          26,
+          1417
+        ],
+        [
+          1106,
+          1417
+        ],
+        [
+          1106,
+          13
+        ]
+      ],
+      "relativeVertices": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0
         ]
       ]
     },
     "level": 0,
     "contains": [
       {
-        "id": "24",
-        "type": "polygon",
+        "id": "14",
+        "parentId": "16",
+        "type": "rectangle",
         "meta": {
-          "absoluteWidth": 223.0,
-          "absoluteHeight": 44.0,
-          "relativeWidth": "77.43055555555556%",
-          "relativeHeight": "11.76470588235294%",
+          "absoluteWidth": 826.0,
+          "absoluteHeight": 160.0,
+          "relativeWidth": "76.48148148148148%",
+          "relativeHeight": "11.396011396011396%",
           "midpoint": [
-            121,
-            47
+            539,
+            181
           ],
-          "area": 8945.5,
+          "area": 132160.0,
           "vertices": [
             [
-              253,
-              27
+              126,
+              101
             ],
             [
-              250,
-              69
+              126,
+              261
             ],
             [
-              36,
-              71
+              952,
+              261
             ],
             [
-              30,
-              38
+              952,
+              101
+            ]
+          ],
+          "boundingBox": [
+            [
+              126,
+              101
             ],
             [
-              37,
-              31
+              126,
+              261
+            ],
+            [
+              952,
+              261
+            ],
+            [
+              952,
+              101
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.09259259259259259,
+              0.06267806267806268
+            ],
+            [
+              0.09259259259259259,
+              0.17663817663817663
+            ],
+            [
+              0.8574074074074074,
+              0.17663817663817663
+            ],
+            [
+              0.8574074074074074,
+              0.06267806267806268
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "12",
+            "parentId": "14",
+            "type": "image",
+            "meta": {
+              "absoluteWidth": 162.0,
+              "absoluteHeight": 84.0,
+              "relativeWidth": "19.612590799031477%",
+              "relativeHeight": "52.5%",
+              "midpoint": [
+                246,
+                187
+              ],
+              "area": 13608.0,
+              "vertices": [
+                [
+                  165,
+                  145
+                ],
+                [
+                  165,
+                  229
+                ],
+                [
+                  327,
+                  229
+                ],
+                [
+                  327,
+                  145
+                ]
+              ],
+              "boundingBox": [
+                [
+                  165,
+                  145
+                ],
+                [
+                  165,
+                  229
+                ],
+                [
+                  327,
+                  229
+                ],
+                [
+                  327,
+                  145
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.04721549636803874,
+                  0.275
+                ],
+                [
+                  0.04721549636803874,
+                  0.8
+                ],
+                [
+                  0.24334140435835352,
+                  0.8
+                ],
+                [
+                  0.24334140435835352,
+                  0.275
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "9",
+        "parentId": "16",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 423.0,
+          "absoluteHeight": 399.0,
+          "relativeWidth": "39.166666666666664%",
+          "relativeHeight": "28.418803418803417%",
+          "midpoint": [
+            364,
+            556
+          ],
+          "area": 168777.0,
+          "vertices": [
+            [
+              153,
+              357
+            ],
+            [
+              153,
+              756
+            ],
+            [
+              576,
+              756
+            ],
+            [
+              576,
+              357
+            ]
+          ],
+          "boundingBox": [
+            [
+              153,
+              357
+            ],
+            [
+              153,
+              756
+            ],
+            [
+              576,
+              756
+            ],
+            [
+              576,
+              357
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.1175925925925926,
+              0.245014245014245
+            ],
+            [
+              0.1175925925925926,
+              0.5292022792022792
+            ],
+            [
+              0.5092592592592593,
+              0.5292022792022792
+            ],
+            [
+              0.5092592592592593,
+              0.245014245014245
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": [
+          {
+            "id": "6",
+            "parentId": "9",
+            "type": "button",
+            "meta": {
+              "absoluteWidth": 271.0,
+              "absoluteHeight": 62.0,
+              "relativeWidth": "64.0661938534279%",
+              "relativeHeight": "15.538847117794486%",
+              "midpoint": [
+                360,
+                673
+              ],
+              "area": 16802.0,
+              "vertices": [
+                [
+                  224,
+                  642
+                ],
+                [
+                  224,
+                  704
+                ],
+                [
+                  495,
+                  704
+                ],
+                [
+                  495,
+                  642
+                ]
+              ],
+              "boundingBox": [
+                [
+                  224,
+                  642
+                ],
+                [
+                  224,
+                  704
+                ],
+                [
+                  495,
+                  704
+                ],
+                [
+                  495,
+                  642
+                ]
+              ],
+              "relativeVertices": [
+                [
+                  0.16784869976359337,
+                  0.7142857142857143
+                ],
+                [
+                  0.16784869976359337,
+                  0.8696741854636592
+                ],
+                [
+                  0.8085106382978723,
+                  0.8696741854636592
+                ],
+                [
+                  0.8085106382978723,
+                  0.7142857142857143
+                ]
+              ]
+            },
+            "level": 2,
+            "contains": []
+          }
+        ]
+      },
+      {
+        "id": "10",
+        "parentId": "16",
+        "type": "triangle",
+        "meta": {
+          "absoluteWidth": 343.0,
+          "absoluteHeight": 424.0,
+          "relativeWidth": "31.75925925925926%",
+          "relativeHeight": "30.1994301994302%",
+          "midpoint": [
+            836,
+            619
+          ],
+          "area": 72165.0,
+          "vertices": [
+            [
+              620,
+              741
+            ],
+            [
+              925,
+              346
+            ],
+            [
+              963,
+              770
+            ]
+          ],
+          "boundingBox": [
+            [
+              620,
+              346
+            ],
+            [
+              620,
+              771
+            ],
+            [
+              964,
+              771
+            ],
+            [
+              964,
+              346
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.55,
+              0.5185185185185185
+            ],
+            [
+              0.8324074074074074,
+              0.23717948717948717
+            ],
+            [
+              0.8675925925925926,
+              0.5391737891737892
             ]
           ]
         },
         "level": 1,
         "contains": []
-      },
-      {
-        "id": "17",
-        "type": "triangle",
-        "meta": {
-          "absoluteWidth": 85.0,
-          "absoluteHeight": 107.0,
-          "relativeWidth": "29.51388888888889%",
-          "relativeHeight": "28.609625668449194%",
-          "midpoint": [
-            190,
-            126
-          ],
-          "area": 4340.0,
-          "vertices": [
-            [
-              246,
-              89
-            ],
-            [
-              163,
-              196
-            ],
-            [
-              161,
-              94
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": [
-          {
-            "id": "52",
-            "type": "intersection",
-            "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
-              "midpoint": [
-                86,
-                54
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  86.0,
-                  54.0
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "60",
-            "type": "intersection",
-            "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
-              "midpoint": [
-                75,
-                50
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  75.0,
-                  50.0
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "62",
-            "type": "intersection",
-            "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
-              "midpoint": [
-                67,
-                49
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  67.0,
-                  49.0
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          }
-        ]
-      },
-      {
-        "id": "14",
-        "type": "rectangle",
-        "meta": {
-          "absoluteWidth": 113.0,
-          "absoluteHeight": 106.0,
-          "relativeWidth": "39.23611111111111%",
-          "relativeHeight": "28.342245989304814%",
-          "midpoint": [
-            98,
-            148
-          ],
-          "area": 11978.0,
-          "vertices": [
-            [
-              41,
-              95
-            ],
-            [
-              41,
-              201
-            ],
-            [
-              154,
-              201
-            ],
-            [
-              154,
-              95
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": [
-          {
-            "id": "10",
-            "type": "polygon",
-            "meta": {
-              "absoluteWidth": 70.0,
-              "absoluteHeight": 14.0,
-              "relativeWidth": "61.94690265486725%",
-              "relativeHeight": "13.20754716981132%",
-              "midpoint": [
-                96,
-                178
-              ],
-              "area": 874.5,
-              "vertices": [
-                [
-                  130,
-                  185
-                ],
-                [
-                  62,
-                  184
-                ],
-                [
-                  60,
-                  177
-                ],
-                [
-                  67,
-                  171
-                ],
-                [
-                  126,
-                  172
-                ],
-                [
-                  130,
-                  176
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "9",
-            "type": "rectangle",
-            "meta": {
-              "absoluteWidth": 73.0,
-              "absoluteHeight": 17.0,
-              "relativeWidth": "64.60176991150442%",
-              "relativeHeight": "16.037735849056602%",
-              "midpoint": [
-                96,
-                180
-              ],
-              "area": 1241.0,
-              "vertices": [
-                [
-                  59,
-                  171
-                ],
-                [
-                  59,
-                  188
-                ],
-                [
-                  132,
-                  188
-                ],
-                [
-                  132,
-                  171
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": [
-              {
-                "id": "11",
-                "type": "polygon",
-                "meta": {
-                  "absoluteWidth": 10.0,
-                  "absoluteHeight": 7.0,
-                  "relativeWidth": "13.698630136986301%",
-                  "relativeHeight": "41.17647058823529%",
-                  "midpoint": [
-                    92,
-                    176
-                  ],
-                  "area": 47.5,
-                  "vertices": [
-                    [
-                      95,
-                      179
-                    ],
-                    [
-                      92,
-                      180
-                    ],
-                    [
-                      86,
-                      174
-                    ],
-                    [
-                      86,
-                      173
-                    ],
-                    [
-                      95,
-                      173
-                    ],
-                    [
-                      96,
-                      174
-                    ],
-                    [
-                      96,
-                      176
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "16",
-        "type": "triangle",
-        "meta": {
-          "absoluteWidth": 91.0,
-          "absoluteHeight": 113.0,
-          "relativeWidth": "31.59722222222222%",
-          "relativeHeight": "30.213903743315505%",
-          "midpoint": [
-            222,
-            165
-          ],
-          "area": 5101.5,
-          "vertices": [
-            [
-              165,
-              197
-            ],
-            [
-              246,
-              92
-            ],
-            [
-              256,
-              205
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": [
-          {
-            "id": "58",
-            "type": "intersection",
-            "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "100.0%",
-              "relativeHeight": "100.0%",
-              "midpoint": [
-                249,
-                65
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  249.0,
-                  65.0
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": []
-          }
-        ]
       },
       {
         "id": "3",
-        "type": "polygon",
+        "parentId": "16",
+        "type": "rectangle",
         "meta": {
-          "absoluteWidth": 204.0,
-          "absoluteHeight": 59.0,
-          "relativeWidth": "70.83333333333334%",
-          "relativeHeight": "15.775401069518717%",
+          "absoluteWidth": 773.0,
+          "absoluteHeight": 242.0,
+          "relativeWidth": "71.57407407407408%",
+          "relativeHeight": "17.236467236467238%",
           "midpoint": [
-            125,
-            246
+            548,
+            942
           ],
-          "area": 11499.5,
+          "area": 187066.0,
           "vertices": [
             [
-              246,
-              221
+              162,
+              821
             ],
             [
-              241,
-              277
+              162,
+              1063
             ],
             [
-              44,
-              280
+              935,
+              1063
             ],
             [
-              42,
-              230
+              935,
+              821
+            ]
+          ],
+          "boundingBox": [
+            [
+              162,
+              821
             ],
             [
-              50,
-              221
+              162,
+              1063
+            ],
+            [
+              935,
+              1063
+            ],
+            [
+              935,
+              821
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.1259259259259259,
+              0.5754985754985755
+            ],
+            [
+              0.1259259259259259,
+              0.7478632478632479
+            ],
+            [
+              0.8416666666666667,
+              0.7478632478632479
+            ],
+            [
+              0.8416666666666667,
+              0.5754985754985755
             ]
           ]
         },
         "level": 1,
-        "contains": [
-          {
-            "id": "18",
-            "type": "rectangle",
-            "meta": {
-              "absoluteWidth": 43.0,
-              "absoluteHeight": 24.0,
-              "relativeWidth": "21.07843137254902%",
-              "relativeHeight": "40.67796610169492%",
-              "midpoint": [
-                66,
-                50
-              ],
-              "area": 1032.0,
-              "vertices": [
-                [
-                  44,
-                  38
-                ],
-                [
-                  44,
-                  62
-                ],
-                [
-                  87,
-                  62
-                ],
-                [
-                  87,
-                  38
-                ]
-              ]
-            },
-            "level": 2,
-            "contains": [
-              {
-                "id": "22",
-                "type": "polygon",
-                "meta": {
-                  "absoluteWidth": 23.0,
-                  "absoluteHeight": 7.0,
-                  "relativeWidth": "53.48837209302325%",
-                  "relativeHeight": "29.166666666666668%",
-                  "midpoint": [
-                    62,
-                    43
-                  ],
-                  "area": 111.0,
-                  "vertices": [
-                    [
-                      74,
-                      42
-                    ],
-                    [
-                      65,
-                      47
-                    ],
-                    [
-                      62,
-                      47
-                    ],
-                    [
-                      56,
-                      45
-                    ],
-                    [
-                      51,
-                      42
-                    ],
-                    [
-                      53,
-                      40
-                    ],
-                    [
-                      72,
-                      40
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "21",
-                "type": "polygon",
-                "meta": {
-                  "absoluteWidth": 14.0,
-                  "absoluteHeight": 13.0,
-                  "relativeWidth": "32.55813953488372%",
-                  "relativeHeight": "54.166666666666664%",
-                  "midpoint": [
-                    78,
-                    47
-                  ],
-                  "area": 102.5,
-                  "vertices": [
-                    [
-                      81,
-                      54
-                    ],
-                    [
-                      80,
-                      55
-                    ],
-                    [
-                      67,
-                      48
-                    ],
-                    [
-                      78,
-                      42
-                    ],
-                    [
-                      80,
-                      42
-                    ],
-                    [
-                      81,
-                      43
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "20",
-                "type": "polygon",
-                "meta": {
-                  "absoluteWidth": 12.0,
-                  "absoluteHeight": 12.0,
-                  "relativeWidth": "27.906976744186046%",
-                  "relativeHeight": "50.0%",
-                  "midpoint": [
-                    51,
-                    48
-                  ],
-                  "area": 87.5,
-                  "vertices": [
-                    [
-                      59,
-                      49
-                    ],
-                    [
-                      50,
-                      55
-                    ],
-                    [
-                      48,
-                      52
-                    ],
-                    [
-                      47,
-                      48
-                    ],
-                    [
-                      47,
-                      44
-                    ],
-                    [
-                      48,
-                      43
-                    ],
-                    [
-                      50,
-                      43
-                    ],
-                    [
-                      58,
-                      47
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "19",
-                "type": "polygon",
-                "meta": {
-                  "absoluteWidth": 29.0,
-                  "absoluteHeight": 10.0,
-                  "relativeWidth": "67.44186046511628%",
-                  "relativeHeight": "41.66666666666667%",
-                  "midpoint": [
-                    66,
-                    55
-                  ],
-                  "area": 180.5,
-                  "vertices": [
-                    [
-                      79,
-                      57
-                    ],
-                    [
-                      78,
-                      58
-                    ],
-                    [
-                      53,
-                      59
-                    ],
-                    [
-                      50,
-                      57
-                    ],
-                    [
-                      62,
-                      49
-                    ],
-                    [
-                      66,
-                      49
-                    ],
-                    [
-                      76,
-                      54
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "53",
-                "type": "centered_intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    86,
-                    54
-                  ],
-                  "area": 0.0,
-                  "vertices": [
-                    [
-                      86.0,
-                      54.0
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "61",
-                "type": "centered_intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    75,
-                    50
-                  ],
-                  "area": 0.0,
-                  "vertices": [
-                    [
-                      75.0,
-                      50.0
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "63",
-                "type": "centered_intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "100.0%",
-                  "relativeHeight": "100.0%",
-                  "midpoint": [
-                    67,
-                    49
-                  ],
-                  "area": 0.0,
-                  "vertices": [
-                    [
-                      67.0,
-                      49.0
-                    ]
-                  ]
-                },
-                "level": 3,
-                "contains": []
-              }
-            ]
-          }
-        ]
+        "contains": []
       },
       {
         "id": "2",
-        "type": "rectangle",
+        "parentId": "16",
+        "type": "triangle",
         "meta": {
-          "absoluteWidth": 206.0,
-          "absoluteHeight": 65.0,
-          "relativeWidth": "71.52777777777779%",
-          "relativeHeight": "17.379679144385026%",
+          "absoluteWidth": 467.0,
+          "absoluteHeight": 205.0,
+          "relativeWidth": "43.24074074074074%",
+          "relativeHeight": "14.6011396011396%",
           "midpoint": [
-            146,
-            250
+            315,
+            1198
           ],
-          "area": 13390.0,
+          "area": 46028.0,
           "vertices": [
             [
-              43,
-              218
+              626,
+              1127
             ],
             [
-              43,
-              283
+              159,
+              1332
             ],
             [
-              249,
-              283
-            ],
-            [
-              249,
-              218
+              161,
+              1134
             ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "1",
-        "type": "rectangle",
-        "meta": {
-          "absoluteWidth": 208.0,
-          "absoluteHeight": 57.0,
-          "relativeWidth": "72.22222222222221%",
-          "relativeHeight": "15.240641711229946%",
-          "midpoint": [
-            146,
-            328
           ],
-          "area": 11856.0,
-          "vertices": [
+          "boundingBox": [
             [
-              42,
-              300
+              159,
+              1127
             ],
             [
-              42,
-              357
+              159,
+              1333
             ],
             [
-              250,
-              357
+              627,
+              1333
             ],
             [
-              250,
-              300
+              627,
+              1127
             ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "54",
-        "type": "intersection",
-        "meta": {
-          "absoluteWidth": 0.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
-          "midpoint": [
-            166,
-            188
           ],
-          "area": 0.0,
-          "vertices": [
+          "relativeVertices": [
             [
-              166.0,
-              188.0
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "55",
-        "type": "centered_intersection",
-        "meta": {
-          "absoluteWidth": 0.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
-          "midpoint": [
-            166,
-            188
-          ],
-          "area": 0.0,
-          "vertices": [
+              0.5555555555555556,
+              0.7934472934472935
+            ],
             [
-              166.0,
-              188.0
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "56",
-        "type": "intersection",
-        "meta": {
-          "absoluteWidth": 0.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "100.0%",
-          "relativeHeight": "100.0%",
-          "midpoint": [
-            12,
-            376
-          ],
-          "area": 0.0,
-          "vertices": [
+              0.12314814814814815,
+              0.9394586894586895
+            ],
             [
-              12.0,
-              376.0
+              0.125,
+              0.7984330484330484
             ]
           ]
         },

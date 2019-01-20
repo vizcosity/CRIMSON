@@ -23,7 +23,7 @@ args
   .version(package.version)
   .usage("--image <image path> --output [output directory] [--context , --project]")
   .option('-i, --image <image path>', 'Source image.')
-  .option('-o, --output [output path]', 'Output directory.', './output')
+  .option('-o, --output [output path]', 'Output directory.', './.output')
   .option('-c, --context [vanilla, bootstrap, react]', 'Context type ("vanilla", "bootstrap", "react")', 'vanilla')
   .option('-p, --project [static, server]', 'Output type ("static", "server")', 'server')
   .parse(process.argv)

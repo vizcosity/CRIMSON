@@ -2,5 +2,8 @@
   "navigation": "nav",
   "footer": "footer",
   "image": "img",
-  "button": "button"
+  "button": "button",
+  "paragraph": "p",
+  "header": "h1",
+  "text": "p"
 }
