@@ -71,10 +71,30 @@ def mergeShapeWithPrimitive(primitiveShape, intersectingShape, iou):
     # TODO: Examine if we should consult the confidence score & iou in order to see
     # if we should instead keep the bounding box produced by the neural network.
 
+    # Set content for the intersectingShape.
+    intersectingShape.content = primitiveShape.content
+
     # Once we classify a shape, since it can no longer be a container, we
     # remove all the containing shapes.
     intersectingShape.contained = []
 
+# Given a list of text predictions from some image, and a list of shape primitives
+# previously detected, finds shapes which have a high degree of intersection with
+# the bounding boxes returned from the text detection, and populates the content
+# for the respective text component accordingly.
+def resolveTextUsingPredictions(textPredictions, shapes, lastShapeId):
+
+    for text, bounding_rect in textPredictions:
+        predicted_bounding_rect = Shape(bounding_rect, shapeType="header", content=text)
+        intersecting_shapes = getIntersectingShapes(predicted_bounding_rect, shapes, _IOU_THRESHOLD)
+        # Sort intersecting shapes by largest intersections.
+        intersecting_shapes = np.array(intersecting_shapes, dtype=[('shape', Shape), ('iou', float)])
+        intersecting_shapes.sort(order='iou')
+        if (len(intersecting_shapes) >= 1):
+            intersecting_shape, iou = intersecting_shapes[-1]
+            mergeShapeWithPrimitive(predicted_bounding_rect, intersecting_shape, iou)
+
+    return shapes
 
 def resolveShapesUsingPredictions(primitives, shapes, lastShapeId):
 
@@ -88,10 +108,6 @@ def resolveShapesUsingPredictions(primitives, shapes, lastShapeId):
         predictedShape = Shape(vertices, id=lastShapeId, shapeType=label)
         lastShapeId = lastShapeId + 1
 
-        # intersecting_shapes = [
-        #         (shape, shape.calc_iou(predictedShape)) for shape in shapes
-        #         if shape.calc_iou(predictedShape) >= _IOU_THRESHOLD
-        #     ]
         intersecting_shapes = getIntersectingShapes(predictedShape, shapes, _IOU_THRESHOLD)
 
         # Sort intersecting shapes by largest intersections.

@@ -8,6 +8,8 @@ const inferGrid = require('./inferGrid');
 const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./implicitNest');
 const { getLastACRObjectId, sortshapesAlongYAxis } = require('../geometry');
 const inferTypes = require('./inferTypes');
+// const inferHandwrittenText = require("./inc");
+
 const inferCompoundPrimitives = require('./inferCompound');
 
 // Infer properties about the shapes which will then be generated into HTML code.
@@ -56,6 +58,9 @@ module.exports = function inferProperties(shapes){
     shape = inferGrid(shape);
 
   });
+
+  // Infer all handwritten text present in the image.
+
 
   return shapes;
 }

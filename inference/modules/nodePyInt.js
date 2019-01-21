@@ -43,21 +43,23 @@ module.exports = (path, args, ops) => {
 
         // On successful data output, resolve the Promise.s
         pyProc.stdout.on('data', (data) => {
-
           data = data.toString('utf8');
-
           output += data;
         });
+
+        pyProc.stderr.on('data', data => reject(data.toString('utf8')));
 
         // On close, resolve the promise as empty.
         pyProc.on('close', () => {
 
           // Attempt to parse as JSON.
           try {
-            output = JSON.parse(output);
+            var parsed = JSON.parse(output);
+            output = parsed;
           } catch(e){
             // Data is not JSON. Return raw string.
-            log(`Warning: Data returned by ${path} is not in JSON format.`);
+            log(`Warning: Data returned by ${path} is not in JSON format:`, output);
+            reject(output);
           }
 
           resolve(output);
