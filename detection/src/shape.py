@@ -16,7 +16,7 @@ def log(message):
 
 class Shape:
 
-    def __init__(self, vertices, id=None, shapeType=None):
+    def __init__(self, vertices, id=None, shapeType=None, content=None):
         if (type(vertices) != np.ndarray):
             vertices = np.array(vertices)
 
@@ -34,6 +34,7 @@ class Shape:
         self.width = float(calculateWidth(self.vertices))
         self.height = float(calculateHeight(self.vertices))
         self.relativeVertices = calculateRelativeVertices(self.vertices[0][0], self.width, self.height, self.vertices, self.vertices)
+        self.content = content
 
         # Level describes the level at which the shape is currently nested.
         # Level 0 refers to the global container, whereas level 1 represents

@@ -6,12 +6,14 @@ from findContainer import getContainers, nestShapes
 from detectLine import detectAndNestIntersections, detectAndNestLines
 from shapesToJSON import serialiseShapeHierachy
 from clf.yolo_cnn_detector import predict_primitives, draw_pred
-from primitiveDetect import resolveShapesUsingPredictions
+from resolvePrediction import resolveShapesUsingPredictions, resolveTextUsingPredictions
+from textDetect import detectTextFromImage
 import cv2
 import os
 import imutils
 import json
 import argparse
+import sys
 
 def outputResultsToDir(dir, filename, json, annotated=None, containers=None, intersections=None, lines=None, cnn_preds=None, full_detections=None):
     # Output results.
@@ -78,6 +80,9 @@ if (__name__ == "__main__"):
     # Detect presence of complex shape primitives using YOLO CNN.
     primitives = predict_primitives(getFreshImage(args['image']), image.shape)
 
+    # Detect presence of text using Google Cloud Vision API.
+    textPredictions = detectTextFromImage(getFreshImage(args['image']), '.'+args['image'].split('.')[-1])
+
     # Draw all shapes detected by the CNN.
     cnnPredsImg = getFreshImage(args['image'])
     for (x, y, w, h), vertices, label, id, confidence in primitives:
@@ -106,6 +111,9 @@ if (__name__ == "__main__"):
     # step, attempt to identify each shape correctly using bounding box information
     # and the set of predicted primitives from CNN classification.
     shapes = resolveShapesUsingPredictions(primitives, shapes, lastShapeId)
+
+    # Resolve text predictions with shapes detected using YOLO CNN.
+    shapes = resolveTextUsingPredictions(textPredictions, shapes, lastShapeId)
 
     # Draw all detected primitives.
     fullPrimitivesImg = drawShapes(shapes, getFreshImage(args['image']))
