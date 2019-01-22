@@ -151,7 +151,7 @@ function BootstrapObject(shape){
         attributes: {
           for: `input_${shape.id}`
         },
-        content: 'Enter text below.'
+        content: shape.content ? shape.content : 'Enter text below.'
       },
       {
         elementType: 'input',
@@ -167,13 +167,13 @@ function BootstrapObject(shape){
 
     if (shape.type == "header"){
       return [{
-        content: 'Header'
+        content: shape.content ? shape.content : 'Header'
       }]
     }
 
     if (shape.type == "paragraph"){
       return [{
-        content: "Lorem ipsum dolor amet"
+        content: shape.content ? shape.content : "Lorem ipsum dolor amet"
       }]
     }
 
