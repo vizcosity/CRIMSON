@@ -84,9 +84,12 @@ def mergeShapeWithPrimitive(primitiveShape, intersectingShape, iou):
 # for the respective text component accordingly.
 def resolveTextUsingPredictions(textPredictions, shapes, lastShapeId):
 
-    for text, bounding_rect in textPredictions:
+    # Skip the first prediction, as this returns a bounding box over all
+    # text detected in the image, instead of the components, which we are looking
+    # for. This will cause panels and containers to be resolved as text.
+    for text, bounding_rect in textPredictions[1:]:
         predicted_bounding_rect = Shape(bounding_rect, shapeType="header", content=text)
-        intersecting_shapes = getIntersectingShapes(predicted_bounding_rect, shapes, _IOU_THRESHOLD)
+        intersecting_shapes = getIntersectingShapes(predicted_bounding_rect, shapes, _IOU_THRESHOLD - 0.2)
         # Sort intersecting shapes by largest intersections.
         intersecting_shapes = np.array(intersecting_shapes, dtype=[('shape', Shape), ('iou', float)])
         intersecting_shapes.sort(order='iou')
