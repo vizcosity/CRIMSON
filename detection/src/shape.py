@@ -16,7 +16,7 @@ def log(message):
 
 class Shape:
 
-    def __init__(self, vertices, id=None, shapeType=None, content=None):
+    def __init__(self, vertices, id=None, shapeType=None, content=False):
         if (type(vertices) != np.ndarray):
             vertices = np.array(vertices)
 

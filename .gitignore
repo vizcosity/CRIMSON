@@ -19,3 +19,4 @@ web-platform/.uploads/*
 web-platform/node_modules/*
 web-platform/.generated/*
 web-platform/.cache/*
+.output/
