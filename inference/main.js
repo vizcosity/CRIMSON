@@ -6,6 +6,7 @@
 
  const bundle = require('./modules/bundle');
  const detectPrimitives = require('./modules/detectPrimitives');
+ const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
  const package = require('./package.json');
  const {generateCode, generateACR } = require('./modules/generateCode');
  const mkdir = require('mkdirp');
@@ -45,6 +46,9 @@ module.exports = {
     acr = filterPrimitives(acr);
 
     log(`Generating code for`, fileName);
+
+    log(`Inferring compound primitives for`, fileName);
+    acr = inferCompoundPrimitives(acr);
 
     log(`Code generation parameters:`, fileName, file, outputDir, context, project, imgPath, zip);
 

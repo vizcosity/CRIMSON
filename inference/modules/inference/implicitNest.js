@@ -9,7 +9,7 @@
  * @ Aaron Baw 2018
  */
 
-const { getHighestX, getLowestX, getHighestY, getLowestY, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId } = require('../geometry.js');
+const { getHighestX, getLowestX, getHighestY, getLowestY, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId, sortshapesAlongYAxis } = require('../geometry.js');
 const { Container, Row } = require('../ACR.js');
 const { padding } = require('../../config/config.json');
 
@@ -130,9 +130,6 @@ function implicitlyNestHorizontallyWithRespectToShape(currentShape, shapesAtLeve
 
   // Find the height and width of the container.
   var allVertices = rowBuffer.map(shape => shape.meta.vertices).flat();
-
-  // log(`All Vertices in buffer:`, allVertices);
-
   var rowHeight = getHighestY(allVertices) - getLowestY(allVertices) + padding;
   var rowWidth = getHighestX(allVertices) - getLowestX(allVertices) + padding;
 
@@ -159,48 +156,162 @@ function implicitlyNestHorizontallyWithRespectToShape(currentShape, shapesAtLeve
   return shapesAtLevel;
 }
 
+function getHorizontallyOverlapping(shape, shapes){
+  return shapes.filter(s => s.id !== shape.id && doesHorizontallyOverlap(s, shape));
+}
+
+function getNewRowDimensions(rowBuffer){
+  log(`Getting row dimensions for row buffer`, rowBuffer.map(s => s.id));
+  var allVertices = rowBuffer.map(shape => shape.meta.vertices).flat();
+  var highestY = getHighestY(allVertices);
+  var lowestY = getLowestY(allVertices);
+  var highestX = getHighestX(allVertices);
+  var lowestX = getLowestX(allVertices);
+  log(`Highest Y:`, highestY, `Lowest Y:`, lowestY);
+  var height = highestY - lowestY;
+  var width = highestX - lowestX;
+
+  return { height, width, midpoint: [(highestX + lowestX) / 2, (highestY + lowestY) / 2] };
+}
+
 // Given the lastId, shapes at a current level, and a parent, nests shapes within
 // that level appropriately into rows.
+// function implicitlyNestIntoRows(lastId, shapesAtLevel, parent){
+//
+//
+//     if (!shapesAtLevel || shapesAtLevel.length === 0) return shapesAtLevel;
+//
+//     log(`Implicitly nesting into rows at level`, shapesAtLevel[0].level);
+//
+//     // var shapesByHeight = shapesAtLevel.sort((a, b) => a.meta.absoluteHeight < b.meta.absoluteHeight ? 1 : -1);
+//
+//     // log(`Sorted by height`, shapesByHeight);
+//
+//     // var tallestShape = shapesByHeight[0];
+//
+//     // log(`Tallest shape`, tallestShape);
+//
+//     // log(`Tallest shape (${tallestShape.meta.absoluteWidth}) is ${tallestShape.id}`);
+//
+//     // Iterate through all the shapes at the current nesting level, and examine
+//     // adjacent shapes which may be placed at the same vertical level. Where this
+//     // is the case, we nest both of them into a new container, and continue doing
+//     // so for all other shapes at the same level which meet the same criteria.
+//     shapesAtLevel.forEach(shape => {
+//
+//       log(`Shape count before nesting:`, shapesAtLevel.length);
+//       shapesAtLevel = implicitlyNestHorizontallyWithRespectToShape(shape, shapesAtLevel, lastId, parent);
+//       log(`Shape count after nesting:`, shapesAtLevel.length);
+//
+//     });
+//
+//     return shapesAtLevel;
+//
+// };
 function implicitlyNestIntoRows(lastId, shapesAtLevel, parent){
 
+  log(`Implicitly nesting`, shapesAtLevel.map(s => s.id));
 
-    if (!shapesAtLevel || shapesAtLevel.length === 0) return shapesAtLevel;
+  var rowBuffer = [];
 
-    log(`Implicitly nesting into rows at level`, shapesAtLevel[0].level);
+  // Make a temporary copy of the number of shapes at the current level.s
+  var shapes = shapesAtLevel.concat();
 
-    // var shapesByHeight = shapesAtLevel.sort((a, b) => a.meta.absoluteHeight < b.meta.absoluteHeight ? 1 : -1);
+  // Iterate over all shapes with a for loop so that mutations of the array
+  // will update the remaining number of iterations.
+  for (var i = 0; i < shapes.length; i++){
+    var shape = shapes[i];
+    var overlappingShapes = getHorizontallyOverlapping(shape, shapes);
 
-    // log(`Sorted by height`, shapesByHeight);
+    log(`${shape.id} overlaps with`, overlappingShapes.map(s => s.id));
 
-    // var tallestShape = shapesByHeight[0];
+    log(`Shapes before filtering to remove overlapping shapes:`, shapes.map(s => s.id));
+    // Remove overlappingShapes from the shapes array.
+    shapes = shapes.filter(s => overlappingShapes.map(os => os.id).indexOf(s.id) === -1);
+    log(`Shapes after filtering to remove overlapping shapes:`, shapes.map(s => s.id));
 
-    // log(`Tallest shape`, tallestShape);
 
-    // log(`Tallest shape (${tallestShape.meta.absoluteWidth}) is ${tallestShape.id}`);
+    for (var j = 0; j < overlappingShapes.length; j++){
+      var overlappingShape = overlappingShapes[j];
+      var extraOverlapping = getHorizontallyOverlapping(overlappingShape, shapes);
+      overlappingShapes = overlappingShapes.concat(extraOverlapping);
+      shapes = shapes.filter(s => overlappingShapes.map(os => os.id).indexOf(s.id) === -1);
+    }
 
-    // Iterate through all the shapes at the current nesting level, and examine
-    // adjacent shapes which may be placed at the same vertical level. Where this
-    // is the case, we nest both of them into a new container, and continue doing
-    // so for all other shapes at the same level which meet the same criteria.
-    shapesAtLevel.forEach(shape => {
+    rowBuffer = overlappingShapes;
+    if (shapeArraysEqual(rowBuffer, parent.contains) || rowBuffer.length == 0) {
+      // Revert the shapes array so that we don't lose any shapes that would have
+      // otherwise been nested into a new row.
+      log(`PRospective row:`, rowBuffer.map(s => s.id), `is empty or the same as parent contains array`, parent.contains.map(s => s.id));
+      shapes = shapesAtLevel;
+      continue;
+    }
+    else {
+      var { height, width, midpoint } = getNewRowDimensions(rowBuffer);
+      log(`Creating new row of height ${height} and width ${width}.`);
+      var row = new Row({
+        id: ++lastId,
+        midpoint: midpoint,
+        height: height,
+        width: width,
+        level: parent.level + 1,
+        parent: parent
+      });
 
-      log(`Shape count before nesting:`, shapesAtLevel.length);
-      shapesAtLevel = implicitlyNestHorizontallyWithRespectToShape(shape, shapesAtLevel, lastId, parent);
-      log(`Shape count after nesting:`, shapesAtLevel.length);
+      // Add the current shape to the row buffer.
+      // rowBuffer.push(shape);
+      // shapes = shapes.filter(s => s.id !== shape.id);
 
-    });
+      // Add all shapes from the rowBuffer to the row.
+      while (rowBuffer.length > 0)
+        row.addContainingShape(rowBuffer.shift());
 
-    return shapesAtLevel;
+      log(`Added rowBuffer shapes to prospective row:`,row.contains.map(s => s.id));
 
-};
+      // Add the row to the shapes array.
+      shapes.push(row);
+
+      log(`Added the new row to the shapes array:`, shapes.map(s => Object({type: s.type, id: s.id})));
+
+      // Update the parent's contains array.
+      shapesAtLevel = shapes;
+      parent.contains = shapes;
+
+      log(`Updated the parent.contains array:`, parent.contains.map(s => s.id));
+    }
+
+  }
+
+  return shapesAtLevel;
+}
+
+// Recursively nests all shapes within implicit rows and containers.
+function nest(shapes){
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => {
+
+    // Recursively nest all containing shapes.
+    shape.contains = nest(shape.contains);
+
+    shape.contains = implicitlyNestIntoRows(getLastACRObjectId(shapes), shape.contains, shape);
+
+    shape.contains = sortshapesAlongYAxis(shape.contains);
+
+  });
+
+  return shapes;
+}
 
 // Module entry point.
 module.exports = {
   implicitlyNestIntoRows,
-  implicitlyNestIntoVerticalContainers
+  implicitlyNestIntoVerticalContainers,
+  nest
 };
 
 // Logging.
 function log(...msg){
-  if (process.env.DEBUG) console.log(`IMPLICIT NEST |`, ...msg);
+  // if (process.env.DEBUG) console.log(`IMPLICIT NEST |`, ...msg);
 }

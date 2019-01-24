@@ -1,6 +1,7 @@
 {
   "container { header; paragraph; button }": "card_text_button",
   "container { image; header; paragraph; button }": "card_image_text_button",
+  "container { image; header; paragraph }": "card_image_text",
   "container { header; paragraph }": "card_centered_content",
   "container { header; header; header }": "list_vertical",
   "container { header; header }": "hero_text"

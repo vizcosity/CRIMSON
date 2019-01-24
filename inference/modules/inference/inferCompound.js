@@ -38,9 +38,9 @@ const serialise = shape => {
 
 };
 
-module.exports = function inferCompoundPrimitives(shapes){
+function inferCompoundPrimitivesAtLevel(shapes){
 
-  log(`Inferring compound primitives.`);
+  console.log(`Inferring compound primitives on`, shapes.map(s => s.id));
 
   // Compound primitives will start out as being containers, or rows.
   shapes.filter(s => s.type == "container" || s.type == "row").forEach(shape => {
@@ -55,15 +55,33 @@ module.exports = function inferCompoundPrimitives(shapes){
 
     if (compoundPrimitiveMap[serialised]) {
       shape.type = compoundPrimitiveMap[serialised];
-      // console.log(`${shape.id} (${serialised}) is a compound primitive:`, compoundPrimitiveMap[serialised]);
+      console.log(`${shape.id} (${serialised}) is a compound primitive:`, compoundPrimitiveMap[serialised]);
     }
 
 
   });
 
   return shapes;
-};
+}
+
+function inferCompoundPrimitives(shapes){
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => {
+    shape.contains = inferCompoundPrimitives(shape.contains);
+    shape.contains = inferCompoundPrimitivesAtLevel(shape.contains);
+  });
+
+  return shapes;
+
+}
+
+module.exports = {
+  inferCompoundPrimitivesAtLevel: inferCompoundPrimitivesAtLevel,
+  inferCompoundPrimitives: inferCompoundPrimitives,
+}
 
 function log(...msg){
-  if (process.env.debug) console.log(`INFER COMPOUND |`, ...msg);
+  if (process.env.DEBUG) console.log(`INFER COMPOUND |`, ...msg);
 }

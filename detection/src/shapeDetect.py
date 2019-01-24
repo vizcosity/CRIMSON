@@ -81,7 +81,11 @@ if (__name__ == "__main__"):
     primitives = predict_primitives(getFreshImage(args['image']), image.shape)
 
     # Detect presence of text using Google Cloud Vision API.
-    textPredictions = detectTextFromImage(getFreshImage(args['image']), '.'+args['image'].split('.')[-1])
+    textPredictions = []
+    # Safely attempt to detect text (handle spotty internet connections).
+    try:
+        textPredictions = detectTextFromImage(getFreshImage(args['image']), '.'+args['image'].split('.')[-1])
+    except: pass
 
     # Draw all shapes detected by the CNN.
     cnnPredsImg = getFreshImage(args['image'])
