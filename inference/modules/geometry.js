@@ -90,7 +90,22 @@ const getLastACRObjectId = acr => {
 
 }
 
-module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId };
+// Finds and returns an object in the ACR tree given an ID.
+const getACRObjectById = (acr, id) => {
+
+  if (!acr || acr.length == 0) return;
+
+  for (var i in acr){
+    var shape = acr[i];
+    if (shape.id == id) return shape;
+    var acrObjectWithinShape = findACRObjectById(shape.contains, id);
+    if (acrObjectWithinShape) return acrObjectWithinShape;
+  }
+
+}
+
+
+module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId, getACRObjectById };
 
 function log(...msg){
   if (process.env.DEBUG) console.log(`GEOMETRY |`, ...msg);

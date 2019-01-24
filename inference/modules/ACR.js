@@ -81,6 +81,7 @@ class Rectangle extends ACRObject {
     var [ mx, my ] = midpoint;
     var dx = width/2;
     var dy = height/2;
+    
     super(id, parent, type, [
       [mx - dx, my-dy],
       [mx - dx, my+dy],

@@ -12,11 +12,13 @@ const typeMap = require('./typeToElementMap.json');
 
 function BootstrapObject(shape){
 
-  // log("Transforming shape of type", shape.type);
+  if (!shape.content) log("Transforming shape", shape);
 
   this.shape = shape;
 
-  this.elementType = typeMap[shape.type] ? typeMap[shape.type] : 'div';
+  // If there is no element type, but the argument is defined, then we assume that
+  // the object should simply be a string that is returned.
+  this.elementType = typeMap[shape.type] ? typeMap[shape.type] : (shape.type ? 'div' : null);
 
   this.attributes = {
     'class': resolveClass(shape),
@@ -32,7 +34,7 @@ function BootstrapObject(shape){
 
     var classes = "";
 
-    if (shape.gridCell && shape.gridCell.count) classes +=  `column container col-${shape.gridCell.count}`;
+    if (shape.gridCell && shape.gridCell.count) classes +=  ` column container col-${shape.gridCell.count}`;
 
     switch (shape.type){
       case "navigation":
@@ -54,10 +56,13 @@ function BootstrapObject(shape){
         classes += " form-group";
         break;
       case "card_text_button":
-        classes += "card";
+        classes += " card";
+        break;
+      case "panel":
+        classes += " container panel";
         break;
       default:
-        classes += shape.type;
+        classes += ` ${shape.type}`;
     }
 
     return classes;
@@ -69,20 +74,22 @@ function BootstrapObject(shape){
     // If shape is a type of container, we want to preserve the relative height.
     if (["container", "row"].indexOf(shape.type) !== -1) {
       return {
-        style: `height:${shape.meta.relativeHeight}`
+        // style: `height:${shape.meta.relativeHeight}`
       }
     }
 
     if (shape.type == "image"){
       // Use template image for now.
       return {
-        src: src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_167219acfd8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_167219acfd8%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274.09375%22%20y%3D%22104.6546875%22%3E200x200%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+        // src: src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_167219acfd8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_167219acfd8%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274.09375%22%20y%3D%22104.6546875%22%3E200x200%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+        src: 'http://source.unsplash.com/random/800x800'
       }
     }
 
     if (shape.type == "button"){
       return {
-        type:"button"
+        type:"button",
+        tabindex: '0'
       }
     }
   }
@@ -166,18 +173,23 @@ function BootstrapObject(shape){
     }
 
     if (shape.type == "header"){
-      return [{
-        content: shape.content ? shape.content : 'Header'
-      }]
+      return shape.content ? shape.content : 'Header';
     }
 
     if (shape.type == "paragraph"){
-      return [{
-        content: shape.content ? shape.content : "Lorem ipsum dolor amet"
-      }]
+      return shape.content ? shape.content : "Lorem ipsum dolor amet";
     }
 
     if (shape.type == "card_text_button"){
+      var cardTitle = new BootstrapObject(shape.contains[0]);
+      cardTitle.addClass('card-title');
+      log(`Card Title:`, cardTitle);
+      var cardBody = new BootstrapObject(shape.contains[1]);
+      log(`Card Body:`, cardBody);
+      cardBody.addClass('card-text');
+      var cardBtn = new BootstrapObject(shape.contains[2]);
+
+
       return [{
         elementType: 'div',
         content: {
@@ -185,25 +197,122 @@ function BootstrapObject(shape){
           attributes: {
             class: 'card-body'
           },
-          content: [
-            {
-              elementType: 'h5',
-              attributes: { class: 'card-title' },
-              // If there is content attatched to the shape, then we embed it.
-              // Otherwise we use placeholder text.
-              content: shape.contains[0].content ? shape.contains[0].content : 'Card Title'
-            }, {
-              elementType: 'p',
-              attributes: { class: 'card-text' },
-              content: shape.contains[1].content ? shape.contains[1].content : 'Card Body Text. Lorem Ipsum dolor amet.'
-            }, {
-              elementType: 'a',
-              attributes: { class: 'btn btn-primary' },
-              content: shape.contains[2].content ? shape.contains[2].content : 'Card Button'
-            }
-          ]
+          content: [cardTitle, cardBody, cardBtn]
         }
       }]
+    }
+
+    if (shape.type == "card_image_text_button") {
+
+      var cardImg = new BootstrapObject(shape.contains[0]);
+
+      var cardTitle = new BootstrapObject(shape.contains[1]);
+
+      cardTitle.attributes.class = cardTitle.attributes.class ? `${cardTitle.attributes.class} card-title` : 'card-title';
+
+      var cardBody = new BootstrapObject(shape.contains[2]);
+
+      cardBody.attributes.class = cardBody.attributes.class ? `${cardBody.attributes.class} card-text` : 'card-text';
+
+      var cardBtn = new BootstrapObject(shape.contains[3]);
+
+      return [{
+                elementType: 'div',
+                attributes: {
+                  class: 'card'
+                  // TODO: Check if we need to set a custom width here, or if it can be
+                  // handled by assigning grid cells.
+                },
+                content: [{
+                  elementType: 'div',
+                  attributes: {
+                    class: 'card-body'
+                  },
+                  content: [ cardImg,
+                      {
+                        elementType: 'div',
+                        attributes: { class: 'card-body' },
+                        content: [cardTitle, cardBody, cardBtn]
+                      }
+                    ]
+                  }]
+              }]
+    }
+
+    if (shape.type == "card_image_text"){
+      var cardImg = new BootstrapObject(shape.contains[0]);
+      cardImg.attributes.class = cardImg.attributes.class ? `${cardImg.attributes.class} card-img-top`: 'card-img-top';
+      var cardTitle = new BootstrapObject(shape.contains[1]);
+      cardTitle.attributes.class = cardTitle.attributes.class ? `${cardTitle.attributes.class} card-title` : 'card-title';
+      // Set the header to h5.
+      cardTitle.elementType = 'h5';
+      var cardBody = new BootstrapObject(shape.contains[2]);
+      cardBody.attributes.class = cardBody.attributes.class ? `${cardBody.attributes.class} card-text`: 'card-text';
+
+      return [{
+        elementType: 'div',
+        attributes: { class: 'card' },
+        content: [ cardImg, {
+          elementType: 'div',
+          attributes: { class: 'card-body' },
+          content: [cardTitle, cardBody]
+        }]
+      }];
+    }
+
+    if (shape.type == "card_centered_content") {
+
+      var cardTitle = new BootstrapObject(shape.contains[0]);
+      cardTitle.attributes.class = cardTitle.attributes.class ? `${cardTitle.attributes.class} card-title`: 'card-title';
+      var cardBody = new BootstrapObject(shape.contains[1]);
+      cardBody.attributes.class = cardBody.attributes.class ? `${cardBody.attributes.class} card-text` : 'card-text';
+
+
+      return [{
+        elementType: 'div',
+        attributes: { class: 'card text-center' },
+        content: [{
+          elementType: 'div',
+          attributes: { class: 'card-body' },
+          content: [cardTitle, cardBody]
+        }]
+      }]
+    }
+
+    // Hero text without image maps to a jumbotron in bootstrap.
+    if (shape.type == "hero_text"){
+      var jumbTitle = new BootstrapObject(shape.contains[0]);
+      jumbTitle.attributes.class = jumbTitle.attributes.class ? `${jumbTitle.attributes.class} display-4` : 'display-4';
+      var jumbSubheader = new BootstrapObject(shape.contains[1]);
+      jumbSubheader.attributes.class = jumbSubheader.attributes.class ? `${jumbSubheader.attributes.class} lead` : 'lead';
+
+
+      return [{
+        elementType: 'div',
+        attributes: { class: 'container' },
+        content: [jumbTitle, jumbSubheader]
+      }];
+    }
+
+    if (shape.type == "list_vertical"){
+
+      var items = shape.contains.map(shape => {
+        var item = new BootstrapObject(shape);
+        item.attributes.class = item.attributes.class ? `${item.attributes.class} list-group-item` : 'list-group-item';
+        item.elementType = 'li';
+        return item;
+      });
+
+      return [{
+        elementType: 'div',
+        attributes: { class: 'card' },
+        content: [{
+          elementType: 'ul',
+          attributes: { class: 'list-group list-group-flush' },
+          content: items
+        }]
+      }]
+
     }
 
     return [{
@@ -218,6 +327,12 @@ function BootstrapObject(shape){
     },
     ...shape.contains.map(shape => new BootstrapObject(shape))];
 
+  }
+
+  // Instance methods for bootstrap objects.
+  // Add a new class to the bootstrap object.
+  this.addClass = function (newClass){
+    this.attributes.class = this.attributes.class ? `${this.attributes.class} ${newClass}` : 'newClass';
   }
 
 }

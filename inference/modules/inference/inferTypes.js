@@ -88,13 +88,13 @@ const isRow = shape => {
       if (i == j) continue;
 
       if (shape.id == 10){
-      log(shape.contains)
+      // log(shape.contains)
       // log(`${shape.contains[i].id}`,getHighestY(shape.contains[i]), `${shape.contains[i].id}`,getLowestY(shape.contains[i]));
       // log(`${shape.contains[j].id}`,getHighestY(shape.contains[j]), `${shape.contains[j].id}`,getLowestY(shape.contains[i]));
 
       if (shape.contains[i].type == "intersection") continue;
-      log(shape.contains[i].id, getHighestY(shape.contains[i]), shape.contains[j].id, getLowestY(shape.contains[j]));
-      log(shape.contains[i].id, getLowestY(shape.contains[i]), shape.contains[j].id, getHighestY(shape.contains[j]));
+      // log(shape.contains[i].id, getHighestY(shape.contains[i]), shape.contains[j].id, getLowestY(shape.contains[j]));
+      // log(shape.contains[i].id, getLowestY(shape.contains[i]), shape.contains[j].id, getHighestY(shape.contains[j]));
       }
 
       // The highestY of the shape should not be below the lowestY of the other shape.
@@ -118,8 +118,6 @@ const relativeDistance = (parent, child, axis=0) => {
   var start = midpoint - (parent.meta.absoluteWidth / 2);
 
   var dist = child.meta.midpoint[axis] - start;
-
-  // log(child.id, ` has dist of `, dist);
 
   return dist / parent.meta.absoluteWidth;
 }
@@ -235,8 +233,6 @@ const inferInteractiveContainers = shapes => {
 // TODO: Refactor this to use a promise - based workflow.
 module.exports = (shapes) => {
 
-  log(`Inferring from`, shapes.length, `shapes.`);
-
   // Detect presence of *panels*, which are full-height containers / pages.
   shapes = inferPanels(shapes);
 
@@ -245,10 +241,10 @@ module.exports = (shapes) => {
   shapes = inferRows(shapes);
 
   // Infer navigation on the topmost panel only.
-  shapes = inferNavigation(shapes);
+  // shapes = inferNavigation(shapes);
 
   // Infer footer on the last panel only.
-  shapes = inferFooter(shapes);
+  // shapes = inferFooter(shapes);
 
   return shapes;
 }
