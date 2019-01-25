@@ -5,7 +5,7 @@
  * @ Aaron Baw 2018
  */
 
-export default class Primitive {
+class Primitive {
   constructor(id, parent, type="container", meta={
     absoluteWidth:50,
     absoluteHeight: 50
@@ -61,4 +61,8 @@ export default class Primitive {
       this.contains = [];
 
   }
+}
+
+function newIDGenerator(shapes){
+
 }

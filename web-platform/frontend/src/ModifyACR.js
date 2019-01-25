@@ -11,7 +11,14 @@ import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
 import Primitive from './Primitive.js';
-import { getRelativeDistance, findACRObjectById, moveACRObject, resizeACRObject, getLastACRObjectId } from './geometry.js';
+import {
+  getRelativeDistance,
+  findACRObjectById,
+  moveACRObject,
+  resizeACRObject,
+  getLastACRObjectId,
+  newIDGenerator
+} from './geometry.js';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
 
