@@ -32,7 +32,7 @@ and so it is desireable to have all of the content centered vertically within it
 /* Navigation bar must be sticky and not exceed 60 pixels in height */
 nav {
   height: 70px;
-  position: absolute !important;
+  /* position: absolute !important; */
   top:0;
   width: 100%;
 }

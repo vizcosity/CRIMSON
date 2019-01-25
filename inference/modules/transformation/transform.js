@@ -9,10 +9,11 @@
  */
 
 const typeMap = require('./typeToElementMap.json');
+const { randomImageUrl } = require('./placeholder');
 
 function BootstrapObject(shape){
 
-  if (!shape.content) log("Transforming shape", shape);
+  // if (!shape.content) log("Transforming shape", shape);
 
   this.shape = shape;
 
@@ -38,7 +39,7 @@ function BootstrapObject(shape){
 
     switch (shape.type){
       case "navigation":
-        classes += " navbar navbar-expand-lg navbar-dark bg-dark";
+        classes += " navbar navbar-expand-lg navbar-light bg-light";
         break;
       case "footer":
         classes +=  " bd-footer";
@@ -82,7 +83,7 @@ function BootstrapObject(shape){
       // Use template image for now.
       return {
         // src: src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_167219acfd8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_167219acfd8%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274.09375%22%20y%3D%22104.6546875%22%3E200x200%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
-        src: 'http://source.unsplash.com/random/800x800'
+        src: randomImageUrl(shape)
       }
     }
 
@@ -109,7 +110,7 @@ function BootstrapObject(shape){
     }
 
     if (shape.type == "button"){
-      return `Button ${shape.id}`
+      return `Click here`
     }
 
     if (shape.type == "dropdown"){
@@ -122,7 +123,7 @@ function BootstrapObject(shape){
           'arias-haspopup': "true",
           'aria-expanded':"false"
         },
-        content: `Dropdown ${shape.id}`
+        content: `Select`
       },
       {
         elementType: 'div',
@@ -154,18 +155,11 @@ function BootstrapObject(shape){
 
     if (shape.type == "input"){
       return [{
-        elementType: 'label',
-        attributes: {
-          for: `input_${shape.id}`
-        },
-        content: shape.content ? shape.content : 'Enter text below.'
-      },
-      {
         elementType: 'input',
         attributes: {
           type: 'text',
           class: 'form-control',
-          placeholder: `Input ${shape.id}`,
+          placeholder: `Enter text here.`,
           id: `input_${shape.id}`
         }
       }
@@ -183,9 +177,9 @@ function BootstrapObject(shape){
     if (shape.type == "card_text_button"){
       var cardTitle = new BootstrapObject(shape.contains[0]);
       cardTitle.addClass('card-title');
-      log(`Card Title:`, cardTitle);
+      // log(`Card Title:`, cardTitle);
       var cardBody = new BootstrapObject(shape.contains[1]);
-      log(`Card Body:`, cardBody);
+      // log(`Card Body:`, cardBody);
       cardBody.addClass('card-text');
       var cardBtn = new BootstrapObject(shape.contains[2]);
 
@@ -226,7 +220,7 @@ function BootstrapObject(shape){
                 content: [{
                   elementType: 'div',
                   attributes: {
-                    class: 'card-body'
+                    class: 'card'
                   },
                   content: [ cardImg,
                       {
