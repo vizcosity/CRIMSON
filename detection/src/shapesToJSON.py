@@ -30,7 +30,7 @@ def composeShapeHierarchy(containers):
                 'area': float(container.area),
                 'vertices': container.vertices.tolist(),
                 'boundingBox': container.boundingBox.tolist(),
-                'relativeVertices': container.relativeVertices
+                # 'relativeVertices': container.relativeVertices
             },
             'content': container.content,
             'level': container.level,

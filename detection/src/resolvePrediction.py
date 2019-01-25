@@ -15,6 +15,7 @@ import numpy as np
 # Shapes with an IOU score greater than the below will be resolved into a single
 # classification.
 _IOU_THRESHOLD = 0.5
+_TEXT_CONFIDENCE_THRESHOLD = 0.65
 _DEBUG = False
 
 def addNewShape(shapes, newShape):
@@ -84,11 +85,18 @@ def mergeShapeWithPrimitive(primitiveShape, intersectingShape, iou):
 # for the respective text component accordingly.
 def resolveTextUsingPredictions(textPredictions, shapes, lastShapeId):
 
+    # Filter predictions by confidence threshold.
+    textPredictions = [ \
+        (word, confidence, bounding_rect) \
+        for (word, confidence, bounding_rect) in textPredictions if confidence >= _TEXT_CONFIDENCE_THRESHOLD \
+    ]
+
     # Skip the first prediction, as this returns a bounding box over all
     # text detected in the image, instead of the components, which we are looking
     # for. This will cause panels and containers to be resolved as text.
-    for text, bounding_rect in textPredictions[1:]:
-        predicted_bounding_rect = Shape(bounding_rect, shapeType="header", content=text)
+    for text, confidence, bounding_rect in textPredictions[1:]:
+        predicted_bounding_rect = Shape(bounding_rect, id=lastShapeId, shapeType="header", content=text)
+        lastShapeId = lastShapeId + 1
         intersecting_shapes = getIntersectingShapes(predicted_bounding_rect, shapes, _IOU_THRESHOLD - 0.2)
         # Sort intersecting shapes by largest intersections.
         intersecting_shapes = np.array(intersecting_shapes, dtype=[('shape', Shape), ('iou', float)])
@@ -96,6 +104,8 @@ def resolveTextUsingPredictions(textPredictions, shapes, lastShapeId):
         if (len(intersecting_shapes) >= 1):
             intersecting_shape, iou = intersecting_shapes[-1]
             mergeShapeWithPrimitive(predicted_bounding_rect, intersecting_shape, iou)
+        elif (intersecting_shapes is None or len(intersecting_shapes) == 0):
+            addNewShape(shapes, predicted_bounding_rect)
 
     return shapes
 
