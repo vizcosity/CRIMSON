@@ -95,7 +95,7 @@ h2 {
 
 /** Bounding Box styling */
 .bounding-box {
-  border: 2px dashed #78909C;
+  border: 1px dashed #78909C;
   background-color: rgba(240, 248, 255, 0.8);
   position: absolute;
   z-index: 1;
@@ -113,7 +113,7 @@ h2 {
 }
 
 .selected {
-  background-color: #FFC107 !important;
+  background-color: #2278ff36 !important;
 }
 
 .selected label {

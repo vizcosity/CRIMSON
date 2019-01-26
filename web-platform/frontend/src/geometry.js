@@ -138,7 +138,7 @@ function resizeACRObject(primitive, parent, width, height){
 }
 
 // Generates new shape IDs used for manual primitive creation.
-function newIDGenerator(shapes){
+function IDGenerator(shapes){
 
   this.nextId = getLastACRObjectId(shapes) + 1;
 
@@ -156,5 +156,5 @@ export {
   getUpperLeftmostVertex,
   getLastACRObjectId,
   resizeACRObject,
-  newIDGenerator
+  IDGenerator
 };
