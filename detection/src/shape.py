@@ -27,7 +27,10 @@ class Shape:
         self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
         self.rawArea = calculateArea(self.rawVertices)
         self.boundingBox = getBoundingBox(self.rawVertices) if len(self.rawVertices) > 1 else np.array([])
-        self.vertices = tidyAndApproximate(self.rawVertices, self.type)
+        # self.vertices = tidyAndApproximate(self.rawVertices, self.type)
+        # TEMP: Use Bounding Box a vertices for shape, since specific details about
+        # shape vertices when not using a rectangle is not required.
+        self.vertices = self.boundingBox
         self.edges = getEdges(self.vertices)
         self.midpoint = calculateMidpoint(self.vertices)
         self.area = calculateArea(self.vertices)
