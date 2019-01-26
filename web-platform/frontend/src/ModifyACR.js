@@ -10,7 +10,8 @@ import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
-import Primitive from './Primitive.js';
+// import Primitive from './Primitive.js';
+import { Container } from 'crimson-inference/modules/ACR.js';
 import {
   getRelativeDistance,
   findACRObjectById,
@@ -21,7 +22,6 @@ import {
 } from './geometry.js';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
-
 const BoundingBoxComponent = ({shape, className, parent, level, contains, getRef, children}) => {
 
 var meta = shape.meta;
@@ -139,8 +139,19 @@ class InteractiveACRModifier extends Component {
   }
 
   // Creates a new container primitive and adds to the ACR.
-  createPrimitive(parent){
-    var newPrimitive = new Primitive(this.idGenerator.newId(), parent);
+  createPrimitive(parent, {x, y}){
+    
+    x *= this.state.drawScaleFactor.x;
+    y *= this.state.drawScaleFactor.y;
+
+    var newPrimitive = new Container({
+      id: this.idGenerator.newId(),
+      parent: parent,
+      midpoint: [x, y],
+      width: parent.meta.absoluteWidth / 2,
+      height: parent.meta.absoluteHeight / 2,
+      level: parent.level + 1
+    })
     parent.contains.push(newPrimitive);
   }
 
@@ -207,7 +218,7 @@ class InteractiveACRModifier extends Component {
     // warnings about mutation of the state can safely be ignored.
     this.state.modifyingPrimitive.type = data.value;
 
-    console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
+    // console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
 
     // Set the state to end primitive selection.
     this.setState({
@@ -290,8 +301,6 @@ class InteractiveACRModifier extends Component {
   {
     if (!acr || acr.length === 0) return "";
 
-    console.log('Re-drawing.', acr);
-
     // We keep the acr object as a prop so that we do not have to call
     // setState when moving the primitive, as we would not be able to do
     // so by using a reference to some shape object.
@@ -323,7 +332,7 @@ class InteractiveACRModifier extends Component {
         },
 
         ondrop: event => {
-          console.log(`Dropping`, event.relatedTarget, `Into`, event.target, `This Primitive: `,primitive.id, `This Primitive Parent:`, parent.id);
+          // console.log(`Dropping`, event.relatedTarget, `Into`, event.target, `This Primitive: `,primitive.id, `This Primitive Parent:`, parent.id);
           this.nestWithinNewParent(event.relatedTarget, event.target)
         }
       }}
@@ -339,7 +348,7 @@ class InteractiveACRModifier extends Component {
       }
       onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))}
       onUp={e =>  e.stopPropagation() || this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))}
-      onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))}
+      onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
       onResizeMove={
         e => {
           e.stopPropagation();
