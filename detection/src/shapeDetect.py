@@ -65,7 +65,6 @@ def drawShapes(shapes, image):
 
 
 if (__name__ == "__main__"):
-    # print("WE DOIN IT FAM.")
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--image", required=True, help="Input path.")
     ap.add_argument("-o", "--output", required=False)
