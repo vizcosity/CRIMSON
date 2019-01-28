@@ -7,6 +7,9 @@
  const bundle = require('./modules/bundle');
  const detectPrimitives = require('./modules/detectPrimitives');
  const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
+ const inferProperties = require('./modules/inference/infer');
+ const { inferGrid } = require('./modules/inference/inferGrid');
+ const { getLastACRObjectId } = require('./modules/geometry');
  const package = require('./package.json');
  const {generateCode, generateACR } = require('./modules/generateCode');
  const mkdir = require('mkdirp');
@@ -47,8 +50,16 @@ module.exports = {
 
     log(`Generating code for`, fileName);
 
+    // Infer types on the potentially modified primitives.
+    acr = inferProperties(acr);
+
     log(`Inferring compound primitives for`, fileName);
     acr = inferCompoundPrimitives(acr);
+
+    // log(`Inferring Grids for`, fileName);
+    // acr = inferGrid(acr, getLastACRObjectId(acr));
+
+    // console.log(acr);
 
     log(`Code generation parameters:`, fileName, file, outputDir, context, project, imgPath, zip);
 
@@ -110,7 +121,7 @@ module.exports = {
     mkdir.sync(outputDir);
 
     log(`Bundling project and saving output to`, outputDir);
-    var zipPath = await bundle({zip, outputDir, imgPath, context: context, targets: {source: HTMLOutput, name: 'index.html'}});
+    var zipPath = await bundle({zip, outputDir, imgPath, context: context, filteredACR: acr, targets: {source: HTMLOutput, name: 'index.html'}});
 
     return zip ? zipPath : outputDir;
 

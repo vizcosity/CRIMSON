@@ -54,12 +54,11 @@ const nestImagesWithinContainers = (shapes, lastId) => {
   }
 }
 
-module.exports = (row, lastId) => {
-
+const inferGridAtLevel = (row, lastId) => {
 
   // Return if row is not a container.
   if (row.type != "row") {
-    return row;
+    return {row, lastId};
   }
 
   // Nest images within containers before assigning grid cells.
@@ -115,10 +114,30 @@ module.exports = (row, lastId) => {
   // row.contains = serialiseClasses(row.contains);
 
   // Return row.
-  return row;
+  return {row, lastId};
+};
+
+const inferGrid = (shapes, lastShapeId) => {
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => {
+    var { row, lastShapeId } = inferGridAtLevel(shape.contains, lastShapeId);
+    shape.contains = row;
+    // log(`Generated grid row:`, inferredGrid);
+    shape.contains = inferGrid(shape.contains, lastShapeId);
+  });
+
+  return shapes;
+
+};
+
+module.exports = {
+  // inferGrid,
+  inferGridAtLevel
 };
 
 // Utility functions.
 function log(...msg){
-  // if (process.env.DEBUG) console.log(`INFER GRID | `, ...msg);
+  if (process.env.DEBUG) console.log(`INFER GRID | `, ...msg);
 }
