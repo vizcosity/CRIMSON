@@ -11,8 +11,9 @@ const args = require('commander');
 const bundle = require('./modules/bundle');
 const package = require('./package.json');
 const detectPrimitives = require('./modules/detectPrimitives');
-const {generateCode, generateACR } = require('./modules/generateCode');
-const {filterPrimitives} = require('./modules/filterPrimitives');
+const { generateCode, generateACR } = require('./modules/generateCode');
+const { filterPrimitives } = require('./modules/filterPrimitives');
+const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
 const fs = require('fs');
 const { resolve, basename } = require('path');
 const mkdir = require('mkdirp');
@@ -45,6 +46,12 @@ detectPrimitives(imagePath).then(async primitives => {
 
   log(`Generating ACR for`, fileName);
   var ACR = generateACR(primitives);
+
+  // Infer compound primities as an extra step here. This is separated from the
+  // main ACR generation flow so that inference can take place after genration
+  // with regards to modification and viewing on the web platform.
+  ACR = inferCompoundPrimitives(ACR);
+
   var outputFilePath = resolve(outputDir,'acr.json')
   fs.writeFileSync(outputFilePath, JSON.stringify(ACR, null, 2));
 

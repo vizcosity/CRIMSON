@@ -241,7 +241,7 @@ module.exports = (shapes) => {
   shapes = inferRows(shapes);
 
   // Infer navigation on the topmost panel only.
-  // shapes = inferNavigation(shapes);
+  shapes = inferNavigation(shapes);
 
   // Infer footer on the last panel only.
   // shapes = inferFooter(shapes);

@@ -40,7 +40,7 @@ const serialise = shape => {
 
 function inferCompoundPrimitivesAtLevel(shapes){
 
-  console.log(`Inferring compound primitives on`, shapes.map(s => s.id));
+  // console.log(`Inferring compound primitives on`, shapes.map(s => s.id));
 
   // Compound primitives will start out as being containers, or rows.
   shapes.filter(s => s.type == "container" || s.type == "row").forEach(shape => {
@@ -55,7 +55,7 @@ function inferCompoundPrimitivesAtLevel(shapes){
 
     if (compoundPrimitiveMap[serialised]) {
       shape.type = compoundPrimitiveMap[serialised];
-      console.log(`${shape.id} (${serialised}) is a compound primitive:`, compoundPrimitiveMap[serialised]);
+      log(`${shape.id} (${serialised}) is a compound primitive:`, compoundPrimitiveMap[serialised]);
     }
 
 

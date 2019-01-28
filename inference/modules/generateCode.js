@@ -83,6 +83,8 @@ function log(...msg){
 
  function generateACRObjects(shapes){
 
+   console.log(`GENERATE CODE | Generating ACR Objects`);
+
    if (!shapes || shapes.length == 0) return shapes;
 
    for (var i = 0; i < shapes.length; i++){

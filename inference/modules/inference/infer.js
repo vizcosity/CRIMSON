@@ -4,7 +4,7 @@
  *  @ Aaron Baw 2018
  */
 
-const inferGrid = require('./inferGrid');
+const {inferGridAtLevel} = require('./inferGrid');
 const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./implicitNest');
 const { getLastACRObjectId, getACRObjectById, sortshapesAlongYAxis } = require('../geometry');
 const inferTypes = require('./inferTypes');
@@ -27,8 +27,10 @@ module.exports = function inferProperties(shapes){
   // Infer grid information for containers representing rows.
   shapes.forEach(shape => {
 
+    log(`Inferring grid on`, shape.id);
+
     // Infer grids.
-    shape = inferGrid(shape, getLastACRObjectId(shapes));
+    var { shape, lastShapeId } = inferGridAtLevel(shape, getLastACRObjectId(shapes));
     // shape.contains = inferGrid(shape, shape.contains, getLastACRObjectId(shapes));
     // shape.contains.forEach(shape => {
     //   shape = inferGrid(shape, getLastACRObjectId(shapes));
@@ -41,5 +43,5 @@ module.exports = function inferProperties(shapes){
 }
 
 function log(...msg){
-  if (process.env.debug) console.log(`INFER |`, ...msg);
+  if (process.env.DEBUG) console.log(`INFER |`, ...msg);
 }

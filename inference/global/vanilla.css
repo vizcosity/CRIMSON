@@ -5,6 +5,10 @@ html, body {
   font-family: "Avenir", sans-serif;
 }
 
+.row-fill-grid-space {
+  justify-content: space-between;
+}
+
 .container, .row {
   padding: 10px;
   margin: 0;
@@ -73,12 +77,15 @@ footer h1 {
   font-size: 20px;
 }
 
-/* Ensure that text is centered horizontally and vertically. */
+/* Ensure that headers is centered horizontally and vertically. */
 h1, p {
-  text-align: center;
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+h1 {
+  text-align: center;
 }
 
 /* Do not center text horizontally within a card by default. */
