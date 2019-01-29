@@ -67,7 +67,7 @@ const inferGridAtLevel = (row, lastId) => {
   row.contains = nestedImages;
 
   // Return if no contained shapes or just a single shape.
-  if (row.contains.length <= 1) return row;
+  if (row.contains.length <= 1) return {row, lastId};
 
   // Sort the contained shapes along x axis from left to right.
   row.contains = sortShapesAlongXAxis(row.contains);
@@ -122,18 +122,17 @@ const inferGrid = (shapes, lastShapeId) => {
   if (!shapes || shapes.length === 0) return shapes;
 
   shapes.forEach(shape => {
-    var { row, lastShapeId } = inferGridAtLevel(shape.contains, lastShapeId);
-    shape.contains = row;
-    // log(`Generated grid row:`, inferredGrid);
     shape.contains = inferGrid(shape.contains, lastShapeId);
+    var { row, lastId } = inferGridAtLevel(shape, lastShapeId);
+    lastShapeId = lastId;
+    shape = row;
   });
 
   return shapes;
-
 };
 
 module.exports = {
-  // inferGrid,
+  inferGrid,
   inferGridAtLevel
 };
 

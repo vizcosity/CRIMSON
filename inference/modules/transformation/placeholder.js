@@ -20,7 +20,7 @@ const randomImageUrl = shape => new Promise((resolve, reject) => {
 
   // if (contentStore[shape.id]) return resolve(contentStore[shape.id]);
 
-  console.log(`PLACEHOLDER | Fetching placeholder image from unsplash.`);
+  // console.log(`PLACEHOLDER | Fetching placeholder image from unsplash.`);
 
   // // Make a new request and convert the bytes recived into a base64 array.
   // request({

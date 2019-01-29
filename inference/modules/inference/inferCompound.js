@@ -83,5 +83,5 @@ module.exports = {
 }
 
 function log(...msg){
-  if (process.env.DEBUG) console.log(`INFER COMPOUND |`, ...msg);
+  // if (process.env.DEBUG) console.log(`INFER COMPOUND |`, ...msg);
 }

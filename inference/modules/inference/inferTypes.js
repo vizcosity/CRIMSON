@@ -7,7 +7,7 @@
 // Dependencies.
 const config = require('../../config/config.json');
 const isSubtypeOf = require('../subtypes.js');
-const { getLowestY, getHighestY } = require('../geometry.js');
+const { getLowestY, getHighestY, getLowestX, sortShapesAlongXAxis } = require('../geometry.js');
 
 // Default values.
 const _FRAG_THRESH = config.thresholds.fragmentArea;
@@ -59,7 +59,38 @@ const isFooter = (shape, shapes) => {
   var lowerMostContainer = shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] > b.meta.vertices[1][1]).reverse()[0];
 
   return lowerMostContainer && (shape.id == lowerMostContainer.id);
-}
+};
+
+// (BOOTSTRAP-SPECIFIC): Infers which element of the navigation bar should be used as the 'navbar-brand'
+// element.
+const inferNavbarBrand = nav => {
+
+  // Sort the elements by their position along the x axis.
+  nav.contains = sortShapesAlongXAxis(nav.contains);
+
+  // Examine the first element.
+  // If it is not of type 'header' or 'image', then we do not infer a navbar brand.
+  if (nav.contains.length === 0 || ["image", "header"].indexOf(nav.contains[0].type) === -1)
+    return {navBrand, nav};
+
+  // Check that the element is within 1/4 (nav-width) distance from the leftmost edge.
+  var navBrand = nav.contains[0];
+
+  // log(navbrand, `is a prospective navbarbrand.`);
+
+  var distanceFromLeftEdge = getLowestX(navBrand) - getLowestX(nav);
+  var relativeLeftEdgeDistance = distanceFromLeftEdge / nav.meta.absoluteWidth;
+  // log(`relativeLeftEdgeDistance:`, relativeLeftEdgeDistance);
+
+  if (relativeLeftEdgeDistance > 0.25) return {navBrand, nav};
+
+  // log(`${navbarBrand.id} is classified as the navbarbrand.`);
+  // nav.contains = nav.contains.filter(s => s.id !== navBrand.id);
+  navBrand.type = "navbar_brand,"+navBrand.type;
+
+  return {navBrand, nav};
+
+};
 
 const inferText = shapes => {
 
@@ -187,7 +218,10 @@ const inferNavigation = shapes => {
 
   // Infer navigation on the children of the first panel.
   shapes[0].contains.forEach(shape => {
-    if (isNavigation(shape, shapes[0].contains)) shape.type = "navigation";
+    if (isNavigation(shape, shapes[0].contains)) {
+      shape.type = "navigation";
+      // shape = inferNavbarBrand(shape);
+    }
   });
   return shapes;
 }
@@ -231,22 +265,26 @@ const inferInteractiveContainers = shapes => {
 }
 
 // TODO: Refactor this to use a promise - based workflow.
-module.exports = (shapes) => {
+module.exports = {
+  inferTypes: (shapes) => {
 
-  // Detect presence of *panels*, which are full-height containers / pages.
-  shapes = inferPanels(shapes);
+    // Detect presence of *panels*, which are full-height containers / pages.
+    shapes = inferPanels(shapes);
 
-  // Appropriate rows and containers must first be inferred.
-  shapes = inferFromMap(shapes);
-  shapes = inferRows(shapes);
+    // Appropriate rows and containers must first be inferred.
+    shapes = inferFromMap(shapes);
+    shapes = inferRows(shapes);
 
-  // Infer navigation on the topmost panel only.
-  shapes = inferNavigation(shapes);
+    // Infer navigation on the topmost panel only.
+    shapes = inferNavigation(shapes);
 
-  // Infer footer on the last panel only.
-  // shapes = inferFooter(shapes);
+    // Infer footer on the last panel only.
+    // shapes = inferFooter(shapes);
 
-  return shapes;
+    return shapes;
+
+  },
+  inferNavbarBrand
 }
 
 // Utility.
