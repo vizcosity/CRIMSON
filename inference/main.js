@@ -56,8 +56,8 @@ module.exports = {
     log(`Inferring compound primitives for`, fileName);
     acr = inferCompoundPrimitives(acr);
 
-    // log(`Inferring Grids for`, fileName);
-    // acr = inferGrid(acr, getLastACRObjectId(acr));
+    log(`Inferring Grids for`, fileName);
+    acr = inferGrid(acr, getLastACRObjectId(acr));
 
     // console.log(acr);
 

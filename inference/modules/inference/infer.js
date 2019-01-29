@@ -7,7 +7,7 @@
 const {inferGridAtLevel} = require('./inferGrid');
 const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows } = require('./implicitNest');
 const { getLastACRObjectId, getACRObjectById, sortshapesAlongYAxis } = require('../geometry');
-const inferTypes = require('./inferTypes');
+const {inferTypes} = require('./inferTypes');
 const {inferCompoundPrimitives, inferCompoundPrimitivesAtLevel} = require('./inferCompound');
 
 // Infer properties about the shapes which will then be generated into HTML code.
@@ -25,18 +25,18 @@ module.exports = function inferProperties(shapes){
   // shapes = inferCompoundPrimitivesAtLevel(shapes);
 
   // Infer grid information for containers representing rows.
-  shapes.forEach(shape => {
-
-    log(`Inferring grid on`, shape.id);
-
-    // Infer grids.
-    var { shape, lastShapeId } = inferGridAtLevel(shape, getLastACRObjectId(shapes));
-    // shape.contains = inferGrid(shape, shape.contains, getLastACRObjectId(shapes));
-    // shape.contains.forEach(shape => {
-    //   shape = inferGrid(shape, getLastACRObjectId(shapes));
-    // })
-
-  });
+  // shapes.forEach(shape => {
+  //
+  //   log(`Inferring grid on`, shape.id);
+  //
+  //   // Infer grids.
+  //   var { shape, lastShapeId } = inferGridAtLevel(shape, getLastACRObjectId(shapes));
+  //   // shape.contains = inferGrid(shape, shape.contains, getLastACRObjectId(shapes));
+  //   // shape.contains.forEach(shape => {
+  //   //   shape = inferGrid(shape, getLastACRObjectId(shapes));
+  //   // })
+  //
+  // });
 
 
   return shapes;
