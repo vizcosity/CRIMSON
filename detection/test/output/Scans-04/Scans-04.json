@@ -68,6 +68,7 @@
         ]
       ]
     },
+    "content": "None",
     "level": 0,
     "contains": [
       {
@@ -139,6 +140,7 @@
             ]
           ]
         },
+        "content": "None",
         "level": 1,
         "contains": [
           {
@@ -210,6 +212,7 @@
                 ]
               ]
             },
+            "content": "None",
             "level": 2,
             "contains": []
           }
@@ -284,6 +287,7 @@
             ]
           ]
         },
+        "content": "None",
         "level": 1,
         "contains": [
           {
@@ -355,6 +359,7 @@
                 ]
               ]
             },
+            "content": "None",
             "level": 2,
             "contains": []
           },
@@ -427,6 +432,7 @@
                 ]
               ]
             },
+            "content": "None",
             "level": 2,
             "contains": []
           }
@@ -501,6 +507,7 @@
             ]
           ]
         },
+        "content": "None",
         "level": 1,
         "contains": []
       },
@@ -573,6 +580,7 @@
             ]
           ]
         },
+        "content": "None",
         "level": 1,
         "contains": []
       },
@@ -645,12 +653,13 @@
             ]
           ]
         },
+        "content": "None",
         "level": 1,
         "contains": [
           {
             "id": "19",
             "parentId": "0",
-            "type": "text",
+            "type": "header",
             "meta": {
               "absoluteWidth": 310.0,
               "absoluteHeight": 150.0,
@@ -668,14 +677,14 @@
                 ],
                 [
                   594,
-                  1827
+                  1828
                 ],
                 [
-                  904,
-                  1827
+                  905,
+                  1828
                 ],
                 [
-                  904,
+                  905,
                   1677
                 ]
               ],
@@ -716,6 +725,7 @@
                 ]
               ]
             },
+            "content": "Aaren",
             "level": 2,
             "contains": []
           }
@@ -724,7 +734,7 @@
       {
         "id": "20",
         "parentId": "14",
-        "type": "text",
+        "type": "header",
         "meta": {
           "absoluteWidth": 368.0,
           "absoluteHeight": 178.0,
@@ -742,14 +752,14 @@
             ],
             [
               588,
-              617
+              618
             ],
             [
-              956,
-              617
+              957,
+              618
             ],
             [
-              956,
+              957,
               439
             ]
           ],
@@ -790,6 +800,7 @@
             ]
           ]
         },
+        "content": "Sticky",
         "level": 1,
         "contains": []
       }

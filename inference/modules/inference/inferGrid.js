@@ -7,7 +7,7 @@
  */
 
 const { sortShapesAlongXAxis } = require('../geometry.js');
-
+const { Container } = require("../ACR.js");
 const config = require('../../config/config.json');
 
  // Assumes that there is a maximum of one container along the vertical axis.
@@ -21,18 +21,53 @@ const determineNumOfGridCells = (shape, budget) => {
   };
 };
 
+// When embedding images within some row, it is crucial that we nest images within
+// a container in order to obey the column and spacing rules.
+const nestImagesWithinContainers = (shapes, lastId) => {
 
-module.exports = (row) => {
+  return {
+    nestedImages: shapes.map(shape => {
+      if (shape.type !== "image") return shape;
 
+      // log(`Nesting image`, shape.id, shape.meta);
+
+      lastId += 1;
+
+      var container = new Container({
+        id: lastId,
+        parent: null,
+        midpoint: shape.meta.midpoint,
+        width: shape.meta.absoluteWidth,
+        height: shape.meta.absoluteHeight,
+        level: shape.level
+      });
+
+      // Replace the metadata for this container with that of the original image.
+      container.meta = Object.assign({}, shape.meta);
+
+      // Add the shape as a contained element of the container.
+      container.addContainingShape(shape);
+
+      return container;
+    }),
+    lastId: lastId
+  }
+}
+
+const inferGridAtLevel = (row, lastId) => {
 
   // Return if row is not a container.
   if (row.type != "row") {
-    return row;
+    return {row, lastId};
   }
 
+  // Nest images within containers before assigning grid cells.
+  var { nestedImages, lastId } = nestImagesWithinContainers(row.contains, lastId);
+
+  row.contains = nestedImages;
 
   // Return if no contained shapes or just a single shape.
-  if (row.contains.length <= 1) return row;
+  if (row.contains.length <= 1) return {row, lastId};
 
   // Sort the contained shapes along x axis from left to right.
   row.contains = sortShapesAlongXAxis(row.contains);
@@ -75,14 +110,30 @@ module.exports = (row) => {
     cellBudget--;
   };
 
-  // Assign type of row to parent.
-  row.type = "row";
-
   // Assign appropriate class based off of grid properties.
   // row.contains = serialiseClasses(row.contains);
 
   // Return row.
-  return row;
+  return {row, lastId};
+};
+
+const inferGrid = (shapes, lastShapeId) => {
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => {
+    shape.contains = inferGrid(shape.contains, lastShapeId);
+    var { row, lastId } = inferGridAtLevel(shape, lastShapeId);
+    lastShapeId = lastId;
+    shape = row;
+  });
+
+  return shapes;
+};
+
+module.exports = {
+  inferGrid,
+  inferGridAtLevel
 };
 
 // Utility functions.

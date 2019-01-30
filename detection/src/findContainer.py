@@ -97,9 +97,10 @@ def getContainers(image, annotate=False):
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
         # Add a bounding box to each contour. This will be represented by its
-        # own shape type in the ACR.
+        # own shape type in the ACR. We only add if the bounding polygon has more
+        # than 2 vertices, as we don't want noisy lines.
+        if (len(approx) > 2): approximatedContours.append(approx)
 
-        approximatedContours.append(approx)
 
     # Create shapes.
     shapes = [Shape(id=str(i), vertices=approximatedContours[i]) for i in range(0,len(approximatedContours))]

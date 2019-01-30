@@ -10,12 +10,18 @@ import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
-import Primitive from './Primitive.js';
-import { getRelativeDistance, findACRObjectById, moveACRObject, resizeACRObject, getLastACRObjectId } from './geometry.js';
+// import Primitive from './Primitive.js';
+import { Container } from 'crimson-inference/modules/ACR.js';
+import {
+  getRelativeDistance,
+  findACRObjectById,
+  moveACRObject,
+  resizeACRObject,
+  getLastACRObjectId,
+  IDGenerator
+} from './geometry.js';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
-
-
 const BoundingBoxComponent = ({shape, className, parent, level, contains, getRef, children}) => {
 
 var meta = shape.meta;
@@ -51,12 +57,17 @@ class Toolbar extends Component {
 class InteractiveACRModifier extends Component {
 
   constructor(props, context){
+
     super(props, context);
     this.imageRef = React.createRef();
     this.state = {
       canvasWidth: '100%',
       canvasHeight: '100%',
       selectedPrimitive: null,
+      drawScaleFactor: {
+        x: 1,
+        y: 1,
+      },
       doubleTap: {
         x: 0,
         y: 0
@@ -73,6 +84,10 @@ class InteractiveACRModifier extends Component {
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
 
+    // Instantiate the ID generator.
+    this.idGenerator = new IDGenerator(this.props.project.acr);
+
+
   }
 
   componentDidMount(){
@@ -80,6 +95,16 @@ class InteractiveACRModifier extends Component {
     this.setState({
       ready: true
     })
+  }
+
+  // A wrapper function which finds ACR objects by their id, and performs some
+  // safety checks in case the intended object to be found is the canvas object.
+  findACRObjectById(id){
+
+    // Check if id is none; return the implicit parent canvas element.
+    if (!id) return this.implicitCanvasACRObject;
+
+    return findACRObjectById(this.props.project.acr, id);
   }
 
   updateImageSizeProperties(){
@@ -92,6 +117,21 @@ class InteractiveACRModifier extends Component {
       }
     });
 
+    // Update implicit canvasACR element which will simply be used as the
+    // top level ACR object. It contains no useful information and is simply
+    // used to support functions which require the use of a parent acr object,
+    // on objects such as panels which are natively the top level elements of the
+    // ACR representation.
+    this.implicitCanvasACRObject = {
+      meta: {
+        absoluteWidth: this.imageRef.width * this.state.drawScaleFactor.x,
+        absoluteHeight: this.imageRef.height * this.state.drawScaleFactor.y,
+        vertices: [[0,0]]
+      },
+      id: "canvas",
+      contains: []
+    };
+
   }
 
   onResize(x, y){
@@ -99,8 +139,19 @@ class InteractiveACRModifier extends Component {
   }
 
   // Creates a new container primitive and adds to the ACR.
-  createPrimitive(parent){
-    var newPrimitive = new Primitive(getLastACRObjectId(this.props.project.acr) + 1, parent)
+  createPrimitive(parent, {x, y}){
+    
+    x *= this.state.drawScaleFactor.x;
+    y *= this.state.drawScaleFactor.y;
+
+    var newPrimitive = new Container({
+      id: this.idGenerator.newId(),
+      parent: parent,
+      midpoint: [x, y],
+      width: parent.meta.absoluteWidth / 2,
+      height: parent.meta.absoluteHeight / 2,
+      level: parent.level + 1
+    })
     parent.contains.push(newPrimitive);
   }
 
@@ -130,7 +181,10 @@ class InteractiveACRModifier extends Component {
     })
   }
 
+  // TEMP: Attempt to address desync between primitive clicked on, and the one
+  // that the internal state believes is selected.
   async initPrimitiveSelection(e, primitive){
+
     if (!this.availablePrimitives){
       // Fetch available primitives from the backend.
       var primitives = await fetch('/api/v1/getSupportedPrimitives').then(res => res.json());
@@ -155,9 +209,6 @@ class InteractiveACRModifier extends Component {
     // Prevent event from bubbling up div hierachy.
     e.stopPropagation();
 
-    console.log(this.state.modifyingPrimitive);
-    console.log(this.state.changingType);
-
   }
 
   endPrimitiveSelection(e, data){
@@ -167,7 +218,7 @@ class InteractiveACRModifier extends Component {
     // warnings about mutation of the state can safely be ignored.
     this.state.modifyingPrimitive.type = data.value;
 
-    console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
+    // console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
 
     // Set the state to end primitive selection.
     this.setState({
@@ -179,6 +230,8 @@ class InteractiveACRModifier extends Component {
   resizePrimitive(primitive, parent, height, width){
     if (parent.id !== "canvas") height *= this.state.drawScaleFactor.y;
     if (parent.id !== "canvas") width *= this.state.drawScaleFactor.x;
+
+    log(`Resizing ${primitive.id} to`, height, width);
 
     resizeACRObject(primitive, parent, height, width);
     // Redraw.
@@ -193,6 +246,8 @@ class InteractiveACRModifier extends Component {
     dx *= this.state.drawScaleFactor.x;
     dy *= this.state.drawScaleFactor.y;
 
+    // console.log(`Moving ${primitive.id} by`, dx, dy);
+
     moveACRObject({primitive, parent}, dx, dy);
     // Force a redraw.
     this.setState(this.state);
@@ -203,10 +258,10 @@ class InteractiveACRModifier extends Component {
 
     // Find the newParent, primitive, and oldParent object given the id.
     var primitiveId = primitiveDiv.getAttribute('data-id');
-    var primitive = findACRObjectById(this.props.project.acr, primitiveId);
+    var primitive = this.findACRObjectById(primitiveId);
     var newParentId = newParentDiv.getAttribute('data-id');
-    var newParent = findACRObjectById(this.props.project.acr, newParentId);
-    var oldParent = findACRObjectById(this.props.project.acr, primitive.parentId);
+    var newParent = this.findACRObjectById(newParentId);
+    var oldParent = this.findACRObjectById(primitive.parentId);
 
     // Prevent shapes from being nested within themselves or from being added
     // to shapes which they are already nested within.
@@ -234,15 +289,15 @@ class InteractiveACRModifier extends Component {
     // By default, if there is no parent, then this must be the highest level
     // primitive - in which case we create a 'pseudo' primitive which will
     // contain it - the canvas.
-    parent = {
-    meta: {
-      absoluteWidth: this.imageRef.width * this.state.drawScaleFactor.x,
-      absoluteHeight: this.imageRef.height * this.state.drawScaleFactor.y,
-      vertices: [[0,0]]
-    },
-    id: "canvas",
-    contains: []
-  })
+    parent={
+          meta: {
+            absoluteWidth: this.imageRef.width * this.state.drawScaleFactor.x,
+            absoluteHeight: this.imageRef.height * this.state.drawScaleFactor.y,
+            vertices: [[0,0]]
+          },
+          id: "canvas",
+          contains: []
+    })
   {
     if (!acr || acr.length === 0) return "";
 
@@ -258,6 +313,7 @@ class InteractiveACRModifier extends Component {
       key={i}
       draggable
       resizable={{
+        margin: 5,
         edges: {
           top: true,
           right: true,
@@ -276,21 +332,35 @@ class InteractiveACRModifier extends Component {
         },
 
         ondrop: event => {
-          // console.log(`Dropping`, event.relatedTarget, `Into`, event.target, primitive.id, `Parent`, parent.id);
+          // console.log(`Dropping`, event.relatedTarget, `Into`, event.target, `This Primitive: `,primitive.id, `This Primitive Parent:`, parent.id);
           this.nestWithinNewParent(event.relatedTarget, event.target)
         }
       }}
-      onDragMove={({dx, dy}) => this.movePrimitive({primitive, parent}, {dx, dy, width:0, height:0})}
-      onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, primitive)}
-      onUp={e =>  e.stopPropagation() || this.selectPrimitive(primitive)}
-      onHold={e => e.stopPropagation() || this.createPrimitive(primitive)}
+      onDragMove={
+        ({target, dx, dy}) => {
+          var primitive = this.findACRObjectById(target.dataset.id);
+          var parent = this.findACRObjectById(primitive.parentId);
+          this.movePrimitive({
+            primitive: primitive,
+            parent: parent
+          }, {dx, dy, width:0, height:0})
+        }
+      }
+      onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))}
+      onUp={e =>  e.stopPropagation() || this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))}
+      onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
       onResizeMove={
-        e => e.stopPropagation() ||
-        this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height) ||
-        this.movePrimitive({primitive, parent}, {
-          dx: (e.deltaRect.left * 2) * this.state.drawScaleFactor.x,
-          dy: (e.deltaRect.top * 2) * this.state.drawScaleFactor.y
-        })
+        e => {
+          e.stopPropagation();
+          var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
+          var parent = this.findACRObjectById(primitive.parentId);
+          console.log(primitive, parent)
+          this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height);
+          this.movePrimitive({primitive, parent}, {
+            dx: e.deltaRect.left,
+            dy: e.deltaRect.top
+          });
+        }
       }
       {...primitive} /> : "")
 
@@ -305,7 +375,6 @@ class InteractiveACRModifier extends Component {
           {
             /* Display dropdown on double click. */
             (this.state.modifyingPrimitive) ?
-            console.log(`Drawing dropdown at`,this.state.doubleTap.x, `and`, this.state.doubleTap.y) ||
             <Dropdown
               style={{
                 position: 'absolute',

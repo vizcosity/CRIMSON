@@ -16,7 +16,7 @@ def log(message):
 
 class Shape:
 
-    def __init__(self, vertices, id=None, shapeType=None):
+    def __init__(self, vertices, id=None, shapeType=None, content=False):
         if (type(vertices) != np.ndarray):
             vertices = np.array(vertices)
 
@@ -27,13 +27,17 @@ class Shape:
         self.type = determineShapeType(self.rawVertices) if shapeType is None else shapeType
         self.rawArea = calculateArea(self.rawVertices)
         self.boundingBox = getBoundingBox(self.rawVertices) if len(self.rawVertices) > 1 else np.array([])
-        self.vertices = tidyAndApproximate(self.rawVertices, self.type)
+        # self.vertices = tidyAndApproximate(self.rawVertices, self.type)
+        # TEMP: Use Bounding Box a vertices for shape, since specific details about
+        # shape vertices when not using a rectangle is not required.
+        self.vertices = self.boundingBox
         self.edges = getEdges(self.vertices)
         self.midpoint = calculateMidpoint(self.vertices)
         self.area = calculateArea(self.vertices)
         self.width = float(calculateWidth(self.vertices))
         self.height = float(calculateHeight(self.vertices))
         self.relativeVertices = calculateRelativeVertices(self.vertices[0][0], self.width, self.height, self.vertices, self.vertices)
+        self.content = content
 
         # Level describes the level at which the shape is currently nested.
         # Level 0 refers to the global container, whereas level 1 represents

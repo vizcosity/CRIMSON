@@ -30,26 +30,26 @@ class App extends Component {
   // Called when the ACR object has been generated and recieved at the front
   // end. The acr is a JSON object, and so we can store this in cache and
   // move it around the application as needed.
-  onRecieveACRHandler({acr, source}) {
+  onRecieveACRHandler({acr, source, history}) {
 
-    // Save it to the class instance.
-    this.project = {acr, source};
+      // Collect the 'history' prop, and then use that to push the current
+      // path onto the browser's history stack once we need to navigate page.
 
-    log(`New project instantiated.`, this.project);
+      // Save it to the class instance.
+      this.project = {acr, source};
 
-    // Navigate to the ACR modifier module.
-    this.setState({
-      ...this.state,
-      navigate: {
-        to: '/modify-acr',
-        from: this.state.navigate.current,
-        current: '/modify-acr'
-      }
-    });
+      log(`New project instantiated.`, this.project);
 
-    // log(this.state);
-    // log(this.project);
+      // Navigate to the ACR modifier module.
+      // this.setState({
+      //   ...this.state,
+      //   navigate: {
+      //     to: '/modify-acr',
+      //     from: this.state.navigate.current,
+      //     current: '/modify-acr'
+      //   }});
 
+      history.push('/modify-acr');
   }
 
   render() {
@@ -59,12 +59,12 @@ class App extends Component {
       <div className="routes-container" >
 
       {/* Navigate to other pages throughout the app. */}
-      {this.state.navigate.to ? <Redirect from={this.state.navigate.from} to={this.state.navigate.to} /> : ""}
+      {/*this.state.navigate.to ? <Redirect from={this.state.navigate.from} to={this.state.navigate.to} /> : "" */}
 
         <Route exact path="/" component={
-          () => <Landing
+          ({history}) => <Landing
           api={Package.api}
-          onRecieveACR={this.onRecieveACRHandler}
+          onRecieveACR={({acr, source}) => this.onRecieveACRHandler({acr, source, history})}
 
           />
         } />
