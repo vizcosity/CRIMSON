@@ -27,7 +27,8 @@
     "mayonnaise.js": "^1.1.0",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
-    "sentence-generator": "^1.0.1"
+    "sentence-generator": "^1.0.1",
+    "the-noun-project": "^2.1.0"
   },
   "devDependencies": {
     "parcel-bundler": "^1.10.3"

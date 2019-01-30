@@ -228,37 +228,38 @@ class BootstrapObject {
     if (navBrand) navBrand =  await this.resolveNavItem(navBrand);
     listItems = await Promise.all(listItems.map(shape => this.resolveNavItem(shape)));
 
-    // log(`List items`, listItems);
+    var output = [];
 
+    if (navBrand)
+      output.push(navBrand);
 
-    var navbarItemContainer = {
+    var collapseContainer = {
       elementType: 'div',
       attributes: { class: 'collapse navbar-collapse', id: 'navbarItemContainer' },
       content: []
     };
 
-    if (navBrand)
-      navbarItemContainer.content.push({
-        elementType: 'a',
-        attributes: { class: 'navbar-brand' },
-        content: navBrand
-      });
 
     if (listItems.length !== 0)
-      navbarItemContainer.content.push({
+      collapseContainer.content.push({
         elementType: 'ul',
         attributes: { class: 'navbar-nav mr-auto' },
         content: listItems
       });
 
     if (formItems.length !== 0)
-      navbarItemContainer.content.push({
+      collapseContainer.content.push({
         elementType: 'form',
         attributes: { class: 'form-inline' },
         content: formItems
       });
 
-    return [hamburgerButton, navbarItemContainer];
+    output.push(hamburgerButton);
+    output.push(collapseContainer);
+
+    log(`Resolved navigation content:`, output);
+
+    return output;
 }
 
   async resolveCustomContent(shape){
