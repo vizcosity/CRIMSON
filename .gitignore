@@ -11,8 +11,13 @@ detection/src/clf/training_data/squiggle_yolo/labels/*.txt
 detection/src/clf/training_data/squiggle_pos/
 detection/src/clf/training_data/squiggle_neg/
 inference/.cache
-inference/output/*
+inference/output/*detection/clf/squiggle_legacy
+detection/src/clf/squiggle_legacy
+detection/src/clf/PrimitiveDetect
+.DS_Store
 web-platform/.uploads/*
 web-platform/node_modules/*
 web-platform/.generated/*
 web-platform/.cache/*
+.output/
+.cache

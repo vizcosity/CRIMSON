@@ -15,6 +15,7 @@ from util import *
 from shape import Shape, nestShapes, nestWithinWindow
 
 _DEBUG = False
+_LINE_THICKNESS = 2
 
 # Logging.
 def log(message):
@@ -61,8 +62,8 @@ def getContainers(image, annotate=False):
 
     # Canny edge detection.
     canny = cv2.Canny(image, 100, 200)
-
-    cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # print("Detecting contours for image: " +str(canny))
+    cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(image, cont2, -1, (255,0,0))
 
     # Finding contours based off of the result of the Canny edge detection.
@@ -71,13 +72,13 @@ def getContainers(image, annotate=False):
     # of the contours.
     # CHAIN_APPROX_SIMPLE compresses the contours by only storing minimal information
     # about how to represent the lines that make it up (e.g. the endpoints of the lines).
-    canny2, contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(invert, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(image, contours, -1, (255,0,0))
 
     log("Found: "+ str(len(contours))+ " contours.")
 
     # Filter miniscule contours.
-    # contours = filterContours(contours, image.shape)
+    contours = filterContours(contours, image.shape)
 
     contours = fillGaps(contours)
 
@@ -96,9 +97,10 @@ def getContainers(image, annotate=False):
         approx = cv2.approxPolyDP(cont, epsilon, True)
 
         # Add a bounding box to each contour. This will be represented by its
-        # own shape type in the ACR.
+        # own shape type in the ACR. We only add if the bounding polygon has more
+        # than 2 vertices, as we don't want noisy lines.
+        if (len(approx) > 2): approximatedContours.append(approx)
 
-        approximatedContours.append(approx)
 
     # Create shapes.
     shapes = [Shape(id=str(i), vertices=approximatedContours[i]) for i in range(0,len(approximatedContours))]
@@ -144,7 +146,7 @@ def annotateShapeTypes(shapes, image):
             # (x, y, w, h) = cv2.boundingRect(shape.rawVertices)
             # cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
         # print(shape)
-        cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, shape.type[0], (shape.midpoint[0] - 20, shape.midpoint[1]), cv2.FONT_HERSHEY_SIMPLEX, _LINE_THICKNESS, (50,50,50))
 
 # Annotates by shape name, adding information about what shape contains it if so.
 def annotateNestedShapes(shapes, owner=None, image=None):
@@ -157,10 +159,10 @@ def annotateNestedShapes(shapes, owner=None, image=None):
         cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),1)
 
         if (shape.type == 'rectangle'):
-            cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255))
+            cv2.rectangle(image, tuple(shape.vertices[0]), tuple(shape.vertices[2]), color=(0,0,255), thickness=_LINE_THICKNESS)
         else:
             cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.vertices[0][0] + 5, shape.vertices[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (50,50,50))
+        cv2.putText(image, (str(owner) + ": " if str(owner) is not None else "") + str(shape), (shape.vertices[0][0] + 5, shape.vertices[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (50,50,50), thickness=_LINE_THICKNESS)
         # Call recursively for all shapes that this shape contains.
         annotateNestedShapes(shape.contained, owner=shape, image=image)
 

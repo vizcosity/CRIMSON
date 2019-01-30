@@ -6,52 +6,68 @@
  * @ Aaron Baw 2018
  */
 
+const { sortShapesAlongXAxis } = require('../geometry.js');
+const { Container } = require("../ACR.js");
 const config = require('../../config/config.json');
 
  // Assumes that there is a maximum of one container along the vertical axis.
 const determineNumOfGridCells = (shape, budget) => {
   var width = parseFloat(shape.meta.relativeWidth) / 100;
   var numCells = width / (1 / budget);
-  log(numCells, shape.meta.relativeWidth);
+  log(`Assigning ${Math.floor(numCells)} cells to ${shape.id} which has relative width:`, shape.meta.relativeWidth);
   return {
     numCells: Math.floor(numCells),
     clipSize: numCells - Math.floor(numCells)
   };
+};
+
+// When embedding images within some row, it is crucial that we nest images within
+// a container in order to obey the column and spacing rules.
+const nestImagesWithinContainers = (shapes, lastId) => {
+
+  return {
+    nestedImages: shapes.map(shape => {
+      if (shape.type !== "image") return shape;
+
+      // log(`Nesting image`, shape.id, shape.meta);
+
+      lastId += 1;
+
+      var container = new Container({
+        id: lastId,
+        parent: null,
+        midpoint: shape.meta.midpoint,
+        width: shape.meta.absoluteWidth,
+        height: shape.meta.absoluteHeight,
+        level: shape.level
+      });
+
+      // Replace the metadata for this container with that of the original image.
+      container.meta = Object.assign({}, shape.meta);
+
+      // Add the shape as a contained element of the container.
+      container.addContainingShape(shape);
+
+      return container;
+    }),
+    lastId: lastId
+  }
 }
 
-const sortShapesAlongXAxis = (shapes) => {
-    return shapes.concat().sort((a, b) => a.meta.vertices[0][0] > b.meta.vertices[0][0]);
-}
-
-// // Use inferred grid properties to determine class.
-// const serialiseClasses = shapes => {
-//
-//   var output = [];
-//
-//   shapes.forEach(shape => {
-//     if (shape.gridCell && shape.gridCell.count)
-//       shape.class = `col-${shape.gridCell.count}`;
-//     output.push(shape);
-//   });
-//
-//   // console.log(shapes);
-//
-//   return shapes;
-//
-// }
-
-
-module.exports = (row) => {
-
+const inferGridAtLevel = (row, lastId) => {
 
   // Return if row is not a container.
   if (row.type != "row") {
-    return row;
+    return {row, lastId};
   }
 
+  // Nest images within containers before assigning grid cells.
+  var { nestedImages, lastId } = nestImagesWithinContainers(row.contains, lastId);
+
+  row.contains = nestedImages;
 
   // Return if no contained shapes or just a single shape.
-  if (row.contains.length <= 1) return row;
+  if (row.contains.length <= 1) return {row, lastId};
 
   // Sort the contained shapes along x axis from left to right.
   row.contains = sortShapesAlongXAxis(row.contains);
@@ -79,8 +95,10 @@ module.exports = (row) => {
 
   // Assign leftover cells to shapes with largest clip amount.
   while (cellBudget > 0){
-    var {id} = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize)[0];
-    var mostClipped = row.contains.filter(shape => shape.id == id)[0];
+    var mostClipped = row.contains.concat().sort((a, b) => a.gridCell.clipSize < b.gridCell.clipSize ? 1 : -1)[0];
+    // var mostClipped = row.contains.filter(shape => shape.id == id)[0];
+
+    // log(`Most clipped shape is ${mostClipped.id} with gridcell object`,mostClipped.gridCell);
 
     // Assign a new cell.
     mostClipped.gridCell.count++;
@@ -92,14 +110,30 @@ module.exports = (row) => {
     cellBudget--;
   };
 
-  // Assign type of row to parent.
-  row.type = "row";
-
   // Assign appropriate class based off of grid properties.
   // row.contains = serialiseClasses(row.contains);
 
   // Return row.
-  return row;
+  return {row, lastId};
+};
+
+const inferGrid = (shapes, lastShapeId) => {
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => {
+    shape.contains = inferGrid(shape.contains, lastShapeId);
+    var { row, lastId } = inferGridAtLevel(shape, lastShapeId);
+    lastShapeId = lastId;
+    shape = row;
+  });
+
+  return shapes;
+};
+
+module.exports = {
+  inferGrid,
+  inferGridAtLevel
 };
 
 // Utility functions.

@@ -1,0 +1,317 @@
+[
+  {
+    "id": "0",
+    "parentId": "None",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 279.0,
+      "absoluteHeight": 278.0,
+      "relativeWidth": "93.0%",
+      "relativeHeight": "91.14754098360656%",
+      "midpoint": [
+        152,
+        156
+      ],
+      "area": 77562.0,
+      "vertices": [
+        [
+          12,
+          17
+        ],
+        [
+          12,
+          295
+        ],
+        [
+          291,
+          295
+        ],
+        [
+          291,
+          17
+        ]
+      ],
+      "relativeVertices": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0
+        ]
+      ]
+    },
+    "level": 0,
+    "contains": [
+      {
+        "id": "99",
+        "parentId": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 84.0,
+          "absoluteHeight": 73.0,
+          "relativeWidth": "30.107526881720432%",
+          "relativeHeight": "26.258992805755394%",
+          "midpoint": [
+            190,
+            106
+          ],
+          "area": 6132.0,
+          "vertices": [
+            [
+              148,
+              69
+            ],
+            [
+              148,
+              142
+            ],
+            [
+              232,
+              142
+            ],
+            [
+              232,
+              69
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.4874551971326165,
+              0.18705035971223022
+            ],
+            [
+              0.4874551971326165,
+              0.44964028776978415
+            ],
+            [
+              0.7885304659498208,
+              0.44964028776978415
+            ],
+            [
+              0.7885304659498208,
+              0.18705035971223022
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "2",
+        "parentId": "0",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 130.0,
+          "absoluteHeight": 87.0,
+          "relativeWidth": "46.59498207885305%",
+          "relativeHeight": "31.294964028776977%",
+          "midpoint": [
+            128,
+            190
+          ],
+          "area": 11310.0,
+          "vertices": [
+            [
+              63,
+              147
+            ],
+            [
+              63,
+              234
+            ],
+            [
+              193,
+              234
+            ],
+            [
+              193,
+              147
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.1827956989247312,
+              0.4676258992805755
+            ],
+            [
+              0.1827956989247312,
+              0.7805755395683454
+            ],
+            [
+              0.6487455197132617,
+              0.7805755395683454
+            ],
+            [
+              0.6487455197132617,
+              0.4676258992805755
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "4",
+        "parentId": "0",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 131.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "46.95340501792115%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            128,
+            148
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              62,
+              148
+            ],
+            [
+              193,
+              148
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.17921146953405018,
+              0.4712230215827338
+            ],
+            [
+              0.6487455197132617,
+              0.4712230215827338
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "6",
+        "parentId": "0",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 129.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "46.236559139784944%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            128,
+            146
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              63,
+              146
+            ],
+            [
+              192,
+              146
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.1827956989247312,
+              0.46402877697841727
+            ],
+            [
+              0.6451612903225806,
+              0.46402877697841727
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "8",
+        "parentId": "0",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 83.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "29.749103942652326%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            190,
+            142
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              148,
+              142
+            ],
+            [
+              231,
+              142
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.4874551971326165,
+              0.44964028776978415
+            ],
+            [
+              0.7849462365591398,
+              0.44964028776978415
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "11",
+        "parentId": "0",
+        "type": "centered_line",
+        "meta": {
+          "absoluteWidth": 82.0,
+          "absoluteHeight": 0.0,
+          "relativeWidth": "29.39068100358423%",
+          "relativeHeight": "0.0%",
+          "midpoint": [
+            191,
+            140
+          ],
+          "area": 0.0,
+          "vertices": [
+            [
+              150,
+              140
+            ],
+            [
+              232,
+              140
+            ]
+          ],
+          "relativeVertices": [
+            [
+              0.4946236559139785,
+              0.44244604316546765
+            ],
+            [
+              0.7885304659498208,
+              0.44244604316546765
+            ]
+          ]
+        },
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

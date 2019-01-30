@@ -1,0 +1,81 @@
+html, body {
+  margin:0;
+  width: 100%;
+  height: 100%;
+  font-family: "Avenir", sans-serif;
+}
+
+.container, .row {
+  padding: 10px;
+  margin: 0;
+  /*
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fill-available;
+  width: -moz-fill-available;
+  width: -webkit-fill-available;
+  margin: 5px; */
+}
+
+/* Panels are full-height containers. These are 'pages' within the single page,
+and so it is desireable to have all of the content centered vertically within it. */
+.panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Navigation bar must be sticky and not exceed 60 pixels in height */
+nav {
+  height: 70px;
+  position: absolute !important;
+  top:0;
+  width: 100%;
+}
+
+/* Footer should be sticky and have a minimum height of ~60px */
+footer {
+  /* We want footers to behave like a row; only one item along the vertical axis. */
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 60px;
+  background-color: #1d1e1f;
+}
+
+img {
+  max-height: 100%;
+}
+
+/* Wrap labels in a container so that we don't push a completely filled row
+with columns to a new line */
+.label-wrap {
+  border: 0px;
+  width: 100%;
+}
+
+/**
+ * Ensure that text placed within a dark footer is readable.
+ */
+footer p {
+  color: #424242;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+footer h1 {
+  color: #757575;
+  font-size: 20px;
+}
+
+/* Ensure that text is centered horizontally and vertically. */
+h1, p {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}

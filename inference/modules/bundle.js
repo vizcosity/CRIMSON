@@ -27,7 +27,7 @@ function generateBundleEmbed(files){
 
 }
 
-module.exports = ({outputDir, context, imgPath, targets, zip=false}) => new Promise((resolve, reject) => {
+module.exports = ({outputDir, filteredACR, context, imgPath, targets, zip=false}) => new Promise((resolve, reject) => {
 
   const projectName = outputDir.split('/')[outputDir.split('/').length - 1];
 
@@ -77,6 +77,9 @@ module.exports = ({outputDir, context, imgPath, targets, zip=false}) => new Prom
     //   log(`Writing`, resolve(__dirname, 'test.html'))
       fs.writeFileSync(outputDir+'/'+target.name, target.source);
     });
+
+    // Write the filteredACR file.
+    fs.writeFileSync(outputDir+'/filteredACR.json', JSON.stringify(filteredACR, null, 2));
 
     // Zip project.
     if (zip) {

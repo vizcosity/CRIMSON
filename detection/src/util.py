@@ -2,6 +2,19 @@
 
 import numpy as np
 
+# Re-numbers all shapeIds present in the ACR hierachy.
+def renumberShapeIds(shapes, parentId=None, lastShapeId=0):
+
+    if (shapes is None or len(shapes) == 0): return shapes, lastShapeId
+
+    # Perform a DFS, and renumber all the shape IDs sequentially.
+    for shape in shapes:
+        shape.id = lastShapeId = lastShapeId + 1
+        shape.parentId = parentId
+        shape.contains, lastShapeId = renumberShapeIds(shape.contained, shape.id, lastShapeId)
+
+    return shapes, lastShapeId
+
 # Returns true if two arrays are equal
 def arrCompare(arr1, arr2):
     if (len(arr1) != len(arr2)): return False
