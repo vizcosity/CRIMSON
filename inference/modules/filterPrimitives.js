@@ -5,11 +5,11 @@
  */
 
 const config = require('../config/config');
+
 function filterLevel(shapes){
   if (!shapes) return shapes;
   // console.log('shapes', shapes);
   return shapes.filter(s => {
-    // console.log('Checking if should keep', s.type, config.filter.indexOf(s.type) === -1);
     return config.filter.indexOf(s.type) === -1
   });
 
@@ -26,15 +26,17 @@ function filterPrimitives(shapes){
   // Filter current level.
   shapes = filterLevel(shapes);
 
-  // Filter contained.
-  shapes.contains = filterLevel(shapes.contains);
+  // console.log(`Shapes:`, shapes.contains.length);
+  //
+  // // Filter contained.
+  // shapes.contains = filterLevel(shapes.contains);
+  //
+  // console.log(`NUm shapes after filtering:`, shapes.contains.length);
 
   // For each contained shape, recurse on their contained shapes.
   shapes = shapes.map(s => {
     return {...s, contains: filterPrimitives(s.contains)}
   });
-
-  // console.log('filtered level', shapes);
 
   return shapes;
 }

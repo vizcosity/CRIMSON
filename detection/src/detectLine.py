@@ -374,7 +374,7 @@ def detectLines(image, debug=False, erode=True):
         # Canny edge detection.
         canny = cv2.Canny(preCannyImage, 100, 200)
 
-        cann3, cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # Detect lines.
         # The 2nd last paramter is the minimum line length, while the lat parameter

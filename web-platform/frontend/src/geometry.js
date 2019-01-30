@@ -137,11 +137,24 @@ function resizeACRObject(primitive, parent, width, height){
 
 }
 
+// Generates new shape IDs used for manual primitive creation.
+function IDGenerator(shapes){
+
+  this.nextId = getLastACRObjectId(shapes) + 1;
+
+  this.newId = function(){
+    return this.nextId++;
+  }
+
+
+}
+
 export {
   getRelativeDistance,
   findACRObjectById,
   moveACRObject,
   getUpperLeftmostVertex,
   getLastACRObjectId,
-  resizeACRObject
+  resizeACRObject,
+  IDGenerator
 };

@@ -2,10 +2,11 @@
   "grid":{
     "cellBudget": 12
   },
+  "padding": 5,
   "shapeMap": {
     "rectangle": "container",
-    "triangle": "triangle",
-    "polygon": "polygon"
+    "triangle": "container",
+    "polygon": "container"
   },
   "thresholds": {
     "fragmentArea": 0.08
@@ -25,6 +26,12 @@
     "js": "main"
   },
   "supportedPrimitives": [
-    "panel", "rectangle", "container", "row", "triangle", "image", "dropdown", "button", "input", "navigation", "footer", "header", "paragraph"
-  ]
+    "header", "paragraph", "image", "button", "input", "dropdown", "checkbox", "container", "row", "navigation", "footer", "panel"
+  ],
+  "api": {
+    "nounProject": {
+      "key": "dd55f8784cd34c8cbb9f74dbd09b5f64",
+      "secret": "22ebfe79ca254ac7bf562ddd60de4ed5"
+    }
+  }
 }

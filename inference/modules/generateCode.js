@@ -4,15 +4,17 @@
  * @ Aaron Baw 2018
  */
 
- // Dependencies.
- const shapeMap = require('../config/config.json').shapeMap;
- const inferProperties = require('./inference/infer');
- const indent = require('indent-string');
- const transform = require('./transformation/transform');
- const fs = require('fs');
+// Dependencies.
+const shapeMap = require('../config/config.json').shapeMap;
+const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows, nest } = require('./inference/implicitNest');
+const { getLastACRObjectId, sortshapesAlongYAxis, sortShapes } = require('./geometry');
+const inferProperties = require('./inference/infer');
+const indent = require('indent-string');
+const transform = require('./transformation/transform');
+const fs = require('fs');
 
 function log(...msg){
-  console.log(`GEN CODE |`, ...msg);
+  if (process.env.DEBUG) console.log(`GEN CODE |`, ...msg);
 }
 
  // Given a transformed preNode, embeds this into serialised HTML.
@@ -63,26 +65,31 @@ function log(...msg){
 
    return embedCode(preNode);
 
-   // return `
-   // <div style="height:${container.meta.relativeHeight};" class="${container.class}" data-id="${container.id}">
-   //
-   // <span class="label-wrap">
-   //  <label style="align-self:flex-start;">${container.id}</label>
-   // </span>
-   //    ${indent(containingCode, 8)}
-   // </div>`;
-
  }
 
+ // We have a separate method which first performs some pre-processing on
+ // the shape primitives returned by the detection pipeline. We then pass these
+ // onto the recursive generateACRObjects method.
  function generateACR(shapes){
 
    if (!shapes || shapes.length == 0) return shapes;
 
-   // log(`Generating ACR at level`, shapes);
+   // Implicitly nest shapes horizontally and vertically.
+   shapes = nest(shapes);
+
+   // Generate ACR for the objects after performing the implicit nesting.
+   return generateACRObjects(shapes);
+ }
+
+ function generateACRObjects(shapes){
+
+   // console.log(`GENERATE CODE | Generating ACR Objects`);
+
+   if (!shapes || shapes.length == 0) return shapes;
 
    for (var i = 0; i < shapes.length; i++){
      // log(`About to gen code for `, shapes[i]);
-     shapes[i].contains = generateACR(shapes[i].contains);
+     shapes[i].contains = generateACRObjects(shapes[i].contains);
    }
 
    return inferProperties(shapes);
@@ -93,12 +100,14 @@ function log(...msg){
    if (!shapes || shapes.length == 0) return "";
 
    // Generate ACR.
-   shapes = inferProperties(shapes);
+   // shapes = inferProperties(shapes);
+
 
    var output = "";
 
    for (var i = 0; i < shapes.length; i++){
      var shape = shapes[i];
+     // log(`Transforming`, shape.type);
 
      var containedCode = await generateCode(shape.contains);
 

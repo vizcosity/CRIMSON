@@ -3,16 +3,14 @@
  *
  *  @ Aaron Baw 2018
  */
+
+// Dependencies.
 const config = require('../../config/config.json');
+const isSubtypeOf = require('../subtypes.js');
+const { getLowestY, getHighestY, getLowestX, sortShapesAlongXAxis } = require('../geometry.js');
+
+// Default values.
 const _FRAG_THRESH = config.thresholds.fragmentArea;
-
-const getHighestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1]
-};
-
-const getLowestY = shape => {
-  return shape.meta.vertices.sort((a, b) => a[1] < b[1] ? -1 : 1)[0][1];
-};
 
 const isContainer = shape => {
   return shape.type == "row" || shape.type == "container";
@@ -21,8 +19,6 @@ const isContainer = shape => {
 // Navigation specification:
 // Uppermost element which is of type container or derived.
 const isNavigation = (shape, shapes) => {
-
-
 
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
@@ -50,7 +46,7 @@ const isFooter = (shape, shapes) => {
   // Filter shapes so that we only deal with those at level 1.
   shapes = shapes.filter(s => s.level == 1);
 
-  log(`Checking footer with surrounding shapes`, shapes.length);
+  // log(`Checking footer with surrounding shapes`, shapes.length);
 
   // If no shapes passed we can assume that this is the global window or empty,
   // in which case we should return.
@@ -63,71 +59,39 @@ const isFooter = (shape, shapes) => {
   var lowerMostContainer = shapes.filter(s => isContainer(s)).sort((a, b) => a.meta.vertices[1][1] > b.meta.vertices[1][1]).reverse()[0];
 
   return lowerMostContainer && (shape.id == lowerMostContainer.id);
-}
+};
 
-// Text header specification:
-// Must contain a single centered horizontal line which takes up at least 33% of the
-// width of the parent container.
-const isHeader = shape => {
+// (BOOTSTRAP-SPECIFIC): Infers which element of the navigation bar should be used as the 'navbar-brand'
+// element.
+const inferNavbarBrand = nav => {
 
-  // log(`Centered lines: `, shape.contains.filter(s => s.type == "centered_line"));
-  //
-  // if (shape.id == "4") log(shape.contains.filter(s => (s.type == "centered_line") && (parseFloat(s.meta.relativeWidth) >= 33)));
-  // if (shape.id == "4"){
-  //   // var centered_lines = shape.contains.filter(s => s.type == "centered_line");
-  //   // centered_lines.forEach(line => log(parseFloat(line.meta.relativeWidth)));
-  //   // log(line);
-  // }
+  // Sort the elements by their position along the x axis.
+  nav.contains = sortShapesAlongXAxis(nav.contains);
 
-  return shape.contains.filter(s => s.type == "centered_line" && parseFloat(s.meta.relativeWidth) >= 33).length == 1;
+  // Examine the first element.
+  // If it is not of type 'header' or 'image', then we do not infer a navbar brand.
+  if (nav.contains.length === 0 || ["image", "header", "text", "navbar_brand,text", "navbar_brand,image", "navbar_brand,header"].indexOf(nav.contains[0].type) === -1)
+    return {navBrand, nav};
 
-}
+  // Check that the element is within 1/4 (nav-width) distance from the leftmost edge.
+  var navBrand = nav.contains[0];
 
-// Paragraph component specification:
-// Must contain more than a single contained horizontal line which takes up
-// at least 33% of the width of the parent container.
-const isParagraph = shape => {
+  // TODO: Ensure that we check among all items, not just the first one.
+  if (navBrand.type.split(',')[0] == "navbar_brand") return {navBrand, nav};
 
-  return shape.contains.filter(s => s.type == "horizontal_line" && parseFloat(s.relativeWidth) >= 33).length >= 2;
+  // log(navbrand, `is a prospective navbarbrand.`);
 
-}
+  var distanceFromLeftEdge = getLowestX(navBrand) - getLowestX(nav);
+  var relativeLeftEdgeDistance = distanceFromLeftEdge / nav.meta.absoluteWidth;
+  // log(`relativeLeftEdgeDistance:`, relativeLeftEdgeDistance);
 
-// Image specification:
-// Container containing four triangles at all orientations. (tip facing inwards
-// on every triangle).
-const isImage = shape => {
+  if (relativeLeftEdgeDistance > 0.25) return {navBrand, nav};
 
-  if (shape.type != "container" && shape.type != "row") return false;
+  // log(`${navbarBrand.id} is classified as the navbarbrand.`);
+  // nav.contains = nav.contains.filter(s => s.id !== navBrand.id);
+  navBrand.type = "navbar_brand,"+navBrand.type;
 
-  // if (shape.contains.filter(s => s.type == 'triangle').length !== 4) return false;
-
-  // shape.contains.forEach(triangle => {
-  //
-  // });
-
-  // Examine to see if the container contains any centered intersections.
-  // log(`Checking if ${shape.id}(${shape.type}) is an image.`);
-  if (shape.contains.filter(s => s.type === 'centered_intersection').length == 0) return false;
-
-  // Lower level containers may be mistakenly classified as images, since they
-  // are most likely to contain intersections, despite also containing
-  // a variety of other drawable shapes. Here, we examine how many drawable
-  // shapes are contained, and if there do not appear to be more than 3, then
-  // we classify the container as an image. We can also make use of the fact that
-  // images are likely to contain triangles & other polygons at the immediately
-  // succeeding nest level.
-  var containedDrawableShapes = shape.contains.filter(s => config.filter.indexOf(s.type) === -1);
-  log(`Candidate image ${shape.id} contains ${containedDrawableShapes.length} drawable shapes.`);
-
-  if (containedDrawableShapes.length > 2){
-    log(containedDrawableShapes);
-    // Check if any polygons or triangles have been detected, as this is typically
-    // a good sign that the primitive is an image.
-    if (containedDrawableShapes.filter(s => s.type == "triangle" || s.type == "polygon").length == 0)
-      return false
-  }
-
-  return true;
+  return {navBrand, nav};
 
 };
 
@@ -144,21 +108,6 @@ const inferText = shapes => {
   return shapes;
 };
 
-const inferImages = shapes => {
-  shapes.forEach(shape => {
-
-    if (isImage(shape)) {
-      shape.type = "image";
-      // Clear contained shapes.
-      shape.contains = [];
-    }
-
-
-
-  });
-  return shapes;
-}
-
 const isRow = shape => {
 
   // A row is a special case of a container, so shape must first be identified
@@ -172,13 +121,15 @@ const isRow = shape => {
     for (var j = 0; j < shape.contains.length; j++){
       if (i == j) continue;
 
-      if (shape.id == 13){
+      if (shape.id == 10){
+      // log(shape.contains)
       // log(`${shape.contains[i].id}`,getHighestY(shape.contains[i]), `${shape.contains[i].id}`,getLowestY(shape.contains[i]));
       // log(`${shape.contains[j].id}`,getHighestY(shape.contains[j]), `${shape.contains[j].id}`,getLowestY(shape.contains[i]));
 
-
-      log(shape.contains[i].id, getHighestY(shape.contains[i]), shape.contains[j].id, getLowestY(shape.contains[j]));
-      log(shape.contains[i].id, getLowestY(shape.contains[i]), shape.contains[j].id, getHighestY(shape.contains[j]));}
+      if (shape.contains[i].type == "intersection") continue;
+      // log(shape.contains[i].id, getHighestY(shape.contains[i]), shape.contains[j].id, getLowestY(shape.contains[j]));
+      // log(shape.contains[i].id, getLowestY(shape.contains[i]), shape.contains[j].id, getHighestY(shape.contains[j]));
+      }
 
       // The highestY of the shape should not be below the lowestY of the other shape.
       if (getHighestY(shape.contains[i]) < getLowestY(shape.contains[j])) return false;
@@ -201,8 +152,6 @@ const relativeDistance = (parent, child, axis=0) => {
   var start = midpoint - (parent.meta.absoluteWidth / 2);
 
   var dist = child.meta.midpoint[axis] - start;
-
-  // log(child.id, ` has dist of `, dist);
 
   return dist / parent.meta.absoluteWidth;
 }
@@ -238,18 +187,6 @@ const getInnerFragmentsBetweenPercentiles = (shape, {start, end}, axis=0) => {
 
 }
 
-const isDropdown = shape => {
-  return getInnerFragmentsBetweenPercentiles(shape, {start: 0.8, end: 1}).length == 1;
-}
-
-const isButton = shape => {
-  return getInnerFragmentsBetweenPercentiles(shape, {start: 0.4, end: 0.6}).length == 1;
-}
-
-const isTextInput = shape => {
-  return getInnerFragmentsBetweenPercentiles(shape, {start: 0, end: 0.2}).length == 1;
-}
-
 const inferPanels = shapes => {
   // All highest level containers should be panels.
   // During primitive detection, we nest all shapes within our top level
@@ -265,7 +202,6 @@ const inferPanels = shapes => {
 const inferRows = shapes => {
   shapes.forEach(shape => {
     shape.type = isRow(shape) ? 'row' : shape.type
-    if (shape.id == 13) log(`Shape type: `, shape.type);
   });
   return shapes;
 }
@@ -285,7 +221,10 @@ const inferNavigation = shapes => {
 
   // Infer navigation on the children of the first panel.
   shapes[0].contains.forEach(shape => {
-    if (isNavigation(shape, shapes[0].contains)) shape.type = "navigation";
+    if (isNavigation(shape, shapes[0].contains)) {
+      shape.type = "navigation";
+      // shape = inferNavbarBrand(shape);
+    }
   });
   return shapes;
 }
@@ -315,6 +254,10 @@ const inferInteractiveContainers = shapes => {
     // a container containing other shape elements that happen to be fairly small.
     if (shape.contains.length > 1) return false;
 
+    // An interactive container must first be a container, or a derived type
+    // thereof. Navigation bars and footers, for example, will likely contain
+    // links (<a> tags) which may be misclassified as fragments.
+    if (shape.type !== "container" || shape.type !== "row") return false;
 
     if (isDropdown(shape, shapes))  shape.type = "dropdown";
     if (isButton(shape, shapes)) shape.type = "button";
@@ -325,30 +268,26 @@ const inferInteractiveContainers = shapes => {
 }
 
 // TODO: Refactor this to use a promise - based workflow.
-module.exports = (shapes) => {
+module.exports = {
+  inferTypes: (shapes) => {
 
-  log(`Inferring from`, shapes.length, `shapes.`);
+    // Detect presence of *panels*, which are full-height containers / pages.
+    shapes = inferPanels(shapes);
 
-  // Detect presence of *panels*, which are full-height containers / pages.
-  shapes = inferPanels(shapes);
+    // Appropriate rows and containers must first be inferred.
+    shapes = inferFromMap(shapes);
+    shapes = inferRows(shapes);
 
-  // Appropriate rows and containers must first be inferred.
-  shapes = inferFromMap(shapes);
-  shapes = inferRows(shapes);
+    // Infer navigation on the topmost panel only.
+    shapes = inferNavigation(shapes);
 
-  // Infer navigation on the topmost panel only.
-  shapes = inferNavigation(shapes);
+    // Infer footer on the last panel only.
+    // shapes = inferFooter(shapes);
 
-  // Infer footer on the last panel only.
-  shapes = inferFooter(shapes);
+    return shapes;
 
-  shapes = inferImages(shapes);
-
-  shapes = inferInteractiveContainers(shapes);
-
-  shapes = inferText(shapes);
-
-  return shapes;
+  },
+  inferNavbarBrand
 }
 
 // Utility.
