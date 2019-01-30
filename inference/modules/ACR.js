@@ -35,12 +35,12 @@ class ACRObject {
         vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
 
       ],
-      relativeVertices: [
-        [0,0],
-        [0,1],
-        [1,1],
-        [1,0]
-      ],
+      // relativeVertices: [
+      //   [0,0],
+      //   [0,1],
+      //   [1,1],
+      //   [1,0]
+      // ],
     };
       this.level = level;
       this.contains = [];
@@ -57,12 +57,13 @@ class ACRObject {
 
     // Adjust the relative vertices.
     var [ox, oy] = this.meta.vertices[0];
-    for (var i = 0; i < otherShape.meta.vertices.length; i++){
-      otherShape.meta.relativeVertices[i] = [
-        (otherShape.meta.vertices[i][0] - ox) / this.meta.absoluteWidth,
-        (otherShape.meta.vertices[i][1] - oy) / this.meta.absoluteHeight,
-      ];
-    }
+
+    // for (var i = 0; i < otherShape.meta.vertices.length; i++){
+    //   otherShape.meta.relativeVertices[i] = [
+    //     (otherShape.meta.vertices[i][0] - ox) / this.meta.absoluteWidth,
+    //     (otherShape.meta.vertices[i][1] - oy) / this.meta.absoluteHeight,
+    //   ];
+    // }
 
     // Increase the nesting level for the other shape.
     otherShape.level++;
@@ -81,6 +82,7 @@ class Rectangle extends ACRObject {
     var [ mx, my ] = midpoint;
     var dx = width/2;
     var dy = height/2;
+
     super(id, parent, type, [
       [mx - dx, my-dy],
       [mx - dx, my+dy],
