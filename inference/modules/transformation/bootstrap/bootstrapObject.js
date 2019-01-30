@@ -10,7 +10,7 @@
 
 
 const typeMap = require('../typeToElementMap.json');
-const { randomImageUrl, generateDummyContent } = require('../placeholder');
+const { randomImageUrl, generateDummyContent, getPlaceholderLogoUrl } = require('../placeholder');
 const { hamburgerButton } = require('./assets');
 const { inferNavbarBrand } = require('../../inference/inferTypes');
 
@@ -19,6 +19,7 @@ class BootstrapObject {
   constructor(shape){}
 
   static async create(shape){
+    // log(`Constructor called:`, shape.type)
     let object = new BootstrapObject();
     return await object.init_(shape);
   }
@@ -46,9 +47,10 @@ class BootstrapObject {
       ...customAttributes
     }
 
+    // if (this.shape.type === "navigation") log(`Beginning nav transform`)
     // Add shape id.
     this.content = await this.resolveCustomContent(shape);
-
+    // if(this.shape.type === "navigation") log(`Finished nav transform`);
     return this;
 
   }
@@ -131,7 +133,6 @@ class BootstrapObject {
   }
 
   async resolveNavItem(shape){
-    log(shape.type);
     switch (shape.type){
       case 'header':
       case 'text':
@@ -162,7 +163,22 @@ class BootstrapObject {
         return transformedShape;
       break;
       case 'navbar_brand,image':
-        shape.type = 'image';
+        var image = await BootstrapObject.create({
+          ...shape,
+          type: 'image'
+        });
+        image.attributes.width = 30;
+        image.attributes.height = 30;
+        image.attributes.style = image.attributes.style ? `${image.attributes.style} filter: invert(50%);` : 'filter: invert(50%);';
+        image.attributes.src = await getPlaceholderLogoUrl();
+
+        // Nest the image within an 'a' container.
+        return {
+          elementType: 'a',
+          attributes: { class: 'navbar-brand', href: '#' },
+          content: image
+        };
+        break;
       case 'image':
         var image = await BootstrapObject.create(shape);
         image.attributes.width = 30;
@@ -174,6 +190,7 @@ class BootstrapObject {
           attributes: { class: 'navbar-brand', href: '#' },
           content: image
         };
+        return image;
       break;
       case 'dropdown':
         var dropdown = await BootstrapObject.create(shape);
@@ -214,6 +231,8 @@ class BootstrapObject {
     // Infer navbar-brand elements specific to Bootstrap.
     var { nav, navBrand } = inferNavbarBrand(nav);
 
+    // log(`Inferring navigation:`, nav.contains.map(s => Object({id:s.id, type:s.type})))
+
     // Shapes we have to wrap in a <form> component.
     var formItems = nav.contains.filter(shape => shape.type === "button" || shape.type === "input");
     var formItemIds = formItems.map(s => s.id);
@@ -225,11 +244,12 @@ class BootstrapObject {
     // transformed into links, forms into inlne-forms, and image content
     // should be navbar-brand appropriate.
     formItems = await Promise.all(formItems.map(shape => this.resolveNavItem(shape)));
-    if (navBrand) navBrand =  await this.resolveNavItem(navBrand);
+    // log(`Attempting to generate navbrand,`, navBrand ? navBrand.type : "undefined");
+    if (navBrand) navBrand = await this.resolveNavItem(navBrand);
     listItems = await Promise.all(listItems.map(shape => this.resolveNavItem(shape)));
 
     var output = [];
-
+    // log(`Generated navbrand`, navBrand)
     if (navBrand)
       output.push(navBrand);
 
@@ -257,7 +277,7 @@ class BootstrapObject {
     output.push(hamburgerButton);
     output.push(collapseContainer);
 
-    log(`Resolved navigation content:`, output);
+    // log(`Resolved navigation content:`, output);
 
     return output;
 }
@@ -266,7 +286,8 @@ class BootstrapObject {
 
     switch(shape.type){
       case "navigation":
-      return await this.resolveNavigationContent(shape);
+      var resolved = await this.resolveNavigationContent(shape);
+      return resolved;
     }
 
     if (shape.type == "button"){

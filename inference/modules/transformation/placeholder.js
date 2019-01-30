@@ -9,6 +9,15 @@
  const TextGenerator = require('sentence-generator');
  const generator = TextGenerator(__dirname + '/source.txt');
  const request = require('request');
+ const NounProject = require('the-noun-project');
+ const nounProjectCreds = require('../../config/config').api.nounProject;
+
+// Logo collections from the noun-project which are used for branding.
+const _LOGO_COLLECTIONS = [20469];
+
+const nounProject = new NounProject({
+  ...nounProjectCreds
+});
 
 var contentStore = {};
 
@@ -57,9 +66,26 @@ const generateDummyContent = shape => {
 
 };
 
+const getPlaceholderLogoUrl = () => new Promise((resolve, reject) => {
+  nounProject.getCollectionIconsById(random(_LOGO_COLLECTIONS), (err, res) => {
+
+    return resolve(random(res.icons.map(item => item.preview_url_84)));
+
+  });
+});
 
 
 module.exports = {
   randomImageUrl,
-  generateDummyContent
+  generateDummyContent,
+  getPlaceholderLogoUrl
 };
+
+// Utility.
+function log(...msg){
+  if (process.env.DEBUG) console.log(`PLACEHOLDER |`, ...msg);
+}
+
+function random(array){
+  return array[Math.floor(Math.random() * array.length)];
+}

@@ -70,11 +70,14 @@ const inferNavbarBrand = nav => {
 
   // Examine the first element.
   // If it is not of type 'header' or 'image', then we do not infer a navbar brand.
-  if (nav.contains.length === 0 || ["image", "header"].indexOf(nav.contains[0].type) === -1)
+  if (nav.contains.length === 0 || ["image", "header", "text", "navbar_brand,text", "navbar_brand,image", "navbar_brand,header"].indexOf(nav.contains[0].type) === -1)
     return {navBrand, nav};
 
   // Check that the element is within 1/4 (nav-width) distance from the leftmost edge.
   var navBrand = nav.contains[0];
+
+  // TODO: Ensure that we check among all items, not just the first one.
+  if (navBrand.type.split(',')[0] == "navbar_brand") return {navBrand, nav};
 
   // log(navbrand, `is a prospective navbarbrand.`);
 

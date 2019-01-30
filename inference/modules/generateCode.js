@@ -14,7 +14,7 @@ const transform = require('./transformation/transform');
 const fs = require('fs');
 
 function log(...msg){
-  if (process.env.debug) console.log(`GEN CODE |`, ...msg);
+  if (process.env.DEBUG) console.log(`GEN CODE |`, ...msg);
 }
 
  // Given a transformed preNode, embeds this into serialised HTML.
@@ -102,10 +102,12 @@ function log(...msg){
    // Generate ACR.
    // shapes = inferProperties(shapes);
 
+
    var output = "";
 
    for (var i = 0; i < shapes.length; i++){
      var shape = shapes[i];
+     // log(`Transforming`, shape.type);
 
      var containedCode = await generateCode(shape.contains);
 
