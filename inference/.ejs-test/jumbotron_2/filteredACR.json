@@ -1,0 +1,1118 @@
+[
+  {
+    "id": "1",
+    "parentId": "None",
+    "type": "panel",
+    "meta": {
+      "absoluteWidth": 704,
+      "absoluteHeight": 1080,
+      "relativeWidth": "94.36997319034852%",
+      "relativeHeight": "94.90333919156416%",
+      "midpoint": [
+        374,
+        578
+      ],
+      "area": 760320,
+      "vertices": [
+        [
+          22,
+          38
+        ],
+        [
+          22,
+          1118
+        ],
+        [
+          726,
+          1118
+        ],
+        [
+          726,
+          38
+        ]
+      ],
+      "boundingBox": [
+        [
+          22,
+          38
+        ],
+        [
+          22,
+          1118
+        ],
+        [
+          726,
+          1118
+        ],
+        [
+          726,
+          38
+        ]
+      ]
+    },
+    "content": false,
+    "level": 0,
+    "contains": [
+      {
+        "id": "2",
+        "parentId": "1",
+        "type": "navigation",
+        "meta": {
+          "absoluteWidth": 608,
+          "absoluteHeight": 101,
+          "relativeWidth": "86.36363636363636%",
+          "relativeHeight": "9.351851851851851%",
+          "midpoint": [
+            363,
+            122
+          ],
+          "area": 61408,
+          "vertices": [
+            [
+              59,
+              172
+            ],
+            [
+              667,
+              172
+            ],
+            [
+              59,
+              71
+            ],
+            [
+              667,
+              71
+            ]
+          ],
+          "boundingBox": [
+            [
+              59,
+              71
+            ],
+            [
+              59,
+              172
+            ],
+            [
+              667,
+              172
+            ],
+            [
+              667,
+              71
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": [],
+        "class": "navigation"
+      },
+      {
+        "id": "3",
+        "parentId": "1",
+        "type": "container",
+        "meta": {
+          "absoluteWidth": 579,
+          "absoluteHeight": 225,
+          "relativeWidth": "82.24431818181817%",
+          "relativeHeight": "20.833333333333336%",
+          "midpoint": [
+            356,
+            298
+          ],
+          "area": 130275,
+          "vertices": [
+            [
+              67,
+              411
+            ],
+            [
+              646,
+              411
+            ],
+            [
+              67,
+              186
+            ],
+            [
+              646,
+              186
+            ]
+          ],
+          "boundingBox": [
+            [
+              67,
+              186
+            ],
+            [
+              67,
+              411
+            ],
+            [
+              646,
+              411
+            ],
+            [
+              646,
+              186
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": [
+          {
+            "id": "5",
+            "parentId": "3",
+            "type": "header",
+            "meta": {
+              "absoluteWidth": 106,
+              "absoluteHeight": 49,
+              "relativeWidth": "18.307426597582037%",
+              "relativeHeight": "21.777777777777775%",
+              "midpoint": [
+                145,
+                232
+              ],
+              "area": 5194,
+              "vertices": [
+                [
+                  92,
+                  257
+                ],
+                [
+                  198,
+                  257
+                ],
+                [
+                  92,
+                  208
+                ],
+                [
+                  198,
+                  208
+                ]
+              ],
+              "boundingBox": [
+                [
+                  92,
+                  208
+                ],
+                [
+                  92,
+                  257
+                ],
+                [
+                  198,
+                  257
+                ],
+                [
+                  198,
+                  208
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [],
+            "class": "header"
+          },
+          {
+            "id": 20,
+            "parentId": "3",
+            "type": "row",
+            "draw": true,
+            "meta": {
+              "absoluteWidth": 126,
+              "absoluteHeight": 118,
+              "relativeWidth": "21.761658031088082%",
+              "relativeHeight": "52.44444444444445%",
+              "area": 14868,
+              "vertices": [
+                [
+                  101,
+                  277
+                ],
+                [
+                  227,
+                  277
+                ],
+                [
+                  101,
+                  395
+                ],
+                [
+                  227,
+                  395
+                ]
+              ],
+              "midpoint": [
+                164,
+                336
+              ]
+            },
+            "level": 2,
+            "contains": [
+              {
+                "id": "6",
+                "parentId": 20,
+                "type": "paragraph",
+                "meta": {
+                  "absoluteWidth": 111,
+                  "absoluteHeight": 73,
+                  "relativeWidth": "88.09523809523809%",
+                  "relativeHeight": "61.86440677966102%",
+                  "midpoint": [
+                    156,
+                    314
+                  ],
+                  "area": 8103,
+                  "vertices": [
+                    [
+                      101,
+                      277
+                    ],
+                    [
+                      212,
+                      277
+                    ],
+                    [
+                      101,
+                      350
+                    ],
+                    [
+                      212,
+                      350
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      101,
+                      277
+                    ],
+                    [
+                      101,
+                      350
+                    ],
+                    [
+                      212,
+                      350
+                    ],
+                    [
+                      212,
+                      277
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "gridCell": {
+                  "count": 10,
+                  "clipSize": 0.5714285714285712
+                },
+                "class": "paragraph"
+              },
+              {
+                "id": "4",
+                "parentId": 20,
+                "type": "button",
+                "meta": {
+                  "absoluteWidth": 121,
+                  "absoluteHeight": 52,
+                  "relativeWidth": "96.03174603174604%",
+                  "relativeHeight": "44.06779661016949%",
+                  "midpoint": [
+                    166,
+                    369
+                  ],
+                  "area": 6292,
+                  "vertices": [
+                    [
+                      106,
+                      343
+                    ],
+                    [
+                      227,
+                      343
+                    ],
+                    [
+                      106,
+                      395
+                    ],
+                    [
+                      227,
+                      395
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      106,
+                      343
+                    ],
+                    [
+                      106,
+                      395
+                    ],
+                    [
+                      227,
+                      395
+                    ],
+                    [
+                      227,
+                      343
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "gridCell": {
+                  "count": 11,
+                  "clipSize": 0.5238095238095255
+                },
+                "class": "button"
+              }
+            ],
+            "class": "row"
+          }
+        ],
+        "class": "container"
+      },
+      {
+        "id": "7",
+        "parentId": "1",
+        "type": "container",
+        "meta": {
+          "absoluteWidth": 619,
+          "absoluteHeight": 299,
+          "relativeWidth": "87.92613636363636%",
+          "relativeHeight": "27.685185185185183%",
+          "midpoint": [
+            388,
+            572
+          ],
+          "area": 185081,
+          "vertices": [
+            [
+              78,
+              722
+            ],
+            [
+              697,
+              722
+            ],
+            [
+              78,
+              423
+            ],
+            [
+              697,
+              423
+            ]
+          ],
+          "boundingBox": [
+            [
+              78,
+              423
+            ],
+            [
+              78,
+              722
+            ],
+            [
+              697,
+              722
+            ],
+            [
+              697,
+              423
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": [
+          {
+            "id": "12",
+            "parentId": "7",
+            "type": "card_text_button",
+            "meta": {
+              "absoluteWidth": 167,
+              "absoluteHeight": 236,
+              "relativeWidth": "26.978998384491113%",
+              "relativeHeight": "78.92976588628763%",
+              "midpoint": [
+                192,
+                563
+              ],
+              "area": 39412,
+              "vertices": [
+                [
+                  109,
+                  681
+                ],
+                [
+                  276,
+                  681
+                ],
+                [
+                  109,
+                  445
+                ],
+                [
+                  276,
+                  445
+                ]
+              ],
+              "boundingBox": [
+                [
+                  109,
+                  445
+                ],
+                [
+                  109,
+                  681
+                ],
+                [
+                  276,
+                  681
+                ],
+                [
+                  276,
+                  445
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [
+              {
+                "id": "14",
+                "parentId": "12",
+                "type": "header",
+                "meta": {
+                  "absoluteWidth": 92,
+                  "absoluteHeight": 43,
+                  "relativeWidth": "55.08982035928144%",
+                  "relativeHeight": "18.220338983050848%",
+                  "midpoint": [
+                    173,
+                    488
+                  ],
+                  "area": 3956,
+                  "vertices": [
+                    [
+                      127,
+                      510
+                    ],
+                    [
+                      219,
+                      510
+                    ],
+                    [
+                      127,
+                      467
+                    ],
+                    [
+                      219,
+                      467
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      127,
+                      467
+                    ],
+                    [
+                      127,
+                      510
+                    ],
+                    [
+                      219,
+                      510
+                    ],
+                    [
+                      219,
+                      467
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "header"
+              },
+              {
+                "id": "15",
+                "parentId": "12",
+                "type": "paragraph",
+                "meta": {
+                  "absoluteWidth": 76,
+                  "absoluteHeight": 60,
+                  "relativeWidth": "45.50898203592814%",
+                  "relativeHeight": "25.423728813559322%",
+                  "midpoint": [
+                    168,
+                    557
+                  ],
+                  "area": 4560,
+                  "vertices": [
+                    [
+                      130,
+                      527
+                    ],
+                    [
+                      206,
+                      527
+                    ],
+                    [
+                      130,
+                      587
+                    ],
+                    [
+                      206,
+                      587
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      130,
+                      527
+                    ],
+                    [
+                      130,
+                      587
+                    ],
+                    [
+                      206,
+                      587
+                    ],
+                    [
+                      206,
+                      527
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "paragraph"
+              },
+              {
+                "id": "13",
+                "parentId": "12",
+                "type": "button",
+                "meta": {
+                  "absoluteWidth": 110,
+                  "absoluteHeight": 47,
+                  "relativeWidth": "65.86826347305389%",
+                  "relativeHeight": "19.915254237288135%",
+                  "midpoint": [
+                    194,
+                    630
+                  ],
+                  "area": 5170,
+                  "vertices": [
+                    [
+                      139,
+                      607
+                    ],
+                    [
+                      249,
+                      607
+                    ],
+                    [
+                      139,
+                      654
+                    ],
+                    [
+                      249,
+                      654
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      139,
+                      607
+                    ],
+                    [
+                      139,
+                      654
+                    ],
+                    [
+                      249,
+                      654
+                    ],
+                    [
+                      249,
+                      607
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "button"
+              }
+            ],
+            "class": "card_text_button"
+          },
+          {
+            "id": "17",
+            "parentId": "7",
+            "type": "header",
+            "meta": {
+              "absoluteWidth": 89,
+              "absoluteHeight": 32,
+              "relativeWidth": "14.378029079159935%",
+              "relativeHeight": "10.702341137123746%",
+              "midpoint": [
+                354,
+                475
+              ],
+              "area": 2848,
+              "vertices": [
+                [
+                  310,
+                  491
+                ],
+                [
+                  399,
+                  491
+                ],
+                [
+                  310,
+                  459
+                ],
+                [
+                  399,
+                  459
+                ]
+              ],
+              "boundingBox": [
+                [
+                  310,
+                  459
+                ],
+                [
+                  310,
+                  491
+                ],
+                [
+                  399,
+                  491
+                ],
+                [
+                  399,
+                  459
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [],
+            "class": "header"
+          },
+          {
+            "id": "18",
+            "parentId": "7",
+            "type": "header",
+            "meta": {
+              "absoluteWidth": 77,
+              "absoluteHeight": 49,
+              "relativeWidth": "12.439418416801292%",
+              "relativeHeight": "16.387959866220736%",
+              "midpoint": [
+                354,
+                544
+              ],
+              "area": 3773,
+              "vertices": [
+                [
+                  315,
+                  520
+                ],
+                [
+                  392,
+                  520
+                ],
+                [
+                  315,
+                  569
+                ],
+                [
+                  392,
+                  569
+                ]
+              ],
+              "boundingBox": [
+                [
+                  315,
+                  520
+                ],
+                [
+                  315,
+                  569
+                ],
+                [
+                  392,
+                  569
+                ],
+                [
+                  392,
+                  520
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [],
+            "class": "header"
+          },
+          {
+            "id": "16",
+            "parentId": "7",
+            "type": "button",
+            "meta": {
+              "absoluteWidth": 97,
+              "absoluteHeight": 47,
+              "relativeWidth": "15.670436187399032%",
+              "relativeHeight": "15.719063545150503%",
+              "midpoint": [
+                360,
+                616
+              ],
+              "area": 4559,
+              "vertices": [
+                [
+                  311,
+                  639
+                ],
+                [
+                  408,
+                  639
+                ],
+                [
+                  311,
+                  592
+                ],
+                [
+                  408,
+                  592
+                ]
+              ],
+              "boundingBox": [
+                [
+                  311,
+                  592
+                ],
+                [
+                  311,
+                  639
+                ],
+                [
+                  408,
+                  639
+                ],
+                [
+                  408,
+                  592
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [],
+            "class": "button"
+          },
+          {
+            "id": "8",
+            "parentId": "7",
+            "type": "container",
+            "meta": {
+              "absoluteWidth": 176,
+              "absoluteHeight": 218,
+              "relativeWidth": "28.432956381260098%",
+              "relativeHeight": "72.90969899665552%",
+              "midpoint": [
+                559,
+                554
+              ],
+              "area": 38368,
+              "vertices": [
+                [
+                  471,
+                  663
+                ],
+                [
+                  647,
+                  663
+                ],
+                [
+                  471,
+                  445
+                ],
+                [
+                  647,
+                  445
+                ]
+              ],
+              "boundingBox": [
+                [
+                  471,
+                  445
+                ],
+                [
+                  471,
+                  663
+                ],
+                [
+                  647,
+                  663
+                ],
+                [
+                  647,
+                  445
+                ]
+              ]
+            },
+            "content": false,
+            "level": 2,
+            "contains": [
+              {
+                "id": "11",
+                "parentId": "8",
+                "type": "header",
+                "meta": {
+                  "absoluteWidth": 81,
+                  "absoluteHeight": 33,
+                  "relativeWidth": "46.02272727272727%",
+                  "relativeHeight": "15.137614678899084%",
+                  "midpoint": [
+                    538,
+                    480
+                  ],
+                  "area": 2673,
+                  "vertices": [
+                    [
+                      497,
+                      496
+                    ],
+                    [
+                      578,
+                      496
+                    ],
+                    [
+                      497,
+                      463
+                    ],
+                    [
+                      578,
+                      463
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      497,
+                      463
+                    ],
+                    [
+                      497,
+                      496
+                    ],
+                    [
+                      578,
+                      496
+                    ],
+                    [
+                      578,
+                      463
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "header"
+              },
+              {
+                "id": "10",
+                "parentId": "8",
+                "type": "header",
+                "meta": {
+                  "absoluteWidth": 98,
+                  "absoluteHeight": 45,
+                  "relativeWidth": "55.68181818181818%",
+                  "relativeHeight": "20.642201834862387%",
+                  "midpoint": [
+                    548,
+                    540
+                  ],
+                  "area": 4410,
+                  "vertices": [
+                    [
+                      499,
+                      518
+                    ],
+                    [
+                      597,
+                      518
+                    ],
+                    [
+                      499,
+                      563
+                    ],
+                    [
+                      597,
+                      563
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      499,
+                      518
+                    ],
+                    [
+                      499,
+                      563
+                    ],
+                    [
+                      597,
+                      563
+                    ],
+                    [
+                      597,
+                      518
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "header"
+              },
+              {
+                "id": "9",
+                "parentId": "8",
+                "type": "button",
+                "meta": {
+                  "absoluteWidth": 94,
+                  "absoluteHeight": 37,
+                  "relativeWidth": "53.40909090909091%",
+                  "relativeHeight": "16.972477064220186%",
+                  "midpoint": [
+                    560,
+                    600
+                  ],
+                  "area": 3478,
+                  "vertices": [
+                    [
+                      513,
+                      582
+                    ],
+                    [
+                      607,
+                      582
+                    ],
+                    [
+                      513,
+                      619
+                    ],
+                    [
+                      607,
+                      619
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      513,
+                      582
+                    ],
+                    [
+                      513,
+                      619
+                    ],
+                    [
+                      607,
+                      619
+                    ],
+                    [
+                      607,
+                      582
+                    ]
+                  ]
+                },
+                "content": false,
+                "level": 3,
+                "contains": [],
+                "class": "button"
+              }
+            ],
+            "class": "container"
+          }
+        ],
+        "class": "container"
+      },
+      {
+        "id": "19",
+        "parentId": "1",
+        "type": "row",
+        "meta": {
+          "absoluteWidth": 580,
+          "absoluteHeight": 121,
+          "relativeWidth": "82.38636363636364%",
+          "relativeHeight": "11.203703703703702%",
+          "midpoint": [
+            352,
+            1016
+          ],
+          "area": 70180,
+          "vertices": [
+            [
+              62,
+              956
+            ],
+            [
+              642,
+              956
+            ],
+            [
+              62,
+              1077
+            ],
+            [
+              642,
+              1077
+            ]
+          ],
+          "boundingBox": [
+            [
+              62,
+              956
+            ],
+            [
+              62,
+              1077
+            ],
+            [
+              642,
+              1077
+            ],
+            [
+              642,
+              956
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": [],
+        "class": "row"
+      }
+    ],
+    "class": "panel"
+  }
+]
