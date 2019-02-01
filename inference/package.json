@@ -27,6 +27,7 @@
     "indent-string": "^3.2.0",
     "mayonnaise.js": "^1.1.0",
     "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
     "request": "^2.88.0",
     "sentence-generator": "^1.0.1",
     "the-noun-project": "^2.1.0"

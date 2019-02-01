@@ -8,7 +8,7 @@
  */
 
 const args = require('commander');
-const bundle = require('./modules/bundle/bundle');
+const { bundle } = require('./modules/bundle/bundle');
 const package = require('./package.json');
 const detectPrimitives = require('./modules/detectPrimitives');
 const { generateCode, generateACR } = require('./modules/generateCode');
@@ -17,7 +17,7 @@ const { getLastACRObjectId } = require('./modules/geometry');
 const { inferGrid } = require('./modules/inference/inferGrid');
 const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
 const fs = require('fs');
-const { resolve, basename } = require('path');
+const { resolve, basename, join } = require('path');
 const mkdir = require('mkdirp');
 const { exec, spawn } = require('child_process');
 
@@ -102,25 +102,11 @@ detectPrimitives(imagePath).then(async primitives => {
   });
 
 
-  // TEMP: Remove this for now until we have static bundling using ejs.
-  // Run parcel-bundler in output dir.
-  // if (args.project == 'server'){
-  //   log(`Running parcel-bundler.`, resolve(__dirname, 'node_modules/parcel-bundler/bin/cli.js') + ' ' + resolve(outputDir, 'index.html') + ' -d ' + resolve(outputDir, 'dist'));
-  //
-  //   var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
-  //     resolve(outputDir, 'index.html'),
-  //     '-d',
-  //     resolve(outputDir, 'dist')
-  //   ]);
-  //
-  //   parcelBundelerProc.stdout.on('data', data => log(`[Parcel Bundler]`, data.toString()));
-  // }
-  //
-  // var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
-  //   resolve(outputDir, 'index.html'),
-  //   '-d',
-  //   resolve(outputDir, 'dist')
-  // ]);
+  // Deploy express server if we have specified the projectType is 'server'.
+  if (args.project === 'server'){
+    var app = require(join(outputDir, 'app.js'));
+    app.listen(app.get('port'), () => log(fileName, `is running on`, `http://localhost:${app.get('port')}`));
+  }
 
 })
 

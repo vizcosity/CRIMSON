@@ -1,24 +1,21 @@
+/**
+ * 'Serer' project type bundler for CRIMSON projects.
+ *
+ * Creates an express application skeleton, ready for initialisation by virtue of
+ * an npm package json.
+ *
+ * @ Aaron Baw 2019
+ */
 
-// Loads template file.
-function loadTemplate (name) {
-  var contents = fs.readFileSync(path.join(__dirname, '..', 'templates', (name + '.ejs')), 'utf-8')
-  var locals = Object.create(null)
-
-  function render () {
-    return ejs.render(contents, locals, {
-      escape: util.inspect
-    })
-  }
-
-  return {
-    locals: locals,
-    render: render
-  }
-}
-
+const { loadTemplate, generateBundleEmbed, copyContextFiles, createDirStructure } = require('./bundleCommon');
+const glob = require('glob');
+const fs = require('fs');
+const { join, basename, resolve } = require('path');
+const ncp = require('ncp');
+const resolvePath = resolve;
 
 // Creates npm project skeleton and moves files to appropriate target directory.
-function createApplication (name, dir) {
+const createApplication = (name, dir) => {
 
   // Package
   var pkg = {
@@ -248,4 +245,154 @@ function createApplication (name, dir) {
   }
 
   console.log()
+}
+
+const createPackageJSON = (projectName, nav) => {
+
+  // Package
+  var pkg = {
+    name: projectName,
+    version: '0.1.0',
+    private: true,
+    scripts: {
+      start: 'node app.js'
+    },
+    dependencies: {
+      "cookie-parser": "~1.4.3",
+      "debug": "~2.6.9",
+      "express": "~4.16.0",
+      "express-session": "^1.15.6",
+      "http-errors": "~1.6.2",
+      "morgan": "~1.9.0",
+      "ejs": "^2.6.1"
+    }
+  }
+
+
+  if (nav) pkg.dependencies = {
+    ...pkg.dependencies,
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0"
+  }
+
+  return pkg;
+
+}
+
+const createEntryPoint = (projectName, port) => {
+
+  var app = loadTemplate('../app.js');
+  app.locals.projectName = projectName;
+  app.locals.port = port;
+
+  return app.render();
+
+};
+
+// Server bundle project directory structure:
+// public
+//  - images
+//  - js
+//  - stylesheet
+// routes
+// views
+//  - index.ejs
+//  - navigation.ejs
+// app.js
+// package.json
+const createExpressFiles = (outputDir) => new Promise((resolve, reject) => {
+  // Copy routes (these will remain static for now; no need for editing).
+  ncp(resolvePath(__dirname, 'templates', 'routes'), join(outputDir, 'routes'), function (err) {
+   if (err) throw err;
+   // Copy db.
+   ncp(join(__dirname, 'templates', 'db'), join(outputDir, 'db'), err => {
+     if (err) throw err;
+     return resolve();
+   });
+  });
+});
+
+var ports = {};
+const getAvailablePort = (projectName) => {
+  var portNum = 3500 + Object.keys(ports).length;
+  ports[portNum] = projectName;
+  return portNum;
+}
+
+const serverBundle = async ({
+ outputDir,
+ context,
+ projectType,
+ filteredACR,
+ imagePath,
+ code,
+ navigation,
+ file,
+ fileName,
+ package,
+ port,
+ zip=false
+}) => {
+
+   // Load 'index' view template.
+   var index = loadTemplate('index');
+
+   index.locals.code = code;
+   index.locals.projectType = projectType;
+   index.locals.context = context;
+   index.locals.file = file;
+   index.locals.package = package;
+   index.locals.fileName = fileName;
+   index.locals.imagePath = imagePath;
+
+   var contextFiles = await copyContextFiles(context, projectType, outputDir);
+   await createExpressFiles(outputDir);
+
+   const projectName = outputDir.split('/')[outputDir.split('/').length - 1];
+
+   if (!port) port = getAvailablePort(projectName);
+
+   log(`Bundling server project`, projectName);
+
+   // Copy the source image over to the bundle.
+   log(`Copying imagePath`, imagePath, `to`, join(outputDir, 'public', 'images', basename(imagePath)));
+   fs.copyFileSync(imagePath, join(outputDir, 'public', 'images', basename(imagePath)));
+   contextFiles.push(basename(imagePath));
+
+   // Write the filteredACR file.
+   fs.writeFileSync(join(outputDir, 'filteredACR.json'), JSON.stringify(filteredACR, null, 2));
+
+
+   bundled = {
+     ...generateBundleEmbed(contextFiles),
+     bgImagePath: join('public', 'images', basename(imagePath))
+   };
+
+   // Embed assets in template.
+   for (var assetType in bundled){
+     index.locals[assetType] = bundled[assetType];
+   }
+
+   // Render & write the index view.
+   fs.writeFileSync(join(outputDir, 'views', 'index.ejs'), index.render());
+
+   // Prepare the application.
+   var packageJSON = createPackageJSON(projectName, projectType);
+   var appJS = createEntryPoint(projectName, port);
+
+   // Write the entry point & package json files.
+   fs.writeFileSync(join(outputDir, 'package.json'), JSON.stringify(packageJSON, null, 2));
+   fs.writeFileSync(join(outputDir, 'app.js'), appJS, 'utf8');
+
+   // Zip project.
+   if (zip) return zipDir(projectName, outputDir);
+   else return bundled;
+
+};
+
+module.exports = serverBundle;
+
+// Logging.
+function log(...msg){
+  if (process.env.DEBUG) console.log(basename(__filename.split('.')[0]).toUpperCase(), '|', ...msg);
 }
