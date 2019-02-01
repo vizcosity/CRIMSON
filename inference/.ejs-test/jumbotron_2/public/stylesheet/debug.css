@@ -1,0 +1,35 @@
+ /* ID Labels are hidden by default, toggled with a keypress */
+ .hidden {
+   display: none;
+ }
+
+/* Add some spacing to see borders easier. */
+.show-border {
+}
+
+ /* Wrap labels in a container so that we don't push a completely filled row
+ with columns to a new line */
+ .label-wrap {
+   border: 0px !important;
+   width: 100% !important;
+ }
+
+ .row.show-border {
+   border: 1px solid red;
+   /* margin: 10px; */
+ }
+
+ .row .column.show-border {
+   border: 1px solid green;
+   /* margin: 10px; */
+ }
+
+ .row .container.show-border {
+   border: 1px solid green;
+   /* margin: 10px; */
+ }
+
+ .row .row.show-border {
+   border: 1px solid green;
+   /* margin: 10px; */
+ }

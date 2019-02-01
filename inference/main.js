@@ -64,7 +64,6 @@ module.exports = {
     log(`Code generation parameters:`, fileName, file, outputDir, context, project, imgPath, zip);
 
     var code = await generateCode(acr);
-
     var HTMLOutput = `
     <!-- Skeleton Code generated below via CRIMSON prototyping tool ${package.version} -->
     <!-- Tool available at ${package.homepage} -->
@@ -121,7 +120,18 @@ module.exports = {
     mkdir.sync(outputDir);
 
     log(`Bundling project and saving output to`, outputDir);
-    var zipPath = await bundle({zip, outputDir, imgPath, context: context, filteredACR: acr, targets: {source: HTMLOutput, name: 'index.html'}});
+    var zipPath = await bundle({
+      zip,
+      context,
+      projectType: project,
+      outputDir,
+      imagePath: imgPath,
+      filteredACR: acr,
+      code,
+      file,
+      fileName,
+      package
+    });
 
     return zip ? zipPath : outputDir;
 

@@ -98,7 +98,7 @@ detectPrimitives(imagePath).then(async primitives => {
     imagePath,
     code,
     file,
-    fileName,
+    fileName
   });
 
 

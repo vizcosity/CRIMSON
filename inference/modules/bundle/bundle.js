@@ -126,8 +126,8 @@ const zipDir = (projectName, outputDir) => new Promise((resolve, reject) => {
 
 const staticBundle = async ({
   outputDir,
-  args,
   context,
+  projectType,
   filteredACR,
   imagePath,
   code,
@@ -141,11 +141,12 @@ const staticBundle = async ({
     var index = loadTemplate('index');
 
     index.locals.code = code;
+    index.locals.projectType = projectType;
+    index.locals.context = context;
     index.locals.file = file;
     index.locals.package = package;
     index.locals.fileName = fileName;
     index.locals.imagePath = imagePath;
-    index.locals.args = args;
 
     var contextFiles = await copyContextFiles(context, outputDir);
 
@@ -176,8 +177,8 @@ const staticBundle = async ({
     fs.writeFileSync(join(outputDir, 'index.html'), index.render());
 
     // Zip project.
-    if (zip) zipDir(projectName, outputDir)
-    return bundled;
+    if (zip) return zipDir(projectName, outputDir);
+    else return bundled;
 };
 
 // Server bundle project directory structure:
