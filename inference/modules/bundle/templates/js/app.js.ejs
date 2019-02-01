@@ -1,0 +1,86 @@
+/**
+ * ExpressJS App skeleton, based off of express-generator.
+ * Ref: https://expressjs.com/en/starter/generator.html
+ *
+ * This app skeleton is based off of the generator provided above, and deploys
+ * the code geneerated through CRIMSON via a server environment, allowing users
+ * to quickly bootstrap new development projects, and support prototyping of
+ * server-side features such as user login and registration.
+ *
+ * @ Aaron Baw 2019
+ */
+
+<%#
+  Params passable to this template;
+    - port (Static port)
+    - projectName (Name for project)
+    - secret (Session secret)
+%>
+
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
+const passport = require('passport');
+var Strategy = require('passport-local').Strategy;
+const db = require('./db/db.js');
+const _PORT = process.env.PORT || <%- port %>
+
+// Define local authentication strategy.
+passport.serializeUser(function(user, cb) {
+  cb(null, user.username);
+});
+
+passport.deserializeUser(async function(username, cb) {
+  cb(null, await db.getUserByUsername(username));
+});
+
+passport.use(new Strategy(async (username, password, cb) => {
+    console.log(`Attempting to authenticate:`, username, password);
+    // console.log();
+    var user = await db.getUserByUsername(username)
+    if (!user) return cb(null, false);
+    if (user.password !== password) return cb(null, false);
+    return cb(null, user);
+  }));
+
+// Initialize routes with DB & Passport instance.
+const indexRouter = require('./routes/index')({db, passport});
+
+<%# Only initialise login, registration & logout routes if it has been specified
+    in template params.
+%>
+const loginRouter = require('./routes/login')({db, passport});
+
+<% if (generateAuthRoutes) { %>
+const registrationRouter = require('./routes/register')({db, passport});
+const logoutRouter = require('./routes/logout')({db, passport});
+<% } %>
+
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({secret: '<%- secret ? secret : 'my secret' %>'}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
+app.set('port', _PORT);
+
+app.use('/', indexRouter);
+<% if (generateAuthRoutes) { %>
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
+app.use('/register', registrationRouter);
+<% } %>
+
+/**
+ * Start Express server.
+ */
+app.listen(app.get('port'), () => {
+  console.log('<%- projectName ? projectName : 'App' %> is running at http://localhost:%d in %s mode', app.get('port'), app.get('env'));
+  console.log('  Press CTRL-C to stop\n');
+});

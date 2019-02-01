@@ -4,7 +4,7 @@
  *  @ Aaron Baw 2018
  */
 
- const bundle = require('./modules/bundle');
+ const bundle = require('./modules/bundle/bundle');
  const detectPrimitives = require('./modules/detectPrimitives');
  const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
  const inferProperties = require('./modules/inference/infer');
