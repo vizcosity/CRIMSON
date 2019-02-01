@@ -13,7 +13,7 @@ const { exec, spawn } = require('child_process');
 const package = require('./package.json');
 const endpointPrefix = `/api/v${package['api-version']}`;
 const multer = require('multer');
-const { resolve, basename, extname } = require('path');
+const { resolve, basename, extname, join } = require('path');
 const upload = multer({
   dest: resolve(__dirname, "./.uploads"),
   preservePath: true,
@@ -31,7 +31,10 @@ const config = require('crimson-inference/config/config.json');
 
 // Keep track of running processes, ensuring to kill them once used.
 var runningProcesses = {};
-
+const getAvailablePort = (projectName) => {
+  var portNum = 3500 + Object.keys(runningProcesses).length;
+  return portNum;
+}
 
 // Defaults.
 const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
@@ -109,31 +112,55 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   log(`Output directory for generated code`, outputDir);
 
-  // Launch a live webserver if the param has passed.
+  // Launch a live webserver if the param has been passed.
   if (req.body.livePreview){
-    var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
-      resolve(outputDir, 'index.html'),
-      '-d',
-      resolve(outputDir, 'dist')
-    ]);
+    // var projectApp = require(join(outputDir, 'app.js'));
+    // projectApp.listen(app.get('port'), () => {
+    //   log(fileName, `has been deployed and running on`, `http://localhost:${projectApp.get('port')}`);
+    //   return res.json({
+    //     url: `http://localhost:${projectApp.get('port')}`
+    //   });
+    // });
 
-    runningProcesses[fileName] = parcelBundelerProc;
+    var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)]);
+    runningProcesses[fileName] = childServer;
 
-    log(`Generated live preview. Waiting for parcel-bundler to return live preview url.`);
+    log(`Generated live preview. Waiting for url.`);
 
-    parcelBundelerProc.stdout.on('data', data => {
+    childServer.stdout.on('data', data => {
       data = data.toString();
-      log(`[Parcel Bundler]`, data);
+      log(`[${fileName} : Server]`, data);
       if (data.match(/http\S+/g)) return res.json({
         url: data.match(/http\S+/g)[0]
       });
     });
-
-    // Legacy URL.
-    // return res.json({
-    //   url: `http://localhost:1234`
-    // });
   }
+
+  // Launch a live webserver if the param has passed.
+  // if (req.body.livePreview){
+  //   var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
+  //     resolve(outputDir, 'index.html'),
+  //     '-d',
+  //     resolve(outputDir, 'dist')
+  //   ]);
+  //
+  //   runningProcesses[fileName] = parcelBundelerProc;
+  //
+  //   log(`Generated live preview. Waiting for parcel-bundler to return live preview url.`);
+  //
+  //   parcelBundelerProc.stdout.on('data', data => {
+  //     data = data.toString();
+  //     log(`[Parcel Bundler]`, data);
+  //     if (data.match(/http\S+/g)) return res.json({
+  //       url: data.match(/http\S+/g)[0]
+  //     });
+  //   });
+  //
+  //   // Legacy URL.
+  //   // return res.json({
+  //   //   url: `http://localhost:1234`
+  //   // });
+  // }
 
   // Return zipped file.
   else if (req.body.zip){

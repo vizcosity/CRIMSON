@@ -22,11 +22,14 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+<% if (locals.generateAuthRoutes) { %>
+const db = require(path.join(__dirname, 'db/db.js'));
 const passport = require('passport');
 var Strategy = require('passport-local').Strategy;
-const db = require('./db/db.js');
+<% } %>
 const _PORT = process.env.PORT || <%- port %>
 
+<% if (locals.generateAuthRoutes) { %>
 // Define local authentication strategy.
 passport.serializeUser(function(user, cb) {
   cb(null, user.username);
@@ -45,33 +48,38 @@ passport.use(new Strategy(async (username, password, cb) => {
     return cb(null, user);
   }));
 
+<% } %>
 // Initialize routes with DB & Passport instance.
-const indexRouter = require('./routes/index')({db, passport});
-
+const indexRouter = require(path.join(__dirname, 'routes/index'))();
 <%# Only initialise login, registration & logout routes if it has been specified
     in template params.
 %>
-const loginRouter = require('./routes/login')({db, passport});
-
-<% if (generateAuthRoutes) { %>
-const registrationRouter = require('./routes/register')({db, passport});
-const logoutRouter = require('./routes/logout')({db, passport});
+<% if (locals.generateAuthRoutes) { %>
+const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport});
+const registrationRouter = require(path.join(__dirname, 'routes/register')({db, passport});
+const logoutRouter = require(path.join(__dirname, 'routes/logout')({db, passport});
 <% } %>
 
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({secret: '<%- secret ? secret : 'my secret' %>'}));
+app.use(session({
+  secret: '<%- locals.secret ? secret : 'my secret' %>',
+  resave: null,
+  saveUninitialized: null
+}));
+<% if (locals.generateAuthRoutes) { %>
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+<% } %>
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.set('views', './views');
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.set('port', _PORT);
 
 app.use('/', indexRouter);
-<% if (generateAuthRoutes) { %>
+<% if (locals.generateAuthRoutes) { %>
 app.use('/login', loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/register', registrationRouter);
@@ -79,8 +87,13 @@ app.use('/register', registrationRouter);
 
 /**
  * Start Express server.
+ * If we launch the file from the command-line, then run the server. If the file
+ * is imported as a module, we want to export the 'app' object so that we can
+ * call the 'listen' method directly.
  */
-app.listen(app.get('port'), () => {
-  console.log('<%- projectName ? projectName : 'App' %> is running at http://localhost:%d in %s mode', app.get('port'), app.get('env'));
-  console.log('  Press CTRL-C to stop\n');
-});
+if (require.main == module)
+  app.listen(app.get('port'), () => {
+    console.log('drawn_jumbotron_sample_2 is running at http://localhost:%d in %s mode', app.get('port'), app.get('env'));
+    console.log('  Press CTRL-C to stop\n');
+  });
+else module.exports = app;

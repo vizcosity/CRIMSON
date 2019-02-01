@@ -25,7 +25,7 @@ class CodeGenerator extends Component {
       fileName: this.props.project.source.name,
       imgPath: this.props.project.source.path,
       context: 'vanilla',
-      project: 'static',
+      project: 'server',
       livePreview: true
     }).then(({url}) => {
       log(`Generated code; live at url:`, url);
