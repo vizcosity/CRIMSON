@@ -21,3 +21,4 @@ web-platform/.generated/*
 web-platform/.cache/*
 .output/
 .cache
+inference/.*
