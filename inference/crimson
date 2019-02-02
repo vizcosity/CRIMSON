@@ -43,6 +43,7 @@ const outputDir = resolve(__dirname, args.output, fileName);
 process.env['CRIMSON_PROJECT_TYPE'] = args.project;
 
 // Clear & create output dir.
+mkdir.sync(outputDir);
 remove.removeSync(outputDir);
 mkdir.sync(outputDir);
 

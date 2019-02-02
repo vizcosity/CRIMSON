@@ -17,7 +17,6 @@ import {
   findACRObjectById,
   moveACRObject,
   resizeACRObject,
-  getLastACRObjectId,
   IDGenerator
 } from './geometry.js';
 import { Link } from "react-router-dom";
@@ -48,11 +47,11 @@ style={{
 </div>)}
 const BoundingBox = Reactable(BoundingBoxComponent);
 
-class Toolbar extends Component {
-  render(){
-    return;
-  }
-}
+// class Toolbar extends Component {
+//   render(){
+//     return;
+//   }
+// }
 
 class InteractiveACRModifier extends Component {
 
@@ -140,7 +139,7 @@ class InteractiveACRModifier extends Component {
 
   // Creates a new container primitive and adds to the ACR.
   createPrimitive(parent, {x, y}){
-    
+
     x *= this.state.drawScaleFactor.x;
     y *= this.state.drawScaleFactor.y;
 
