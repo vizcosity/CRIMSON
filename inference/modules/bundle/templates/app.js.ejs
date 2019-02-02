@@ -22,6 +22,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const ipv4 = require('local-ipv4-address');
 <% if (locals.generateAuthRoutes) { %>
 const db = require(path.join(__dirname, 'db/db.js'));
 const passport = require('passport');
@@ -92,8 +93,9 @@ app.use('/register', registrationRouter);
  * call the 'listen' method directly.
  */
 if (require.main == module)
-  app.listen(app.get('port'), () => {
-    console.log('drawn_jumbotron_sample_2 is running at http://localhost:%d in %s mode', app.get('port'), app.get('env'));
+  app.listen(app.get('port'), async () => {
+    var host = `http://${await ipv4()}:${app.get('port')}`
+    console.log('drawn_jumbotron_sample_2 is running at %s in %s mode', host, app.get('env'));
     console.log('  Press CTRL-C to stop\n');
   });
 else module.exports = app;

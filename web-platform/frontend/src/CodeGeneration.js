@@ -9,7 +9,7 @@
  */
 
 import React, { Component } from 'react';
-import { Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Dimmer, Loader } from 'semantic-ui-react'
 import { fetchGeneratedCode } from './Fetch.js';
 
 class CodeGenerator extends Component {
@@ -62,7 +62,7 @@ class CodeGenerator extends Component {
           </Dimmer>
         </div> :
 
-        <iframe className="live-preview" src={this.generatedCodeUrl} ></iframe>
+        <iframe title="live-codegen" className="live-preview" src={this.generatedCodeUrl} ></iframe>
       }
       </div>
     );

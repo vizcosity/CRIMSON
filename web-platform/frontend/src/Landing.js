@@ -7,7 +7,6 @@
  */
 
 import React, { Component } from 'react';
-import download from 'downloadjs';
 
 const Footer  = () => <footer>
   <p>CRIMSON @ Aaron Baw 2018</p>
@@ -75,9 +74,6 @@ class Uploader extends Component {
 
 export default class Landing extends Component {
 
-  constructor(props, context){
-    super(props, context);
-  }
 
   render(){
     return (

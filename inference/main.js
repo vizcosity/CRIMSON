@@ -76,6 +76,7 @@ module.exports = {
     }
 
     // Clear & create output directory.
+    mkdir.sync(outputDir);
     remove.removeSync(outputDir);
     mkdir.sync(outputDir);
 
