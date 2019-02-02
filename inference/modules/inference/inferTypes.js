@@ -243,12 +243,9 @@ const inferNavigation = shapes => {
   shapes[0].contains.forEach(shape => {
     if (isNavigation(shape, shapes[0].contains)) {
       shape.type = "navigation";
-
-      console.log(process.env.CRIMSON_PROJECT_TYPE)
-      // Infer login tokens only if the server project type can support it.
-      if (process.env['CRIMSON_PROJECT_TYPE'] === 'server')
-        shape = inferLoginToken(shape);
     }
+    if (shape.type === "navigation" && process.env['CRIMSON_PROJECT_TYPE'] === 'server')
+      shape = inferLoginToken(shape);
   });
   return shapes;
 }

@@ -23,7 +23,7 @@ module.exports = {
     fs.writeFile(__dirname+'/db.json',JSON.stringify(users, null, 2), (err) => {
 
       if (err) return reject(err);
-      console.log(`DB | Creater user`, users[username]);
+      console.log(`DB | Created user`, users[username]);
 
       return resolve(users[username]);
     });

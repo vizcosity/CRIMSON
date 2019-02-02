@@ -19,6 +19,7 @@ const { inferCompoundPrimitives } = require('./modules/inference/inferCompound')
 const fs = require('fs');
 const { resolve, basename, join } = require('path');
 const mkdir = require('mkdirp');
+const remove = require('remove');
 const { exec, spawn } = require('child_process');
 
 // Parse arguments.
@@ -41,7 +42,8 @@ const outputDir = resolve(__dirname, args.output, fileName);
 // Set the project type as an environment variable.
 process.env['CRIMSON_PROJECT_TYPE'] = args.project;
 
-// Create output directory.
+// Clear & create output dir.
+remove.removeSync(outputDir);
 mkdir.sync(outputDir);
 
 // Generate the ACR JSON file, and return the path of the generated file.

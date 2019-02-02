@@ -3,6 +3,8 @@ html, body {
   width: 100%;
   height: 100%;
   font-family: "Avenir", sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .row-fill-grid-space {
@@ -100,4 +102,9 @@ h1 {
 
 .card p {
   text-align: inherit;
+}
+
+/** Remove bottom margin on forms. */
+form {
+  margin-bottom: 0;
 }

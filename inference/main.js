@@ -13,6 +13,7 @@
  const package = require('./package.json');
  const {generateCode, generateACR } = require('./modules/generateCode');
  const mkdir = require('mkdirp');
+ const remove = require('remove');
  const { resolve, basename } = require('path');
  const {filterPrimitives, markDisplayablePrimitives} = require('./modules/filterPrimitives');
  const fs = require('fs');
@@ -22,11 +23,10 @@ module.exports = {
 
     // Detect primitives.
     var primitives = await detectPrimitives(imgPath);
+
     // Mark shapes which should be drawn by the interactive ACR customiser
     // tool.
     primitives = markDisplayablePrimitives(primitives);
-
-    log(`Detected primitives`, primitives);
 
 
     // Generate ACR from detected primitives.
@@ -45,10 +45,10 @@ module.exports = {
     fileName, file, outputDir, context, project, imgPath, zip
   }) => {
 
+    process.env['CRIMSON_PROJECT_TYPE'] = project;
+
     // Filter unwanted primitives used for inference.
     acr = filterPrimitives(acr);
-
-    process.env['CRIMSON_PROJECT_TYPE'] = project;
 
     log(`Generating code for`, fileName);
 
@@ -75,6 +75,8 @@ module.exports = {
       log(`No outputDir passed. Using:`, outputDir);
     }
 
+    // Clear & create output directory.
+    remove.removeSync(outputDir);
     mkdir.sync(outputDir);
 
     log(`Bundling project [${project}] and saving output to`, outputDir);
