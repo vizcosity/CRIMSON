@@ -56,8 +56,8 @@ const indexRouter = require(path.join(__dirname, 'routes/index'))();
 %>
 <% if (locals.generateAuthRoutes) { %>
 const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport});
-const registrationRouter = require(path.join(__dirname, 'routes/register')({db, passport});
-const logoutRouter = require(path.join(__dirname, 'routes/logout')({db, passport});
+const registrationRouter = require(path.join(__dirname, 'routes/register'))({db, passport});
+const logoutRouter = require(path.join(__dirname, 'routes/logout'))({db, passport});
 <% } %>
 
 const app = express();

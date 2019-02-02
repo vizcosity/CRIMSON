@@ -214,6 +214,26 @@ const inferFromMap = shapes => {
   return shapes;
 }
 
+const inferLoginToken = nav => {
+  nav.contains.forEach(shape => {
+    log(shape.content);
+    if (shape.content.toLowerCase && shape.content.toLowerCase() === "login"){
+      // Convert the shape to a 'button'.
+      shape.type = "button";
+      // Set nav 'generateAuth' property to true.
+      nav.generateAuth = true;
+      shape.generateAuth = true;
+
+      // Set the generate auth environment variable to true so that we permit
+      // access to the login, logout & registration routes later in the pipeline.
+      process.env['CRIMSON_GENERATE_AUTH'] = true;
+
+      log(`${shape.id} constitutes a login token.`);
+    }
+  });
+  return nav;
+}
+
 const inferNavigation = shapes => {
 
   // Ensure we are working at the top level, with panels.
@@ -223,7 +243,11 @@ const inferNavigation = shapes => {
   shapes[0].contains.forEach(shape => {
     if (isNavigation(shape, shapes[0].contains)) {
       shape.type = "navigation";
-      // shape = inferNavbarBrand(shape);
+
+      console.log(process.env.CRIMSON_PROJECT_TYPE)
+      // Infer login tokens only if the server project type can support it.
+      if (process.env['CRIMSON_PROJECT_TYPE'] === 'server')
+        shape = inferLoginToken(shape);
     }
   });
   return shapes;

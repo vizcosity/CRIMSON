@@ -48,10 +48,12 @@ module.exports = {
     // Filter unwanted primitives used for inference.
     acr = filterPrimitives(acr);
 
+    process.env['CRIMSON_PROJECT_TYPE'] = project;
+
     log(`Generating code for`, fileName);
 
     // Infer types on the potentially modified primitives.
-    acr = inferProperties(acr);
+    acr = inferProperties(acr, project);
 
     log(`Inferring compound primitives for`, fileName);
     acr = inferCompoundPrimitives(acr);
@@ -86,7 +88,8 @@ module.exports = {
       code,
       file,
       fileName,
-      package
+      package,
+      generateAuth: process.env.CRIMSON_GENERATE_AUTH
     });
 
     return zip ? zipPath : outputDir;

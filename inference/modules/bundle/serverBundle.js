@@ -279,10 +279,11 @@ const createPackageJSON = (projectName, nav) => {
 
 }
 
-const createEntryPoint = (projectName, port) => {
+const createEntryPoint = (projectName, generateAuth, port) => {
 
   var app = loadTemplate('../app.js');
   app.locals.projectName = projectName;
+  app.locals.generateAuthRoutes = generateAuth;
   app.locals.port = port;
 
   return app.render();
@@ -307,7 +308,13 @@ const createExpressFiles = (outputDir) => new Promise((resolve, reject) => {
    // Copy db.
    ncp(join(__dirname, 'templates', 'db'), join(outputDir, 'db'), err => {
      if (err) throw err;
-     return resolve();
+
+     if (process.env.CRIMSON_GENERATE_AUTH)
+     ncp(join(__dirname, 'templates', 'views'), join(outputDir, 'views'), err => {
+       if (err) throw err;
+       return resolve();
+     });
+     else return resolve();
    });
   });
 });
@@ -331,19 +338,28 @@ const serverBundle = async ({
  fileName,
  package,
  port,
+ generateAuth,
  zip=false
 }) => {
 
    // Load 'index' view template.
    var index = loadTemplate('index');
 
-   index.locals.code = code;
-   index.locals.projectType = projectType;
-   index.locals.context = context;
-   index.locals.file = file;
-   index.locals.package = package;
-   index.locals.fileName = fileName;
-   index.locals.imagePath = imagePath;
+   log(`Generated Code:`, code);
+
+   log(`GenerateAuth:`,generateAuth);
+
+   index.locals.code = code.index;
+
+   var header = loadTemplate('header');
+   header.locals.projectType = projectType;
+   header.locals.context = context;
+   header.locals.file = file;
+   header.locals.package = package;
+   header.locals.fileName = fileName;
+   header.locals.imagePath = imagePath;
+
+   // log(`Index locals:`, index.locals);
 
    var contextFiles = await copyContextFiles(context, projectType, outputDir);
    await createExpressFiles(outputDir);
@@ -376,9 +392,19 @@ const serverBundle = async ({
    // Render & write the index view.
    fs.writeFileSync(join(outputDir, 'views', 'index.ejs'), index.render());
 
+   // Render & write the header view.
+   fs.writeFileSync(join(outputDir, 'views', 'header.ejs'), header.render());
+
+   if (code.nav) {
+     var nav = loadTemplate('nav');
+     nav.locals.code = code.nav;
+     // render & write the nav view.
+     fs.writeFileSync(join(outputDir, 'views', 'nav.ejs'), nav.render());
+   }
+
    // Prepare the application.
    var packageJSON = createPackageJSON(projectName, projectType);
-   var appJS = createEntryPoint(projectName, port);
+   var appJS = createEntryPoint(projectName, generateAuth, port);
 
    // Write the entry point & package json files.
    fs.writeFileSync(join(outputDir, 'package.json'), JSON.stringify(packageJSON, null, 2));

@@ -38,6 +38,9 @@ const file = imagePath.split('/')[imagePath.split('/').length - 1]
 const fileName = file.split('.')[0].substring(0, file.split('.')[0].length);
 const outputDir = resolve(__dirname, args.output, fileName);
 
+// Set the project type as an environment variable.
+process.env['CRIMSON_PROJECT_TYPE'] = args.project;
+
 // Create output directory.
 mkdir.sync(outputDir);
 
@@ -98,7 +101,8 @@ detectPrimitives(imagePath).then(async primitives => {
     imagePath,
     code,
     file,
-    fileName
+    fileName,
+    generateAuth: process.env.CRIMSON_GENERATE_AUTH
   });
 
 

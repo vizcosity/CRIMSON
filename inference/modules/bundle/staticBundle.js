@@ -25,7 +25,7 @@ const staticBundle = async ({
    // Load 'index' view template.
    var index = loadTemplate('index');
 
-   index.locals.code = code;
+   index.locals.code = code.index;
    index.locals.projectType = projectType;
    index.locals.context = context;
    index.locals.file = file;
@@ -56,6 +56,13 @@ const staticBundle = async ({
    // Embed assets in template.
    for (var assetType in bundled){
      index.locals[assetType] = bundled[assetType];
+   }
+
+   if (code.nav) {
+     var nav = loadTemplate('nav');
+     nav.locals.code = code.nav;
+     // render & write the nav view.
+     fs.writeFileSync(join(outputDir, 'views', 'nav.ejs'), nav.render());
    }
 
    // Render & write the index file.
