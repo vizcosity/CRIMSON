@@ -73,7 +73,7 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
 // as well as a live URL with the generated page, if desired.
 app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (req, res, params) => {
 
-  log(`Recieved request to generate code with body:`, req.body);
+  // log(`Recieved request to generate code with body:`, req.body);
 
   // If an image is passed to the request, it will be stored under the
   // req.file field.

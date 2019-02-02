@@ -1,8 +1,13 @@
 <%- include('header', locals) %>
 <%- include('nav', locals) %>
+
+<body>
+
 <div class="container" style="
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-grow: 1;
   flex-direction: column;
   margin: auto;
 ">
@@ -95,3 +100,7 @@ function handleSubmission(e){
 }
 
 </script>
+
+<%- include('scripts', locals) %>
+
+</body>

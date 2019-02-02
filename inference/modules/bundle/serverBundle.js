@@ -342,22 +342,23 @@ const serverBundle = async ({
  zip=false
 }) => {
 
-   // Load 'index' view template.
+   // Load 'index' and 'header' view templates.
    var index = loadTemplate('index');
+   var header = loadTemplate('header');
+   var scripts = loadTemplate('scripts');
 
-   log(`Generated Code:`, code);
+   var locals = {};
 
    log(`GenerateAuth:`,generateAuth);
 
-   index.locals.code = code.index;
-
-   var header = loadTemplate('header');
-   header.locals.projectType = projectType;
-   header.locals.context = context;
-   header.locals.file = file;
-   header.locals.package = package;
-   header.locals.fileName = fileName;
-   header.locals.imagePath = imagePath;
+   locals.code = code.index;
+   locals.package = package;
+   locals.projectType = projectType;
+   locals.context = context;
+   locals.file = file;
+   locals.package = package;
+   locals.fileName = fileName;
+   locals.imagePath = imagePath;
 
    // log(`Index locals:`, index.locals);
 
@@ -386,14 +387,24 @@ const serverBundle = async ({
 
    // Embed assets in template.
    for (var assetType in bundled){
-     index.locals[assetType] = bundled[assetType];
+     locals[assetType] = bundled[assetType];
    }
+
+   // Share locals between the index and header views.
+   for (var local in locals){
+     header.locals[local] = locals[local];
+     index.locals[local] = locals[local];
+     scripts.locals[local] = locals[local];
+   };
 
    // Render & write the index view.
    fs.writeFileSync(join(outputDir, 'views', 'index.ejs'), index.render());
 
    // Render & write the header view.
    fs.writeFileSync(join(outputDir, 'views', 'header.ejs'), header.render());
+
+   // Render & write the scripts view.
+   fs.writeFileSync(join(outputDir, 'views', 'scripts.ejs'), scripts.render());
 
    if (code.nav) {
      var nav = loadTemplate('nav');

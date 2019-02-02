@@ -1,9 +1,11 @@
 <%- include('header', locals) %>
 <%- include('./nav.ejs', locals) %>
-
+<body>
     <div class="container" style="
       display: flex;
       align-items: center;
+      justify-content: center;
+      flex-grow: 1;
       flex-direction: column;
       margin: auto;
     ">
@@ -72,3 +74,5 @@
 </form> -->
 
 </div>
+<%- include('scripts', locals) %>
+</body>
