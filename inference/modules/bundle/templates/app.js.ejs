@@ -42,13 +42,9 @@ passport.deserializeUser(async function(username, cb) {
 
 passport.use(new Strategy(async (username, password, cb) => {
     console.log(`Attempting to authenticate:`, username, password);
-    // console.log();
-    var user = await db.getUserByUsername(username)
-    if (!user) return cb(null, false);
-    if (user.password !== password) return cb(null, false);
-    return cb(null, user);
-  }));
-
+    var result = await db.validateUserPassword(username, password)
+    return cb(null, result ? await db.getUserByUsername(username) : false);
+}));
 <% } %>
 // Initialize routes with DB & Passport instance.
 const indexRouter = require(path.join(__dirname, 'routes/index'))();
