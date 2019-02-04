@@ -1,0 +1,40 @@
+<%#
+Template params;
+  - package (for homepage & version)
+  - file
+  - imagePath
+  - args
+  - fileName
+  - code [String]
+  - jsEmbed [String]
+  - cssEmbed [String]
+ %>
+
+<!-- Skeleton Code generated below via CRIMSON prototyping tool <% package.version %> -->
+<!-- Tool available at <%= package.homepage %> -->
+<!-- Copyright @ Aaron Baw 2018 -->
+<!DOCTYPE html>
+<html>
+  <%%- include('header', locals) %%>
+  <body>
+  <%%- include('nav', locals) %%>
+  <%- code %>
+
+  <div id="source-image-preview" style="
+    background-image: url('<%- bgImagePath %>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+    z-index: -1;
+  " class="meta hidden"></div>
+
+  <!-- JS -->
+  <%%- include('scripts', locals) %%>
+  </body>
+</html>

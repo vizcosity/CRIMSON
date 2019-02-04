@@ -11,7 +11,7 @@ const {inferTypes} = require('./inferTypes');
 const {inferCompoundPrimitives, inferCompoundPrimitivesAtLevel} = require('./inferCompound');
 
 // Infer properties about the shapes which will then be generated into HTML code.
-module.exports = function inferProperties(shapes){
+module.exports = function inferProperties(shapes, projectType){
 
   // Inference assumes that all the shapes have been sorted along the y axis,
   // according to their top-left most vertex. We sort them here to enforce
@@ -19,7 +19,7 @@ module.exports = function inferProperties(shapes){
   shapes = sortshapesAlongYAxis(shapes);
 
   // Infer types.
-  shapes = inferTypes(shapes);
+  shapes = inferTypes(shapes, projectType);
 
   // Infer compound primitives, such as cards, heros, jumbotrons and media objects.
   // shapes = inferCompoundPrimitivesAtLevel(shapes);

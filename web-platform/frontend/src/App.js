@@ -8,6 +8,7 @@ import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 import Package from '../package.json';
+import { basename } from 'path';
 
 class App extends Component {
 
@@ -37,6 +38,9 @@ class App extends Component {
 
       // Save it to the class instance.
       this.project = {acr, source};
+
+      // Remove extension from projectname.
+      this.project.source.name = this.project.source.name.split('.')[0];
 
       log(`New project instantiated.`, this.project);
 
@@ -74,8 +78,9 @@ class App extends Component {
         }
           />
 
-        <Route exact path="/generate-code"
-        render={() => <CodeGenerator api={Package.api} project={this.project} /> } />
+        <Route exact path="/generate-code" component={
+          ({history}) => <CodeGenerator history={history} api={Package.api} project={this.project} />
+        } />
 
       </div>
     </Router>);

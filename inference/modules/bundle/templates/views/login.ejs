@@ -1,0 +1,78 @@
+<%- include('header', locals) %>
+<%- include('./nav.ejs', locals) %>
+<body>
+    <div class="container" style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      flex-direction: column;
+      margin: auto;
+    ">
+
+  <form action="/login" method="POST">
+
+    <div class="form-group">
+      <h1>Login below.</h1>
+    </div>
+    <div class="form-group">
+      <label for="inputUsername">Username</label>
+      <div class="input-group">
+      <div class="input-group-prepend">
+          <div class="input-group-text">
+            <div style="
+              background-image: url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxuczp4PSJodHRwOi8vbnMuYWRvYmUuY29tL0V4dGVuc2liaWxpdHkvMS4wLyIgeG1sbnM6aT0iaHR0cDovL25zLmFkb2JlLmNvbS9BZG9iZUlsbHVzdHJhdG9yLzEwLjAvIiB4bWxuczpncmFwaD0iaHR0cDovL25zLmFkb2JlLmNvbS9HcmFwaHMvMS4wLyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj48c3dpdGNoPjxmb3JlaWduT2JqZWN0IHJlcXVpcmVkRXh0ZW5zaW9ucz0iaHR0cDovL25zLmFkb2JlLmNvbS9BZG9iZUlsbHVzdHJhdG9yLzEwLjAvIiB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIj48L2ZvcmVpZ25PYmplY3Q+PGcgaTpleHRyYW5lb3VzPSJzZWxmIj48Zz48cGF0aCBkPSJNNjkuNiw0OWMtMC42LTAuNC0xLjMtMC4zLTEuOCwwLjFjLTUsMy43LTExLjEsNS44LTE3LjgsNS44Yy02LjcsMC0xMi44LTIuMi0xNy44LTUuOGMtMC41LTAuNC0xLjMtMC40LTEuOC0wLjEgICAgIGMtMTEuOCw3LjYtMTcuNywyMi41LTE3LjcsMzkuNmMwLDExLjgsNzQuNiwxMS44LDc0LjYsMEM4Ny4zLDcxLjUsODEuNCw1Ni42LDY5LjYsNDl6Ij48L3BhdGg+PGNpcmNsZSBjeD0iNTAiIGN5PSIyNC44IiByPSIyMi4zIj48L2NpcmNsZT48L2c+PC9nPjwvc3dpdGNoPjwvc3ZnPg==');
+              height: 24px;
+              width: 24px;
+              background-position: center center;
+              background-repeat: no-repeat;
+              background-size: contain;
+              opacity: 0.6;"
+            "></div>
+          </div>
+        </div>
+      <input name="username" type="username" id="inputUsername" class='form-control'>
+    </div>
+    </div>
+    <div class="form-group">
+    <label for="inputPassword6">Password</label>
+    <div class="input-group">
+      <div class="input-group-prepend">
+          <div class="input-group-text">
+            <div style="
+              background-image: url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIiB2aWV3Qm94PSIwIDAgMTI2Ni4zNDA0IDM3MC4wOTA0MyIgdmVyc2lvbj0iMS4xIiB4PSIwcHgiIHk9IjBweCI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTU0MS41MzEzLDEwNC40NDQxOSkiPjxwYXRoIHN0eWxlPSIiIGQ9Im0gLTEzODYuNDg2MSwyMDkuMDY4NDggMCwtNTYuNTc3OCAtNDAuMDAxMywzOS45ODY2NyAtNDAuMDAxNCwzOS45ODY2OSAtMjAuOTMwMSwtMjAuOTMwMTcgLTIwLjkzMDIsLTIwLjkzMDE4IDM5Ljk3MzYsLTM5Ljk4ODI2IDM5Ljk3MzYsLTM5Ljk4ODI1IC01Ni4yMjk2LC0wLjMyNTU4IC01Ni4yMjk2LC0wLjMyNTU3IC0wLjMzNTEsLTI5LjY4NzUwMiAtMC4zMzUxLC0yOS42ODc1IDU2LjU3NzgsMCA1Ni41Nzc4LDAgLTM5Ljk4NjcsLTQwLjAwMTMyIC0zOS45ODY3LC00MC4wMDEzNCAyMC45MzAyLC0yMC45MzAxOCAyMC45MzAxLC0yMC45MzAxNyA0MC4wMDE0LDM5Ljk4NjY5IDQwLjAwMTMsMzkuOTg2NjcgMCwtNTYuNTc3OCAwLC01Ni41Nzc3OTggMjkuNjg3NSwwLjMzNTEyIDI5LjY4NzUsMC4zMzUxMyAwLjMyNTYsNTYuMjI5NjA4IDAuMzI1NSw1Ni4yMjk2IDM5Ljk4ODMsLTM5Ljk3MzYxIDM5Ljk4ODMsLTM5Ljk3MzYxIDIwLjkzMDEsMjAuOTMwMTcgMjAuOTMwMiwyMC45MzAxOCAtMzkuOTg2Nyw0MC4wMDEzNCAtMzkuOTg2Nyw0MC4wMDEzMiA1Ni41Nzc4LDAgNTYuNTc3OCwwIC0wLjMzNTEsMjkuNjg3NSAtMC4zMzUxLDI5LjY4NzUwMiAtNTYuMjI5NiwwLjMyNTU3IC01Ni4yMjk2LDAuMzI1NTggMzkuOTczNiwzOS45ODgyNSAzOS45NzM2LDM5Ljk4ODI2IC0yMC45MzAyLDIwLjkzMDE4IC0yMC45MzAxLDIwLjkzMDE3IC0zOS45ODgzLC0zOS45NzM2MSAtMzkuOTg4MywtMzkuOTczNjEgLTAuMzI1NSw1Ni4yMjk2IC0wLjMyNTYsNTYuMjI5NjEgLTI5LjY4NzUsMC4zMzUxMyAtMjkuNjg3NSwwLjMzNTEyIDAsLTU2LjU3NzggeiBtIDQ0OC43NDk5OCwwIDAsLTU2LjU3NzggLTQwLjAwMTMsMzkuOTg2NjcgLTQwLjAwMTM4LDM5Ljk4NjY5IC0yMC45MzAxLC0yMC45MzAxNyAtMjAuOTMwMiwtMjAuOTMwMTggMzkuOTczNiwtMzkuOTg4MjYgMzkuOTczNTgsLTM5Ljk4ODI1IC01Ni4yMjk1OCwtMC4zMjU1OCAtNTYuMjI5NiwtMC4zMjU1NyAtMC4zMzUxLC0yOS42ODc1MDIgLTAuMzM1MSwtMjkuNjg3NSA1Ni41Nzc4LDAgNTYuNTc3NzgsMCAtMzkuOTg2NjgsLTQwLjAwMTMyIC0zOS45ODY3LC00MC4wMDEzNCAyMC45MzAyLC0yMC45MzAxOCAyMC45MzAxLC0yMC45MzAxNyA0MC4wMDEzOCwzOS45ODY2OSA0MC4wMDEzLDM5Ljk4NjY3IDAsLTU2LjU3NzggMCwtNTYuNTc3Nzk4IDI5LjY4NzUsMC4zMzUxMiAyOS42ODc1LDAuMzM1MTMgMC4zMjU2LDU2LjIyOTYwOCAwLjMyNTUsNTYuMjI5NiAzOS45ODgzLC0zOS45NzM2MSAzOS45ODgzLC0zOS45NzM2MSAyMC45MzAxLDIwLjkzMDE3IDIwLjkzMDIsMjAuOTMwMTggLTM5Ljk4NjcsNDAuMDAxMzQgLTM5Ljk4NjcsNDAuMDAxMzIgNTYuNTc3OCwwIDU2LjU3NzgsMCAtMC4zMzUxLDI5LjY4NzUgLTAuMzM1MSwyOS42ODc1MDIgLTU2LjIyOTYsMC4zMjU1NyAtNTYuMjI5NiwwLjMyNTU4IDM5Ljk3MzYsMzkuOTg4MjUgMzkuOTczNiwzOS45ODgyNiAtMjAuOTMwMiwyMC45MzAxOCAtMjAuOTMwMSwyMC45MzAxNyAtMzkuOTg4MywtMzkuOTczNjEgLTM5Ljk4ODMsLTM5Ljk3MzYxIC0wLjMyNTUsNTYuMjI5NiAtMC4zMjU2LDU2LjIyOTYxIC0yOS42ODc1LDAuMzM1MTMgLTI5LjY4NzUsMC4zMzUxMiAwLC01Ni41Nzc4IHogbSA0NDcuNSwwIDAsLTU2LjU3NzggLTQwLjAwMTMzLDM5Ljk4NjY3IC00MC4wMDEzMywzOS45ODY2OSAtMjAuOTMwMTQsLTIwLjkzMDE3IC0yMC45MzAyLC0yMC45MzAxOCAzOS45NzM2LC0zOS45ODgyNiAzOS45NzM2MSwtMzkuOTg4MjUgLTU2LjIyOTYxLC0wLjMyNTU4IC01Ni4yMjk2LC0wLjMyNTU3IC0wLjMzNTEsLTI5LjY4NzUwMiAtMC4zMzUxLC0yOS42ODc1IDU2LjU3NzgsMCA1Ni41Nzc3NSwwIC0zOS45ODY2NSwtNDAuMDAxMzIgLTM5Ljk4NjcsLTQwLjAwMTM0IDIwLjkzMDIsLTIwLjkzMDE4IDIwLjkzMDE0LC0yMC45MzAxNyA0MC4wMDEzNCwzOS45ODY2OSA0MC4wMDEzMiwzOS45ODY2NyAwLC01Ni41Nzc4IDAsLTU2LjU3Nzc5OCAyOS42ODc1LDAuMzM1MTIgMjkuNjg3NSwwLjMzNTEzIDAuMzI1NTgsNTYuMjI5NjA4IDAuMzI1NTcsNTYuMjI5NiAzOS45ODgyNSwtMzkuOTczNjEgMzkuOTg4MjYsLTM5Ljk3MzYxIDIwLjkzMDE4LDIwLjkzMDE3IDIwLjkzMDE3LDIwLjkzMDE4IC0zOS45ODY2OCw0MC4wMDEzNCAtMzkuOTg2NjgsNDAuMDAxMzIgNTYuNTc3OCwwIDU2LjU3NzgsMCAtMC4zMzUxMiwyOS42ODc1IC0wLjMzNTEzLDI5LjY4NzUwMiAtNTYuMjI5NjEsMC4zMjU1NyAtNTYuMjI5NiwwLjMyNTU4IDM5Ljk3MzYxLDM5Ljk4ODI1IDM5Ljk3MzYxLDM5Ljk4ODI2IC0yMC45MzAxNywyMC45MzAxOCAtMjAuOTMwMTgsMjAuOTMwMTcgLTM5Ljk4ODI2LC0zOS45NzM2MSAtMzkuOTg4MjUsLTM5Ljk3MzYxIC0wLjMyNTU4LDU2LjIyOTYgLTAuMzI1NTcsNTYuMjI5NjEgLTI5LjY4NzUsMC4zMzUxMyAtMjkuNjg3NSwwLjMzNTEyIDAsLTU2LjU3NzggeiIgZmlsbD0iIzAwMDAwMCI+PC9wYXRoPjwvZz48L3N2Zz4=');
+              height: 24px;
+              width: 24px;
+              background-position: center center;
+              background-repeat: no-repeat;
+              background-size: contain;
+              opacity: 0.6;"
+            "></div>
+          </div>
+        </div>
+      <input name="password" type="password" id="inputPassword6" class="form-control" aria-describedby="passwordHelpInline">
+    </div>
+    <small id="passwordHelpInline" class="text-muted">
+      Must be 8-20 characters long.
+    </small>
+    </div>
+    <div class="form-group form-row ">
+      <button class="col mr-1 btn btn-primary" type="submit" name="button">Login</button>
+      <a style="color: white;" class="col ml-1 btn btn-secondary" href="/register">Register</a>
+    </div>
+  </form>
+
+  <!-- <form>
+  <div class="form-group">
+    <label for="formGroupExampleInput">Example label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Another label</label>
+    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+  </div>
+</form> -->
+
+</div>
+<%- include('scripts', locals) %>
+</body>

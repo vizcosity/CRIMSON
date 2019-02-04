@@ -11,7 +11,7 @@
 
 const typeMap = require('../typeToElementMap.json');
 const { randomImageUrl, generateDummyContent, getPlaceholderLogoUrl } = require('../placeholder');
-const { hamburgerButton } = require('./assets');
+const { hamburgerButton, loginButton } = require('./assets');
 const { inferNavbarBrand } = require('../../inference/inferTypes');
 
 class BootstrapObject {
@@ -137,15 +137,15 @@ class BootstrapObject {
       case 'header':
       case 'text':
 
-        var transformedShape = await BootstrapObject.create(shape);
-        transformedShape.elementType = 'a';
-        transformedShape.addClass('nav-link');
-        transformedShape.attributes.href = '#';
+        var textElement = await BootstrapObject.create(shape);
+        textElement.elementType = 'a';
+        textElement.addClass('nav-link');
+        textElement.attributes.href = '#';
 
         return {
           elementType: 'li',
           attributes: { class: 'nav-item' },
-          content: transformedShape
+          content: textElement
         };
       case 'navbar_brand,header':
       case 'navbar_brand,text':
@@ -203,8 +203,20 @@ class BootstrapObject {
         };
       break;
       case 'button':
+
         var button = await BootstrapObject.create(shape);
         button.attributes.class = 'btn btn-outline-secondary';
+
+        // If content matches 'login', then we wrap the prenode in an ejs
+        // control flow statement.
+        // Ensure that the project type is a server before inferring, as inserting
+        // ejs template syntax will break static code.
+        if (
+            shape.generateAuth && 
+            shape.content.toLowerCase &&
+            shape.content.toLowerCase() == "login"
+          ) button = loginButton;
+
         return {
           elementType: 'form',
           attributes: { class: 'form-inline' },
