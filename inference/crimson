@@ -28,6 +28,7 @@ args
   .usage("--image <image path> --output [output directory] [--context , --project]")
   .option('-i, --image <image path>', 'Source image.')
   .option('-o, --output [output path]', 'Output directory.', './.output')
+  .option('-z --zip', 'Produce zipped bundle.', false)
   .option('-c, --context [vanilla, bootstrap, react]', 'Context type ("vanilla", "bootstrap", "react")', 'vanilla')
   .option('-p, --project [static, server]', 'Output type ("static", "server")', 'server')
   .parse(process.argv)
@@ -105,6 +106,7 @@ detectPrimitives(imagePath).then(async primitives => {
     code,
     file,
     fileName,
+    zip: args.zip,
     generateAuth: process.env.CRIMSON_GENERATE_AUTH
   });
 

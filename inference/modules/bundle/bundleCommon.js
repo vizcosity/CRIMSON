@@ -136,7 +136,8 @@ module.exports = {
   loadTemplate,
   copyContextFiles,
   generateBundleEmbed,
-  createDirStructure
+  createDirStructure,
+  zipDir
 }
 
 
