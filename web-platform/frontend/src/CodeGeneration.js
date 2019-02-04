@@ -41,7 +41,7 @@ class PreviewWindow extends Component {
               project: 'server'
             }).then(async (data) => {
               data = await data.blob();
-              download(data, `${this.project.source.name}.zip`, 'application/zip');
+              download(data, `${this.props.project.source.name}.zip`, 'application/zip');
             })} />
         <OverlayButton icon={<Modify />} text="Modify" onClick={() => this.props.history.push('/modify-acr')} />
       </div>
