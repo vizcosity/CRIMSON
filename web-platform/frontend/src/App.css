@@ -16,11 +16,16 @@ h1 {
   font-family: "Futura", sans-serif;
 }
 
-h2 {
+h2, h3 {
   margin: 0;
   opacity: 0.7;
   font-weight: normal;
   font-family: "Futura", sans-serif;
+}
+
+h3 {
+  opacity: 1;
+  color: #DEE3EB;
 }
 
 /*  Landing page styling */
