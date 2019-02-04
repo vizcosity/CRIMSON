@@ -7,7 +7,7 @@
  * @ Aaron Baw 2019
  */
 
-const { loadTemplate, generateBundleEmbed, copyContextFiles, createDirStructure } = require('./bundleCommon');
+const { loadTemplate, generateBundleEmbed, copyContextFiles, createDirStructure, zipDir } = require('./bundleCommon');
 const glob = require('glob');
 const fs = require('fs');
 const { join, basename, resolve } = require('path');
@@ -370,7 +370,7 @@ const serverBundle = async ({
    if (!port) port = getAvailablePort(projectName);
 
    log(`Bundling server project`, projectName);
-
+   log(`imagePath`, imagePath);
    // Copy the source image over to the bundle.
    log(`Copying imagePath`, imagePath, `to`, join(outputDir, 'public', 'images', basename(imagePath)));
    fs.copyFileSync(imagePath, join(outputDir, 'public', 'images', basename(imagePath)));

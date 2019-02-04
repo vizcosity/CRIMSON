@@ -58,7 +58,7 @@ const staticBundle = async ({
      index.locals[assetType] = bundled[assetType];
    }
 
-   if (code.nav) {
+   if (projectType === 'server' && code.nav) {
      var nav = loadTemplate('nav');
      nav.locals.code = code.nav;
      // render & write the nav view.

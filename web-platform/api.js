@@ -73,7 +73,7 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
 // as well as a live URL with the generated page, if desired.
 app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (req, res, params) => {
 
-  // log(`Recieved request to generate code with body:`, req.body);
+  log(`Recieved request to generate code with body:`, req.body);
 
   // If an image is passed to the request, it will be stored under the
   // req.file field.
@@ -113,7 +113,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
   log(`Output directory for generated code`, outputDir);
 
   // Launch a live webserver if the param has been passed.
-  if (req.body.livePreview){
+  if (req.body.livePreview == 'true'){
     // var projectApp = require(join(outputDir, 'app.js'));
     // projectApp.listen(app.get('port'), () => {
     //   log(fileName, `has been deployed and running on`, `http://localhost:${projectApp.get('port')}`);
@@ -136,36 +136,13 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     });
   }
 
-  // Launch a live webserver if the param has passed.
-  // if (req.body.livePreview){
-  //   var parcelBundelerProc = spawn('node_modules/parcel-bundler/bin/cli.js', [
-  //     resolve(outputDir, 'index.html'),
-  //     '-d',
-  //     resolve(outputDir, 'dist')
-  //   ]);
-  //
-  //   runningProcesses[fileName] = parcelBundelerProc;
-  //
-  //   log(`Generated live preview. Waiting for parcel-bundler to return live preview url.`);
-  //
-  //   parcelBundelerProc.stdout.on('data', data => {
-  //     data = data.toString();
-  //     log(`[Parcel Bundler]`, data);
-  //     if (data.match(/http\S+/g)) return res.json({
-  //       url: data.match(/http\S+/g)[0]
-  //     });
-  //   });
-  //
-  //   // Legacy URL.
-  //   // return res.json({
-  //   //   url: `http://localhost:1234`
-  //   // });
-  // }
-
   // Return zipped file.
   else if (req.body.zip){
     log(`Generated zip file. Sending download from`, outputDir);
-    return res.download(`${outputDir}/${fileName}.zip`);
+    // The outputDir does not contain the name of the project directory, this needs
+    // to be included alongside the actual zip file itself.
+    var zipFile = `${outputDir}/${fileName}/${fileName}.zip`;
+    return res.download(zipFile);
   }
 
 });
