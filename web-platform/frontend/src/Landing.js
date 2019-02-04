@@ -7,6 +7,8 @@
  */
 
 import React, { Component } from 'react';
+import { HashLoader } from 'react-spinners';
+import { Fade } from 'react-reveal';
 
 const Footer  = () => <footer>
   <p>CRIMSON @ Aaron Baw 2018</p>
@@ -74,18 +76,72 @@ class Uploader extends Component {
 
 export default class Landing extends Component {
 
+  constructor(props, context){
+    super(props, context);
+
+    this.state = {
+      loading: false
+    };
+
+    this.onEndUpload = this.onEndUpload.bind(this);
+    this.onStartUpload = this.onStartUpload.bind(this);
+  }
+
+  // Hide the spinner & return the onRecieveAcr function.
+  onEndUpload(params){
+
+    this.setState({
+      ...this.state,
+      loading: false
+    })
+
+    return this.props.onRecieveACRHandler(params);
+  }
+
+  onStartUpload(){
+    this.setState({
+      ...this.state,
+      loading: true
+    });
+  }
+
 
   render(){
     return (
       <div className="landing-page-container">
 
+      <Fade collapse when={!this.state.loading}>
       <div className="landing-headers-container">
         <h1>CRIMSON</h1>
         <h2>An intelligent tool for rapid prototyping on the web.</h2>
       </div>
 
-        <Uploader apiUrl={this.props.api.generateACR} onStartUpload={()=> log(`Started upload`)}
-        onEndUpload={this.props.onRecieveACR} />
+        <Uploader
+          apiUrl={this.props.api.generateACR}
+          onStartUpload={this.onStartUpload}
+          onEndUpload={this.onEndUpload}
+        />
+
+    </Fade>
+
+      <Fade collapse when={this.state.loading}>
+      <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+      className="loading-container">
+        <HashLoader
+          sizeUnit={"px"}
+          size={50}
+          color={'#DEE3EB'}
+      />
+      <h3 style={{
+        marginTop: '15px'
+      }}> Detecting symbols. </h3>
+      </div>
+      </Fade>
 
         <Footer />
       </div>
