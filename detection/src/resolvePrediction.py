@@ -35,6 +35,8 @@ def addNewShape(shapes, newShape):
 # references to the objects in the shape array.
 def getIntersectingShapes(primitive, shapes, iou_threshold):
 
+    # log("Detecting intersections for " + str(primitive))
+
     intersecting_shapes = []
 
     if shapes is None or len(shapes) == 0: return intersecting_shapes
@@ -94,10 +96,12 @@ def resolveTextUsingPredictions(textPredictions, shapes, lastShapeId):
     # Skip the first prediction, as this returns a bounding box over all
     # text detected in the image, instead of the components, which we are looking
     # for. This will cause panels and containers to be resolved as text.
-    for text, confidence, bounding_rect in textPredictions[1:]:
+    for text, confidence, bounding_rect in textPredictions:
+        log("Resolving text:" + str(text))
         predicted_bounding_rect = Shape(bounding_rect, id=lastShapeId, shapeType="header", content=text)
         lastShapeId = lastShapeId + 1
         intersecting_shapes = getIntersectingShapes(predicted_bounding_rect, shapes, _IOU_THRESHOLD - 0.2)
+        log("Intersecting shapes for " + str(text)+ ": " + str(intersecting_shapes))
         # Sort intersecting shapes by largest intersections.
         intersecting_shapes = np.array(intersecting_shapes, dtype=[('shape', Shape), ('iou', float)])
         intersecting_shapes.sort(order='iou')

@@ -17,19 +17,44 @@ function log(...msg){
   if (process.env.DEBUG) console.log(`GEN CODE |`, ...msg);
 }
 
+// Separates shapes into navigation and remaining shapes.
+function separateNavFromShapes(shapes){
+
+  if (!shapes || shapes.length === 0) return {navShapes: [], remainingShapes: shapes};
+
+  var navShapes = [];
+  var remainingShapes = shapes.concat();
+  shapes.forEach(shape => {
+    var separateContainedShapes = separateNavFromShapes(shape.contains);
+    shape.contains = separateContainedShapes.remainingShapes;
+    var updatedNavShapes = separateContainedShapes.navShapes;
+    if (updatedNavShapes.length > 0) navShapes = navShapes.concat(updatedNavShapes);
+    if (shape.type === 'navigation') {
+      navShapes.push(shape);
+      remainingShapes = remainingShapes.filter(s => s.id !== shape.id);
+    }
+  });
+  // console.log(remainingShapes);
+
+  return {navShapes, remainingShapes};
+
+}
+
  // Given a transformed preNode, embeds this into serialised HTML.
  function embedCode(preNode){
 
    // If preNode is a string, then inject this code directly.
    if (typeof preNode == 'string') return preNode;
 
-   var nodeType = preNode.elementType ? preNode.elementType : 'div';
-
    var serialisedAttributes = "";
 
    for (var attribute in preNode.attributes){
      serialisedAttributes += ` ${attribute}="${preNode.attributes[attribute]}"`
    }
+
+   var nodeType = preNode.elementType ? preNode.elementType : 'div';
+   var openTag = typeof nodeType === 'object' ? nodeType.open : `<${nodeType} ${serialisedAttributes}>`;
+   var closeTag = typeof nodeType === 'object' ? nodeType.close : `</${nodeType}>`;
 
    var content = "";
    if (typeof preNode.content == 'object'){
@@ -39,8 +64,8 @@ function log(...msg){
 
    // If no content we assume a self-closed tag.
    return preNode.content ? `
-    <${nodeType}${serialisedAttributes}>${content}
-    </${nodeType}>
+    ${openTag}${content}
+    ${closeTag}
     ` :
     `<${nodeType}${serialisedAttributes} />`;
 
@@ -83,8 +108,6 @@ function log(...msg){
 
  function generateACRObjects(shapes){
 
-   // console.log(`GENERATE CODE | Generating ACR Objects`);
-
    if (!shapes || shapes.length == 0) return shapes;
 
    for (var i = 0; i < shapes.length; i++){
@@ -95,13 +118,10 @@ function log(...msg){
    return inferProperties(shapes);
  }
 
- // Takes JSON representation of detected shapes and outputs serialised HTML.
- async function generateCode(shapes){
+ // Takes JSON representation of detected shapes and outputs serialised HTML for the
+ // given shapes.s
+ async function generate(shapes){
    if (!shapes || shapes.length == 0) return "";
-
-   // Generate ACR.
-   // shapes = inferProperties(shapes);
-
 
    var output = "";
 
@@ -109,7 +129,7 @@ function log(...msg){
      var shape = shapes[i];
      // log(`Transforming`, shape.type);
 
-     var containedCode = await generateCode(shape.contains);
+     var containedCode = await generate(shape.contains);
 
      output += await generateShapeCode(shape, containedCode);
 
@@ -117,6 +137,19 @@ function log(...msg){
 
    return output;
  }
+
+// Takes JSON representation of detected shapes and outputs serialised HTML,
+// ensuring to keep any navigation as separated markup for auth generation.
+async function generateCode(shapes){
+
+  // Separate out navigation if it exists.
+  var separated = separateNavFromShapes(shapes);
+
+  return {
+    nav: await generate(separated.navShapes),
+    index: await generate(separated.remainingShapes)
+  }
+}
 
 // Configure module.
 module.exports = {generateCode, generateACR};

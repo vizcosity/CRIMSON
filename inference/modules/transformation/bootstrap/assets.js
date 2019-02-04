@@ -23,5 +23,38 @@ module.exports = {
       attributes: { class: 'navbar-toggler-icon' },
       content: ""
     }
-  }
+  },
+  loginButton: [
+    {
+      elementType: {
+        open: '<%',
+        close: '%>'
+      },
+      content: ' if (!locals.username) { '
+    },
+    {
+      elementType: 'a',
+      attributes: { class: 'btn btn-primary', href: '/login' },
+      content: 'Login'
+    },
+    {
+      elementType: {
+        open: '<%',
+        close: '%>'
+      },
+      content: ' } else { '
+    },
+    {
+      elementType: 'a',
+      attributes: { class: 'btn btn-secondary', href: '/logout' },
+      content: 'Logout'
+    },
+    {
+      elementType: {
+        open: '<%',
+        close: '%>'
+      },
+      content: ' } '
+    }
+  ]
 }

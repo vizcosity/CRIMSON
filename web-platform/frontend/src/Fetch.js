@@ -26,4 +26,24 @@ async function fetchGeneratedCode(acr, options){
 
 }
 
-export { fetchGeneratedCode };
+async function fetchZippedBundle(acr, options){
+  options = {
+    ...options,
+    zip: true
+  };
+  var data = new FormData();
+  data.append('acr', JSON.stringify(acr));
+
+  Object.keys(options).forEach(option => {
+    data.append(option, options[option]);
+  });
+
+  var res = await fetch(api.generateCode, {
+    method: 'POST',
+    body: data
+  });
+
+  return res;
+}
+
+export { fetchGeneratedCode, fetchZippedBundle };
