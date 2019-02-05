@@ -11,6 +11,13 @@ p {
   color: grey;
 }
 
+.subtext {
+  /* font-family: "Open Sans", sans-serif; */
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.3);
+}
+
 h1 {
   margin: 0;
   font-family: "Futura", sans-serif;
@@ -85,6 +92,23 @@ h3 {
   align-items: center;
   color: #c4c6ce;
   height: 15px;
+}
+
+button {
+  cursor: pointer;
+}
+
+button.button-fade > svg {
+  fill: #dedfe3;
+  transition: 0.3s ease-in-out;
+}
+
+button.button-fade:hover > svg {
+  fill: #2e3437;
+}
+
+button.active > svg {
+  fill: #3d59d4;
 }
 
 .continue-button, .arrow {
@@ -185,16 +209,83 @@ div.overlay-button-container > button {
   color: #7E8389;
 }
 
+
+/** Icon styling */
+
+
+
 /** Edit Primitive Dialogue styling */
 div.edit-dialogue-container {
   display: flex;
   flex-direction: column;
   padding: 25px;
+  /* margin: 10px; */
+  border-radius: 10px;
+  border: 1px solid #dedfe3;
+  box-shadow: 0px 4px 5px #0000000d;
+  max-width: 310px;
+  background-color: white;
 }
 
 div.edit-dialogue-header-container {
   display: flex;
   align-items: center;
+}
+
+div.edit-dialogue-text-edit-container {
+  display: flex;
+  align-items: center;
+  margin: 10px 0px 10px 0px;
+}
+
+div.edit-dialogue-primitive-type-and-header-wrap {
+  margin-top: 10px;
+}
+
+div.edit-dialogue-primitive-type-container {
+  margin: 20px 0px 20px 0px;
+  display: flex;
+  width: 100%;
+  overflow-x: scroll;
+  padding-bottom: 5px;
+}
+
+div.edit-dialogue-primitive-type-container > * {
+  margin-right: 20px;
+
+}
+
+div.edit-dialogue-primitive-type-container  p {
+  font-family: "Futura PT", sans-serif;
+  color: #dedfe3;
+  font-weight: 500;
+  transition: 0.3s
+}
+
+div.edit-dialogue-primitive-type-container > *:hover p {
+  color: #2e3437;
+}
+
+
+div.primitive-type-option-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+}
+
+input {
+  border: 1px solid #dedfe3;
+  border-radius: 7px;
+  padding: 5px;
+}
+
+input[value], input {
+  font-family: "Futura PT", sans-serif;
+  color: grey;
+  text-align: center;
 }
 
 
