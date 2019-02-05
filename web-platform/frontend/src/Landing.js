@@ -95,7 +95,7 @@ export default class Landing extends Component {
       loading: false
     })
 
-    return this.props.onRecieveACRHandler(params);
+    return this.props.onRecieveACR(params);
   }
 
   onStartUpload(){
