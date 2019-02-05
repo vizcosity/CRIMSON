@@ -6,9 +6,13 @@ import InteractiveACRModifier from './ModifyACR.js';
 import CodeGenerator from './CodeGeneration.js';
 import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
+import './Resets.css';
 import './App.css';
 import Package from '../package.json';
 import { basename } from 'path';
+
+import EditDialogue from './CustomisePrimitive';
+import { CloseIcon } from './Icons';
 
 class App extends Component {
 
@@ -80,6 +84,24 @@ class App extends Component {
 
         <Route exact path="/generate-code" component={
           ({history}) => <CodeGenerator history={history} api={Package.api} project={this.project} />
+        } />
+
+
+        {
+          // TEMP: Test dialogues.
+        }
+
+        <Route exact path="/dialogue" component={() =>
+          <EditDialogue primitive={
+            ACRSample[0]
+          }
+            primitiveTypes={[
+              {
+                type: "Rectangle",
+                icon: CloseIcon
+              }
+            ]}
+          />
         } />
 
       </div>
