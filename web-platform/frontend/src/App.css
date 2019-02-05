@@ -185,6 +185,20 @@ div.overlay-button-container > button {
   color: #7E8389;
 }
 
+/** Edit Primitive Dialogue styling */
+div.edit-dialogue-container {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+div.edit-dialogue-header-container {
+  display: flex;
+  align-items: center;
+}
+
+
+
 /** Footer Styling */
 footer {
   position: absolute;
@@ -201,3 +215,5 @@ footer {
 footer p {
   opacity: 0.5;
 }
+
+/** Resets */
