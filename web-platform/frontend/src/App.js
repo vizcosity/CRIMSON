@@ -99,6 +99,22 @@ class App extends Component {
               {
                 type: "Rectangle",
                 icon: CloseIcon
+              },
+              {
+                type: "Navigation",
+                icon: CloseIcon
+              },
+              {
+                type: "Panel",
+                icon: CloseIcon
+              },
+              {
+                type: "Dropdown",
+                icon: CloseIcon
+              },
+              {
+                type: "Input",
+                icon: CloseIcon
               }
             ]}
           />

@@ -10,6 +10,8 @@ import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
 import { Arrow } from './Icons.js';
+import EditDialogue from './CustomisePrimitive';
+import { CloseIcon } from './Icons';
 // import Primitive from './Primitive.js';
 import { Container } from 'crimson-inference/modules/ACR.js';
 import {
@@ -210,15 +212,18 @@ class InteractiveACRModifier extends Component {
 
   }
 
-  endPrimitiveSelection(e, data){
+  setPrimitiveType(type){
 
     // Change the type of the modifying primitive. We are not changing the state
     // so much as a reference to an object contained within the state, so
     // warnings about mutation of the state can safely be ignored.
-    this.state.modifyingPrimitive.type = data.value;
+    this.state.modifyingPrimitive.type = type;
 
-    // console.log(`Changing`, this.state.modifyingPrimitive.id, `type to`, data.value);
+    this.setState(this.state);
 
+  }
+
+  endPrimitiveSelection(){
     // Set the state to end primitive selection.
     this.setState({
       ...this.state,
@@ -374,19 +379,37 @@ class InteractiveACRModifier extends Component {
           {
             /* Display dropdown on double click. */
             (this.state.modifyingPrimitive) ?
-            <Dropdown
-              style={{
-                position: 'absolute',
-                zIndex: 10,
-                width: '200px',
-                top: this.state.doubleTap.y,
-                left: this.state.doubleTap.x
-              }}
-              fluid selection compact open
-              onChange={(e, val) => this.endPrimitiveSelection(e, val)}
-              defaultValue={this.state.modifyingPrimitive.type}
-              options={this.availablePrimitives}
-              />
+            <EditDialogue
+              x={this.state.doubleTap.x}
+              y={this.state.doubleTap.y}
+              primitive={this.state.modifyingPrimitive}
+              onChangePrimitiveType={type => this.setPrimitiveType(type)}
+              onClose={() => this.endPrimitiveSelection()}
+              primitiveTypes={
+                [
+                  {
+                    type: "Rectangle",
+                    icon: CloseIcon
+                  },
+                  {
+                    type: "Navigation",
+                    icon: CloseIcon
+                  },
+                  {
+                    type: "Panel",
+                    icon: CloseIcon
+                  },
+                  {
+                    type: "Dropdown",
+                    icon: CloseIcon
+                  },
+                  {
+                    type: "Input",
+                    icon: CloseIcon
+                  }
+                ]
+              } />
+
             : ""
           }
 
