@@ -27,6 +27,7 @@ const upload = multer({
   })
 });
 const crimson = require('crimson-inference');
+const { deployToGithub } = require('./deploy');
 const config = require('crimson-inference/config/config.json');
 
 // Keep track of running processes, ensuring to kill them once used.
@@ -144,6 +145,39 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     var zipFile = `${outputDir}/${fileName}/${fileName}.zip`;
     return res.download(zipFile);
   }
+
+});
+
+// Set up endpoint to deploy project to GitHub.
+app.post(`${endpointPrefix}/deployToGithub`, async (req, res, params) => {
+
+  // try {
+  //   req.body = JSON.parse(req.body);
+  // } catch(e){
+  //   log(`Could not parse request:`, req);
+  // }
+
+  if (!req.body.token || !req.body.projectDir) return res.json({
+    success: false,
+    error: "Missing params."
+  });
+
+  var repo = await deployToGithub({
+    user: req.body.user,
+    description: req.body.description || "Sample webpage built with CRIMSON.",
+    private: req.body.private || true,
+    token: req.body.token,
+    repo: req.body.repoName,
+    message: req.body.message || `Init commit`,
+    projectDir: req.body.projectDir
+  });
+
+  log(`Created and deployed`,req.body.repoName, `to GitHub Repository:`, repo.svn_url);
+
+  return res.json({
+    success: true,
+    ...repo
+  });
 
 });
 

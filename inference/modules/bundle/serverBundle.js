@@ -35,6 +35,7 @@ const createApplication = (name, dir) => {
       "morgan": "~1.9.0",
       "ejs": "^2.6.1",
       "passport": "^0.4.0",
+      "local-ipv4-address": "0.0.2",
       "passport-local": "^1.0.0"
     }
   }
