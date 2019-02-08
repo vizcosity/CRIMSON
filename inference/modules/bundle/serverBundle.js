@@ -262,6 +262,7 @@ const createPackageJSON = (projectName, nav) => {
       "cookie-parser": "~1.4.3",
       "debug": "~2.6.9",
       "express": "~4.16.0",
+      "local-ipv4-address": "0.0.2",
       "express-session": "^1.15.6",
       "http-errors": "~1.6.2",
       "morgan": "~1.9.0",
