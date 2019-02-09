@@ -9,7 +9,7 @@
 import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
-import { Arrow } from './Icons.js';
+import { ArrowIcon } from './Icons.js';
 import EditDialogue from './CustomisePrimitive';
 import { CloseIcon } from './Icons';
 // import Primitive from './Primitive.js';
@@ -448,7 +448,7 @@ class InteractiveACRModifier extends Component {
 
         <div className="continue-container">
           <Link className="continue-button" to="/generate-code">Continue</Link>
-          <Arrow style={{
+          <ArrowIcon style={{
             marginTop: '5px',
             marginLeft: '10px'
           }} />

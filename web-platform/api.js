@@ -5,7 +5,9 @@
  */
 
 // Dependencies.
+const dotenv = require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const mkdir = require('mkdirp').sync;
@@ -14,6 +16,7 @@ const package = require('./package.json');
 const endpointPrefix = `/api/v${package['api-version']}`;
 const multer = require('multer');
 const { resolve, basename, extname, join } = require('path');
+const crypto = require('crypto');
 const upload = multer({
   dest: resolve(__dirname, "./.uploads"),
   preservePath: true,
@@ -27,7 +30,7 @@ const upload = multer({
   })
 });
 const crimson = require('crimson-inference');
-const { deployToGithub } = require('./deploy');
+const { getGitHubAuthToken, deployToGithub } = require('./deploy');
 const config = require('crimson-inference/config/config.json');
 
 // Keep track of running processes, ensuring to kill them once used.
@@ -40,17 +43,34 @@ const getAvailablePort = (projectName) => {
 // Defaults.
 const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'my secret',
+  resave: null,
+  saveUninitialized: null
+}));
+
+// Session handling.
+// Generate a random sessionID.
+const generateSessionID = (projectName) => {
+  var hash = crypto.randomBytes(12).toString('hex').slice(0, 12).toString('hex');
+  return `${projectName}_${hash}`;
+};
+
 
 // Register GET point to fetch list of supported primitives.
 app.get(`${endpointPrefix}/getSupportedPrimitives`, (req, res, params) => {
-
   return res.json(config.supportedPrimitives);
 
 });
 
 // Register a POST endpoint for generating the ACR.
 app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req, res, params) => {
+
+  // Assign a new session id.
+  var fileName = req.body.fileName ? req.body.fileName : basename(req.file.originalname).split('.')[0];
+  req.session.id = generateSessionID(fileName);
 
   if (!req.file) return res.json({success: false, error: "No file provided."});
 
@@ -74,7 +94,47 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
 // as well as a live URL with the generated page, if desired.
 app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (req, res, params) => {
 
-  log(`Recieved request to generate code with body:`, req.body);
+  // Assign new session ID if it doesn't exist.
+  // if (!req.session.id) {
+  //   // Assign a new session.
+  //   var fileName = req.body.fileName ? req.body.fileName : basename(req.file.originalname).split('.')[0];
+  //   req.session.id = generateSessionID(fileName);
+  // } else if (runningProcesses[req.session.id])
+  //
+  //   // Check if we have recieved a GitHub auth code in the params.
+  //   if (req.body.code)
+  //
+  //   return res.json({
+  //     url: runningProcesses[req.session.id].liveUrl
+  // });
+
+  // If we have recieved a code from GitHub, then return the liveURL for the
+  // running process, and return the oAuth token.
+  if (req.body.code != 'false'){
+
+    log(`Recieved callback from GitHub with code`, req.body.code, `and sessionID`, req.body.sessionID);
+
+    if (!req.body.sessionID) return res.json({
+      success: false,
+      reason: "No sessionID present in request. Check GitHub redirect URI."
+    });
+
+    // Grab the GitHub Auth token & liveURL.
+    var oAuthTokenResponse = JSON.parse(await getGitHubAuthToken(req.body.code));
+    var project = runningProcesses[req.body.sessionID]
+    var liveURL = project.liveUrl;
+
+    log(`Returning oAuthToken Response:`, oAuthTokenResponse, `and liveURL:`, liveURL);
+
+    return res.json({
+      url: liveURL,
+      sessionID: req.body.sessionID,
+      oAuthToken: oAuthTokenResponse.access_token,
+      ...project
+    })
+  }
+
+
 
   // If an image is passed to the request, it will be stored under the
   // req.file field.
@@ -93,6 +153,8 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
   var fileName = req.body.fileName ? req.body.fileName : basename(req.file.originalname).split('.')[0];
   log(`Generating code for`, fileName);
   log(`Image Path for`, fileName, `:`, req.body.imgPath);
+
+  var sessionID = generateSessionID(fileName);
 
   // Generate the codes and return the output directory.
   var outputDir = await crimson.generateCode(req.body.acr, {
@@ -115,25 +177,29 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // Launch a live webserver if the param has been passed.
   if (req.body.livePreview == 'true'){
-    // var projectApp = require(join(outputDir, 'app.js'));
-    // projectApp.listen(app.get('port'), () => {
-    //   log(fileName, `has been deployed and running on`, `http://localhost:${projectApp.get('port')}`);
-    //   return res.json({
-    //     url: `http://localhost:${projectApp.get('port')}`
-    //   });
-    // });
 
     var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)]);
-    runningProcesses[fileName] = childServer;
+    runningProcesses[sessionID] = {
+      process: childServer,
+      outputDir,
+      fileName,
+      acr: req.body.acr
+    }
 
     log(`Generated live preview. Waiting for url.`);
 
     childServer.stdout.on('data', data => {
       data = data.toString();
       log(`[${fileName} : Server]`, data);
-      if (data.match(/http\S+/g)) return res.json({
-        url: data.match(/http\S+/g)[0]
-      });
+      var urlMatches = data.match(/http\S+/g);
+      if (urlMatches) {
+        // Update running process details with the live url.
+        runningProcesses[sessionID].liveUrl = urlMatches[0];
+        return res.json({
+          url: urlMatches[0],
+          sessionID
+        });
+    }
     });
   }
 
@@ -151,26 +217,34 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 // Set up endpoint to deploy project to GitHub.
 app.post(`${endpointPrefix}/deployToGithub`, async (req, res, params) => {
 
-  // try {
-  //   req.body = JSON.parse(req.body);
-  // } catch(e){
-  //   log(`Could not parse request:`, req);
-  // }
+  log(`Recieved request to deploy to Github for repo:`, req.body);
 
-  if (!req.body.token || !req.body.projectDir) return res.json({
+  if (!req.body.token || !runningProcesses[req.body.sessionID]) return res.json({
     success: false,
     error: "Missing params."
   });
 
-  var repo = await deployToGithub({
-    user: req.body.user,
-    description: req.body.description || "Sample webpage built with CRIMSON.",
-    private: req.body.private || true,
-    token: req.body.token,
-    repo: req.body.repoName,
-    message: req.body.message || `Init commit`,
-    projectDir: req.body.projectDir
-  });
+  var projectDir = runningProcesses[req.body.sessionID].outputDir;
+
+  log(`Deploying ${req.body.repoName} to GitHub.`);
+
+  try {
+    var repo = await deployToGithub({
+      user: req.body.user,
+      description: req.body.repoDesc || "Sample webpage built with CRIMSON.",
+      private: req.body.privateOption || true,
+      token: req.body.token,
+      repo: req.body.repoName,
+      message: req.body.message || `Init commit`,
+      projectDir
+    });
+  } catch (e){
+    log(`Could not deploy ${req.body.repoName} to GitHub:`,e.body);
+    return res.json({
+      success: false,
+      reason: `Could not create repository: ${e}`
+    })
+  }
 
   log(`Created and deployed`,req.body.repoName, `to GitHub Repository:`, repo.svn_url);
 

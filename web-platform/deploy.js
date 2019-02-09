@@ -9,6 +9,25 @@ const glob = require('glob-promise');
 const path = require('path');
 const fs = require('fs');
 
+const _GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+const _GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+
+const getGitHubAuthToken = async code => {
+  return await request.post({
+    url: 'https://github.com/login/oauth/access_token',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      client_id: _GITHUB_CLIENT_ID,
+      client_secret: _GITHUB_CLIENT_SECRET,
+      code
+    })
+  });
+
+};
+
 const createGithubRepo = async ({name, description, private=true, token}) => {
 
   return request.post({ method: 'POST',
@@ -106,12 +125,23 @@ const deployToGithub = async ({
   repo,
   user,
   message=`Init commit`,
-  configureForHerku=true,
+  configureForHeroku=true,
   projectDir
 }) => {
   var repoDetails = await createGithubRepo({name:repo, description, private, token});
-  log(`Created GitHub Repo:`, repoDetails.svn_url);
+  log(`Created GitHub Repo:`, repoDetails);
   log(`Uploading files.`);
+
+  // Assign placeholder email if user object not passed.
+  // TODO: Enter CRIMSON email so that we can see how many
+  // sites have been created with CRIMSON.
+  if (!user){
+    user = {
+      name: repoDetails.owner.login,
+      email: 'aaronbaw@gmail.com'
+    }
+  }
+
   await commitDirToRepo({repo, user, message, token, projectDir});
   log(`Configuring repo for Heroku.`);
   await configureRepoForHeroku({user, repoURL: repoDetails.svn_url, name: repo, token, description});
@@ -159,5 +189,5 @@ function log(...msg){
 }
 
 module.exports = {
-  createGithubRepo, commitFilesToRepo, commitDirToRepo, deployToGithub, configureRepoForHeroku
+  getGitHubAuthToken, createGithubRepo, commitFilesToRepo, commitDirToRepo, deployToGithub, configureRepoForHeroku
 };

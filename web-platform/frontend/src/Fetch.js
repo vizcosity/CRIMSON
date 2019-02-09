@@ -19,6 +19,7 @@ async function fetchGeneratedCode(acr, options){
 
   var res = await fetch(api.generateCode, {
     method: 'POST',
+    credentials: 'same-origin',
     body: data
   });
 
@@ -40,10 +41,27 @@ async function fetchZippedBundle(acr, options){
 
   var res = await fetch(api.generateCode, {
     method: 'POST',
+    credentials: 'same-origin',
     body: data
   });
 
   return res;
 }
 
-export { fetchGeneratedCode, fetchZippedBundle };
+async function deployToGithub (options){
+
+  console.log(`FETCH | Deploying`, options);
+
+  var res = await fetch(api.deployToGithub, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify(options)
+  });
+
+  return res;
+}
+
+export { deployToGithub, fetchGeneratedCode, fetchZippedBundle };

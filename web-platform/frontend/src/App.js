@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ACRSample from './acr.json';
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import query from 'query-string';
 import Landing from './Landing.js';
 import InteractiveACRModifier from './ModifyACR.js';
 import CodeGenerator from './CodeGeneration.js';
@@ -83,41 +84,17 @@ class App extends Component {
           />
 
         <Route exact path="/generate-code" component={
-          ({history}) => <CodeGenerator history={history} api={Package.api} project={this.project} />
+          ({history, location}) =>{
+            console.log(`Recieved location:`, query.parse(location.search));
+          return <CodeGenerator
+            history={history}
+            api={Package.api}
+            project={this.project}
+            sessionID={query.parse(location.search)['sessionID']}
+            code={query.parse(location.search)['code']}
+          />}
         } />
 
-
-        {
-          // TEMP: Test dialogues.
-        }
-
-        <Route exact path="/dialogue" component={() =>
-          <EditDialogue primitive={
-            ACRSample[0]
-          }
-            primitiveTypes={[
-              {
-                type: "Rectangle",
-                icon: CloseIcon
-              },
-              {
-                type: "Navigation",
-                icon: CloseIcon
-              },
-              {
-                type: "Panel",
-                icon: CloseIcon
-              },
-              {
-                type: "Dropdown",
-                icon: CloseIcon
-              },
-              {
-                type: "Input",
-                icon: CloseIcon
-              }
-            ]}
-          />
         } />
 
       </div>

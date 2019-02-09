@@ -18,6 +18,14 @@ p {
   color: rgba(0,0,0,0.3);
 }
 
+.success {
+  color: #4caf50;
+}
+
+.failure {
+  color: #f13f3f;
+}
+
 h1 {
   margin: 0;
   font-family: "Futura", sans-serif;
@@ -212,10 +220,32 @@ div.overlay-button-container > button {
 
 /** Icon styling */
 
+/** Deploy dialogue styling */
+div.deploy-dialogue {
+  margin: auto;
+  max-width: 400px;
+}
 
+div.horizontal-container {
+  margin: 10px 0px 10px 0px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+div.horizontal-container * {
+  margin: 0px 10px 0px 10px;
+}
+
+div.vertical-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0px 10px 10px;
+}
 
 /** Edit Primitive Dialogue styling */
-div.edit-dialogue-container {
+div.dialogue-container {
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -223,19 +253,27 @@ div.edit-dialogue-container {
   border-radius: 10px;
   border: 1px solid #dedfe3;
   box-shadow: 0px 4px 5px #0000000d;
-  max-width: 310px;
   background-color: white;
 }
 
-div.edit-dialogue-header-container {
+div.edit-dialogue {
+  max-width: 310px;
+}
+
+div.dialogue-header-container {
   display: flex;
   align-items: center;
 }
 
-div.edit-dialogue-text-edit-container {
+div.dialogue-text-edit-container {
   display: flex;
   align-items: center;
   margin: 10px 0px 10px 0px;
+}
+
+div.dialogue-text-edit-container input {
+  margin-left: 20px;
+  width: -webkit-fill-available;
 }
 
 div.edit-dialogue-primitive-type-and-header-wrap {
@@ -286,6 +324,10 @@ input[value], input {
   font-family: "Futura PT", sans-serif;
   color: grey;
   text-align: center;
+}
+
+input::placeholder {
+  color: #b4b4b4;
 }
 
 

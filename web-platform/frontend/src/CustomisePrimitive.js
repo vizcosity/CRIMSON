@@ -54,9 +54,9 @@ class EditDialogue extends Component {
         zIndex: 10,
         left: this.state.x,
         top: this.state.y
-      }} className="edit-dialogue-container">
+      }} className="edit-dialogue dialogue-container">
 
-        <div className="edit-dialogue-header-container">
+        <div className="dialogue-header-container">
           <h2>Edit {this.props.primitive.type} {this.props.primitive.id}</h2>
           <button className="button-fade"
             style={{
@@ -89,14 +89,10 @@ class EditDialogue extends Component {
         </div>
 
         <div className="edit-dialogue-component-properties-container">
-          <div className="edit-dialogue-text-edit-container">
+          <div className="dialogue-text-edit-container">
             <p>Text</p>
             <input
-              style={{
-                marginLeft: '20px',
-                width: '-webkit-fill-available'
-              }}
-              type={this.props.primitive.text}
+              placeholder={this.props.primitive.text}
               onChange={
                 e => this.props.primitive.text = e.target.value
               }
