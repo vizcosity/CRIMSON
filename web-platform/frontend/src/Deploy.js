@@ -66,6 +66,17 @@ class GitHubDeployActions extends Component {
 
   render(){
     return (
+      <div className="vertical-container">
+
+        <p className="subtext">
+          {
+            /** Show rationale for connecting to GitHub if oAuthToken not present */
+            !this.props.oAuthToken ?
+            'Before continuing, CRIMSON needs permission to create repositories on your GitHub account.' :
+            'Your GitHub account is connected. Click Deploy to publish your project to GitHub.'
+          }
+        </p>
+
       <div className="horizontal-container">
 
       {
@@ -93,6 +104,11 @@ class GitHubDeployActions extends Component {
         onClick={this.props.handleDeploy}
         disabled={!this.props.oAuthToken}
       >Deploy</button>
+      </div>
+
+      <p className="subtext">Once your project is published to GitHub, you
+      can deploy it on Heroku and recieve a live URL which you can share.</p>
+
       </div>
     );
   }
@@ -204,11 +220,6 @@ class DeployDialogue extends Component {
           />
         </div>
 
-        <p className="subtext">
-          Before continuing, CRIMSON needs permission to create repositories
-          on your GitHub account.
-        </p>
-
         {
           !this.state.repo.url ?
           <div style={{
@@ -242,10 +253,6 @@ class DeployDialogue extends Component {
             repo={this.state.repo}
           />
         }
-
-
-        <p className="subtext">Once your project is published to GitHub, you
-        can deploy it on Heroku and recieve a live URL which you can share.</p>
 
       </div>
     );
