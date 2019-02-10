@@ -7,6 +7,40 @@
 var users = require(__dirname+'/db.json');
 const fs = require('fs');
 const crypto = require('crypto');
+const { MongoClient } = require('mongodb');
+const { url, collectionName, dbName } = require('./config.json');
+
+/**
+ * DB Set up.
+ */
+
+var db = null;
+
+const instantiateDB = () => new Promise((resolve, reject) => {
+
+  if (db) return resolve();
+
+  log(`Creating mongo client instance.`);
+
+  // Connect to Mongo server.
+  const client = new MongoClient(url);
+  client.connect(err => {
+   if (err) return log(err);
+
+   log(`Successfully connected to mongo server.`);
+
+   // Get instance of the speak freely db.
+   db = client.db(dbName).collection(collectionName);
+
+   log(`DB Instante assigned.`);
+
+   return resolve();
+
+ });
+
+});
+
+
 
 /**
  * Cryptography.
@@ -37,39 +71,46 @@ const preparePassword = async password => {
   };
 };
 
+const getUserByUsername = username => new Promise((resolve, reject) => {
+  instantiateDB().then(() => {
+    db.find({username}).toArray((err, res) => err ? reject(err) : resolve(res[0]));
+  });
+});
+
 module.exports = {
-  getUserByUsername: async (username) => {
-    return users[username];
-  },
+  getUserByUsername,
   validateUserPassword: async (username, passwordAttempt) => {
+    if (!db) await instantiateDB();
     console.log(`DB | Validating`, username);
-    if (!users[username]) return false;
-    var passwordDetails = users[username].password;
+    var user = await getUserByUsername(username);
+    // log(`User:`, user);
+    if (!user) {
+      // log(`No user ${username} present in DB.`);
+      return;
+    }
+    var passwordDetails = user.password;
     var {hashSaltedPassword, _} = await hashWithSalt(passwordAttempt, passwordDetails.iterations, passwordDetails.salt);
     return hashSaltedPassword === passwordDetails.hash;
   },
-  createUser: ({username, password}) => new Promise((resolve, reject) => {
+  createUser: ({username, password}) => new Promise(async (resolve, reject) => {
 
-    console.log(`DB | Creating user`, username);
+    if (!db) await instantiateDB();
 
-    if (users[username]) return reject('Username exists.');
+    log(`DB | Creating user`, username);
 
-    preparePassword(password).then(passwordDetails => {
+    if (await getUserByUsername(username)) return reject('Username exists.');
 
-      users[username] = {
-        username, password: passwordDetails
-      };
+    preparePassword(password).then(passwordDetails => {;
 
-      // Update the DB file.
-      fs.writeFile(__dirname+'/db.json',JSON.stringify(users, null, 2), (err) => {
-
-        if (err) return reject(err);
-        console.log(`DB | Creater user`, users[username]);
-
-        return resolve(users[username]);
-      });
+      db.insertOne({
+          username, password: passwordDetails
+      }, (err, result) => err ? reject(err) : resolve(result.ops[0]));
 
     });
 
   })
+}
+
+function log(...msg){
+  if (process.env.DEBUG) console.log(`DB |`,...msg);
 }
