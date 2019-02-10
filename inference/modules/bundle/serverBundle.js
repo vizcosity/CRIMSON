@@ -40,6 +40,7 @@ const createPackageJSON = (projectName, nav) => {
       "express": "~4.16.0",
       "local-ipv4-address": "0.0.2",
       "express-session": "^1.15.6",
+      "mongodb": "^3.1.13",
       "http-errors": "~1.6.2",
       "morgan": "~1.9.0",
       "ejs": "^2.6.1"
