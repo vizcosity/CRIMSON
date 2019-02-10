@@ -8,6 +8,72 @@ import React, { Component } from 'react';
 import { CloseIcon } from './Icons';
 import Reactable from 'reactablejs';
 
+class ContainedPrimitive extends Component {
+
+  constructor(props, context){
+    super(props, context);
+    this.state = {};
+  }
+
+  render(){
+      return (
+        <div className="horizontal-container contained-primitive-container">
+          <p>{this.props.primitive.type} [{this.props.primitive.id}]</p>
+
+          <button style={{
+            margin: '0px 0px 0px auto'
+          }} onClick={() => this.props.removePrimitive(this.props.primitive, this.props.parent)} className="button-fade">
+            <CloseIcon style={{
+              height: '10px'
+            }} />
+          </button>
+        </div>
+      );
+  }
+
+}
+
+// Display all contained primitives for the current primitive, with the ability to
+// remove primitives as desired.
+class ContainedPrimitivesField extends Component {
+  constructor(props, context){
+    super(props, context);
+    this.removePrimitive = this.removePrimitive.bind(this);
+  }
+
+  removePrimitive(primitive, parent){
+    console.log(`CUSTOMISE PRIMITIVE | Removing `, primitive.id, `from`, parent.id);
+    parent.contains = parent.contains.filter(s => s.id !== primitive.id);
+
+    // Force a render to update changes visually.
+    this.setState({
+      ...this.state
+    });
+  }
+
+  render(){
+    return (<div className="edit-dialogue-contained-primitives-container">
+
+    {
+      this.props.primitive.contains.length > 0 ? 
+      <p> Nested shapes </p>
+      : ""
+    }
+
+      {
+        this.props.primitive.contains.map(primitive =>
+          <ContainedPrimitive
+            primitive={primitive}
+            parent={this.props.primitive}
+            removePrimitive={this.removePrimitive}
+          />
+        )
+      }
+    </div>);
+  }
+
+}
+
 class PrimitiveTypeOption extends Component {
   render(){
     console.log('generating', this.props.type);
@@ -75,26 +141,29 @@ class EditDialogue extends Component {
         <div className="edit-dialogue-primitive-type-container">
           {
             this.props.primitiveTypes.map(
-              ({type, icon}, key) =>
+              ({value, icon}, key) =>
               <PrimitiveTypeOption
-                onClick={() => this.props.onChangePrimitiveType(type)}
+                onClick={() => this.props.onChangePrimitiveType(value)}
                 key={key}
-                type={type}
+                type={value}
                 icon={icon}
-                active={this.props.primitive.type.toLowerCase() === type.toLowerCase()}
+                active={this.props.primitive.type.toLowerCase() === value.toLowerCase()}
               />
             )
           }
         </div>
+
+        <ContainedPrimitivesField primitive={this.props.primitive} />
+
         </div>
 
         <div className="edit-dialogue-component-properties-container">
           <div className="dialogue-text-edit-container">
             <p>Text</p>
             <input
-              placeholder={this.props.primitive.text}
+              placeholder={this.props.primitive.content}
               onChange={
-                e => this.props.primitive.text = e.target.value
+                e => this.props.primitive.content = e.target.value
               }
             />
           </div>
@@ -104,8 +173,8 @@ class EditDialogue extends Component {
           <p style={{
             marginTop: '10px'
           }}className="subtext">
-            x: {this.props.primitive.meta.midpoint[0]}   y: {this.props.primitive.meta.midpoint[1]}  |
-              width: {this.props.primitive.meta.absoluteWidth}  height: {this.props.primitive.meta.absoluteHeight}
+            x: {Math.round(this.props.primitive.meta.midpoint[0])}   y: {Math.round(this.props.primitive.meta.midpoint[1])}  |
+              width: {Math.round(this.props.primitive.meta.absoluteWidth)}  height: {Math.round(this.props.primitive.meta.absoluteHeight)}
           </p>
         </div>
 

@@ -191,9 +191,12 @@ class InteractiveACRModifier extends Component {
       var primitives = await fetch('/api/v1/getSupportedPrimitives').then(res => res.json());
       this.availablePrimitives = primitives.map(primitive => Object({
         text: primitive,
-        value: primitive
+        value: primitive,
+        icon: primitive.icon || CloseIcon
       }));
     }
+
+    console.log(`MODIFY ACR | Available primitives`, this.availablePrimitives);
 
     this.setState({
       ...this.state,
@@ -385,30 +388,7 @@ class InteractiveACRModifier extends Component {
               primitive={this.state.modifyingPrimitive}
               onChangePrimitiveType={type => this.setPrimitiveType(type)}
               onClose={() => this.endPrimitiveSelection()}
-              primitiveTypes={
-                [
-                  {
-                    type: "Rectangle",
-                    icon: CloseIcon
-                  },
-                  {
-                    type: "Navigation",
-                    icon: CloseIcon
-                  },
-                  {
-                    type: "Panel",
-                    icon: CloseIcon
-                  },
-                  {
-                    type: "Dropdown",
-                    icon: CloseIcon
-                  },
-                  {
-                    type: "Input",
-                    icon: CloseIcon
-                  }
-                ]
-              } />
+              primitiveTypes={this.availablePrimitives} />
 
             : ""
           }

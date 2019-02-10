@@ -283,13 +283,20 @@ div.edit-dialogue-primitive-type-and-header-wrap {
 div.edit-dialogue-primitive-type-container {
   margin: 20px 0px 20px 0px;
   display: flex;
+  /* justify-content: center; */
+  /* align-items: center; */
+  overflow-y: scroll;
   width: 100%;
-  overflow-x: scroll;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: 120px;
+  /* overflow-x: scroll; */
   padding-bottom: 5px;
 }
 
 div.edit-dialogue-primitive-type-container > * {
-  margin-right: 20px;
+  width: 50px;
+    margin: 5px;
 
 }
 
@@ -312,6 +319,12 @@ div.primitive-type-option-container {
   justify-content: center;
   width: 70px;
   height: 70px;
+}
+
+div.contained-primitive-container {
+  border: 1px solid #dedfe3;
+  border-radius: 7px;
+  padding: 10px;
 }
 
 input {
