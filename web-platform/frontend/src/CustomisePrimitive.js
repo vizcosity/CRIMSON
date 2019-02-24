@@ -6,6 +6,8 @@
 
 import React, { Component } from 'react';
 import { CloseIcon } from './Icons';
+import { Checkbox } from 'semantic-ui-react';
+import Icon from './Icons';
 import Reactable from 'reactablejs';
 
 class ContainedPrimitive extends Component {
@@ -55,7 +57,7 @@ class ContainedPrimitivesField extends Component {
     return (<div className="edit-dialogue-contained-primitives-container">
 
     {
-      this.props.primitive.contains.length > 0 ? 
+      this.props.primitive.contains.length > 0 ?
       <p> Nested shapes </p>
       : ""
     }
@@ -74,13 +76,37 @@ class ContainedPrimitivesField extends Component {
 
 }
 
+class GenerateLoginOption extends Component {
+
+  constructor(props, context){
+    super(props, context);
+    this.state = {};
+    this.toggleLogin = this.toggleLogin.bind(this);
+  }
+
+  toggleLogin(e){
+    this.props.primitive.generateAuth = !this.props.primitive.generateAuth;
+    console.log(`Altered primitive:`, this.props.primitive);
+    this.setState(this.state);
+  }
+
+  render(){
+    return (<div className="generate-login-option-container">
+      <p>Generate Login Code</p>
+      <Checkbox checked={this.props.primitive.generateAuth} onChange={this.toggleLogin} style={{
+        marginLeft: 'auto'
+      }} toggle />
+    </div>);
+  }
+}
+
 class PrimitiveTypeOption extends Component {
   render(){
-    console.log('generating', this.props.type);
+    // console.log('generating', this.props.type);
     return (
       <button
       onClick={this.props.onClick}
-      className={`${this.props.active ? 'active ' : ''}button-fade primitive-type-option-container`}>
+      className={`${this.props.active ? 'active ' : ''}button-fade button-enlarge primitive-type-option-container`}>
         {this.props.icon()}
         <p style={{
           marginTop: '10px'
@@ -132,6 +158,14 @@ class EditDialogue extends Component {
           <CloseIcon  />
           </button>
         </div>
+
+
+        {
+          // Display generatelogin option if 'login' detected.
+          typeof this.props.primitive.generateAuth !== 'undefined' ?
+          <GenerateLoginOption primitive={this.props.primitive}/> : ""
+
+        }
 
 
         <div className="edit-dialogue-primitive-type-and-header-wrap">

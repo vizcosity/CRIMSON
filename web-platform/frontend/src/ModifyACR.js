@@ -9,9 +9,10 @@
 import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import Reactable from 'reactablejs';
-import { ArrowIcon } from './Icons.js';
 import EditDialogue from './CustomisePrimitive';
-import { CloseIcon } from './Icons';
+import { ArrowIcon, GenerateCodeIcon, CloseIcon, InfoButtonIcon } from './Icons';
+import { OverlayButton } from './Asset';
+import * as Icon from './Icons';
 // import Primitive from './Primitive.js';
 import { Container } from 'crimson-inference/modules/ACR.js';
 import {
@@ -74,6 +75,12 @@ class InteractiveACRModifier extends Component {
         y: 0
       }
     };
+
+
+    // Perform some pre-processing on the ACR. Top level shapes should have a
+    // parent of 'none'.
+    this.props.project.acr.forEach(object => object.parentId = "None");
+
     this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
     this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
     this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
@@ -81,6 +88,7 @@ class InteractiveACRModifier extends Component {
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+    this.continueClickHandler = this.continueClickHandler.bind(this);
 
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
@@ -105,7 +113,9 @@ class InteractiveACRModifier extends Component {
     // Check if id is none; return the implicit parent canvas element.
     if (!id) return this.implicitCanvasACRObject;
 
-    return findACRObjectById(this.props.project.acr, id);
+    var parent = findACRObjectById(this.props.project.acr, id);
+
+    return parent || this.implicitCanvasACRObject;
   }
 
   updateImageSizeProperties(){
@@ -161,7 +171,7 @@ class InteractiveACRModifier extends Component {
 
     var parent = findACRObjectById(this.props.project.acr, this.state.selectedPrimitive.parentId);
 
-    parent.contains = parent.contains.filter(s => s.id !== this.state.selectedPrimitive.id);
+    if (parent) parent.contains = parent.contains.filter(s => s.id !== this.state.selectedPrimitive.id);
 
     // Clear selected primitive.
     this.clearSelectedPrimitive();
@@ -192,7 +202,7 @@ class InteractiveACRModifier extends Component {
       this.availablePrimitives = primitives.map(primitive => Object({
         text: primitive,
         value: primitive,
-        icon: primitive.icon || CloseIcon
+        icon: Icon[`${primitive[0].toUpperCase()+primitive.substring(1, primitive.length)+'Icon'}`]
       }));
     }
 
@@ -373,9 +383,41 @@ class InteractiveACRModifier extends Component {
 
   }
 
+  // Continue click handler.
+  continueClickHandler(){
+    if (this.props.history) this.props.history.push('/generate-code');
+  }
+
   render(){
     return (
       <div className="acr-mod-container">
+
+      {
+        //<div className="acr-right-panel">
+
+
+        //   <div className="acr-header-container">
+        //   <h2>Editing {this.props.project.source.name}</h2>
+        //   <p className="subtext">
+        //     Adjust the bounding boxes and shape primitive classification type
+        //     before continuing.
+        //   </p>
+        // </div>
+
+
+
+      //  <div className="continue-container">
+      //   <Link className="continue-button" to="/generate-code">Continue</Link>
+      //   <ArrowIcon style={{
+      //     marginTop: '5px',
+      //     marginLeft: '10px'
+      //   }} />
+      // </div>
+
+
+      //</div>
+      }
+
 
         <div className="acr-image-container">
 
@@ -416,26 +458,16 @@ class InteractiveACRModifier extends Component {
           </ResizeDetector>
         </div>
 
-        <div className="acr-right-panel">
-
-        <div className="acr-header-container">
-          <h1>Editing {this.props.project.source.name}</h1>
-          <p>
-            Adjust the bounding boxes and shape primitive classification type
-            before continuing.
-          </p>
+        <div style={{
+          left: '0',
+          right: 'auto'
+        }} className="overlay-buttons-container">
+          <OverlayButton text="Info" icon={<InfoButtonIcon/>} tooltip="Adjust any errors in the detected shapes above. Click 'Generate Code' to continue" />
         </div>
 
-        <div className="continue-container">
-          <Link className="continue-button" to="/generate-code">Continue</Link>
-          <ArrowIcon style={{
-            marginTop: '5px',
-            marginLeft: '10px'
-          }} />
+        <div className="overlay-buttons-container">
+        <OverlayButton text="Generate Code" icon={<GenerateCodeIcon />} onClick={this.continueClickHandler} />
         </div>
-
-        </div>
-
       </div>
     );
   }

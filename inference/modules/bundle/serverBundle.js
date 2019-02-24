@@ -28,7 +28,7 @@ const createPackageJSON = (projectName, nav) => {
 
   // Package
   var pkg = {
-    name: projectName,
+    name: projectName.replace(/ /g, '_'),
     version: '0.1.0',
     private: true,
     scripts: {
@@ -190,12 +190,10 @@ const serverBundle = async ({
    // Render & write the scripts view.
    fs.writeFileSync(join(outputDir, 'views', 'scripts.ejs'), scripts.render());
 
-   if (code.nav) {
-     var nav = loadTemplate('nav');
-     nav.locals.code = code.nav;
-     // render & write the nav view.
-     fs.writeFileSync(join(outputDir, 'views', 'nav.ejs'), nav.render());
-   }
+   var nav = loadTemplate('nav');
+   nav.locals.code = code && code.nav ? code.nav : "";
+   // render & write the nav view.
+   fs.writeFileSync(join(outputDir, 'views', 'nav.ejs'), nav.render());
 
    // Prepare the application.
    var packageJSON = createPackageJSON(projectName, projectType);

@@ -108,6 +108,16 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
   //     url: runningProcesses[req.session.id].liveUrl
   // });
 
+  // Check if the user is requesting a zip bundle.
+  // if (req.body.zip && req.body.code == 'false'){
+  //   if (!req.body.sessionID) return log(`No sessionID present in request for zipped bundle without acr / image wireframe.`);
+  //   var outputDir = runningProcesses[req.body.sessionID].outputDir;
+  //   log(`Generated zip file. Sending download from`, outputDir);
+  //
+  //   var zipFile = `${outputDir}/${fileName}/${fileName}.zip`;
+  //   return res.download(zipFile);
+  // }
+
   // If we have recieved a code from GitHub, then return the liveURL for the
   // running process, and return the oAuth token.
   if (req.body.code != 'false'){
@@ -183,6 +193,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
       process: childServer,
       outputDir,
       fileName,
+      imagePath: req.body.imgPath,
       acr: req.body.acr
     }
 

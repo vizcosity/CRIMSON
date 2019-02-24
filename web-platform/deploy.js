@@ -40,7 +40,8 @@ const createGithubRepo = async ({name, description, private=true, token}) => {
      'Content-Type': 'application/json'
    },
   body:
-   { name: name,
+   {
+     name: name.replace(/ /g, '_'),
      description: description,
      // TODO: Update homepage with URL from heroku.
      homepage: 'https://github.com',

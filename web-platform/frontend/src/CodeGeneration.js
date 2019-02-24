@@ -10,17 +10,13 @@
 
 import React, { Component } from 'react';
 import { DownloadIcon, ModifyIcon, DeployIcon } from './Icons';
+import { OverlayButton } from './Asset';
 import DeployDialogue from './Deploy';
 import Modal from 'react-modal';
 import fileDownload from 'js-file-download';
 import download from 'downloadjs';
-import { Dimmer, Loader } from 'semantic-ui-react'
+import { Loader } from './Asset';
 import { fetchGeneratedCode, fetchZippedBundle } from './Fetch.js';
-
-const OverlayButton = ({icon, text, onClick}) => <div onClick={onClick} className="overlay-button-container">
-  {icon}
-  <button className="overlay-button" >{text}</button>
-</div>
 
 class PreviewWindow extends Component {
 
@@ -54,11 +50,7 @@ class PreviewWindow extends Component {
     <div style={{
       height: '100%'
     }}className="live-preview-container">
-      <div style={{
-        position: 'fixed',
-        bottom: '0',
-        right: '0'
-      }} className="overlay-buttons-container">
+      <div className="overlay-buttons-container">
         <OverlayButton icon={<DownloadIcon />} text="Download" onClick={() =>
             // Fetch zip bundle.
             fetchZippedBundle(this.props.project.acr, {
@@ -68,7 +60,7 @@ class PreviewWindow extends Component {
               project: 'server'
             }).then(async (data) => {
               data = await data.blob();
-              download(data, `${this.props.project.source.name}.zip`, 'application/zip');
+              fileDownload(data, `${this.props.project.source.name}.zip`, 'application/zip');
             })} />
         <OverlayButton icon={<ModifyIcon />} text="Modify" onClick={() => this.props.history.push('/modify-acr')} />
         <OverlayButton icon={<DeployIcon />} text="Deploy" onClick={() => this.showDeployDialogue()} />
@@ -119,11 +111,12 @@ class CodeGenerator extends Component {
       context: 'vanilla',
       project: 'server',
       livePreview: true
-    }).then(({url, sessionID, oAuthToken, acr, fileName}) => {
+    }).then(({url, sessionID, oAuthToken, acr, imagePath, fileName}) => {
       log(`Generated code. live at url:`, url, `with sessionID:`, sessionID);
       if (oAuthToken) log(`Recieved GitHub oAuthToken:`, oAuthToken);
       if (acr) this.props.project.acr = acr;
       if (fileName) this.props.project.source.name = fileName;
+      if (imagePath) this.props.project.source.path = imagePath;
       this.onGenerateCodeHandler({url, sessionID, oAuthToken});
     });
 
@@ -155,10 +148,15 @@ class CodeGenerator extends Component {
       {
         this.state.loading ?
 
-        <div className="loading-container">
-          <Dimmer active inverted>
-          <Loader active indeterminate inverted>Generating code for {this.props.project.source.name}</Loader>
-          </Dimmer>
+        <div style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }} >
+          <Loader text={`Generating code for ${this.props.project.source.name}`} />
         </div> :
 
         <PreviewWindow

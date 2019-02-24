@@ -30,6 +30,7 @@ async function fetchGeneratedCode(acr, options){
 async function fetchZippedBundle(acr, options){
   options = {
     ...options,
+    code: false,
     zip: true
   };
   var data = new FormData();

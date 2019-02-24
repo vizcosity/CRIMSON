@@ -207,12 +207,14 @@ class BootstrapObject {
         var button = await BootstrapObject.create(shape);
         button.attributes.class = 'btn btn-outline-secondary';
 
+        console.log(`Generating button:`, shape);
+
         // If content matches 'login', then we wrap the prenode in an ejs
         // control flow statement.
         // Ensure that the project type is a server before inferring, as inserting
         // ejs template syntax will break static code.
         if (
-            shape.generateAuth && 
+            shape.generateAuth &&
             shape.content.toLowerCase &&
             shape.content.toLowerCase() == "login"
           ) button = loginButton;
