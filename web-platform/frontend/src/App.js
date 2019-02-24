@@ -78,26 +78,21 @@ class App extends Component {
           />
         } />
         <Route exact path="/modify-acr"
-        render={
-          () => <InteractiveACRModifier project={this.project}/>
+        component={
+          ({history}) => <InteractiveACRModifier history={history} project={this.project}/>
         }
           />
-
         <Route exact path="/generate-code" component={
-          ({history, location}) =>{
-            console.log(`Recieved location:`, query.parse(location.search));
-          return <CodeGenerator
+          ({history, location}) => <CodeGenerator
             history={history}
             api={Package.api}
             project={this.project}
             sessionID={query.parse(location.search)['sessionID']}
             code={query.parse(location.search)['code']}
-          />}
+          />
         } />
-
-        } />
-
       </div>
+
     </Router>);
   }
 }

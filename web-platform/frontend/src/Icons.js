@@ -6,6 +6,467 @@
 
 import React, { Component } from 'react';
 
+/** Info Button Icon */
+const InfoButtonIcon = () => <svg width='37' height='37' viewBox='0 0 37 37' xmlns='http://www.w3.org/2000/svg'>
+    <g id='Site-Mockups' fill='none' fillRule='evenodd'>
+        <g id='Generated-Code-View' transform='translate(-340 -870)' fillRule='nonzero'
+        fill='#404850'>
+            <g id='Info-Button' transform='translate(303 847)'>
+                <g id='noun_Info_1829451' transform='translate(37 23)'>
+                    <g id='Group'>
+                        <path d='M33.2738824,7.41980588 C35.5918235,10.4995118 36.9847647,14.3126882 36.9847647,18.4653941 C36.9847647,28.6491 28.7294118,36.9022765 18.5457059,36.9022765 C8.36635294,36.9022765 0.111,28.6491 0.111,18.4653941 C0.111,8.28168824 8.36635294,0.0285117647 18.5457059,0.0285117647 C22.4067647,0.0285117647 25.9783529,1.22557059 28.9383529,3.25404118 L28.9144118,3.28668824 C29.3257647,3.58486471 29.6108824,4.04845294 29.6108824,4.59692353 C29.6108824,5.51104118 28.8708824,6.25104118 27.9589412,6.25104118 C27.5367059,6.25104118 27.1645294,6.08345294 26.8728824,5.82445294 L26.862,5.83751176 C24.4678824,4.25739412 21.6297647,3.29321765 18.5457059,3.29321765 C10.1684706,3.29321765 3.37570588,10.0881588 3.37570588,18.4653941 C3.37570588,26.8448059 10.1684706,33.6375706 18.5457059,33.6375706 C26.9272941,33.6375706 33.7200588,26.8448059 33.7200588,18.4653941 C33.7200588,15.0309235 32.5665294,11.8750412 30.6381765,9.3351 L30.6577647,9.32204118 C30.4705882,9.05433529 30.3334706,8.74527647 30.3334706,8.39486471 C30.3334706,7.49380588 31.0647647,6.76251176 31.9658235,6.76251176 C32.5034118,6.76251176 32.9561176,7.03674706 33.2521176,7.43504118 L33.2738824,7.41980588 Z M20.1789294,11.4774 L20.1789294,20.5576353 C20.1789294,21.4586941 19.4476353,22.1899882 18.5465765,22.1899882 C17.6455176,22.1899882 16.9142235,21.4586941 16.9142235,20.5576353 L16.9142235,11.4774 C16.9142235,10.5763412 17.6455176,9.84504706 18.5465765,9.84504706 C19.4476353,9.84504706 20.1789294,10.5763412 20.1789294,11.4774 Z M18.5465765,23.8221235 C19.4476353,23.8221235 20.1789294,24.5512412 20.1789294,25.4544765 C20.1789294,26.3555353 19.4476353,27.0868294 18.5465765,27.0868294 C17.6455176,27.0868294 16.9142235,26.3555353 16.9142235,25.4544765 C16.9142235,24.5512412 17.6455176,23.8221235 18.5465765,23.8221235 Z'
+                        id='Shape' />
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+
+/** Generate Code Icon */
+const GenerateCodeIcon = () => <svg width='39' height='36' viewBox='0 0 39 36' xmlns='http://www.w3.org/2000/svg'>
+    <g id='Site-Mockups' fill='none' fillRule='evenodd'>
+        <g id='Generated-Code-View' transform='translate(-494 -871)' fillRule='nonzero'
+        fill='#404850'>
+            <g id='Generate-Code-Button' transform='translate(458 847)'>
+                <g id='noun_coding_1619141' transform='translate(36 24)'>
+                    <g id='Group'>
+                        <path d='M0,7.66172191 L0,33.6443402 C0,34.9434495 1.05298097,35.9921662 2.34,35.9921662 L36.66,35.9921662 C37.947019,35.9921662 39,34.9434495 39,33.6443402 L39,7.66172191 L0,7.66172191 Z M12.994779,24.7382494 C13.2989904,25.0434783 13.2989904,25.5365256 12.994779,25.8417067 C12.8465771,25.9982379 12.6438171,26.0765275 12.4488171,26.0765275 C12.2460094,26.0765275 12.0432019,25.9982379 11.8949999,25.8417067 L7.66741326,21.5921471 C7.36320187,21.2869661 7.36320187,20.7939188 7.66741326,20.4886899 L11.895,16.2469642 C12.1992114,15.9417354 12.6906152,15.9417354 12.994779,16.2469642 C13.2989904,16.5521453 13.2989904,17.0451926 12.994779,17.3504214 L9.32100952,21.0443593 L12.994779,24.7382494 Z M25.077019,11.9973569 L15.3035962,30.8191343 C15.1632019,31.0851945 14.8902209,31.2417257 14.6093848,31.2417257 C14.4924133,31.2417257 14.3675867,31.2104386 14.2506153,31.1478165 C13.8684229,30.9521644 13.720221,30.4747845 13.922981,30.0913139 L23.6964039,11.2695366 C23.8992115,10.886066 24.3671925,10.7373684 24.7493849,10.9408543 C25.1315771,11.1365065 25.279779,11.6138863 25.077019,11.9973569 Z M31.3325867,21.5921471 L27.105,25.8417067 C26.9567981,25.9982379 26.7539905,26.0765275 26.5511828,26.0765275 C26.3561828,26.0765275 26.1534229,25.9982379 26.0052209,25.8417067 C25.7010095,25.5365256 25.7010095,25.0434783 26.0052209,24.7382494 L29.6789904,21.0443593 L26.0052209,17.3504215 C25.7010095,17.0451927 25.7010095,16.5521453 26.0052209,16.2469643 C26.3093847,15.9417355 26.8007885,15.9417355 27.1049999,16.2469643 L31.3325866,20.48869 C31.6367981,20.7939188 31.6367981,21.2869661 31.3325867,21.5921471 Z'
+                        id='Shape' />
+                        <path d='M36.66,0.00783375652 L2.34,0.00783375652 C1.05298097,0.00783375652 0,1.0643364 0,2.35565984 L0,6.0965046 L39,6.0965046 L39,2.35565984 C39,1.0643364 37.947019,0.00783375652 36.66,0.00783375652 Z M6.56758666,4.1321491 C6.52859618,4.22605831 6.46618284,4.31218158 6.39600952,4.3825896 C6.25561521,4.53128713 6.05280764,4.61736266 5.84219236,4.61736266 C5.63938471,4.61736266 5.43657715,4.53128713 5.29618284,4.3825896 C5.21820187,4.31218158 5.16359618,4.22605831 5.12460569,4.1321491 C5.08561521,4.0382399 5.06219236,3.93649693 5.06219236,3.83475397 C5.06219236,3.6234821 5.14798097,3.42782992 5.29618284,3.27913239 C5.58477902,2.98957101 6.10741334,2.98957101 6.39600952,3.27913239 C6.54421139,3.42782992 6.62219236,3.6234821 6.62219236,3.83475397 C6.62219236,3.93649693 6.60657715,4.03823982 6.56758666,4.1321491 Z M11.5284229,4.3825896 C11.380221,4.53128713 11.1774133,4.61736266 10.9746057,4.61736266 C10.7639905,4.61736266 10.5689905,4.53128713 10.4207885,4.3825896 C10.2803942,4.24172575 10.1946057,4.0382399 10.1946057,3.83475397 C10.1946057,3.6234821 10.2803943,3.42782992 10.4207885,3.27913239 C10.7093847,2.98957101 11.232019,2.98957101 11.5284228,3.27913239 C11.6688171,3.42782992 11.7546056,3.6234821 11.7546056,3.83475397 C11.7546057,4.03823982 11.6688172,4.24172575 11.5284229,4.3825896 Z'
+                        id='Shape' />
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+
+/** Landing page icons */
+const UploadIcon = () => <svg width='42' height='84' viewBox='0 0 84 88' xmlns='http://www.w3.org/2000/svg'>
+    <g id='Welcome' fill='none' fillRule='evenodd'>
+        <g id='Desktop-HD-Copy' transform='translate(-1100 -418)' fillRule='nonzero'
+        fill='#6D7173'>
+            <g id='Upload-by-Satisfactory-from-the-Noun-Project' transform='translate(1100 418)'>
+                <g id='Group'>
+                    <path d='M0.6,28 L0.6,78.7 C0.6,83.4 4.4,87.2 9.2,87.2 L74.9,87.2 C79.6,87.2 83.4,83.4 83.4,78.7 L83.4,28 C83.4,23.3 79.6,19.5 74.8,19.5 L61.9,19.5 C60.2,19.5 58.9,20.8 58.9,22.5 L58.9,22.5 C58.9,24.2 60.2,25.5 61.9,25.5 L74.7,25.5 C76.1,25.5 77.3,26.7 77.3,28.1 L77.3,78.7 C77.3,80.1 76.2,81.2 74.7,81.2 L9.1,81.2 C7.7,81.2 6.5,80 6.5,78.6 L6.5,28 C6.5,26.6 7.6,25.5 9.1,25.5 L19.3,25.5 C21,25.5 22.3,24.2 22.3,22.5 L22.3,22.5 C22.3,20.8 21,19.5 19.3,19.5 L9.1,19.5 C4.4,19.5 0.6,23.4 0.6,28 Z'
+                    id='Shape' />
+                    <path d='M44.2,49 L44.2,10.3 L50.6,15.8 C51.8,16.9 53.7,16.7 54.8,15.5 L54.8,15.5 C55.9,14.3 55.7,12.4 54.5,11.3 L43.2,1.5 C42.6,1 41.9,0.8 41.2,0.8 C40.5,0.8 39.8,1 39.2,1.5 L28,11.2 C26.7,12.3 26.6,14.2 27.7,15.4 L27.7,15.4 C28.8,16.7 30.7,16.8 32,15.7 L38.4,10.3 L38.4,49 C38.4,50.6 39.7,51.9 41.3,51.9 L41.3,51.9 C42.9,51.9 44.2,50.6 44.2,49 Z'
+                    id='Shape' />
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+
+/** Icons used for the ACR Customisation dialogue. */
+const HeaderIcon = () => <svg
+  width="18px"
+  height="13px"
+  viewBox="0 0 18 13"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <text
+    transform="translate(-669.000000, -304.000000) translate(668.000000, 301.000000)"
+    fill="#6D7173"
+    stroke="none"
+    strokeWidth={1}
+    fillRule="evenodd"
+    fontSize={14}
+    fontFamily="Futura-Medium, Futura"
+    fontWeight={400}
+  >
+    <tspan x={1} y={15}>
+      Aa
+    </tspan>
+  </text>
+</svg>
+
+const ParagraphIcon = () => <svg
+  width="18px"
+  height="20px"
+  viewBox="0 0 18 20"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-731.000000, -302.000000) translate(668.000000, 301.000000) translate(62.000000, 1.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <path
+      d="M1.5.5v19"
+      stroke="#6D7173"
+      opacity="0.296875"
+      strokeLinecap="square"
+    />
+    <text
+      fontFamily="Futura-Medium, Futura"
+      fontSize={5}
+      fontWeight={400}
+      fill="#6D7173"
+    >
+      <tspan x={6} y={6}>
+        lorem{" "}
+      </tspan>{" "}
+      <tspan x={6} y={12}>
+        ipsum
+      </tspan>{" "}
+      <tspan x={6} y={18}>
+        dolor{" "}
+      </tspan>
+    </text>
+  </g>
+</svg>
+
+const ImageIcon = () => <svg
+  width="15px"
+  height="15px"
+  viewBox="0 0 15 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <rect id="a" x={0} y={0} width={15} height={15} rx={3} />
+  </defs>
+  <g
+    transform="translate(-797.000000, -305.000000) translate(668.000000, 301.000000) translate(129.000000, 4.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <use fill="#FFF" fillRule="evenodd" xlinkHref="#a" />
+    <rect
+      stroke="#6D7173"
+      strokeWidth={1}
+      x="0.5"
+      y="0.5"
+      width={14}
+      height={14}
+      rx={3}
+    />
+    <g
+      transform="translate(1.000000, 1.000000)"
+      stroke="#6D7173"
+      strokeLinecap="square"
+    >
+      <path d="M.307 12.357L12.494.393M.759.593L12.78 12.566" />
+    </g>
+  </g>
+</svg>
+
+const ButtonIcon = () => <svg
+  width="23px"
+  height="15px"
+  viewBox="0 0 23 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <rect id="a" x={1} y={5} width={20} height={11} rx={5} />
+  </defs>
+  <g
+    transform="translate(-857.000000, -307.000000) translate(668.000000, 301.000000) translate(188.000000, 1.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <use fill="#FFF" fillRule="evenodd" xlinkHref="#a" />
+    <rect
+      stroke="#6D7173"
+      strokeWidth={1}
+      x="1.5"
+      y="5.5"
+      width={19}
+      height={10}
+      rx={5}
+    />
+    <polygon
+      fill="#6D7173"
+      transform="translate(11.000000, 10.500000) rotate(180.000000) translate(-11.000000, -10.500000) "
+      points="11 9 13 12 9 12"
+    />
+    <g
+      transform="translate(16.000000, 12.000000)"
+      fillRule="nonzero"
+      fill="#6D7173"
+    >
+      <path d="M.521.52l7.427 2.836L4.59 4.589 3.356 7.95.521.52z" />
+    </g>
+  </g>
+</svg>
+
+const RowIcon = () => <svg
+  width="16px"
+  height="13px"
+  viewBox="0 0 16 13"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <rect id="a" x={2} y={4} width={16} height={13} rx={2} />
+  </defs>
+  <g
+    transform="translate(-671.000000, -366.000000) translate(668.000000, 301.000000) translate(1.000000, 61.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <use fill="#FFF" fillRule="evenodd" xlinkHref="#a" />
+    <rect
+      stroke="#6D7173"
+      strokeWidth={1}
+      x="2.5"
+      y="4.5"
+      width={15}
+      height={12}
+      rx={2}
+    />
+    <rect
+      stroke="#6D7173"
+      opacity="0.497848732"
+      x="5.5"
+      y="6.5"
+      width={3}
+      height={8}
+      rx="1.5"
+    />
+    <rect
+      stroke="#6D7173"
+      opacity="0.497848732"
+      x="11.5"
+      y="6.5"
+      width={3}
+      height={8}
+      rx="1.5"
+    />
+  </g>
+</svg>
+
+const InputIcon = () => <svg
+  width="20px"
+  height="11px"
+  viewBox="0 0 20 11"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-668.000000, -367.000000) translate(668.000000, 301.000000) translate(0.000000, 61.000000)"
+    stroke="#6D7173"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <rect x="0.5" y="5.5" width={19} height={10} rx={2} />
+    <path
+      d="M3.5 7.5v6"
+      strokeOpacity="0.504076087"
+      strokeLinecap="square"
+    />
+  </g>
+</svg>
+
+const DropdownIcon = () => <svg
+  width="20px"
+  height="11px"
+  viewBox="0 0 20 11"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-730.000000, -367.000000) translate(668.000000, 301.000000) translate(62.000000, 61.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <rect
+      stroke="#6D7173"
+      x="0.5"
+      y="5.5"
+      width={19}
+      height={10}
+      rx={2}
+    />
+    <polygon
+      fill="#6D7173"
+      transform="translate(15.000000, 10.500000) rotate(180.000000) translate(-15.000000, -10.500000) "
+      points="15 9 17 12 13 12"
+    />
+  </g>
+</svg>
+
+const PanelIcon = () => <svg
+  width="12px"
+  height="16px"
+  viewBox="0 0 12 16"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-735.000000, -364.000000) translate(668.000000, 301.000000) translate(63.000000, 61.000000)"
+    stroke="#6D7173"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <rect x="4.5" y="2.5" width={11} height={6} rx={2} />
+    <rect x="4.5" y="11.5" width={11} height={6} rx={2} />
+  </g>
+</svg>
+
+
+const CheckboxIcon = () => <svg
+  width="15px"
+  height="15px"
+  viewBox="0 0 15 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-797.000000, -364.000000) translate(668.000000, 301.000000) translate(126.000000, 61.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <rect
+      stroke="#6D7173"
+      x="3.5"
+      y="2.5"
+      width={14}
+      height={14}
+      rx={3}
+    />
+    <path
+      d="M13.9 7.098a.319.319 0 0 0-.46 0L9.542 11.17l-1.95-2.036a.322.322 0 0 0-.332-.13.336.336 0 0 0-.251.263.351.351 0 0 0 .123.347l2.18 2.288c.128.13.332.13.46 0l4.13-4.312a.35.35 0 0 0 0-.492z"
+      opacity="0.5"
+      fillRule="nonzero"
+      fill="#6D7173"
+    />
+  </g>
+</svg>
+
+const NavigationIcon = () => <svg
+  width="15px"
+  height="15px"
+  viewBox="0 0 15 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <g
+    transform="translate(-797.000000, -365.000000) translate(668.000000, 301.000000) translate(126.000000, 61.000000)"
+    stroke="#6D7173"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <rect x="3.5" y="3.5" width={14} height={14} rx={2} />
+    <rect
+      opacity="0.497848732"
+      x="5.5"
+      y="5.5"
+      width={10}
+      height={3}
+      rx="1.5"
+    />
+  </g>
+</svg>
+
+const ContainerIcon = () => <svg
+  width="15px"
+  height="15px"
+  viewBox="0 0 15 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <rect id="a" x={3} y={3} width={15} height={15} rx={2} />
+  </defs>
+  <g
+    transform="translate(-859.000000, -365.000000) translate(668.000000, 301.000000) translate(188.000000, 61.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <use fill="#FFF" fillRule="evenodd" xlinkHref="#a" />
+    <rect
+      stroke="#6D7173"
+      strokeWidth={1}
+      x="3.5"
+      y="3.5"
+      width={14}
+      height={14}
+      rx={2}
+    />
+    <rect
+      stroke="#6D7173"
+      opacity="0.497848732"
+      x="5.5"
+      y="5.5"
+      width={10}
+      height={3}
+      rx="1.5"
+    />
+    <rect
+      stroke="#6D7173"
+      opacity="0.497848732"
+      x="5.5"
+      y="12.5"
+      width={10}
+      height={3}
+      rx="1.5"
+    />
+  </g>
+</svg>
+
+const FooterIcon = () => <svg
+  width="15px"
+  height="15px"
+  viewBox="0 0 15 15"
+  version="1.1"
+  xmlnsXlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <rect id="a" x={3} y={3} width={15} height={15} rx={2} />
+  </defs>
+  <g
+    transform="translate(-859.000000, -365.000000) translate(668.000000, 301.000000) translate(188.000000, 61.000000)"
+    stroke="none"
+    strokeWidth={1}
+    fill="none"
+    fillRule="evenodd"
+  >
+    <use fill="#FFF" fillRule="evenodd" xlinkHref="#a" />
+    <rect
+      stroke="#6D7173"
+      strokeWidth={1}
+      x="3.5"
+      y="3.5"
+      width={14}
+      height={14}
+      rx={2}
+    />
+    <rect
+      stroke="#6D7173"
+      opacity="0.497848732"
+      x="5.5"
+      y="12.5"
+      width={10}
+      height={3}
+      rx="1.5"
+    />
+  </g>
+</svg>
+
+
 class ArrowIcon extends Component {
 
   render(){
@@ -95,4 +556,25 @@ const DeployIcon = (props) => <svg {...props} width='24' height='37' viewBox='0 
     </g>
 </svg>
 
-export { ArrowIcon, DownloadIcon, ModifyIcon, CloseIcon, DeployIcon };
+export {
+  UploadIcon,
+  ArrowIcon,
+  InfoButtonIcon,
+  GenerateCodeIcon,
+  DownloadIcon,
+  ModifyIcon,
+  CloseIcon,
+  DeployIcon,
+  HeaderIcon,
+  ParagraphIcon,
+  ImageIcon,
+  ButtonIcon,
+  RowIcon,
+  InputIcon,
+  DropdownIcon,
+  PanelIcon,
+  CheckboxIcon,
+  NavigationIcon,
+  ContainerIcon,
+  FooterIcon
+};
