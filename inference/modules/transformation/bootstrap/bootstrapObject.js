@@ -64,7 +64,7 @@ class BootstrapObject {
 
     switch (shape.type){
       case "navigation":
-        classes += " navbar navbar-expand-lg navbar-light bg-light";
+        classes += " bg-white border-bottom box-shadow navbar navbar-expand-lg navbar-light bg-light";
         break;
       case "footer":
         classes +=  " bd-footer";
