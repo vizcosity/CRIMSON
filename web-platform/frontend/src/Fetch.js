@@ -5,10 +5,16 @@
  */
 
 import { api } from '../package.json';
+import { sortShapes } from './geometry';
 
 // Given an acr object, context, and project type, generates the code and returns
 // response from the server according to the desired format.
 async function fetchGeneratedCode(acr, options){
+
+  // Sort shapes before generating code in case user has altered the ordering.
+  acr = sortShapes(acr);
+
+  console.log('Sorted ACR:', acr);
 
   var data = new FormData();
   data.append('acr', JSON.stringify(acr));
