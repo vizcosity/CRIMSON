@@ -1,12 +1,13 @@
 [
   {
-    "id": "0",
+    "id": "1",
+    "parentId": "None",
     "type": "rectangle",
     "meta": {
       "absoluteWidth": 1188.0,
       "absoluteHeight": 1037.0,
-      "relativeWidth": "100.0%",
-      "relativeHeight": "100.0%",
+      "relativeWidth": "97.85831960461286%",
+      "relativeHeight": "96.91588785046729%",
       "midpoint": [
         606,
         534
@@ -49,10 +50,12 @@
         ]
       ]
     },
+    "content": false,
     "level": 0,
     "contains": [
       {
-        "id": "75",
+        "id": "2",
+        "parentId": "1",
         "type": "rectangle",
         "meta": {
           "absoluteWidth": 1169.0,
@@ -101,69 +104,23 @@
             ]
           ]
         },
+        "content": false,
         "level": 1,
         "contains": [
           {
-            "id": "204",
-            "type": "intersection",
+            "id": "3",
+            "parentId": "2",
+            "type": "header",
             "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "0.0%",
-              "relativeHeight": "0.0%",
+              "absoluteWidth": 282.0,
+              "absoluteHeight": 75.0,
+              "relativeWidth": "24.123182207014544%",
+              "relativeHeight": "38.265306122448976%",
               "midpoint": [
-                560,
-                117
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  560.0,
-                  117.0
-                ]
-              ],
-              "boundingBox": []
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "214",
-            "type": "intersection",
-            "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "0.0%",
-              "relativeHeight": "0.0%",
-              "midpoint": [
-                592,
-                146
-              ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  592.0,
-                  146.0
-                ]
-              ],
-              "boundingBox": []
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "469",
-            "type": "text",
-            "meta": {
-              "absoluteWidth": 281.0,
-              "absoluteHeight": 74.0,
-              "relativeWidth": "24.03763900769889%",
-              "relativeHeight": "37.755102040816325%",
-              "midpoint": [
-                598,
+                599,
                 114
               ],
-              "area": 20794.0,
+              "area": 21150.0,
               "vertices": [
                 [
                   458,
@@ -171,14 +128,14 @@
                 ],
                 [
                   458,
-                  151
+                  152
                 ],
                 [
-                  739,
-                  151
+                  740,
+                  152
                 ],
                 [
-                  739,
+                  740,
                   77
                 ]
               ],
@@ -201,13 +158,15 @@
                 ]
               ]
             },
+            "content": "Navigation",
             "level": 2,
             "contains": []
           }
         ]
       },
       {
-        "id": "11",
+        "id": "4",
+        "parentId": "1",
         "type": "rectangle",
         "meta": {
           "absoluteWidth": 1169.0,
@@ -256,10 +215,12 @@
             ]
           ]
         },
+        "content": false,
         "level": 1,
         "contains": [
           {
-            "id": "50",
+            "id": "5",
+            "parentId": "4",
             "type": "rectangle",
             "meta": {
               "absoluteWidth": 431.0,
@@ -308,10 +269,12 @@
                 ]
               ]
             },
+            "content": false,
             "level": 2,
             "contains": [
               {
-                "id": "61",
+                "id": "6",
+                "parentId": "5",
                 "type": "rectangle",
                 "meta": {
                   "absoluteWidth": 412.0,
@@ -360,93 +323,23 @@
                     ]
                   ]
                 },
+                "content": false,
                 "level": 3,
                 "contains": [
                   {
-                    "id": "196",
-                    "type": "intersection",
+                    "id": "7",
+                    "parentId": "6",
+                    "type": "header",
                     "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
+                      "absoluteWidth": 214.0,
+                      "absoluteHeight": 68.0,
+                      "relativeWidth": "51.94174757281553%",
+                      "relativeHeight": "58.620689655172406%",
                       "midpoint": [
-                        177,
-                        321
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          177.0,
-                          321.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "212",
-                    "type": "intersection",
-                    "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        248,
+                        249,
                         320
                       ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          248.0,
-                          320.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "213",
-                    "type": "centered_intersection",
-                    "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        248,
-                        320
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          248.0,
-                          320.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "474",
-                    "type": "text",
-                    "meta": {
-                      "absoluteWidth": 213.0,
-                      "absoluteHeight": 67.0,
-                      "relativeWidth": "51.69902912621359%",
-                      "relativeHeight": "57.758620689655174%",
-                      "midpoint": [
-                        248,
-                        320
-                      ],
-                      "area": 14271.0,
+                      "area": 14552.0,
                       "vertices": [
                         [
                           142,
@@ -454,14 +347,14 @@
                         ],
                         [
                           142,
-                          353
+                          354
                         ],
                         [
-                          355,
-                          353
+                          356,
+                          354
                         ],
                         [
-                          355,
+                          356,
                           286
                         ]
                       ],
@@ -484,13 +377,70 @@
                         ]
                       ]
                     },
+                    "content": "Heading",
+                    "level": 4,
+                    "contains": []
+                  },
+                  {
+                    "id": "8",
+                    "parentId": "6",
+                    "type": "header",
+                    "meta": {
+                      "absoluteWidth": 15.0,
+                      "absoluteHeight": 50.0,
+                      "relativeWidth": "3.640776699029126%",
+                      "relativeHeight": "43.103448275862064%",
+                      "midpoint": [
+                        360,
+                        326
+                      ],
+                      "area": 750.0,
+                      "vertices": [
+                        [
+                          352,
+                          301
+                        ],
+                        [
+                          352,
+                          351
+                        ],
+                        [
+                          367,
+                          351
+                        ],
+                        [
+                          367,
+                          301
+                        ]
+                      ],
+                      "boundingBox": [
+                        [
+                          352,
+                          301
+                        ],
+                        [
+                          352,
+                          351
+                        ],
+                        [
+                          367,
+                          351
+                        ],
+                        [
+                          367,
+                          301
+                        ]
+                      ]
+                    },
+                    "content": "1",
                     "level": 4,
                     "contains": []
                   }
                 ]
               },
               {
-                "id": "51",
+                "id": "9",
+                "parentId": "5",
                 "type": "rectangle",
                 "meta": {
                   "absoluteWidth": 412.0,
@@ -539,21 +489,23 @@
                     ]
                   ]
                 },
+                "content": false,
                 "level": 3,
                 "contains": [
                   {
-                    "id": "471",
-                    "type": "text",
+                    "id": "10",
+                    "parentId": "9",
+                    "type": "header",
                     "meta": {
-                      "absoluteWidth": 159.0,
-                      "absoluteHeight": 65.0,
-                      "relativeWidth": "38.592233009708735%",
-                      "relativeHeight": "48.507462686567166%",
+                      "absoluteWidth": 160.0,
+                      "absoluteHeight": 66.0,
+                      "relativeWidth": "38.83495145631068%",
+                      "relativeHeight": "49.25373134328358%",
                       "midpoint": [
-                        262,
-                        452
+                        263,
+                        453
                       ],
-                      "area": 10335.0,
+                      "area": 10560.0,
                       "vertices": [
                         [
                           183,
@@ -561,14 +513,14 @@
                         ],
                         [
                           183,
-                          485
+                          486
                         ],
                         [
-                          342,
-                          485
+                          343,
+                          486
                         ],
                         [
-                          342,
+                          343,
                           420
                         ]
                       ],
@@ -591,6 +543,7 @@
                         ]
                       ]
                     },
+                    "content": "Content",
                     "level": 4,
                     "contains": []
                   }
@@ -599,7 +552,8 @@
             ]
           },
           {
-            "id": "37",
+            "id": "11",
+            "parentId": "4",
             "type": "image",
             "meta": {
               "absoluteWidth": 634.0,
@@ -648,11 +602,69 @@
                 ]
               ]
             },
+            "content": false,
             "level": 2,
-            "contains": []
+            "contains": [
+              {
+                "id": "12",
+                "parentId": "11",
+                "type": "header",
+                "meta": {
+                  "absoluteWidth": 132.0,
+                  "absoluteHeight": 44.0,
+                  "relativeWidth": "20.82018927444795%",
+                  "relativeHeight": "7.357859531772576%",
+                  "midpoint": [
+                    828,
+                    365
+                  ],
+                  "area": 5808.0,
+                  "vertices": [
+                    [
+                      762,
+                      343
+                    ],
+                    [
+                      762,
+                      387
+                    ],
+                    [
+                      894,
+                      387
+                    ],
+                    [
+                      894,
+                      343
+                    ]
+                  ],
+                  "boundingBox": [
+                    [
+                      762,
+                      343
+                    ],
+                    [
+                      762,
+                      387
+                    ],
+                    [
+                      894,
+                      387
+                    ],
+                    [
+                      894,
+                      343
+                    ]
+                  ]
+                },
+                "content": "Image",
+                "level": 3,
+                "contains": []
+              }
+            ]
           },
           {
-            "id": "12",
+            "id": "13",
+            "parentId": "4",
             "type": "rectangle",
             "meta": {
               "absoluteWidth": 431.0,
@@ -701,10 +713,12 @@
                 ]
               ]
             },
+            "content": false,
             "level": 2,
             "contains": [
               {
-                "id": "23",
+                "id": "14",
+                "parentId": "13",
                 "type": "rectangle",
                 "meta": {
                   "absoluteWidth": 412.0,
@@ -753,69 +767,23 @@
                     ]
                   ]
                 },
+                "content": false,
                 "level": 3,
                 "contains": [
                   {
-                    "id": "210",
-                    "type": "intersection",
+                    "id": "15",
+                    "parentId": "14",
+                    "type": "header",
                     "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        257,
-                        640
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          257.0,
-                          640.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "211",
-                    "type": "centered_intersection",
-                    "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        257,
-                        640
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          257.0,
-                          640.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "473",
-                    "type": "text",
-                    "meta": {
-                      "absoluteWidth": 242.0,
-                      "absoluteHeight": 63.0,
-                      "relativeWidth": "58.7378640776699%",
-                      "relativeHeight": "54.78260869565217%",
+                      "absoluteWidth": 243.0,
+                      "absoluteHeight": 64.0,
+                      "relativeWidth": "58.98058252427184%",
+                      "relativeHeight": "55.65217391304348%",
                       "midpoint": [
                         254,
-                        638
+                        639
                       ],
-                      "area": 15246.0,
+                      "area": 15552.0,
                       "vertices": [
                         [
                           133,
@@ -823,14 +791,14 @@
                         ],
                         [
                           133,
-                          670
+                          671
                         ],
                         [
-                          375,
-                          670
+                          376,
+                          671
                         ],
                         [
-                          375,
+                          376,
                           607
                         ]
                       ],
@@ -853,13 +821,71 @@
                         ]
                       ]
                     },
+                    "content": "Heading",
                     "level": 4,
-                    "contains": []
+                    "contains": [
+                      {
+                        "id": "16",
+                        "parentId": "15",
+                        "type": "header",
+                        "meta": {
+                          "absoluteWidth": 18.0,
+                          "absoluteHeight": 60.0,
+                          "relativeWidth": "7.4074074074074066%",
+                          "relativeHeight": "93.75%",
+                          "midpoint": [
+                            357,
+                            640
+                          ],
+                          "area": 1080.0,
+                          "vertices": [
+                            [
+                              348,
+                              610
+                            ],
+                            [
+                              348,
+                              670
+                            ],
+                            [
+                              366,
+                              670
+                            ],
+                            [
+                              366,
+                              610
+                            ]
+                          ],
+                          "boundingBox": [
+                            [
+                              348,
+                              610
+                            ],
+                            [
+                              348,
+                              670
+                            ],
+                            [
+                              366,
+                              670
+                            ],
+                            [
+                              366,
+                              610
+                            ]
+                          ]
+                        },
+                        "content": "2",
+                        "level": 5,
+                        "contains": []
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "id": "13",
+                "id": "17",
+                "parentId": "13",
                 "type": "rectangle",
                 "meta": {
                   "absoluteWidth": 412.0,
@@ -908,93 +934,23 @@
                     ]
                   ]
                 },
+                "content": false,
                 "level": 3,
                 "contains": [
                   {
-                    "id": "188",
-                    "type": "intersection",
+                    "id": "18",
+                    "parentId": "17",
+                    "type": "header",
                     "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
+                      "absoluteWidth": 156.0,
+                      "absoluteHeight": 63.0,
+                      "relativeWidth": "37.86407766990291%",
+                      "relativeHeight": "46.666666666666664%",
                       "midpoint": [
-                        292,
-                        774
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          292.0,
-                          774.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "208",
-                    "type": "intersection",
-                    "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        253,
-                        771
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          253.0,
-                          771.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "209",
-                    "type": "centered_intersection",
-                    "meta": {
-                      "absoluteWidth": 0.0,
-                      "absoluteHeight": 0.0,
-                      "relativeWidth": "0.0%",
-                      "relativeHeight": "0.0%",
-                      "midpoint": [
-                        253,
-                        771
-                      ],
-                      "area": 0.0,
-                      "vertices": [
-                        [
-                          253.0,
-                          771.0
-                        ]
-                      ],
-                      "boundingBox": []
-                    },
-                    "level": 4,
-                    "contains": []
-                  },
-                  {
-                    "id": "470",
-                    "type": "text",
-                    "meta": {
-                      "absoluteWidth": 155.0,
-                      "absoluteHeight": 62.0,
-                      "relativeWidth": "37.62135922330097%",
-                      "relativeHeight": "45.925925925925924%",
-                      "midpoint": [
-                        260,
+                        261,
                         772
                       ],
-                      "area": 9610.0,
+                      "area": 9828.0,
                       "vertices": [
                         [
                           183,
@@ -1002,14 +958,14 @@
                         ],
                         [
                           183,
-                          803
+                          804
                         ],
                         [
-                          338,
-                          803
+                          339,
+                          804
                         ],
                         [
-                          338,
+                          339,
                           741
                         ]
                       ],
@@ -1032,65 +988,19 @@
                         ]
                       ]
                     },
+                    "content": "Content",
                     "level": 4,
                     "contains": []
                   }
                 ]
-              },
-              {
-                "id": "190",
-                "type": "intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "0.0%",
-                  "relativeHeight": "0.0%",
-                  "midpoint": [
-                    472,
-                    838
-                  ],
-                  "area": 0.0,
-                  "vertices": [
-                    [
-                      472.0,
-                      838.0
-                    ]
-                  ],
-                  "boundingBox": []
-                },
-                "level": 3,
-                "contains": []
-              },
-              {
-                "id": "206",
-                "type": "intersection",
-                "meta": {
-                  "absoluteWidth": 0.0,
-                  "absoluteHeight": 0.0,
-                  "relativeWidth": "0.0%",
-                  "relativeHeight": "0.0%",
-                  "midpoint": [
-                    472,
-                    695
-                  ],
-                  "area": 0.0,
-                  "vertices": [
-                    [
-                      472.0,
-                      695.0
-                    ]
-                  ],
-                  "boundingBox": []
-                },
-                "level": 3,
-                "contains": []
               }
             ]
           }
         ]
       },
       {
-        "id": "1",
+        "id": "19",
+        "parentId": "1",
         "type": "rectangle",
         "meta": {
           "absoluteWidth": 1169.0,
@@ -1139,45 +1049,23 @@
             ]
           ]
         },
+        "content": false,
         "level": 1,
         "contains": [
           {
-            "id": "184",
-            "type": "intersection",
+            "id": "20",
+            "parentId": "19",
+            "type": "header",
             "meta": {
-              "absoluteWidth": 0.0,
-              "absoluteHeight": 0.0,
-              "relativeWidth": "0.0%",
-              "relativeHeight": "0.0%",
+              "absoluteWidth": 176.0,
+              "absoluteHeight": 56.0,
+              "relativeWidth": "15.055603079555175%",
+              "relativeHeight": "47.45762711864407%",
               "midpoint": [
-                567,
+                605,
                 979
               ],
-              "area": 0.0,
-              "vertices": [
-                [
-                  567.0,
-                  979.0
-                ]
-              ],
-              "boundingBox": []
-            },
-            "level": 2,
-            "contains": []
-          },
-          {
-            "id": "476",
-            "type": "text",
-            "meta": {
-              "absoluteWidth": 175.0,
-              "absoluteHeight": 55.0,
-              "relativeWidth": "14.97005988023952%",
-              "relativeHeight": "46.61016949152542%",
-              "midpoint": [
-                604,
-                978
-              ],
-              "area": 9625.0,
+              "area": 9856.0,
               "vertices": [
                 [
                   517,
@@ -1185,14 +1073,14 @@
                 ],
                 [
                   517,
-                  1006
+                  1007
                 ],
                 [
-                  692,
-                  1006
+                  693,
+                  1007
                 ],
                 [
-                  692,
+                  693,
                   951
                 ]
               ],
@@ -1215,100 +1103,11 @@
                 ]
               ]
             },
+            "content": "Footer",
             "level": 2,
             "contains": []
           }
         ]
-      },
-      {
-        "id": "123",
-        "type": "centered_line",
-        "meta": {
-          "absoluteWidth": 409.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "34.427609427609426%",
-          "relativeHeight": "0.0%",
-          "midpoint": [
-            260,
-            523
-          ],
-          "area": 0.0,
-          "vertices": [
-            [
-              55,
-              523
-            ],
-            [
-              464,
-              523
-            ]
-          ],
-          "boundingBox": [
-            [
-              55,
-              523
-            ],
-            [
-              55,
-              524
-            ],
-            [
-              465,
-              524
-            ],
-            [
-              465,
-              523
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": []
-      },
-      {
-        "id": "124",
-        "type": "centered_line",
-        "meta": {
-          "absoluteWidth": 430.0,
-          "absoluteHeight": 0.0,
-          "relativeWidth": "36.195286195286194%",
-          "relativeHeight": "0.0%",
-          "midpoint": [
-            259,
-            534
-          ],
-          "area": 0.0,
-          "vertices": [
-            [
-              44,
-              534
-            ],
-            [
-              474,
-              534
-            ]
-          ],
-          "boundingBox": [
-            [
-              44,
-              534
-            ],
-            [
-              44,
-              535
-            ],
-            [
-              475,
-              535
-            ],
-            [
-              475,
-              534
-            ]
-          ]
-        },
-        "level": 1,
-        "contains": []
       }
     ]
   }
