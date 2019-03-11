@@ -137,6 +137,36 @@ function resizeACRObject(primitive, parent, width, height){
 
 }
 
+// Sorts shapes in order of their vertical positions before requesting generated
+// code.
+function sortShapesVertically(shapes){
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => shape.contains = sortShapesVertically(shape.contains));
+
+  shapes = shapes.sort((a, b) => a.meta.midpoint[1] < b.meta.midpoint[1] ? -1 : 1);
+
+  return shapes;
+}
+
+function sortShapesHorizontally(shapes){
+
+  if (!shapes || shapes.length === 0) return shapes;
+
+  shapes.forEach(shape => shape.contains = sortShapesHorizontally(shape.contains));
+
+  shapes = shapes.sort((a, b) => a.meta.midpoint[2] < b.meta.midpoint[2] ? -1 : 1);
+
+  return shapes;
+
+}
+
+// Sorts shapes vertically and horizontally before requesting code.
+function sortShapes(shapes){
+  return sortShapesVertically(sortShapesHorizontally(shapes));
+}
+
 // Generates new shape IDs used for manual primitive creation.
 function IDGenerator(shapes){
 
@@ -154,6 +184,10 @@ export {
   findACRObjectById,
   moveACRObject,
   getUpperLeftmostVertex,
+  sortVertices,
+  sortShapesVertically,
+  sortShapesHorizontally,
+  sortShapes,
   getLastACRObjectId,
   resizeACRObject,
   IDGenerator

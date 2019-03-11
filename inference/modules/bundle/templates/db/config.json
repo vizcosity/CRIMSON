@@ -1,0 +1,5 @@
+{
+  "url": "mongodb://crimson:a1port@ds127995.mlab.com:27995/crimson-prototypes",
+  "dbName": "crimson-prototypes",
+  "collectionName": ""
+}

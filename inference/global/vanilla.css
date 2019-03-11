@@ -3,7 +3,7 @@ html, body {
   width: 100%;
   height: 100%;
   font-family: "Avenir", sans-serif;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
 }
 
@@ -107,4 +107,9 @@ h1 {
 /** Remove bottom margin on forms. */
 form {
   margin-bottom: 0;
+}
+
+/** General classes. */
+.box-shadow {
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);
 }

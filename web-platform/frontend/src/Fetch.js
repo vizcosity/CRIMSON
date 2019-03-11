@@ -5,10 +5,16 @@
  */
 
 import { api } from '../package.json';
+import { sortShapes } from './geometry';
 
 // Given an acr object, context, and project type, generates the code and returns
 // response from the server according to the desired format.
 async function fetchGeneratedCode(acr, options){
+
+  // Sort shapes before generating code in case user has altered the ordering.
+  acr = sortShapes(acr);
+
+  console.log('Sorted ACR:', acr);
 
   var data = new FormData();
   data.append('acr', JSON.stringify(acr));
@@ -19,6 +25,7 @@ async function fetchGeneratedCode(acr, options){
 
   var res = await fetch(api.generateCode, {
     method: 'POST',
+    credentials: 'same-origin',
     body: data
   });
 
@@ -29,6 +36,7 @@ async function fetchGeneratedCode(acr, options){
 async function fetchZippedBundle(acr, options){
   options = {
     ...options,
+    code: false,
     zip: true
   };
   var data = new FormData();
@@ -40,10 +48,27 @@ async function fetchZippedBundle(acr, options){
 
   var res = await fetch(api.generateCode, {
     method: 'POST',
+    credentials: 'same-origin',
     body: data
   });
 
   return res;
 }
 
-export { fetchGeneratedCode, fetchZippedBundle };
+async function deployToGithub (options){
+
+  console.log(`FETCH | Deploying`, options);
+
+  var res = await fetch(api.deployToGithub, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify(options)
+  });
+
+  return res;
+}
+
+export { deployToGithub, fetchGeneratedCode, fetchZippedBundle };

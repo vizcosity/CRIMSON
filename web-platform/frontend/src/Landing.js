@@ -7,6 +7,10 @@
  */
 
 import React, { Component } from 'react';
+import { LandingBackground, Loader } from './Asset';
+import { UploadIcon } from './Icons';
+import { Fade } from 'react-reveal';
+import FileDrop from 'react-file-drop';
 
 const Footer  = () => <footer>
   <p>CRIMSON @ Aaron Baw 2018</p>
@@ -24,19 +28,33 @@ const readFile = file => new Promise((resolve, reject) => {
 class Uploader extends Component {
   constructor(props, context){
     super(props, context);
+
+    this.state = {
+      selectedFile: null
+    };
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onUploadHandler = this.onUploadHandler.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
   }
 
   handleInputChange(e){
     this.setState({
       selectedFile: e.target.files[0]
-    })
+    }, () => this.onUploadHandler());
+  }
+
+  openFileDialogue(){
+
   }
 
   onUploadHandler(){
 
+    // If no file has been selected, force user to select one.
+    if (!this.state.selectedFile) return this.inputRef.click();
+
     if (this.props.onStartUpload) this.props.onStartUpload();
+
     const data = new FormData();
     data.append('wireframe', this.state.selectedFile, this.state.selectedFile.name);
     data.append('context', 'vanilla');
@@ -60,12 +78,35 @@ class Uploader extends Component {
 
   }
 
+  handleDrop(files, event){
+
+    this.setState({
+      ...this.state,
+      selectedFile: files[0]
+    }, () => this.onUploadHandler());
+  }
+
   render(){
     return (
 
-      <div className="uploader-container">
-        <input onChange={this.handleInputChange} type="file" />
-        <button onClick={this.onUploadHandler}>Upload</button>
+      <div className={`${this.state.selectedFile ? "uploader-active" : ""} uploader-container`}>
+      <FileDrop draggingOverFrameClassName="uploader-hover" onDrop={this.handleDrop}>
+        <input ref={inputRef => this.inputRef = inputRef} className="file" onChange={this.handleInputChange} type="file" />
+        <button className="button-fade" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: "center",
+          justifyContent: "center"
+        }} onClick={this.onUploadHandler}>
+          <UploadIcon />
+          <p
+          className={this.state.selectedFile ? "uploader-active" : ""}
+          style={{
+            marginTop: '10px',
+            fontFamily: '"Futura", sans-serif'
+          }} > {this.state.selectedFile ? this.state.selectedFile.name : "Upload"} </p>
+        </button>
+        </FileDrop>
       </div>
 
     );
@@ -74,20 +115,69 @@ class Uploader extends Component {
 
 export default class Landing extends Component {
 
+  constructor(props, context){
+    super(props, context);
+
+    this.state = {
+      loading: false
+    };
+
+    this.onEndUpload = this.onEndUpload.bind(this);
+    this.onStartUpload = this.onStartUpload.bind(this);
+  }
+
+  // Hide the spinner & return the onRecieveAcr function.
+  onEndUpload(params){
+
+    this.setState({
+      ...this.state,
+      loading: false
+    })
+
+    return this.props.onRecieveACR(params);
+  }
+
+  onStartUpload(){
+    this.setState({
+      ...this.state,
+      loading: true
+    });
+  }
+
 
   render(){
     return (
       <div className="landing-page-container">
 
+      <Fade when={!this.state.loading}>
+
+      <div style={{
+      }} className="vertical-panel">
+
       <div className="landing-headers-container">
-        <h1>CRIMSON</h1>
+        <h1>crimson</h1>
         <h2>An intelligent tool for rapid prototyping on the web.</h2>
       </div>
 
-        <Uploader apiUrl={this.props.api.generateACR} onStartUpload={()=> log(`Started upload`)}
-        onEndUpload={this.props.onRecieveACR} />
+      </div>
 
+      <div className="vertical-panel">
+        <Uploader
+          apiUrl={this.props.api.generateACR}
+          onStartUpload={this.onStartUpload}
+          onEndUpload={this.onEndUpload}
+        />
+      </div>
+
+      </Fade>
+
+      <Fade when={this.state.loading}>
+        <Loader style={{
+          left: `calc(50% - ${152.36/2}px)`
+        }} text="Detecting symbols."/>
+      </Fade>
         <Footer />
+        <LandingBackground />
       </div>
     );
   }
