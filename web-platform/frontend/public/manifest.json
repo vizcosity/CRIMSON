@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CRIMSON",
+  "name": "An intelligent tool for rapid prototyping on the web.",
   "icons": [
     {
       "src": "favicon.ico",

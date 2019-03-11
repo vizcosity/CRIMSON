@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import ACRSample from './acr.json';
 import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import query from 'query-string';
 import Landing from './Landing.js';
 import InteractiveACRModifier from './ModifyACR.js';
 import CodeGenerator from './CodeGeneration.js';
 import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
+import './Resets.css';
 import './App.css';
 import Package from '../package.json';
 import { basename } from 'path';
+
+import EditDialogue from './CustomisePrimitive';
+import { CloseIcon } from './Icons';
 
 class App extends Component {
 
@@ -73,16 +78,21 @@ class App extends Component {
           />
         } />
         <Route exact path="/modify-acr"
-        render={
-          () => <InteractiveACRModifier project={this.project}/>
+        component={
+          ({history}) => <InteractiveACRModifier history={history} project={this.project}/>
         }
           />
-
         <Route exact path="/generate-code" component={
-          ({history}) => <CodeGenerator history={history} api={Package.api} project={this.project} />
+          ({history, location}) => <CodeGenerator
+            history={history}
+            api={Package.api}
+            project={this.project}
+            sessionID={query.parse(location.search)['sessionID']}
+            code={query.parse(location.search)['code']}
+          />
         } />
-
       </div>
+
     </Router>);
   }
 }

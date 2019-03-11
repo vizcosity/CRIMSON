@@ -1,0 +1,223 @@
+[
+  {
+    "id": "1",
+    "parentId": "None",
+    "type": "rectangle",
+    "meta": {
+      "absoluteWidth": 1080.0,
+      "absoluteHeight": 1226.0,
+      "relativeWidth": "96.0%",
+      "relativeHeight": "95.48286604361371%",
+      "midpoint": [
+        560,
+        651
+      ],
+      "area": 1324080.0,
+      "vertices": [
+        [
+          20,
+          38
+        ],
+        [
+          20,
+          1264
+        ],
+        [
+          1100,
+          1264
+        ],
+        [
+          1100,
+          38
+        ]
+      ],
+      "boundingBox": [
+        [
+          20,
+          38
+        ],
+        [
+          20,
+          1264
+        ],
+        [
+          1100,
+          1264
+        ],
+        [
+          1100,
+          38
+        ]
+      ]
+    },
+    "content": false,
+    "level": 0,
+    "contains": [
+      {
+        "id": "2",
+        "parentId": "1",
+        "type": "image",
+        "meta": {
+          "absoluteWidth": 459.0,
+          "absoluteHeight": 192.0,
+          "relativeWidth": "42.5%",
+          "relativeHeight": "15.660685154975528%",
+          "midpoint": [
+            440,
+            211
+          ],
+          "area": 88128.0,
+          "vertices": [
+            [
+              210,
+              115
+            ],
+            [
+              210,
+              307
+            ],
+            [
+              669,
+              307
+            ],
+            [
+              669,
+              115
+            ]
+          ],
+          "boundingBox": [
+            [
+              210,
+              115
+            ],
+            [
+              210,
+              307
+            ],
+            [
+              669,
+              307
+            ],
+            [
+              669,
+              115
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "3",
+        "parentId": "1",
+        "type": "rectangle",
+        "meta": {
+          "absoluteWidth": 418.0,
+          "absoluteHeight": 255.0,
+          "relativeWidth": "38.7037037037037%",
+          "relativeHeight": "20.799347471451878%",
+          "midpoint": [
+            443,
+            504
+          ],
+          "area": 106590.0,
+          "vertices": [
+            [
+              234,
+              376
+            ],
+            [
+              234,
+              631
+            ],
+            [
+              652,
+              631
+            ],
+            [
+              652,
+              376
+            ]
+          ],
+          "boundingBox": [
+            [
+              234,
+              376
+            ],
+            [
+              234,
+              631
+            ],
+            [
+              652,
+              631
+            ],
+            [
+              652,
+              376
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": []
+      },
+      {
+        "id": "4",
+        "parentId": "1",
+        "type": "image",
+        "meta": {
+          "absoluteWidth": 374.0,
+          "absoluteHeight": 257.0,
+          "relativeWidth": "34.629629629629626%",
+          "relativeHeight": "20.96247960848287%",
+          "midpoint": [
+            447,
+            840
+          ],
+          "area": 96118.0,
+          "vertices": [
+            [
+              260,
+              711
+            ],
+            [
+              260,
+              968
+            ],
+            [
+              634,
+              968
+            ],
+            [
+              634,
+              711
+            ]
+          ],
+          "boundingBox": [
+            [
+              260,
+              711
+            ],
+            [
+              260,
+              968
+            ],
+            [
+              634,
+              968
+            ],
+            [
+              634,
+              711
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": []
+      }
+    ]
+  }
+]

@@ -61,7 +61,8 @@ def getContainers(image, annotate=False):
     invert = cv2.bitwise_not(thresh)
 
     # Canny edge detection.
-    canny = cv2.Canny(image, 100, 200)
+    canny = cv2.Canny(image, 100, 200, apertureSize=5)
+    # cv2.Canny(im)
     # print("Detecting contours for image: " +str(canny))
     cont2, hierarchy2 = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(image, cont2, -1, (255,0,0))
@@ -182,13 +183,13 @@ if (__name__ == "__main__"):
 
     # Load the image.
     image = cv2.imread(args["image"])
-    image = imutils.resize(image, width=300)
+    # image = imutils.resize(image, width=300)
 
     # Create white image.
     whiteImg = np.zeros((image.shape[0],image.shape[1],3)) + 255
 
     # Find containers
-    shapes, containerContours = getContainers(image)
+    shapes, approximatedContours, image, whiteImg = getContainers(image)
 
     # shapes = [shape for shape in shapes if shape.area != 0]
 

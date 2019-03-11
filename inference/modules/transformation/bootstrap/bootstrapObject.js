@@ -64,7 +64,7 @@ class BootstrapObject {
 
     switch (shape.type){
       case "navigation":
-        classes += " navbar navbar-expand-lg navbar-light bg-light";
+        classes += " bg-white border-bottom box-shadow navbar navbar-expand-lg navbar-light bg-light";
         break;
       case "footer":
         classes +=  " bd-footer";
@@ -207,12 +207,14 @@ class BootstrapObject {
         var button = await BootstrapObject.create(shape);
         button.attributes.class = 'btn btn-outline-secondary';
 
+        console.log(`Generating button:`, shape);
+
         // If content matches 'login', then we wrap the prenode in an ejs
         // control flow statement.
         // Ensure that the project type is a server before inferring, as inserting
         // ejs template syntax will break static code.
         if (
-            shape.generateAuth && 
+            shape.generateAuth &&
             shape.content.toLowerCase &&
             shape.content.toLowerCase() == "login"
           ) button = loginButton;

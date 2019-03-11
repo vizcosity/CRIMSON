@@ -155,7 +155,7 @@ class Shape:
         if (len(self.boundingBox) != 4): return
 
         cv2.rectangle(image, tuple(self.boundingBox[0]), tuple(self.boundingBox[2]), color=(0,255,0), thickness=2)
-        cv2.putText(image, (str(self.parentId) + ": " if self.parentId is not None else "") + str(self), (self.boundingBox[0][0] + 5, self.boundingBox[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (50,50,50), 2)
+        cv2.putText(image, (str(self.parentId) + ": " if self.parentId is not None else "") + str(self), (self.boundingBox[0][0] + 5, self.boundingBox[0][1] + 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (50,50,255), 2)
 
     def __str__(self):
         if (self.id is not None): return self.__repr__()
@@ -168,7 +168,7 @@ class Shape:
             # "Width: " + str(self.width) + "\n" + \
             # "Height: " + str(self.height) + "\n" +
     def __repr__(self):
-        return str(self.type)[0]+str(self.id)
+        return str(self.type)+"["+str(self.id)+"]"
 
     # Implementing equality for shapes.
     def __eq__(self, other):
