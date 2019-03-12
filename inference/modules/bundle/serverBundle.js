@@ -156,17 +156,19 @@ const serverBundle = async ({
    log(`Bundling server project`, projectName);
    log(`imagePath`, imagePath);
    // Copy the source image over to the bundle.
-   log(`Copying imagePath`, imagePath, `to`, join(outputDir, 'public', 'images', basename(imagePath)));
-   fs.copyFileSync(imagePath, join(outputDir, 'public', 'images', basename(imagePath)));
-   contextFiles.push(basename(imagePath));
+   if (imagePath) {
+     log(`Copying imagePath`, imagePath, `to`, join(outputDir, 'public', 'images', basename(imagePath)));
+     fs.copyFileSync(imagePath, join(outputDir, 'public', 'images', basename(imagePath)));
+     contextFiles.push(basename(imagePath));
+   }
 
    // Write the filteredACR file.
    fs.writeFileSync(join(outputDir, 'filteredACR.json'), JSON.stringify(filteredACR, null, 2));
 
 
-   bundled = {
+   var bundled = {
      ...generateBundleEmbed(contextFiles),
-     bgImagePath: join('public', 'images', basename(imagePath))
+     bgImagePath: imagePath ? join('public', 'images', basename(imagePath)): ""
    };
 
    // Embed assets in template.

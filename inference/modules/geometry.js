@@ -4,6 +4,30 @@
  *  @ Aaron Baw 2018
  */
 
+// IOU calc implementation in JS for testing accuracy of detected containers.
+const calcIou = (box, otherBox) => {
+  var [[bx1, by1], bv2, [bx3, by3], bv4] = box;
+  var [[ox1, oy1], ov2, [ox3, oy3], ov4] = otherBox;
+
+  var i1 = [Math.max(bx1, ox1), Math.max(by1, oy1)];
+  var i3 = [Math.min(bx3, ox3), Math.min(by3, oy3)];
+
+  var intersectionVertices = [i1, [i1[0], i3[1]], i3, [i3[0], i1[1]]];
+
+  var intersectionArea = Math.max((i3[1] - i1[1]), 0) * Math.max((i3[0] - i1[0]), 0);
+
+  var boxArea = (by3 - by1) * (bx3 - bx1)
+
+  var otherBoxArea = (oy3 - oy1) * (ox3 - ox1)
+
+  // console.log(intersectionArea, boxArea, otherBoxArea);
+
+  var iou = intersectionArea / (boxArea + otherBoxArea - intersectionArea);
+
+  return iou;
+
+}
+
 const getHighestY = shape => {
  var vertices = Array.isArray(shape) ? shape : shape.meta.vertices;
  return vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1];
@@ -105,7 +129,7 @@ const getACRObjectById = (acr, id) => {
 }
 
 
-module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId, getACRObjectById };
+module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId, getACRObjectById, calcIou };
 
 function log(...msg){
   if (process.env.DEBUG) console.log(`GEOMETRY |`, ...msg);

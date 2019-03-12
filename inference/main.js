@@ -6,16 +6,17 @@
 
  const { bundle } = require('./modules/bundle/bundle');
  const detectPrimitives = require('./modules/detectPrimitives');
- const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
+ const { inferCompoundPrimitives, inferCompoundPrimitivesAtLevel, serialise } = require('./modules/inference/inferCompound');
  const inferProperties = require('./modules/inference/infer');
  const { inferGrid } = require('./modules/inference/inferGrid');
- const { getLastACRObjectId } = require('./modules/geometry');
+ const { getLastACRObjectId, calcIou } = require('./modules/geometry');
  const package = require('./package.json');
  const {generateCode, generateACR } = require('./modules/generateCode');
  const mkdir = require('mkdirp');
  const remove = require('remove');
  const { resolve, basename } = require('path');
  const {filterPrimitives, markDisplayablePrimitives} = require('./modules/filterPrimitives');
+ const { nestedContainerImage } = require('./modules/testing/generate');
  const fs = require('fs');
 
 module.exports = {
@@ -96,7 +97,21 @@ module.exports = {
     });
 
     return zip ? zipPath : outputDir;
-  }
+  },
+
+  // Atomic functions added for testing.
+  bundle,
+  nestedContainerImage,
+  detectPrimitives,
+  inferCompoundPrimitives,
+  inferCompoundPrimitivesAtLevel,
+  inferProperties,
+  inferGrid,
+  getLastACRObjectId,
+  filterPrimitives,
+  markDisplayablePrimitives,
+  serialise,
+  calcIou
 };
 
 

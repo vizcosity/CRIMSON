@@ -59,7 +59,7 @@ module.exports = (path, args, ops) => {
           } catch(e){
             // Data is not JSON. Return raw string.
             log(`Warning: Data returned by ${path} is not in JSON format:`, output);
-            reject(output);
+            if (!ops.noThrow) reject(output);
           }
 
           resolve(output);

@@ -3,6 +3,7 @@
 
 import cv2
 import numpy as np
+import argparse
 import random
 
 # Divides the bounding container into a number of grid cells.
@@ -39,13 +40,23 @@ def divideContainerIntoGrid(img, bound, axis, amount):
         # endPt[axis] += x
         startPt = tuple(startPt)
         endPt = tuple(endPt)
-        print("StartPt: "+ str(startPt))
-        print("EndPt: "+ str(endPt))
+        # print("StartPt: "+ str(startPt))
+        # print("EndPt: "+ str(endPt))
         lines.append((startPt, endPt))
         cv2.line(img, startPt, endPt, (0,0,0))
 
     return lines
 
+def padBound(bound, amount):
+    topLeft, bottomRight = bound
+    x1, y1 = topLeft
+    x2, y2 = bottomRight
+
+    if (x2 - x1 < amount or y2 - y1 < amount): return bound
+
+    padded = ((x1+amount, y1+amount), (x2-amount, y2-amount))
+    # print(str(bound) + " , " + str(padded))
+    return padded
 
 # Draw a container of random size within a rectangular bound specified.
 def drawRandomContainer(img, bound, minSizeProportion, nestedCount=0):
@@ -53,7 +64,7 @@ def drawRandomContainer(img, bound, minSizeProportion, nestedCount=0):
     if (bound is None):
         bound = ((0,0),(img.shape[0], img.shape[1]))
 
-    print("Bound: " + str(bound))
+    # print("Bound: " + str(bound))
 
     # Get coordinates for the bounding container.
     topLeftBound, bottomRightBound = bound
@@ -76,28 +87,38 @@ def drawRandomContainer(img, bound, minSizeProportion, nestedCount=0):
     drawnRect = (topLeftPt, bottomRightPt)
 
     # cv2.line(img, topLeftPt, bottomRightPt, (0,0,0))
-    cv2.rectangle(img, topLeftPt, bottomRightPt, (0,0,0), 2)
+    cv2.rectangle(img, topLeftPt, bottomRightPt, (0,0,0), 1)
 
-    return [drawnRect] + drawRandomContainer(img, drawnRect, minSizeProportion, nestedCount - 1) \
+    return [drawnRect] + drawRandomContainer(img, padBound(drawnRect, 5), minSizeProportion, nestedCount - 1) \
         if nestedCount > 0 else [drawnRect]
 
 def drawContainer(image, topLeft, bottomRight):
-    cv2.rectangle(image, topLeft, bottomRight, (0,0,0), 2)
+    cv2.rectangle(image, topLeft, bottomRight, (0,0,0), 1)
 
 if (__name__ == "__main__"):
 
-    imgSize = (512,512)
+    args = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-c", "--count", required=True, help="Container Count")
+    # ap.add_argument("-o", "--output", required=False)
+    args = vars(ap.parse_args())
 
-    whiteImg = np.zeros((512,512,3)) + 255
+    for _ in range(0, int(args["count"])):
 
-    windowBound = ((10,10), (imgSize[0]-10, imgSize[0] - 10))
+        imgSize = (512,512)
 
-    # Draw our main window.
-    drawContainer(whiteImg, windowBound[0], windowBound[1])
+        whiteImg = np.zeros((512,512,3)) + 255
 
-    rects = drawRandomContainer(whiteImg, bound=windowBound, minSizeProportion=(0.5,0.5), nestedCount=1)
-    grid = divideContainerIntoGrid(whiteImg, rects[len(rects) - 1], axis=random.randint(0,1), amount=random.randint(0,10))
-    # grid = divideContainerIntoGrid(whiteImg, bound=None, axis=0, amount=5)
-    name = 'c_'+hex(hash(str(grid + rects)))
-    cv2.imwrite('containers/'+name+'.png', whiteImg)
-    # cv2.waitKey(0)
+        windowBound = ((10,10), (imgSize[0]-10, imgSize[0] - 10))
+
+        # Draw our main window.
+        drawContainer(whiteImg, windowBound[0], windowBound[1])
+
+        # print("DONE")
+
+        rects = drawRandomContainer(whiteImg, bound=windowBound, minSizeProportion=(0.5,0.5), nestedCount=3)
+        # grid = divideContainerIntoGrid(whiteImg, rects[len(rects) - 1], axis=random.randint(0,1), amount=random.randint(0,10))
+        # grid = divideContainerIntoGrid(whiteImg, bound=None, axis=0, amount=5)
+        name = str([windowBound] + rects)
+        cv2.imwrite('containers/'+name+'.png', whiteImg)
+        # cv2.waitKey(0)

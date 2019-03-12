@@ -221,7 +221,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     // to be included alongside the actual zip file itself.
     var zipFile = `${outputDir}/${fileName}/${fileName}.zip`;
     return res.download(zipFile);
-  }
+  } else return res.json({success: false, error: "Must specify type of output desired. (zip download or live preview)."});
 
 });
 
