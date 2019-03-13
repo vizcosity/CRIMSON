@@ -111,6 +111,7 @@ module.exports = {
   filterPrimitives,
   markDisplayablePrimitives,
   serialise,
+  generateCodeFromACR: generateCode,
   calcIou
 };
 

@@ -25,6 +25,9 @@ const _SAMPLE_CARD_PRECOMPOUND_ACR = [{
     {id: 3, type: "paragraph", contains: []}
   ]
 }];
+const _SAMPLE_IMPLICIT_ROW_WIREFRAME = path.resolve('../inference/images/implicit_nest_sample_horizontal_1.png');
+const _SAMPLE_GRID_WIREFRAME = path.resolve('../inference/images/grid_sample_2.png');
+const _SAMPLE_LOGIN_WIREFRAME = path.resolve('../inference/images/drawn_login_sample_1.png');
 
 const getURI = endpointName => {
   return `http://localhost:3715${_ENDPOINTPREFIX}/${endpointName}`;
@@ -58,7 +61,7 @@ describe('[CORE] Regression Testing', () => {
     });
   });
 
-  it('Correctly identifies the positions with an accuracy of 0.95 iou or greater, and less than 1 pixel error ', () => new Promise(async (resolve, reject) => {
+  it('Correctly identifies primitive positions with an accuracy of 0.95 iou or greater, and less than 1 pixel error ', async () => {
 
     // Generate synthetic data by creating random containers.
     var wireframes = await crimson.nestedContainerImage(1);
@@ -81,16 +84,13 @@ describe('[CORE] Regression Testing', () => {
       })
     }
 
-    resolve();
+    return true;
 
-  }));
+  });
 
 });
 
 describe('[CORE] Unit Testing', () => {
-  it('Should generate ACR from a sample wireframe', (done) => {
-    crimson.generateACR(_SAMPLE_WIREFRAME_IMAGE).then(acr => done());
-  });
 
   it('Should detect base primitives in an image (unprocessed ACR)', (done) => {
     crimson.detectPrimitives(_SAMPLE_WIREFRAME_IMAGE).then(primitives => done());
@@ -139,7 +139,60 @@ describe('[CORE] Unit Testing', () => {
 
   });
 
-  it('Should correctly classify container with image, header & paragraph as a card', (done) => {
+  it('Should nest two horizontal elements within a row', () => new Promise(async (resolve, reject) => {
+
+    // console.log("Detecting, ",_SAMPLE_IMPLICIT_ROW_WIREFRAME);
+    var acr = await crimson.generateACR(_SAMPLE_IMPLICIT_ROW_WIREFRAME);
+
+    // We should expect that the three containers are preceeded by a row object.
+    var serialised = crimson.serialise(acr[0].contains[1]);
+    // console.log("serialised implicit row", serialised);
+
+    assert.equal(serialised, "row { row {  }, row {  } }");
+    resolve();
+  }));
+
+  it('Should infer the correct number of grid cells for evenly-spaced elements within a row', async () => {
+    var acr = await crimson.generateACR(_SAMPLE_GRID_WIREFRAME);
+    var inferredGrid = await crimson.inferGrid(acr, 19);
+
+    // console.log(inferredGrid, inferredGrid[0].contains);
+    var rowElements = inferredGrid[0].contains[1].contains;
+
+    rowElements.forEach(element => {
+      // console.log(element);
+      assert.equal(element.gridCell.count, 12/3);
+    });
+
+    return true;
+  });
+
+  it('Should infer the presence of a navigation bar where present on a wireframe', async () => {
+    var acr = await crimson.generateACR(_SAMPLE_GRID_WIREFRAME);
+    assert.equal(acr[0].contains[0].type, 'navigation');
+    return true;
+  });
+
+  it('Should notify the compilation pipeline when the presence of "login" is detected in the Navigation bar', async () => {
+    var acr = await crimson.generateACR(_SAMPLE_LOGIN_WIREFRAME);
+    process.env.CRIMSON_PROJECT_TYPE = 'server';
+    acr = crimson.inferProperties(acr, 'server');
+    // console.log(acr[0].contains[0].contains[1])
+    assert.equal(acr[0].contains[0].contains[1].generateAuth, true);
+    return true;
+  });
+
+  it('Should correctly serialise a container with an image, header & paragraph', done => {
+
+    var serialised = crimson.serialise(_SAMPLE_CARD_PRECOMPOUND_ACR[0]);
+
+    assert.equal(serialised, "container { image; header; paragraph }");
+
+    done();
+
+  });
+
+  it('Should correctly infer a serialised container with image, header & paragraph as a compound primitive (card)', (done) => {
     var compoundPrimitives = crimson.inferCompoundPrimitivesAtLevel(_SAMPLE_CARD_PRECOMPOUND_ACR);
     if (compoundPrimitives[0].type !== 'card_image_text') throw `Primitive incorrectly classified as ${compoundPrimitives[0].type} instead of card_image_text.`;
     done();
@@ -149,7 +202,7 @@ describe('[CORE] Unit Testing', () => {
 
 describe('[API] Integration Testing', () => {
 
-    it('Should return the correct list of supported primitives.', (done) => {
+    it('Should return the correct list of supported primitives', (done) => {
       request.get(getURI('getSupportedPrimitives'), (err, options) => {
           if (err) throw err;
           var primitives = JSON.parse(options.body);
