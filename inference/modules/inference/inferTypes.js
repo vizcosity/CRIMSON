@@ -217,7 +217,7 @@ const inferFromMap = shapes => {
 const inferLoginToken = nav => {
   nav.contains.forEach(shape => {
     log(shape.content);
-    if (shape.content.toLowerCase && shape.content.toLowerCase() === "login"){
+    if (shape.content && shape.content.toLowerCase && shape.content.toLowerCase() === "login"){
       // Convert the shape to a 'button'.
       shape.type = "button";
       // Set nav 'generateAuth' property to true.

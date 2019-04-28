@@ -314,7 +314,7 @@ def nestCenteredLines(lines, shapes, image, lastShapeId, annotate):
 def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
 
     # Detect lines.
-    lines = detectLines(image, erode=False)
+    lines = detectLines(image, erode=True)
 
     # Draw the lines.
     # if annotate: drawLines(lines, image, colour=(100,200,0))
@@ -332,7 +332,7 @@ def detectAndNestLines(image, shapes, lastShapeId, annotate, debug=False):
     # Return shapes, lines and image.
     return shapes, lines, image
 
-def detectLines(image, debug=False, erode=True):
+def detectLines(image, debug=True, erode=True):
 
         imgHeight, imgWidth, channels = image.shape
 
@@ -354,7 +354,7 @@ def detectLines(image, debug=False, erode=True):
         invert = cv2.bitwise_not(thresh)
 
         # Blur the image.
-        blurred = cv2.GaussianBlur(invert, (5,5), 0)
+        blurred = cv2.GaussianBlur(invert, (7,7), 0)
 
         if (debug): cv2.imwrite('blurred.png', blurred)
 
@@ -362,14 +362,38 @@ def detectLines(image, debug=False, erode=True):
         # erode_kernel = np.ones((2,2))
         preCannyImage = blurred
         if erode:
+            print("Eroding the image.")
             # TODO: Here we attempt to extract what's known as the 'morphological' skeleton;
             # This in essence is the shape which appears after we repeatedly erode and
             # dilate a particular image with respect to a kernel designed to target
             # particular structures. Here, we want to find the skeleton pertaining to
             # imaegs, and so we use a 'cross' structuring element.
             erode_kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
-            preCannyImage = cv2.erode(blurred, erode_kernel, iterations=2)
-            if (debug): cv2.imwrite('eroded.png', preCannyImage)
+            # erode_kernel = np.array([  [0, 0, 1, 0, 0],
+            #                    [0, 0, 1, 0, 0],
+            #                    [1, 1, 1, 1, 1],
+            #                    [0, 0, 1, 0, 0],
+            #                    [0, 0, 1, 0, 0] ], 'uint8')
+
+            # erode_kernel = np.array([[ 0, 1, 0], [1, 1, 1], [ 0, 1, 0]], 'uint8')
+            #
+            # dilate_kernel = np.array([  [1, 0, 0, 0, 1],
+            #                    [0, 1, 0, 1, 0],
+            #                    [0, 0, 1, 0, 0],
+            #                    [0, 1, 0, 1, 0],
+            #                    [1, 0, 0, 0, 1] ], 'uint8')
+
+            # dilate_kernel = np.array([
+            #                    [1, 0, 1],
+            #                    [0, 1, 0],
+            #                    [1, 0, 1],
+            #
+            #                    ], 'uint8')
+            dilate_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+            preCannyImage = cv2.erode(blurred, erode_kernel, iterations=1)
+            preCannyImage = cv2.dilate(preCannyImage, dilate_kernel, iterations=1)
+            # if (debug): cv2.imwrite('eroded.png', preCannyImage)
+            # if (debug): cv2.imwrite('dilated.png', dilatedImage)
 
         # Canny edge detection.
         canny = cv2.Canny(preCannyImage, 100, 200)
@@ -420,7 +444,7 @@ if (__name__ == "__main__"):
     # this to draw the contours.
     # cv2.drawContours(image, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
     # cv2.drawContours(whiteImg, [np.array(shape.vertices) for shape in shapes], -1, (0,0,255))
-    lines = detectLines(image, debug=True, erode=False)
+    lines = detectLines(image, debug=True, erode=True)
     # print(detectLines(image))
 
     # Write detected lines to image.
