@@ -1,0 +1,62 @@
+  _____  _____   _____  __  __   _____   ____   _   _ 
+ / ____||  __ \ |_   _||  \/  | / ____| / __ \ | \ | |
+| |     | |__) |  | |  | \  / || (___  | |  | ||  \| |
+| |     |  _  /   | |  | |\/| | \___ \ | |  | || . ` |
+| |____ | | \ \  _| |_ | |  | | ____) || |__| || |\  |
+ \_____||_|  \_\|_____||_|  |_||_____/  \____/ |_| \_|
+
+
+An intelligent tool for rapid prototyping on the web.
+
+GitHub: https://github.com/vizcosity/CRIMSON 
+
+README
+
+CRIMSON requires the installation of the following technologies prior to installation: 
+• Node.js >10.15
+• Python >3.6.3
+• OpenCV >4.0
+• darknet
+
+After installing the tools, module dependencies must be installed for each of the respective
+pipelines.
+
+Detection
+• cd crimson/detection/
+• cd src/
+• pip3 install -r requirements.txt
+
+Inference
+• cd crimson/inference/ • npm install
+• npm link
+
+Web-Platform
+• cd crimson/web-platform/ • npm install
+• npm link crimson-inference • cd frontend/
+• npm install
+
+Running
+
+The tool’s principle web-platform interface may be launched using the following sequence of commands, which will promptly begin execution of the frontend webserver and backend API.
+• cd crimson/web-platform 
+• npm start
+
+The tool may then be accessed at the following URL: http://127.0.0.1:3000. Alternatively, the tool also supports the use of a CLI interface which may be accessed in the
+crimson/inference folder:
+
+./crimson --image <image path> --output [output directory] [--project]
+
+If no output directory is specified, the tool will default to .output/ in the current directory. --project specifies the output type for the generated code (‘static’ - for a static webpage,
+or ‘server’ for an instantiated npm project). 
+
+Input
+When drawing containers, it is vital that other content and components are not directly connected to the lines of the container. They must remain isolated, and separate in order for the image processing pipeline to be able to distinguish the containers from the other components. 
+
+The tool’s image pre-processing capabilities enable robust extraction of image features in the presence of varied wireframe input and lighting conditions. In order to maximise detection accuracy and performance, however, the following practices may be followed when producing wireframe inputs for use with the tool:
+ • Use of a clear white background.
+• High contrast pen markings, preferably with black ink.
+• Few imperfections such as dust, unintended pen markings, and other unwanted artefacts.
+• Removal of unnecessary whitespace through cropping.
+• Drawing containers and rows explicitly where possible.
+
+
