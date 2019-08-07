@@ -1,0 +1,12 @@
+#!/bin/bash
+
+FROM node
+
+ADD inference /opt/inference
+ADD web-platform /opt/web-platform
+
+WORKDIR /opt/
+
+RUN cd inference/ && npm install
+
+RUN cd ../web-platform && npm install
