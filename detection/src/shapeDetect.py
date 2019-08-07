@@ -62,16 +62,11 @@ def drawShapes(shapes, image):
 
     return image
 
+def detectShapes(imagePath):
 
-
-if (__name__ == "__main__"):
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Input path.")
-    ap.add_argument("-o", "--output", required=False)
-    args = vars(ap.parse_args())
     # Load the image.
-    originalImg = cv2.imread(args["image"])
-    image = cv2.imread(args["image"])
+    originalImg = cv2.imread(imagePath)
+    image = cv2.imread(imagePath)
     originalImg = imutils.resize(originalImg)
     image = imutils.resize(image)
 
@@ -80,19 +75,19 @@ if (__name__ == "__main__"):
     shapes, appxConts, containerImg, whiteImg = getContainers(image, annotate=True)
 
     # Detect presence of complex shape primitives using YOLO CNN.
-    primitives = predict_primitives(getFreshImage(args['image']), image.shape)
+    primitives = predict_primitives(getFreshImage(imagePath), image.shape)
 
     # Detect presence of text using Google Cloud Vision API.
     textPredictions = []
-    textImg = getFreshImage(args['image'])
+    textImg = getFreshImage(imagePath)
 
     # Safely attempt to detect text (handle spotty internet connections).
     try:
-        textPredictions, textImg = detectTextFromImage(textImg, '.'+args['image'].split('.')[-1])
+        textPredictions, textImg = detectTextFromImage(textImg, '.'+imagePath.split('.')[-1])
     except: pass
 
     # Draw all shapes detected by the CNN.
-    cnnPredsImg = getFreshImage(args['image'])
+    cnnPredsImg = getFreshImage(imagePath)
     for (x, y, w, h), vertices, label, id, confidence in primitives:
         draw_pred(cnnPredsImg, id, confidence, x, y, x+w, y+h)
 
@@ -128,12 +123,23 @@ if (__name__ == "__main__"):
     shapes, _ = renumberShapeIds(shapes)
 
     # Draw all detected primitives.
-    fullPrimitivesImg = drawShapes(shapes, getFreshImage(args['image']))
+    fullPrimitivesImg = drawShapes(shapes, getFreshImage(imagePath))
 
     # Get serialised hierarchy.
     jsonHierarchy = serialiseShapeHierachy(shapes)
-#
-    if (args['output']):
-        filename = args['image'].split('/')[-1].split('.')[0]
+
+    return jsonHierarchy, fullPrimitivesImg, containerImg, shapes
+
+
+if (__name__ == "__main__"):
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True, help="Input path.")
+    ap.add_argument("-o", "--output", required=False)
+    args = vars(ap.parse_args())
+
+    jsonHierarchy, fullPrimitivesImg, containerImg, shapes = detectShapes(args["image"])
+
+    if (args["output"]):
+        filename = args["image"].split('/')[-1].split('.')[0]
         outputResultsToDir(args['output'], filename, jsonHierarchy, annotated=containerImg, containers=whiteImg, cnn_preds=cnnPredsImg, text_image=textImg, full_detections=fullPrimitivesImg)
     else: print(json.dumps(jsonHierarchy, indent=4))
