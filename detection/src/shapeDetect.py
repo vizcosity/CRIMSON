@@ -4,7 +4,7 @@
 
 from findContainer import getContainers, nestShapes
 from detectLine import detectAndNestIntersections, detectAndNestLines
-from shapesToJSON import serialiseShapeHierachy
+from shapesToJSON import serialiseShapeHierachy, composeShapeHierarchy
 from clf.yolo_cnn_detector import predict_primitives, draw_pred
 from resolvePrediction import resolveShapesUsingPredictions, resolveTextUsingPredictions
 from textDetect import detectTextFromImage
@@ -126,7 +126,7 @@ def detectShapes(imagePath):
     fullPrimitivesImg = drawShapes(shapes, getFreshImage(imagePath))
 
     # Get serialised hierarchy.
-    jsonHierarchy = serialiseShapeHierachy(shapes)
+    jsonHierarchy = composeShapeHierarchy(shapes)
 
     return jsonHierarchy, fullPrimitivesImg, containerImg, shapes
 
