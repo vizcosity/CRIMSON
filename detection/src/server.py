@@ -24,51 +24,9 @@ _PORT = os.environ.get('DETECTION_WEBSERVER_PORT') if not os.environ.get('DETECT
 app = Flask(__name__)
 api = Api(app)
 
-# class File(Data):
-#
-#     def __init__(self, data, filename):
-#         self.data = data
-#         self.filePath = None
-#
-#     def saveTemporarily():
-#
-#         if not os.path.exists(_SERVER_STORAGE_DIR):
-#             os.makedirs(_SERVER_STORAGE_DIR)
-#
-#         self.filePath = _SERVER_STORAGE_DIR+filename
-#         file = open(self.filePath, "w+")
-#         file.write(data)
-#         file.close()
-#
-#         print("Written " + filename + " to " + self.filePath)
-#
-#
-#     def cleanup():
-#         if self.filePath is not None:
-#             os.remove(self.filePath)
-#         print("Removed " + self.filePath)
-#         self.filePath = None
-
 class ShapeDetect(Resource):
 
-    def get(self):
-        return {
-            'success': True
-        }
-
     def post(self):
-
-        # Save the file temporarily.
-        # if len(request.files) != 1 or request.files[0].name is not "Image":
-        #     return {
-        #         "success": False,
-        #         "reason": "Image file not supplied."
-        #     }
-        #
-        # uploadedImage = request.files[0]
-        #
-        # # Save the uploaded image to a temporary location.
-        # uploadedImage.save(_SERVER_STORAGE_DIR+uploadedImage.name)
 
         parse = reqparse.RequestParser()
         parse.add_argument('Image', type=werkzeug.datastructures.FileStorage, location='files')
