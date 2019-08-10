@@ -5,6 +5,7 @@
 // Dependencies.
 const NodePyInt = require('./nodePyInt');
 const request = require('request');
+const fs = require('fs');
 const path = require('path');
 
 // Configuration.
@@ -43,31 +44,19 @@ const detectViaAPI = imagePath => new Promise((resolve, reject) => {
     request({
       method: 'POST',
       url: _WEB_API_ENDPOINT,
-      headers:
-       { 'Postman-Token': '92d241b7-a0ea-4308-aab8-50e955ff62d0',
-         'cache-control': 'no-cache',
-         'Content-Type': 'application/x-www-form-urlencoded',
-         'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
       formData: {
-         Image: {
-            value: fs.createReadStream(path.resolve(imagePath)),
-            options:
-             {
-               filename: imagePath,
-               contentType: null
-             }
-           }
-        }
+         Image: fs.createReadStream(path.resolve(imagePath))
+      }
     }, (err, res, body) => {
       if (err) return reject(err);
-      return resolve(body);
+      return resolve(JSON.parse(body));
     })
 });
 
 // Depending on whether the _WEB_API_ENDPOINT is set (indicating a server is running
 // and ready to receive requests to construct a shape hierarchy), choose to detect
 // shapes via the web API, or standard streams.
-module.exports = async (imagePath) => _WEB_API_ENDPOINT ? await detectViaAPI(imagePath) : detectViaStandardStream(imagePath);
+module.exports = async (imagePath) => _WEB_API_ENDPOINT ? await detectViaAPI(imagePath) : await detectViaStandardStream(imagePath);
 
 
 // Utility functions.
