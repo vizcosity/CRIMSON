@@ -4,8 +4,6 @@
 # API Spec:
 # /api/v1/shapeDetect
 #   - Takes in an image sent as a blob.
-#
-# Will need to handle file uploading
 
 # Dependencies for web server.
 from flask import Flask, request, jsonify
