@@ -1,0 +1,21 @@
+FROM node
+
+ADD inference /opt/inference
+ADD web-platform /opt/web-platform
+
+WORKDIR /opt/inference
+
+RUN npm install
+
+RUN npm link
+
+WORKDIR /opt/web-platform
+
+RUN npm link crimson-inference
+
+RUN npm install
+
+EXPOSE 3715
+EXPOSE 3000
+
+CMD npm link crimson-inference && npm start

@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "downloadjs": "^1.4.7",
     "interactjs": "^1.3.4",

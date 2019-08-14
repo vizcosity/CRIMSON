@@ -41,6 +41,7 @@ const detectViaStandardStream = async imagePath => {
 
 // Performs shape detection by interfacing through a RESTful endpoint.
 const detectViaAPI = imagePath => new Promise((resolve, reject) => {
+    log(`Using Web API for detection:`, _WEB_API_ENDPOINT);
     request({
       method: 'POST',
       url: _WEB_API_ENDPOINT,

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Enables separate dockerignore files for each container in the same repo.
+export DOCKER_BUILDKIT=1
+
 # Builds the docker image for the detection pipeline.
 
 # Move the Google application credentials to the current dir before creating the
