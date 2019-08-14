@@ -188,7 +188,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // Launch a live webserver if the param has been passed.
   if (req.body.livePreview == 'true'){
-    
+
     // Ensure that the 'LIVE_PREVIEW_MODE' env variable is set.
     process.env.LIVE_PREVIEW_MODE = true;
 
@@ -291,9 +291,7 @@ app.post(`${endpointPrefix}/deployToGithub`, async (req, res, params) => {
 if (process.env.PRODUCTION) {
   app.use(express.static(_FRONTEND_BUILD_DIR));
   app.get('*', (req, res, params) => {
-    return res.sendFile(resolve(_FRONTEND_BUILD_DIR, 'index.html'), {
-      root: resolve(_FRONTEND_BUILD_DIR)
-    });
+    return res.sendFile(resolve(_FRONTEND_BUILD_DIR, 'index.html'));
   });
 }
 
