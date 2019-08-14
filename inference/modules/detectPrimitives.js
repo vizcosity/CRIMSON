@@ -50,6 +50,7 @@ const detectViaAPI = imagePath => new Promise((resolve, reject) => {
       }
     }, (err, res, body) => {
       if (err) return reject(err);
+      log(`Recieved`, body);
       return resolve(JSON.parse(body));
     })
 });

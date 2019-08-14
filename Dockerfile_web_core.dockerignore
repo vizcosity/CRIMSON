@@ -13,3 +13,5 @@ web_platform/.uploads
 web_platform/node_modules/
 
 web_platform/frontend/node_modules/
+web_platform/frontend/src/
+web_platform/frontend/public/
