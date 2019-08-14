@@ -28,7 +28,12 @@ const db = require(path.join(__dirname, 'db/db.js'));
 const passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 <% } %>
-const _PORT = process.env.PORT || <%- port %>
+
+// LIVE_PREVIEW_MDOE is an ENV variable set by CRIMSON in order to launch the
+// server and preview the generated wireframe in-app.
+// Replace with the commented line below to remove this for production.
+const _PORT = process.env.LIVE_PREVIEW_MODE ? <%- port %> : (process.env.PORT || <%- port %>)
+// const _PORT = process.env.PORT || 3000;
 
 <% if (locals.generateAuthRoutes) { %>
 // Define local authentication strategy.

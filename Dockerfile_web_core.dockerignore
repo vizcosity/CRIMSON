@@ -1,0 +1,15 @@
+sketch-code/
+benchmark/
+pix2code/
+
+inference/.cache/
+inference/.output/
+inference/.zip_test/
+inference/node_modules/
+
+web_platform/.cache/
+web_platform/.generated/
+web_platform/.uploads
+web_platform/node_modules/
+
+web_platform/frontend/node_modules/

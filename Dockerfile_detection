@@ -9,3 +9,7 @@ ADD detection/ /opt/detection
 WORKDIR /opt/detection/src
 
 RUN pip3 install -r requirements.txt
+
+EXPOSE 5373
+
+CMD ["python3", "server.py"]

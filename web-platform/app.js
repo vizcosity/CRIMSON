@@ -42,6 +42,8 @@ const getAvailablePort = (projectName) => {
 
 // Defaults.
 const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
+const _FRONTEND_BUILD_DIR = resolve(__dirname, 'frontend/build');
+const _PORT = process.env.PORT || (!process.env.PRODUCTION ? 3715 : 3000);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -62,7 +64,6 @@ const generateSessionID = (projectName) => {
 // Register GET point to fetch list of supported primitives.
 app.get(`${endpointPrefix}/getSupportedPrimitives`, (req, res, params) => {
   return res.json(config.supportedPrimitives);
-
 });
 
 // Register a POST endpoint for generating the ACR.
@@ -187,6 +188,9 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // Launch a live webserver if the param has been passed.
   if (req.body.livePreview == 'true'){
+    
+    // Ensure that the 'LIVE_PREVIEW_MODE' env variable is set.
+    process.env.LIVE_PREVIEW_MODE = true;
 
     var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)]);
     runningProcesses[sessionID] = {
@@ -211,6 +215,22 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
           sessionID
         });
     }
+    });
+
+    childServer.stdout.on('error', data => {
+      log(`Could not launch child server:`, data.toString('utf8'));
+      return res.json({
+        success: false,
+        reason: 'Could not launch server.'
+      });
+    });
+
+    childServer.stderr.on('data', data => {
+      log(`Could not launch child server:`, data.toString('utf8'));
+      return res.json({
+        success: false,
+        reason: 'Could not launch server.'
+      });
     });
   }
 
@@ -266,9 +286,20 @@ app.post(`${endpointPrefix}/deployToGithub`, async (req, res, params) => {
 
 });
 
+// If the server is being run in production, serve the static files.
+// Serve the static file by default if we are running in production mode.
+if (process.env.PRODUCTION) {
+  app.use(express.static(_FRONTEND_BUILD_DIR));
+  app.get('*', (req, res, params) => {
+    return res.sendFile(resolve(_FRONTEND_BUILD_DIR, 'index.html'), {
+      root: resolve(_FRONTEND_BUILD_DIR)
+    });
+  });
+}
 
-app.listen(process.env.PORT ? process.env.PORT : 3715, () => log(`Listening on`,
-process.env.PORT ? process.env.PORT : 3715));
+
+app.listen(_PORT, () => log(`Listening on`,
+_PORT));
 
 // Logging.
 function log(...msg){
