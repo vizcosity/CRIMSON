@@ -22,4 +22,4 @@ RUN apt-get install net-tools
 EXPOSE 3715
 EXPOSE 3000
 
-CMD npm link crimson-inference && npm start
+CMD ./update-web-dns.sh && npm link crimson-inference && npm start
