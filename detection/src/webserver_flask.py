@@ -64,6 +64,12 @@ class ShapeDetect(Resource):
 
         return jsonHierarchy
 
+    def get(self):
+
+        log("Recieved get request.")
+
+        return "API is up and running."
+
 api.add_resource(ShapeDetect, _API_PREFIX+'/shapeDetect')
 
 
