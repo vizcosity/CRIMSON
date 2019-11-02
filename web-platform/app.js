@@ -8,6 +8,7 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const dynamicMiddlewares = require('express-dynamic-middleware');
 const bodyParser = require('body-parser');
 const app = express();
 const mkdir = require('mkdirp').sync;
@@ -29,6 +30,7 @@ const upload = multer({
     }
   })
 });
+const createSubpathProxy = require('./modules/subpathProxy');
 const crimson = require('crimson-inference');
 const { getGitHubAuthToken, deployToGithub } = require('./deploy');
 const config = require('crimson-inference/config/config.json');
@@ -39,6 +41,9 @@ const getAvailablePort = (projectName) => {
   var portNum = 3500 + Object.keys(runningProcesses).length;
   return portNum;
 }
+
+// Instantiate dynamic middlewares.
+const dynamic = dynamicMiddlewares.create();
 
 // Defaults.
 const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
@@ -52,6 +57,10 @@ app.use(session({
   resave: null,
   saveUninitialized: null
 }));
+
+// Add dynamic middlewares for dynamically adding proxies as and when live previews
+// of the site are needed.
+app.use(dynamic.handle());
 
 // Session handling.
 // Generate a random sessionID.
@@ -208,29 +217,45 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
       log(`[${fileName} : Server]`, data);
       var urlMatches = data.match(/http\S+/g);
       if (urlMatches) {
-        // Update running process details with the live url.
-        runningProcesses[sessionID].liveUrl = urlMatches[0];
+
+        // Create a router path which proxies requests to the express server.
+        // No need to open a port as the requests will be proxied before reaching
+        // the firewall.
+
+        // Pass in the dynamic middleware handle so that the proxy is added
+        // dynamically to the app middleware.
+        var subpath = createSubpathProxy(dynamic, urlMatches[0], sessionID);
+
+        runningProcesses[sessionID].liveUrl = subpath;
         return res.json({
-          url: urlMatches[0],
+          url: subpath,
           sessionID
         });
+
+        // Update running process details with the live url.
+        // runningProcesses[sessionID].liveUrl = urlMatches[0];
+        // return res.json({
+        //   url: urlMatches[0],
+        //   sessionID
+        // });
+
     }
     });
 
     childServer.stdout.on('error', data => {
-      log(`Could not launch child server:`, data.toString('utf8'));
-      return res.json({
-        success: false,
-        reason: 'Could not launch server.'
-      });
+      log(`[ERROR] Could not launch child server:`, data.toString('utf8'));
+      // return res.json({
+      //   success: false,
+      //   reason: 'Could not launch server.'
+      // });
     });
 
     childServer.stderr.on('data', data => {
-      log(`Could not launch child server:`, data.toString('utf8'));
-      return res.json({
-        success: false,
-        reason: 'Could not launch server.'
-      });
+      log(`(ERROR) [${fileName} : Server]:`, data.toString('utf8'));
+      // return res.json({
+      //   success: false,
+      //   reason: 'Could not launch server.'
+      // });
     });
   }
 

@@ -35,6 +35,12 @@ var Strategy = require('passport-local').Strategy;
 const _PORT = process.env.LIVE_PREVIEW_MODE ? <%- port %> : (process.env.PORT || <%- port %>)
 // const _PORT = process.env.PORT || 3000;
 
+
+// The _SUBPATH_PREFIX is used to proxy requests from the parent express server
+// when previewing live in the CRIMSON web interface. Comment out in production.
+const _SUBPATH_PREFIX = process.env.SUBPATH || "";
+
+
 <% if (locals.generateAuthRoutes) { %>
 // Define local authentication strategy.
 passport.serializeUser(function(user, cb) {
@@ -57,9 +63,9 @@ const indexRouter = require(path.join(__dirname, 'routes/index'))();
     in template params.
 %>
 <% if (locals.generateAuthRoutes) { %>
-const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport});
-const registrationRouter = require(path.join(__dirname, 'routes/register'))({db, passport});
-const logoutRouter = require(path.join(__dirname, 'routes/logout'))({db, passport});
+const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
+const registrationRouter = require(path.join(__dirname, 'routes/register'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
+const logoutRouter = require(path.join(__dirname, 'routes/logout'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
 <% } %>
 
 const app = express();
