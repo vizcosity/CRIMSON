@@ -36,6 +36,9 @@ const instantiateDB = () => new Promise((resolve, reject) => {
 
    return resolve();
 
+ },{
+   useNewUrlParser: true,
+   useUnifiedTopology: true
  });
 
 });
