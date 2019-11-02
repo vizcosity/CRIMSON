@@ -35,11 +35,9 @@ var Strategy = require('passport-local').Strategy;
 const _PORT = process.env.LIVE_PREVIEW_MODE ? <%- port %> : (process.env.PORT || <%- port %>)
 // const _PORT = process.env.PORT || 3000;
 
-
 // The _SUBPATH_PREFIX is used to proxy requests from the parent express server
 // when previewing live in the CRIMSON web interface. Comment out in production.
-const _SUBPATH_PREFIX = process.env.SUBPATH || "";
-
+const _SUBPATH_PREFIX = <% if (locals.subpathPrefix) { %> "<%- subpathPrefix %>" || <% } %> process.env.SUBPATH || "";
 
 <% if (locals.generateAuthRoutes) { %>
 // Define local authentication strategy.
@@ -102,7 +100,8 @@ app.use('/register', registrationRouter);
 if (require.main == module)
   app.listen(app.get('port'), async () => {
     var host = `http://${await ipv4()}:${app.get('port')}`
-    console.log('drawn_jumbotron_sample_2 is running at %s in %s mode', host, app.get('env'));
+    console.log('<%- projectName %> is running at %s in %s mode', host, app.get('env'));
+    if (_SUBPATH_PREFIX) console.log(`Running on subpath prefix`, _SUBPATH_PREFIX);
     console.log('  Press CTRL-C to stop\n');
   });
 else module.exports = app;
