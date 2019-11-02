@@ -30,6 +30,7 @@ const generateBundleEmbed = (files) => {
 // Loads template file.
 const loadTemplate = (name) => {
   var contents = fs.readFileSync(path.join(__dirname, 'templates', 'views', (name + '.ejs')), 'utf-8');
+
   var locals = Object.create(null)
 
   function render () {
@@ -37,6 +38,9 @@ const loadTemplate = (name) => {
   }
 
   return {
+    // We are creating a reference to the 'locals' object created above here,
+    // so that templates loaded can have this object modified by when accessing
+    // template.locals.
     locals: locals,
     render: render
   }

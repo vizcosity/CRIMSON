@@ -67,8 +67,16 @@ const createEntryPoint = (projectName, generateAuth, port) => {
 
   var app = loadTemplate('../app.js');
   app.locals.projectName = projectName;
+  log(`Creating entry point for`, projectName);
   app.locals.generateAuthRoutes = generateAuth;
   app.locals.port = port;
+
+  log(`Rendering app.js.ejs`);
+
+  // Add subpathPrefix local.
+  if (process.env.SUBPATH_PREFIX)
+    log(`Detected SUBPATH_PREFIX:`, process.env.SUBPATH_PREFIX, `. Injecting into app.js.`)
+  app.locals.subpathPrefix = process.env.SUBPATH_PREFIX;
 
   return app.render();
 

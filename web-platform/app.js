@@ -201,14 +201,20 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     // Ensure that the 'LIVE_PREVIEW_MODE' env variable is set.
     process.env.LIVE_PREVIEW_MODE = true;
 
-    var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)]);
+
+    var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)], {
+      // Ensure that we launch the child server with the SUBPATH_PREFIX env variable
+      // set.
+      env: { SUBPATH: sessionID, ...process.env }
+    });
+
     runningProcesses[sessionID] = {
       process: childServer,
       outputDir,
       fileName,
       imagePath: req.body.imgPath,
       acr: req.body.acr
-    }
+    };
 
     log(`Generated live preview. Waiting for url.`);
 
