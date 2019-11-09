@@ -327,8 +327,14 @@ if (process.env.PRODUCTION) {
 }
 
 
-app.listen(_PORT, () => log(`Listening on`,
-_PORT));
+app.listen(_PORT, () =>
+{
+  log(`Listening on`, _PORT)
+  if (process.env.SHAPE_DETECT_WEB_API_ENDPOINT)
+    log(`Using Shape Detect Web API:`, process.env.SHAPE_DETECT_WEB_API_ENDPOINT);
+  else
+    log(`Using local Shape Detect API.`);
+});
 
 // Logging.
 function log(...msg){
