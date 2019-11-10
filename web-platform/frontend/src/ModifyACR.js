@@ -13,6 +13,7 @@ import EditDialogue from './CustomisePrimitive';
 import { ArrowIcon, GenerateCodeIcon, CloseIcon, InfoButtonIcon } from './Icons';
 import { OverlayButton } from './Asset';
 import * as Icon from './Icons';
+import Toolbar from './Toolbar';
 // import Primitive from './Primitive.js';
 import { Container } from 'crimson-inference/modules/ACR.js';
 import {
@@ -391,34 +392,7 @@ class InteractiveACRModifier extends Component {
   render(){
     return (
       <div className="acr-mod-container">
-
-      {
-        //<div className="acr-right-panel">
-
-
-        //   <div className="acr-header-container">
-        //   <h2>Editing {this.props.project.source.name}</h2>
-        //   <p className="subtext">
-        //     Adjust the bounding boxes and shape primitive classification type
-        //     before continuing.
-        //   </p>
-        // </div>
-
-
-
-      //  <div className="continue-container">
-      //   <Link className="continue-button" to="/generate-code">Continue</Link>
-      //   <ArrowIcon style={{
-      //     marginTop: '5px',
-      //     marginLeft: '10px'
-      //   }} />
-      // </div>
-
-
-      //</div>
-      }
-
-
+        <Toolbar />
         <div
           className="acr-image-container"
           style={{
