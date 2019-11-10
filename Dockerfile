@@ -1,1 +1,0 @@
-Dockerfile_web_core
