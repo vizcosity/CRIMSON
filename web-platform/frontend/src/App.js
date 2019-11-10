@@ -9,6 +9,7 @@ import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './Resets.css';
 import './App.css';
+import './Styles/Palette.css';
 import Package from '../package.json';
 import { basename } from 'path';
 
