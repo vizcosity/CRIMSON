@@ -15,6 +15,9 @@ import { basename } from 'path';
 import EditDialogue from './CustomisePrimitive';
 import { CloseIcon } from './Icons';
 
+// Assets.
+import ModifyACRPlaceholderImageSrc from './assets/modify-acr-placeholder-image.png';
+
 class App extends Component {
 
   constructor(props, context){
@@ -26,9 +29,12 @@ class App extends Component {
         current: '/'
       }
     };
+
+    // If no project is instantiated, use the default placeholder project + image
+    // for debugging purposes.
     this.project = {acr: ACRSample, source: {
       name: "Sample_wireframe.png",
-      data: `https://i.imgur.com/z0J73nL.png`
+      data: ModifyACRPlaceholderImageSrc
     }};
     this.onRecieveACRHandler = this.onRecieveACRHandler.bind(this);
   }

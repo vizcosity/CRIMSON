@@ -419,7 +419,13 @@ class InteractiveACRModifier extends Component {
       }
 
 
-        <div className="acr-image-container">
+        <div
+          className="acr-image-container"
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+        >
 
           {
             /* Display dropdown on double click. */
@@ -450,8 +456,9 @@ class InteractiveACRModifier extends Component {
           </div>
 
           <img ref={ref => this.imageRef = ref} style={{
-            width: 'unset',
-            height: '-webkit-fill-available'
+            width: 'auto',
+            // height: '-webkit-fill-available',
+            maxHeight: '100%'
           }}
           src={this.props.project.source.data} />
 
