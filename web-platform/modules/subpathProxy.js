@@ -50,7 +50,10 @@ const subspaceURLSForSubpath = (subpath, pageData) => {
 
 module.exports = (app, host, subpath) => {
   app.use(proxy(host, {
-    filter: (req, res) => req.url.indexOf(subpath) !== -1,
+    filter: (req, res) => {
+      log(`Determining whether request:`, req.url, `should be proxied.`);
+      return req.url.indexOf(subpath) !== -1
+    },
     proxyReqPathResolver: req => req.url.split(subpath)[1],
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => subspaceURLSForSubpath(subpath, proxyResData)
   }));
