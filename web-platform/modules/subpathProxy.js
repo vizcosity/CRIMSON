@@ -11,7 +11,6 @@ const proxy = require('express-http-proxy');
 const express = require('express');
 const cheerio = require('cheerio');
 
-
 // Takes in the subpath where the contained app will exist, and re-writes all
 // <a> tag href attributes so that they are prefixed by this subpath.
 const subspaceURLSForSubpath = (subpath, pageData) => {

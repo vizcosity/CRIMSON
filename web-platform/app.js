@@ -50,6 +50,11 @@ const _DEFAULT_OUTPUT_DIR = resolve(__dirname, './.generated');
 const _FRONTEND_BUILD_DIR = resolve(__dirname, 'frontend/build');
 const _PORT = process.env.PORT || (!process.env.PRODUCTION ? 3715 : 3000);
 
+// In order to allow for debugging, it is useful to proxy requests for a subpath'd
+// child server through the react frontend to the main web api. In order to 'know'
+// which GET requests to proxy back to the API during development,.
+var _SUBPATH_NAMESPACE = '/generated';
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(session({
@@ -175,6 +180,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
   log(`Image Path for`, fileName, `:`, req.body.imgPath);
 
   var sessionID = generateSessionID(fileName);
+  var subpath = `${_SUBPATH_NAMESPACE}/${sessionID}`;
 
   // Generate the codes and return the output directory.
   var outputDir = await crimson.generateCode(req.body.acr, {
@@ -205,7 +211,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
     var childServer = spawn(`node`, [join(outputDir, 'app.js'), getAvailablePort(fileName)], {
       // Ensure that we launch the child server with the SUBPATH_PREFIX env variable
       // set.
-      env: { SUBPATH: sessionID, ...process.env }
+      env: { SUBPATH: subpath, ...process.env }
     });
 
     runningProcesses[sessionID] = {
@@ -230,7 +236,9 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
         // Pass in the dynamic middleware handle so that the proxy is added
         // dynamically to the app middleware.
-        var subpath = createSubpathProxy(dynamic, urlMatches[0], sessionID);
+        // Here we re-write the subpath variable previously declared in-case the
+        // subpath proxy module creates any changes.
+        subpath = createSubpathProxy(dynamic, urlMatches[0], subpath);
 
         runningProcesses[sessionID].liveUrl = subpath;
         return res.json({
