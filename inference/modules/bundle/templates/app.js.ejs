@@ -99,7 +99,11 @@ app.use('/register', registrationRouter);
  */
 if (require.main == module)
   app.listen(app.get('port'), async () => {
-    var host = `http://${await ipv4()}:${app.get('port')}`
+    let ipAddress = "localhost";
+    try {
+      ipAddress = await ipv4();
+    } catch(e){ console.log(`Could not determine IP Address. Likely due to a poor connection.`, e) }
+    let host = `http://${ipAddress}:${app.get('port')}`
     console.log('<%- projectName %> is running at %s in %s mode', host, app.get('env'));
     if (_SUBPATH_PREFIX) console.log(`Running on subpath prefix`, _SUBPATH_PREFIX);
     console.log('  Press CTRL-C to stop\n');
