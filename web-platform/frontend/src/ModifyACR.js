@@ -51,12 +51,6 @@ style={{
 </div>)}
 const BoundingBox = Reactable(BoundingBoxComponent);
 
-// class Toolbar extends Component {
-//   render(){
-//     return;
-//   }
-// }
-
 class InteractiveACRModifier extends Component {
 
   constructor(props, context){
@@ -80,6 +74,7 @@ class InteractiveACRModifier extends Component {
 
     // Perform some pre-processing on the ACR. Top level shapes should have a
     // parent of 'none'.
+    log(`Instantiating ACR Modifier with project:`, this.props.project);
     this.props.project.acr.forEach(object => object.parentId = "None");
 
     this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
@@ -89,7 +84,8 @@ class InteractiveACRModifier extends Component {
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
-    this.continueClickHandler = this.continueClickHandler.bind(this);
+    this.generateCodeHandler = this.generateCodeHandler.bind(this);
+    this.goBackHandler = this.goBackHandler.bind(this);
 
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
@@ -385,14 +381,21 @@ class InteractiveACRModifier extends Component {
   }
 
   // Continue click handler.
-  continueClickHandler(){
+  generateCodeHandler(){
     if (this.props.history) this.props.history.push('/generate-code');
+  }
+
+  goBackHandler(){
+    if (this.props.history) this.props.history.push('/');
   }
 
   render(){
     return (
       <div className="acr-mod-container">
-        <Toolbar />
+        <Toolbar
+          generateCodeHandler={this.generateCodeHandler}
+          goBackHandler={this.goBackHandler}
+        />
         <div
           className="acr-image-container"
           style={{
@@ -439,16 +442,19 @@ class InteractiveACRModifier extends Component {
           </ResizeDetector>
         </div>
 
-        <div style={{
-          left: '0',
-          right: 'auto'
-        }} className="overlay-buttons-container">
-          <OverlayButton text="Info" icon={<InfoButtonIcon/>} tooltip="Adjust any errors in the detected shapes above. Click 'Generate Code' to continue" />
-        </div>
-
-        <div className="overlay-buttons-container">
-        <OverlayButton text="Generate Code" icon={<GenerateCodeIcon />} onClick={this.continueClickHandler} />
-        </div>
+      {
+        // <
+        // div style={{
+        //   left: '0',
+        //   right: 'auto'
+        // }} className="overlay-buttons-container">
+        //   <OverlayButton text="Info" icon={<InfoButtonIcon/>} tooltip="Adjust any errors in the detected shapes above. Click 'Generate Code' to continue" />
+        // </div>
+        //
+        // <div className="overlay-buttons-container">
+        // <OverlayButton text="Generate Code" icon={<GenerateCodeIcon />} onClick={this.continueClickHandler} />
+        // </div>
+      }
       </div>
     );
   }

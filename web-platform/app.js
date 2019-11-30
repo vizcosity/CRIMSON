@@ -237,15 +237,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
           url: subpath,
           sessionID
         });
-
-        // Update running process details with the live url.
-        // runningProcesses[sessionID].liveUrl = urlMatches[0];
-        // return res.json({
-        //   url: urlMatches[0],
-        //   sessionID
-        // });
-
-    }
+      }
     });
 
     childServer.stdout.on('error', data => {
