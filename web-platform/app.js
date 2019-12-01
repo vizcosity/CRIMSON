@@ -53,7 +53,7 @@ const _PORT = process.env.PORT || (!process.env.PRODUCTION ? 3715 : 3000);
 // In order to allow for debugging, it is useful to proxy requests for a subpath'd
 // child server through the react frontend to the main web api. In order to 'know'
 // which GET requests to proxy back to the API during development,.
-var _SUBPATH_NAMESPACE = '/generated';
+var _SUBPATH_NAMESPACE = 'generated';
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
