@@ -41,7 +41,16 @@ const subspaceURLSForSubpath = (subpath, pageData) => {
   for (var i = 0; i < linkTags.length; i++){
     var linkTag = $(linkTags[i]);
     var currentHref = linkTag.attr('href');
-    linkTag.attr('href', currentHref.indexOf('http') === -1 ? `/${subpath}/${currentHref}` : currentHref);
+    linkTag.attr('href', currentHref && currentHref.indexOf('http') === -1 ? `/${subpath}/${currentHref}` : currentHref);
+  }
+
+  // Replace all <script> tags which refer to local files.
+  var scriptTags = $('script');
+  for (var i = 0; i < scriptTags.length; i++){
+    var scriptTag = $(scriptTags[i]);
+    var currentSrc = scriptTag.attr('src');
+    // Replace the tag src attribute only if it is a local resource.
+    scriptTag.attr('src', currentSrc && currentSrc.indexOf('http') === -1 ? `/${subpath}/${currentSrc}` : currentSrc);
   }
 
   return $.html();
