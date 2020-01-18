@@ -66,7 +66,10 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Select")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Select")}
+            onClick={() =>
+              this.selectButton("Select") |
+              (this.props.selectButtonHandler && this.props.selectButtonHandler())
+            }
             className={this.state.selectedButton == "Select" ? "selected-button" : ""}
           >
             <SelectPrimitiveIcon />
@@ -75,7 +78,10 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Add")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Add")}
+            onClick={() =>
+              this.selectButton("Add") |
+              (this.props.addPrimitiveHandler && this.props.addPrimitiveHandler())
+            }
             className={this.state.selectedButton == "Add" ? "selected-button" : ""}
           >
             <AddPrimitiveIcon />
@@ -84,7 +90,10 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Duplicate Selected")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Duplicate")}
+            onClick={() =>
+              this.selectButton("Duplicate") |
+              (this.props.duplicatePrimitiveHandler && this.props.duplicatePrimitiveHandler())
+            }
             className={this.state.selectedButton == "Duplicate" ? "selected-button" : ""}
           >
             <DuplicatePrimitiveIcon />
@@ -98,7 +107,10 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Generate Code")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Generate") || this.props.generateCodeHandler()}
+            onClick={() =>
+              this.selectButton("Generate") |
+              (this.props.generateCodeHandler && this.props.generateCodeHandler())
+            }
             className={this.state.selectedButton == "Generate" ? "selected-button" : ""}
           >
             <GenerateCodeIcon />
@@ -107,7 +119,9 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Back")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Back") || this.props.goBackHandler()}
+            onClick={() =>
+              this.selectButton("Back") |
+              (this.props.goBackHandler && this.props.goBackHandler())}
             className={this.state.selectedButton == "Back" ? "selected-button" : ""}
           >
             <BackIcon />
@@ -116,7 +130,10 @@ export default class Toolbar extends Component {
           <button
             onMouseOver={() => this.setHoverText("Help")}
             onMouseLeave={this.clearHoverText}
-            onClick={() => this.selectButton("Help")}
+            onClick={() =>
+              this.selectButton("Help") |
+              (this.props.helpButtonHandler && this.props.helpButtonHandler())
+            }
             className={this.state.selectedButton == "Help" ? "selected-button" : ""}
           >
             <HelpIcon />

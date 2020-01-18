@@ -3,8 +3,12 @@
  * utility functions for manipulating the primitives.
  */
 
+// Dependencies.
+const { findACRObjectById } = require('./geometry');
+
 class ACRObject {
-  constructor(id, parent, type, vertices, level=0){
+
+  constructor({id, parent, type, vertices, level=0}){
 
     var xs = vertices.map(([x, _]) => x).sort().reverse();
     var ys = vertices.map(([_, y]) => y).sort().reverse();
@@ -72,6 +76,19 @@ class ACRObject {
 
   }
 
+  // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
+  // creates an instance of the ACRObject.
+  static fromJSON(object){
+
+    // We add a null parent reference as we no longer need to calculate the absolute
+    // height and width, as this is already contianed within the object itself.
+    let acrObject = new ACRObject(object.id, null, object.type, object.vertices, object.level);
+
+    acrObject.meta = object.meta;
+    acrObject.content = object.content;
+
+  }
+
 }
 
 class Rectangle extends ACRObject {
@@ -83,12 +100,12 @@ class Rectangle extends ACRObject {
     var dx = width/2;
     var dy = height/2;
 
-    super(id, parent, type, [
+    super({id, parent, type, vertices: [
       [mx - dx, my-dy],
       [mx - dx, my+dy],
       [mx + dx, my+dy],
       [mx + dx, my-dy]
-    ], level);
+    ], level});
 
   }
 }
