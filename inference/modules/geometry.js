@@ -24,6 +24,11 @@ const getLowestX = shape => {
   return vertices.map(([x, _]) => x).sort((a, b) => a > b ? 1 : -1)[0];
 }
 
+const calculateMidPoint = vertices => vertices.length !== 0 ? [
+  vertices.map(([x, y]) => x).reduce((prev, curr) => prev + curr) / vertices.length,
+  vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
+] : [];
+
 const sortShapesAlongXAxis = (shapes) => {
    return shapes.concat().sort((a, b) => a.meta.vertices[0][0] < b.meta.vertices[0][0] ? -1 : 1);
 };
@@ -104,8 +109,20 @@ const getACRObjectById = (acr, id) => {
 
 }
 
-
-module.exports = { getLowestY, getHighestY, getLowestX, getHighestX, sortShapesAlongXAxis, sortshapesAlongYAxis, sortShapesBySize, doesHorizontallyOverlap, doesVerticallyOverlap, getLastACRObjectId, getACRObjectById };
+module.exports = {
+  getLowestY,
+  getHighestY,
+  getLowestX,
+  getHighestX,
+  calculateMidPoint,
+  sortShapesAlongXAxis,
+  sortshapesAlongYAxis,
+  sortShapesBySize,
+  doesHorizontallyOverlap,
+  doesVerticallyOverlap,
+  getLastACRObjectId,
+  getACRObjectById,
+};
 
 function log(...msg){
   if (process.env.DEBUG) console.log(`GEOMETRY |`, ...msg);
