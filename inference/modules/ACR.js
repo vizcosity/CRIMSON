@@ -89,7 +89,13 @@ class ACRObject {
   displace({x = 0,y = 0}){
       this.meta.vertices = this.meta.vertices.map(([xVert, yVert]) => [xVert+x, yVert+y]);
       this.meta.midpoint = calculateMidPoint(this.meta.vertices);
-      return this;
+  }
+
+  // Non-mutating version of the above.
+  displaced(deltas){
+    let displacedObject = ACRObject.fromJSON({...this});
+    displacedObject.displace(deltas);
+    return displacedObject;
   }
 
   // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
