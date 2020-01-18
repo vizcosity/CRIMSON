@@ -15,7 +15,7 @@ import { OverlayButton } from './Asset';
 import * as Icon from './Icons';
 import Toolbar from './Toolbar';
 // import Primitive from './Primitive.js';
-import { Container } from 'crimson-inference/modules/ACR.js';
+import { Container, ACRObject } from 'crimson-inference/modules/ACR.js';
 import {
   getRelativeDistance,
   findACRObjectById,
@@ -23,6 +23,7 @@ import {
   resizeACRObject,
   IDGenerator
 } from './geometry.js';
+import _ from 'lodash';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
 const BoundingBoxComponent = ({shape, className, parent, level, contains, getRef, children}) => {
@@ -166,19 +167,6 @@ class InteractiveACRModifier extends Component {
       level: parent.level + 1
     })
     parent.contains.push(newPrimitive);
-  }
-
-  // Given a created primitive, duplicates it and nests it within the same parent
-  // primtive.
-  duplicatePrimitive(parent, primitive){
-
-    // Push a new primitive to the parent's "contains" array, this time with a
-    // new id.
-    parent.contains.push({
-      ...primitive,
-      id: this.idGenerator.newId()
-    });
-
   }
 
   removeSelectedPrimitive(){
@@ -410,22 +398,32 @@ class InteractiveACRModifier extends Component {
   // Toolbar handlers: Modification.
   duplicatePrimitiveHandler(){
 
-    log(`Duplicating ${this.state.selectedPrimitive.id}`);
-
     // Retrieve the selected primitive. If no primitive is selected, display an
     // error message to the user.
     if (!this.state.selectedPrimitive)
       return this.displayError("No primitive selected.");
+
+    log(`Duplicating`, this.state.selectedPrimitive);
 
     // Attempt to fetch the current primitive's parent.
     // If we cannot locate a parent primitive, then we return the implicit ACR
     // object from which we will add the new object to as a new child.
     let parentPrimitive = this.findACRObjectById(this.state.selectedPrimitive.parentId);
 
-    parentPrimitive.contains.push({
-      ...this.state.selectedPrimitive,
-      id: this.idGenerator.newId()
-    })
+
+    // Ensure that we create a new ACR object from a *copy* of the selected primitive.
+    // This is required since Object.assign copies the reference of the source
+    // object onto the target object.
+    // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+    let duplicated =
+      ACRObject
+      .fromJSON(_.cloneDeep(this.state.selectedPrimitive))
+      .displaced({x: 3, y: 3});
+
+    duplicated.id = this.idGenerator.newId();
+    parentPrimitive.contains.push(duplicated);
+
+    this.setState(this.state);
 
   }
 
