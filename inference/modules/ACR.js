@@ -4,7 +4,10 @@
  */
 
 // Dependencies.
-const { findACRObjectById } = require('./geometry');
+const {
+  findACRObjectById,
+  calculateMidPoint
+} = require('./geometry');
 
 class ACRObject {
 
@@ -34,11 +37,7 @@ class ACRObject {
       relativeHeight: `${(absoluteHeight / parent.meta.absoluteHeight) * 100}%`,
       area: absoluteWidth * absoluteHeight,
       vertices: vertices,
-      midpoint: vertices.length !== 0 ? [
-        vertices.map(([x, y]) => x).reduce((prev, curr) => prev + curr) / vertices.length,
-        vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
-
-      ] : [],
+      midpoint: calculateMidPoint(vertices),
       // relativeVertices: [
       //   [0,0],
       //   [0,1],
@@ -76,6 +75,23 @@ class ACRObject {
 
   }
 
+  // MARK: Constructor utilities.
+  calculateMidPoint(vertices){
+    return vertices.length !== 0 ? [
+      vertices.map(([x, y]) => x).reduce((prev, curr) => prev + curr) / vertices.length,
+      vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
+    ] : [];
+  }
+
+  // MARK: Movement operators.
+
+  // Mutates the object, displacing it x units or y units.
+  displace({x = 0,y = 0}){
+      this.meta.vertices = this.meta.vertices.map(([xVert, yVert]) => [xVert+x, yVert+y]);
+      this.meta.midpoint = calculateMidPoint(this.meta.vertices);
+      return this;
+  }
+
   // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
   // creates an instance of the ACRObject.
   static fromJSON(object){
@@ -87,10 +103,6 @@ class ACRObject {
   }
 
 }
-
-// Debugging: Attempting to parse a plain JS object as a class object.
-let acrSample = require('../acr.json');
-console.log(ACRObject.fromJSON(acrSample[0]));
 
 class Rectangle extends ACRObject {
   constructor({id, parent, midpoint, width, height, level, type}){
