@@ -8,7 +8,7 @@ const { findACRObjectById } = require('./geometry');
 
 class ACRObject {
 
-  constructor({id, parent, type, vertices, level=0}){
+  constructor({id, parent, type, vertices = [], level=0}){
 
     var xs = vertices.map(([x, _]) => x).sort().reverse();
     var ys = vertices.map(([_, y]) => y).sort().reverse();
@@ -34,11 +34,11 @@ class ACRObject {
       relativeHeight: `${(absoluteHeight / parent.meta.absoluteHeight) * 100}%`,
       area: absoluteWidth * absoluteHeight,
       vertices: vertices,
-      midpoint: [
+      midpoint: vertices.length !== 0 ? [
         vertices.map(([x, y]) => x).reduce((prev, curr) => prev + curr) / vertices.length,
         vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
 
-      ],
+      ] : [],
       // relativeVertices: [
       //   [0,0],
       //   [0,1],
@@ -80,16 +80,17 @@ class ACRObject {
   // creates an instance of the ACRObject.
   static fromJSON(object){
 
-    // We add a null parent reference as we no longer need to calculate the absolute
-    // height and width, as this is already contianed within the object itself.
-    let acrObject = new ACRObject(object.id, null, object.type, object.vertices, object.level);
-
-    acrObject.meta = object.meta;
-    acrObject.content = object.content;
+    let startObject = new ACRObject({...object});
+    Object.assign(startObject, object);
+    return startObject;
 
   }
 
 }
+
+// Debugging: Attempting to parse a plain JS object as a class object.
+let acrSample = require('../acr.json');
+console.log(ACRObject.fromJSON(acrSample[0]));
 
 class Rectangle extends ACRObject {
   constructor({id, parent, midpoint, width, height, level, type}){
