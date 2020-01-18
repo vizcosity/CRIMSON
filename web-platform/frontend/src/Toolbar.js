@@ -24,7 +24,7 @@ export default class Toolbar extends Component {
     super(props, context);
     this.state = {
       hoverText: "",
-      selectedButton: ""
+      selectedButton: "Select"
     }
 
     this.setHoverText = this.setHoverText.bind(this);
