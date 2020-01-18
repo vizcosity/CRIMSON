@@ -26,7 +26,20 @@ import {
 import _ from 'lodash';
 import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react';
-const BoundingBoxComponent = ({shape, className, parent, level, contains, getRef, children}) => {
+
+// Import styles.
+import './Styles/ModifyACR.css';
+
+const BoundingBoxComponent = ({
+  shape,
+  className,
+  parent,
+  level,
+  contains,
+  getRef,
+  selectable = true,
+  children
+}) => {
 
 var meta = shape.meta;
 
@@ -45,6 +58,7 @@ style={{
   width: `${meta.relativeWidth}`,
   top: `${top}${parent ? '%' : 'px'}`,
   left: `${left}${parent ? '%' : 'px'}`,
+  pointerEvents: selectable ? 'unset' : 'none'
   // transform: `translateX(${meta.vertices[0][0]}px) translateY(${meta.vertices[0][1]}px)`
 }}>
 {children}
@@ -69,7 +83,12 @@ class InteractiveACRModifier extends Component {
       doubleTap: {
         x: 0,
         y: 0
-      }
+      },
+      // The interaction mode specifies how the user is currently interacting with
+      // the canvas.
+      // 'select' allows the user to select and move primitives.
+      // 'add' allows users to create new primitives.
+      interactionMode: "select"
     };
 
 
@@ -331,16 +350,7 @@ class InteractiveACRModifier extends Component {
       shape={primitive}
       children={this.drawPrimitives(primitive.contains, primitive)}
       key={i}
-      draggable
-      resizable={{
-        margin: 5,
-        edges: {
-          top: true,
-          right: true,
-          bottom: true,
-          left: true
-        }
-      }}
+      selectable={this.state.interactionMode === "select"}
       dropzone={{
         ondropactivate: event => {
           event.target.classList.add('drop-active')
@@ -366,9 +376,27 @@ class InteractiveACRModifier extends Component {
           }, {dx, dy, width:0, height:0})
         }
       }
-      onDoubleTap={e => e.stopPropagation() || this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))}
-      onUp={e =>  e.stopPropagation() || this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))}
-      onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
+      // Ensure that the object is only interactable when the user is in selection
+      // mode.
+      draggable
+      resizable={{
+        margin: 5,
+        edges: {
+          top: true,
+          right: true,
+          bottom: true,
+          left: true
+        }
+      }}
+      onDoubleTap={e =>
+        e.stopPropagation() ||
+        this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
+      }
+      onUp={e =>
+        e.stopPropagation() ||
+        this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
+      }
+      // onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
       onResizeMove={
         e => {
           e.stopPropagation();
@@ -427,7 +455,6 @@ class InteractiveACRModifier extends Component {
 
   }
 
-
   // Error handling.
   displayError(message){
     log(`[Temp Error Display]:`, message);
@@ -442,6 +469,11 @@ class InteractiveACRModifier extends Component {
 
           // Primitive modification handlers (selection, creation, duplication).
           duplicatePrimitiveHandler={this.duplicatePrimitiveHandler}
+
+          // Interaction mode handlers.
+          selectButtonHandler={() => this.setState({...this.state, interactionMode: "select"})}
+          addPrimitiveHandler={() => this.setState({...this.state, interactionMode: "add"})}
+
         />
         <div
           className="acr-image-container"
