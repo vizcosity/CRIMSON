@@ -84,8 +84,13 @@ class InteractiveACRModifier extends Component {
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+
+    // Toolbar handlers: Navigation.
     this.generateCodeHandler = this.generateCodeHandler.bind(this);
     this.goBackHandler = this.goBackHandler.bind(this);
+
+    // Toolbar handlers: Modification.
+    this.duplicatePrimitiveHandler = this.duplicatePrimitiveHandler.bind(this);
 
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
@@ -161,6 +166,19 @@ class InteractiveACRModifier extends Component {
       level: parent.level + 1
     })
     parent.contains.push(newPrimitive);
+  }
+
+  // Given a created primitive, duplicates it and nests it within the same parent
+  // primtive.
+  duplicatePrimitive(parent, primitive){
+
+    // Push a new primitive to the parent's "contains" array, this time with a
+    // new id.
+    parent.contains.push({
+      ...primitive,
+      id: this.idGenerator.newId()
+    });
+
   }
 
   removeSelectedPrimitive(){
@@ -380,7 +398,7 @@ class InteractiveACRModifier extends Component {
 
   }
 
-  // Continue click handler.
+  // Toolbar handlers: Navigation.
   generateCodeHandler(){
     if (this.props.history) this.props.history.push('/generate-code');
   }
@@ -389,12 +407,43 @@ class InteractiveACRModifier extends Component {
     if (this.props.history) this.props.history.push('/');
   }
 
+  // Toolbar handlers: Modification.
+  duplicatePrimitiveHandler(){
+
+    log(`Duplicating ${this.state.selectedPrimitive.id}`);
+
+    // Retrieve the selected primitive. If no primitive is selected, display an
+    // error message to the user.
+    if (!this.state.selectedPrimitive)
+      return this.displayError("No primitive selected.");
+
+    // Attempt to fetch the current primitive's parent.
+    // If we cannot locate a parent primitive, then we return the implicit ACR
+    // object from which we will add the new object to as a new child.
+    let parentPrimitive = this.findACRObjectById(this.state.selectedPrimitive.parentId);
+
+    parentPrimitive.contains.push({
+      ...this.state.selectedPrimitive,
+      id: this.idGenerator.newId()
+    })
+
+  }
+
+
+  // Error handling.
+  displayError(message){
+    log(`[Temp Error Display]:`, message);
+  }
+
   render(){
     return (
       <div className="acr-mod-container">
         <Toolbar
           generateCodeHandler={this.generateCodeHandler}
           goBackHandler={this.goBackHandler}
+
+          // Primitive modification handlers (selection, creation, duplication).
+          duplicatePrimitiveHandler={this.duplicatePrimitiveHandler}
         />
         <div
           className="acr-image-container"
@@ -441,20 +490,6 @@ class InteractiveACRModifier extends Component {
 
           </ResizeDetector>
         </div>
-
-      {
-        // <
-        // div style={{
-        //   left: '0',
-        //   right: 'auto'
-        // }} className="overlay-buttons-container">
-        //   <OverlayButton text="Info" icon={<InfoButtonIcon/>} tooltip="Adjust any errors in the detected shapes above. Click 'Generate Code' to continue" />
-        // </div>
-        //
-        // <div className="overlay-buttons-container">
-        // <OverlayButton text="Generate Code" icon={<GenerateCodeIcon />} onClick={this.continueClickHandler} />
-        // </div>
-      }
       </div>
     );
   }

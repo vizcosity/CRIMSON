@@ -97,10 +97,14 @@ app.post(`${endpointPrefix}/generateACR`, upload.single('wireframe'), async (req
     // Generate the ACR.
     var acr = await crimson.generateACR(resolve(__dirname, imgPath));
   } catch(e){
-    res.json({success: false, error: e});
+
+    // Ensure that we return after sending the json response, otherwise we will have
+    // written to the body after the headers have been set.
+    log(`Failed to generate code for ${fileName}:`, e);
+    return res.json({success: false, error: e});
   }
   // Send ACR as response.
-  res.json({acr, file: req.file});
+  return res.json({acr, file: req.file});
 });
 
 // Register POST endpoint to generate code from ACR representation.
