@@ -21,6 +21,7 @@ import {
   findACRObjectById,
   moveACRObject,
   resizeACRObject,
+  convertAbsoluteToRelativeCoordinates,
   IDGenerator
 } from './geometry.js';
 import _ from 'lodash';
@@ -111,13 +112,16 @@ class InteractiveACRModifier extends Component {
 
     // Toolbar handlers: Modification.
     this.duplicatePrimitiveHandler = this.duplicatePrimitiveHandler.bind(this);
+    // :Interaction
+    this.changeInteractionModeHandler = this.changeInteractionModeHandler.bind(this);
+    // :Adding primitives and canvas click handling.
+    this.canvasClickHandler = this.canvasClickHandler.bind(this);
 
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
 
     // Instantiate the ID generator.
     this.idGenerator = new IDGenerator(this.props.project.acr);
-
 
   }
 
@@ -138,6 +142,7 @@ class InteractiveACRModifier extends Component {
     var parent = findACRObjectById(this.props.project.acr, id);
 
     return parent || this.implicitCanvasACRObject;
+
   }
 
   updateImageSizeProperties(){
@@ -171,8 +176,31 @@ class InteractiveACRModifier extends Component {
     this.updateImageSizeProperties();
   }
 
+  // Handles creation of new ACR objects if the user is in 'add' mode.
+  canvasClickHandler(e){
+    if (this.state.interactionMode != "add") return;
+
+    // Create a new ACR object at the current mouse position, and auto-drag on the
+    // corner of the shape until the mouse is released. We need to add it
+    // to the current shape being clicked on.
+    let absCords = [e.pageX, e.pageY];
+    let boundingBoxCords = [this.canvasRef.offsetLeft, this.canvasRef.offsetTop];
+    let boundingBoxSize = { height: this.canvasRef.offsetHeight, width: this.canvasRef.offsetWidth };
+
+    // Convert the mouse object into relative coordinates of the object canvas (
+    // or perhaps of the bouding box we have selected).
+    let relCords = convertAbsoluteToRelativeCoordinates(absCords, boundingBoxCords, boundingBoxSize);
+
+    console.log('RelCords:', relCords);
+
+    this.createPrimitive(null, {x: absCords.x, y: absCords.y});
+
+  }
+
   // Creates a new container primitive and adds to the ACR.
-  createPrimitive(parent, {x, y}){
+  // If there is no parent passed, then we assume that we are creating a root
+  // level primitive.
+  createPrimitive(parent, {x, y, width = 5, height = 5}){
 
     x *= this.state.drawScaleFactor.x;
     y *= this.state.drawScaleFactor.y;
@@ -181,11 +209,12 @@ class InteractiveACRModifier extends Component {
       id: this.idGenerator.newId(),
       parent: parent,
       midpoint: [x, y],
-      width: parent.meta.absoluteWidth / 2,
-      height: parent.meta.absoluteHeight / 2,
-      level: parent.level + 1
-    })
-    parent.contains.push(newPrimitive);
+      width:  parent ? parent.meta.absoluteWidth / 2 : width,
+      height: parent ? parent.meta.absoluteHeight / 2 : height,
+      level: parent ? parent.level + 1 : 0
+    });
+    if (parent) parent.contains.push(newPrimitive);
+    else this.props.project.acr[0].contains.push(newPrimitive);
   }
 
   removeSelectedPrimitive(){
@@ -455,6 +484,15 @@ class InteractiveACRModifier extends Component {
 
   }
 
+  changeInteractionModeHandler(interactionMode){
+    // Clear the selected primitive, and set the interaction mode.
+    this.setState({
+      ...this.state,
+      selectedPrimitive: null,
+      interactionMode
+    });
+  }
+
   // Error handling.
   displayError(message){
     log(`[Temp Error Display]:`, message);
@@ -464,6 +502,7 @@ class InteractiveACRModifier extends Component {
     return (
       <div className="acr-mod-container">
         <Toolbar
+
           generateCodeHandler={this.generateCodeHandler}
           goBackHandler={this.goBackHandler}
 
@@ -471,8 +510,8 @@ class InteractiveACRModifier extends Component {
           duplicatePrimitiveHandler={this.duplicatePrimitiveHandler}
 
           // Interaction mode handlers.
-          selectButtonHandler={() => this.setState({...this.state, interactionMode: "select"})}
-          addPrimitiveHandler={() => this.setState({...this.state, interactionMode: "add"})}
+          selectButtonHandler={() => this.changeInteractionModeHandler("select")}
+          addPrimitiveHandler={() => this.changeInteractionModeHandler("add")}
 
         />
         <div
@@ -499,11 +538,17 @@ class InteractiveACRModifier extends Component {
 
           <ResizeDetector handleWidth handleHeight onResize={this.onResize}>
 
-          <div style={{
-            width: this.state.canvasWidth,
-            height: this.state.canvasHeight,
-            position: 'absolute'
-          }} className="acr-object-canvas">
+          <div
+            style={{
+              width: this.state.canvasWidth,
+              height: this.state.canvasHeight,
+              position: 'absolute',
+              cursor: this.state.interactionMode === 'add' ? 'crosshair' : 'unset'
+            }}
+            className="acr-object-canvas"
+            onClick={this.canvasClickHandler}
+            ref={ref => this.canvasRef = ref}
+          >
           {
             /* Draw ACR Bounding boxes */
             this.state.ready ? this.drawPrimitives(this.props.project.acr) : ""
