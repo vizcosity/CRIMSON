@@ -35,6 +35,24 @@ function getRelativeDistance(parent, shape){
 
 }
 
+/**
+ * [converts absolute screen coordinates into relative bounding-box coordinates,
+ * for a given bounding box at some position.]
+ * absoluteCords: [x, y]
+ * boundingBoxPosition: [x, y] (top-left vertex position)
+ * @type [relX, relY]
+ */
+const convertAbsoluteToRelativeCoordinates = (absoluteCoords, boundingBoxPosition, boundingBoxSize) => {
+  let [absX, absY] = absoluteCoords;
+  let [bbX, bbY] = boundingBoxPosition;
+  let { width, height } = boundingBoxSize;
+
+  let relX = (absX - bbX) / width;
+  let relY = (absY - bbY) / height;
+
+  return [relX, relY]
+}
+
 // Finds and returns an object in the ACR tree given an ID.
 function findACRObjectById(acr, id){
 
@@ -181,6 +199,7 @@ function IDGenerator(shapes){
 
 export {
   getRelativeDistance,
+  convertAbsoluteToRelativeCoordinates,
   findACRObjectById,
   moveACRObject,
   getUpperLeftmostVertex,
