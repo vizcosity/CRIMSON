@@ -5,6 +5,7 @@ import query from 'query-string';
 import Landing from './Landing.js';
 import InteractiveACRModifier from './ModifyACR.js';
 import CodeGenerator from './CodeGeneration.js';
+import Experiments from './Experiments.js';
 import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './Resets.css';
@@ -98,6 +99,11 @@ class App extends Component {
             code={query.parse(location.search)['code']}
           />
         } />
+      {
+        <Route exact path="experiments">
+          <Experiments />
+        </Route>
+      }
       </div>
 
     </Router>);

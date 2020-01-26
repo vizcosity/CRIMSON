@@ -90,8 +90,10 @@ button.active > p {
   z-index: 1;
   box-sizing: border-box;
   display: flex;
-  transition: 0.15s ease-in-out;
+  /* transition: 0.15s ease-in-out; */
+  transform: translateZ(0);
   border-radius: 5px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.06);
 }
 
 .bounding-box:hover{
