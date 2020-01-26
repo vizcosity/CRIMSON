@@ -65,6 +65,7 @@ style={{
 {children}
 <label className="shape-type-label">{shape.type}</label>
 </div>)}
+
 const BoundingBox = Reactable(BoundingBoxComponent);
 
 class InteractiveACRModifier extends Component {
@@ -105,6 +106,7 @@ class InteractiveACRModifier extends Component {
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+    this.generateBoundingBox = this.generateBoundingBox.bind(this);
 
     // Toolbar handlers: Navigation.
     this.generateCodeHandler = this.generateCodeHandler.bind(this);
@@ -115,7 +117,7 @@ class InteractiveACRModifier extends Component {
     // :Interaction
     this.changeInteractionModeHandler = this.changeInteractionModeHandler.bind(this);
     // :Adding primitives and canvas click handling.
-    this.canvasClickHandler = this.canvasClickHandler.bind(this);
+    this.canvasMouseDownHandler = this.canvasMouseDownHandler.bind(this);
 
     // Register key listener for deleting primitives.
     document.addEventListener('keyup', (e) => e.keyCode === 8 && this.removeSelectedPrimitive());
@@ -177,7 +179,8 @@ class InteractiveACRModifier extends Component {
   }
 
   // Handles creation of new ACR objects if the user is in 'add' mode.
-  canvasClickHandler(e){
+  canvasMouseDownHandler(e){
+
     if (this.state.interactionMode != "add") return;
 
     // Create a new ACR object at the current mouse position, and auto-drag on the
@@ -215,6 +218,7 @@ class InteractiveACRModifier extends Component {
     });
     if (parent) parent.contains.push(newPrimitive);
     else this.props.project.acr[0].contains.push(newPrimitive);
+
   }
 
   removeSelectedPrimitive(){
@@ -336,6 +340,21 @@ class InteractiveACRModifier extends Component {
     if (primitive.id === newParent.id) return;
     if (newParent.contains.map(s => s.id).indexOf(primitive.id) !== -1) return;
 
+    // Prevent parents from being nested within their own children, as this will
+    // cause a circular reference. Checks to see if the selected primitive is
+    // contained somewhere in the contains tree for the prospective parent.
+    // If the current primitive contains the prospective parent, this means we
+    // need to prevent the selected primitive from being nested within the parent.
+    // This is typically caused by mouse movements being faster than animation -
+    // enabling the case where the mouse can allow some selected primitive to
+    // theoretically be released into one of its children - by 'getting ahead' of
+    // the animation.
+    //
+    // If we can find the newParentId from the selected primitive, this means
+    // that we are attempting to nest the current primitive within its own
+    // contains hierarchy.
+    if (findACRObjectById(primitive.contains, newParentId)) return log(`Prevented circular reference.`);
+
     // If oldParent is null, we are likely trying to nest a panel.
     // Remove the primitive from the oldParent.
     if (oldParent)
@@ -344,6 +363,8 @@ class InteractiveACRModifier extends Component {
     // Set the primitive's new parent.
     primitive.parentId = newParent.id;
 
+    console.log(`Nesting`, primitiveId, `within`, newParentId);
+
     // Add the primitive to the new parent.
     newParent.contains.push(primitive);
 
@@ -351,6 +372,83 @@ class InteractiveACRModifier extends Component {
     this.setState(this.state);
 
 
+  }
+
+  // Generates a bounding box component for the given primitive.
+  generateBoundingBox({primitive, parent, i}){
+    return (<BoundingBox
+    className={this.state.selectedPrimitive && (this.state.selectedPrimitive.id == primitive.id) ? 'selected' : ''}
+    parent={parent}
+    shape={primitive}
+    children={this.drawPrimitives(primitive.contains, primitive)}
+    key={i}
+    //selectable={this.state.interactionMode === "select"}
+    dropzone={{
+      ondropactivate: event => {
+        event.target.classList.add('drop-active')
+        // console.log(primitive.id, `is active for dropping.`);
+      },
+      ondropdeactivate: event => {
+        event.target.classList.remove('drop-active');
+        // console.log(primitive.id, `no longer active for dropping.`);
+      },
+
+      ondrop: event => {
+        this.nestWithinNewParent(event.relatedTarget, event.target)
+      }
+    }}
+    // Ensure that the object is only interactable when the user is in selection
+    // mode.
+    draggable={this.state.interactionMode == "select"}
+    resizable={{
+      margin: 5,
+      edges: {
+        top: true,
+        right: true,
+        bottom: true,
+        left: true
+      }
+    }}
+    onDoubleTap={e =>
+      e.stopPropagation() || e.preventDefault() ||
+      this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
+    }
+    onUp={e =>
+      e.stopPropagation() || e.preventDefault() ||
+      this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
+    }
+    onDragMove={
+      (e) => {
+        let {target, dx, dy} = e;
+        // If we are not in selection mode, then we should return before the
+        // primitive location is altered.
+        if (this.state.interactionMode !== "select") return;
+        var primitive = this.findACRObjectById(target.dataset.id);
+        var parent = this.findACRObjectById(primitive.parentId);
+        this.movePrimitive({
+          primitive: primitive,
+          parent: parent
+        }, {dx, dy, width:0, height:0});
+        e.preventDefault();
+      }
+    }
+    // onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
+    onResizeMove={
+      e => {
+        if (this.state.interactionMode !== "select") return;
+        e.stopPropagation();
+        var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
+        var parent = this.findACRObjectById(primitive.parentId);
+        console.log(primitive, parent)
+        this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height);
+        this.movePrimitive({primitive, parent}, {
+          dx: e.deltaRect.left,
+          dy: e.deltaRect.top
+        });
+        e.preventDefault();
+      }
+    }
+    {...primitive} />);
   }
 
   drawPrimitives(acr,
@@ -373,73 +471,7 @@ class InteractiveACRModifier extends Component {
     // setState when moving the primitive, as we would not be able to do
     // so by using a reference to some shape object.
     return acr.map((primitive, i) =>
-      primitive.draw ? <BoundingBox
-      className={this.state.selectedPrimitive && (this.state.selectedPrimitive.id == primitive.id) ? 'selected' : ''}
-      parent={parent}
-      shape={primitive}
-      children={this.drawPrimitives(primitive.contains, primitive)}
-      key={i}
-      selectable={this.state.interactionMode === "select"}
-      dropzone={{
-        ondropactivate: event => {
-          event.target.classList.add('drop-active')
-          // console.log(primitive.id, `is active for dropping.`);
-        },
-        ondropdeactivate: event => {
-          event.target.classList.remove('drop-active');
-          // console.log(primitive.id, `no longer active for dropping.`);
-        },
-
-        ondrop: event => {
-          // console.log(`Dropping`, event.relatedTarget, `Into`, event.target, `This Primitive: `,primitive.id, `This Primitive Parent:`, parent.id);
-          this.nestWithinNewParent(event.relatedTarget, event.target)
-        }
-      }}
-      onDragMove={
-        ({target, dx, dy}) => {
-          var primitive = this.findACRObjectById(target.dataset.id);
-          var parent = this.findACRObjectById(primitive.parentId);
-          this.movePrimitive({
-            primitive: primitive,
-            parent: parent
-          }, {dx, dy, width:0, height:0})
-        }
-      }
-      // Ensure that the object is only interactable when the user is in selection
-      // mode.
-      draggable
-      resizable={{
-        margin: 5,
-        edges: {
-          top: true,
-          right: true,
-          bottom: true,
-          left: true
-        }
-      }}
-      onDoubleTap={e =>
-        e.stopPropagation() ||
-        this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
-      }
-      onUp={e =>
-        e.stopPropagation() ||
-        this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
-      }
-      // onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
-      onResizeMove={
-        e => {
-          e.stopPropagation();
-          var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
-          var parent = this.findACRObjectById(primitive.parentId);
-          console.log(primitive, parent)
-          this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height);
-          this.movePrimitive({primitive, parent}, {
-            dx: e.deltaRect.left,
-            dy: e.deltaRect.top
-          });
-        }
-      }
-      {...primitive} /> : "")
+      primitive.draw ? this.generateBoundingBox({primitive, parent, i}) : "")
 
   }
 
@@ -546,7 +578,7 @@ class InteractiveACRModifier extends Component {
               cursor: this.state.interactionMode === 'add' ? 'crosshair' : 'unset'
             }}
             className="acr-object-canvas"
-            onClick={this.canvasClickHandler}
+            onClick={this.canvasMouseDownHandler}
             ref={ref => this.canvasRef = ref}
           >
           {
