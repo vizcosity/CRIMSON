@@ -18,25 +18,37 @@ class ACRObject {
     var absoluteWidth = Math.abs(xs[0] - xs[xs.length - 1]);
     var absoluteHeight = Math.abs(ys[0] - ys[ys.length - 1]);
 
-    if (!parent) parent = {
-      id: "None",
-      meta: {
-        absoluteWidth: absoluteWidth,
-        absoluteHeight: absoluteHeight
+    if (!parent){ 
+      parent = {
+        id: "None",
+        meta: {
+          absoluteWidth: absoluteWidth,
+          absoluteHeight: absoluteHeight
+        }
       }
     }
+
+    let relativeWidthValue = absoluteWidth / parent.meta.absoluteWidth;
+    if (isNaN(relativeWidthValue)) relativeWidthValue = 0;
+    let relativeWidth = `${(relativeWidthValue) * 100}%`;
+    let relativeHeightValue = absoluteHeight / parent.meta.absoluteHeight;
+    if (isNaN(relativeHeightValue)) relativeHeightValue = 0;
+    let relativeHeight = `${(relativeHeightValue) * 100}%`;
 
     this.id = id;
     this.parentId = parent.id;
     this.type = type;
     this.draw = true;
     this.meta = {
-      absoluteWidth: absoluteWidth,
-      absoluteHeight: absoluteHeight,
-      relativeWidth: `${(absoluteWidth / parent.meta.absoluteWidth) * 100}%`,
-      relativeHeight: `${(absoluteHeight / parent.meta.absoluteHeight) * 100}%`,
+      absoluteWidth,
+      absoluteHeight,
+      relativeWidth,
+      relativeHeight,
       area: absoluteWidth * absoluteHeight,
       vertices: vertices,
+      // Save a copy of the initial vertices for the object for the purposes of
+      // calculating resizing deltas, etc.
+      initialVertices: vertices.concat(),
       midpoint: calculateMidPoint(vertices),
       // relativeVertices: [
       //   [0,0],
@@ -111,20 +123,43 @@ class ACRObject {
 }
 
 class Rectangle extends ACRObject {
-  constructor({id, parent, midpoint, width, height, level, type}){
+  constructor({
+    id,
+    parent,
+    midpoint,
+    vertices,
+    width,
+    height,
+    top,
+    left,
+    level,
+    type
+  }){
 
     if (!type) type = "rectangle";
 
-    var [ mx, my ] = midpoint;
-    var dx = width/2;
-    var dy = height/2;
+    if (!vertices && midpoint){
+      var [ mx, my ] = midpoint;
+      var dx = width/2;
+      var dy = height/2;
+      vertices = [
+        [mx - dx, my-dy],
+        [mx - dx, my+dy],
+        [mx + dx, my+dy],
+        [mx + dx, my-dy]
+      ];
+    }
 
-    super({id, parent, type, vertices: [
-      [mx - dx, my-dy],
-      [mx - dx, my+dy],
-      [mx + dx, my+dy],
-      [mx + dx, my-dy]
-    ], level});
+    if (!vertices && left && top){
+      vertices = [
+        [left, top],
+        [left, top+height],
+        [left+width, top+height],
+        [left+width, top]
+      ]
+    }
+
+    super({id, parent, type, vertices, level});
 
   }
 }
