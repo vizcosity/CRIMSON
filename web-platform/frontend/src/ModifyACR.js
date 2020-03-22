@@ -139,7 +139,7 @@ class InteractiveACRModifier extends Component {
     // used to support functions which require the use of a parent acr object,
     // on objects such as panels which are natively the top level elements of the
     // ACR representation.
-    this.implicitCanvasACRObject = {
+    this.implicitCanvasACRObject = ACRObject.fromJSON({
       meta: {
         absoluteWidth: this.imageRef.width * this.state.drawScaleFactor.x,
         absoluteHeight: this.imageRef.height * this.state.drawScaleFactor.y,
@@ -147,7 +147,7 @@ class InteractiveACRModifier extends Component {
       },
       id: "canvas",
       contains: []
-    };
+    });
 
   }
 
@@ -187,22 +187,47 @@ class InteractiveACRModifier extends Component {
       //parent: this.implicitCanvasACRObject
     });
     
-    log('Created Primitive:', creatingPrimitive);
+    let creatingPrimitiveParent = this.state.selectedPrimitive || this.implicitCanvasACRObject;
+
+    log('Created Primitive:', creatingPrimitive, `with parent:`, creatingPrimitiveParent);
 
 
     // Update the state to contain the newly created primitive as the one being defined.
-    this.setState({...this.state, creatingPrimitive, creatingPrimitiveParent: this.state.selectedPrimitive})
+    this.setState({...this.state, creatingPrimitive, creatingPrimitiveParent})
 
   }
 
   // Handles releasing the mouse button - ensuring that the creating primitive
-  // and the creating primitive parent are released.
+  // and the creating primitive parent are released. Adds the creatingPrimitive to the 
+  // creatingPrimitiveParent's component hierarchy.
   canvasMouseUpHandler(e){
+
+    if (!this.state.creatingPrimitive) return;
+
+    // If no creatingPrimitiveParent has been set, then the primitive is being created on the canvas, 
+    // in which case we should use the implicitCanvasACRObject.
+    let creatingPrimitiveParent = this.state.creatingPrimitiveParent
+    if (!creatingPrimitiveParent){
+      creatingPrimitiveParent = this.implicitCanvasACRObject
+      this.setState({
+        ...this.state,
+        creatingPrimitiveParent
+      });
+    }
+
+    log(`Adding`, this.state.creatingPrimitive, `to`, creatingPrimitiveParent);
+
+    creatingPrimitiveParent.addContainingShape(this.state.creatingPrimitive);
+    
+    log(`Added`, this.state.creatingPrimitive, `to`, creatingPrimitiveParent);
+
     this.setState({
       ...this.state,
       creatingPrimitve: null,
       creatingPrimitiveParent: null
-    })
+    });
+
+
   }
 
   // Handles drag-to-create new primitive.
@@ -343,19 +368,18 @@ class InteractiveACRModifier extends Component {
   }
 
   selectPrimitive(primitive, changingType = false){
-    log(`Selecting`, primitive.id);
     this.setState({
       ...this.state,
       selectedPrimitive: primitive,
       changingType
-    })
+    }, () => log(`Selected primitive is now ${this.state.selectedPrimitive.id}`, this.state.selectedPrimitive));
   }
 
   clearSelectedPrimitive(){
     this.setState({
       ...this.state,
       selectedPrimitive: null
-    })
+    });
   }
 
   // TEMP: Attempt to address desync between primitive clicked on, and the one
@@ -479,7 +503,8 @@ class InteractiveACRModifier extends Component {
     console.log(`Nesting`, primitiveId, `within`, newParentId);
 
     // Add the primitive to the new parent.
-    newParent.contains.push(primitive);
+    // newParent.contains.push(primitive);
+    newParent.addContainingShape(primitive);
 
     // Force a redraw so that the div is now placed inside the parent.
     this.setState(this.state);
@@ -531,7 +556,8 @@ class InteractiveACRModifier extends Component {
     }}
     onDoubleTap={e =>
       e.stopPropagation() || e.preventDefault() ||
-      this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
+      // this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
+      this.initPrimitiveSelection(e, primitive)
     }
     onDown={e => {
         // We need to ensure that the event propagates so that we capture the mouse movement
@@ -546,7 +572,12 @@ class InteractiveACRModifier extends Component {
           e.preventDefault();
           e.stopPropagation();
         }
-        this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
+
+        // TEMP: Select primitive using the object used to construct the bounding box, 
+        // rather than trying to find the primitive by using the ID attached to the div's 
+        // data-id property.
+        this.selectPrimitive(primitive);
+        // this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
       }
     }
     // Ensure that the primitive is visible on top of all other primitives.
@@ -558,7 +589,7 @@ class InteractiveACRModifier extends Component {
         // If we are not in selection mode, then we should return before the
         // primitive location is altered.
         if (this.state.interactionMode !== "select") return;
-        var primitive = this.findACRObjectById(target.dataset.id);
+        // var primitive = this.findACRObjectById(target.dataset.id);
         var parent = this.findACRObjectById(primitive.parentId);
         this.movePrimitive({
           primitive: primitive,
@@ -567,12 +598,17 @@ class InteractiveACRModifier extends Component {
         e.preventDefault();
       }
     }
-    // onHold={e => e.stopPropagation() || this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {x: e.x, y: e.y})}
+    onHold={
+      e => {
+        e.stopPropagation();
+       this.createPrimitive(this.findACRObjectById(e.currentTarget.dataset.id), {left: this.state.canvasMouseX, top: this.state.canvasMouseY})
+      }
+    }
     onResizeMove={
       e => {
         if (this.state.interactionMode !== "select") return;
         e.stopPropagation();
-        var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
+        // var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
         var parent = this.findACRObjectById(primitive.parentId);
         this.resizePrimitive(primitive, parent, e.rect.width, e.rect.height);
         this.movePrimitive({primitive, parent}, {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ACRSample from './acr.json';
+import { ACRObject } from 'crimson-inference/modules/ACR.js';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import query from 'query-string';
 import Landing from './Landing.js';
@@ -34,10 +35,12 @@ class App extends Component {
 
     // If no project is instantiated, use the default placeholder project + image
     // for debugging purposes.
-    this.project = {acr: ACRSample, source: {
-      name: "Sample_wireframe.png",
-      data: ModifyACRPlaceholderImageSrc
-    }};
+    this.project = {
+      acr: ACRObject.fromJSON(ACRSample), 
+      source: {
+        name: "Sample_wireframe.png",
+        data: ModifyACRPlaceholderImageSrc
+      }};
     this.onRecieveACRHandler = this.onRecieveACRHandler.bind(this);
   }
 
@@ -49,22 +52,16 @@ class App extends Component {
       // Collect the 'history' prop, and then use that to push the current
       // path onto the browser's history stack once we need to navigate page.
 
+      // Convert JSON objects into class instances of the ACR Object.
+      acr = ACRObject.fromJSON(acr);
+
       // Save it to the class instance.
       this.project = {acr, source};
 
       // Remove extension from projectname.
       this.project.source.name = this.project.source.name.split('.')[0];
 
-      log(`New project instantiated.`, this.project);
-
-      // Navigate to the ACR modifier module.
-      // this.setState({
-      //   ...this.state,
-      //   navigate: {
-      //     to: '/modify-acr',
-      //     from: this.state.navigate.current,
-      //     current: '/modify-acr'
-      //   }});
+      log(`New project instantiated.`, this.project); 
 
       history.push('/modify-acr');
   }
