@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import ACRSample from './acr.json';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import query from 'query-string';
 import Landing from './Landing.js';
 import InteractiveACRModifier from './ModifyACR.js';
 import CodeGenerator from './CodeGeneration.js';
-import Experiments from './Experiments.js';
-import logo from './logo.svg';
+// import Experiments from './Experiments.js';
+// import logo from './logo.svg';
 import 'semantic-ui-css/semantic.min.css';
 import './Resets.css';
 import './App.css';
 import './Styles/Palette.css';
 import Package from '../package.json';
-import { basename } from 'path';
+// import { basename } from 'path';
 
-import EditDialogue from './CustomisePrimitive';
-import { CloseIcon } from './Icons';
+// import EditDialogue from './CustomisePrimitive';
+// import { CloseIcon } from './Icons';
 
 // Assets.
 import ModifyACRPlaceholderImageSrc from './assets/modify-acr-placeholder-image.png';
@@ -87,7 +87,13 @@ class App extends Component {
         } />
         <Route exact path="/modify-acr"
         component={
-          ({history}) => <InteractiveACRModifier history={history} project={this.project}/>
+          ({history, location}) => 
+          <InteractiveACRModifier 
+            history={history} 
+            project={this.project}
+            debugMode={query.parse(location.search)['debugMode']}
+          />
+
         }
           />
         <Route exact path="/generate-code" component={
@@ -100,9 +106,9 @@ class App extends Component {
           />
         } />
       {
-        <Route exact path="experiments">
-          <Experiments />
-        </Route>
+        // <Route exact path="experiments">
+        //   <Experiments />
+        // </Route>
       }
       </div>
 

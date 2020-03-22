@@ -9,7 +9,7 @@
 // are maintained as we resize the window.
 function getRelativeDistance(parent, shape){
 
-  if (typeof parent.meta.absoluteWidth == "string"){
+  if (typeof parent.meta.absoluteWidth === "string"){
     parent.meta.absoluteWidth = 1;
     parent.meta.absoluteHeight = 1;
   }
@@ -31,7 +31,7 @@ function getRelativeDistance(parent, shape){
   // console.log('Shape', shape.id, ox, oy);
   // console.log(absX, absY, left, top);
 
-  return {left, top};
+  return [left, top];
 
 }
 
@@ -53,14 +53,31 @@ const convertAbsoluteToRelativeCoordinates = (absoluteCoords, boundingBoxPositio
   return [relX, relY]
 }
 
+/**
+ * [Converts global page coordinates into absolute bounding-box coordinates]
+ * @param  {[Array]} globalCoords        [Array of [x, y] tuples]
+ * @param  {[Tuple]} boundingBoxPosition [[x, y] top left position of the bounding box]
+ * @param  {[Object]} boundingBoxSize     [{width, height} object contaiing the bounding box size}]
+ * @return {[Tuple]}                     [Array tuple containing the bounding-box coordinates]
+ */
+const convertGlobalToBoundingBoxCoordinates = (globalCoords, boundingBoxPosition, boundingBoxSize) => {
+  let [absX, absY] = globalCoords;
+  let [bbX, bbY] = boundingBoxPosition
+
+  return [
+    absX - bbX,
+    absY - bbY
+  ]
+}
+
 // Finds and returns an object in the ACR tree given an ID.
 function findACRObjectById(acr, id){
 
-  if (!acr || acr.length == 0) return;
+  if (!acr || acr.length === 0) return;
 
   for (var i in acr){
     var shape = acr[i];
-    if (shape.id == id) return shape;
+    if (shape.id === id) return shape;
     var acrObjectWithinShape = findACRObjectById(shape.contains, id);
     if (acrObjectWithinShape) return acrObjectWithinShape;
   }
@@ -134,9 +151,6 @@ function resizeACRObject(primitive, parent, width, height){
   var dX = width - primitive.meta.absoluteWidth;
   var dY = height - primitive.meta.absoluteHeight;
 
-  var parentWidth = parent.meta.absoluteWidth;
-  var parentHeight = parent.meta.absoluteHeight;
-
   primitive.meta.absoluteHeight = height;
   primitive.meta.absoluteWidth = width;
 
@@ -149,9 +163,12 @@ function resizeACRObject(primitive, parent, width, height){
   // console.log(`Primitive`, primitive.id, `parent:`, parent);
   // console.log(`Primitive height:`, height, `parent height:`, parent.meta.absoluteHeight);
 
-  // Update the relative height and width.
-  primitive.meta.relativeHeight = parent.id !== "canvas" ? `${(height / parentHeight) * 100}%` : `${height}px`;
-  primitive.meta.relativeWidth = parent.id !== "canvas" ? `${(width / parentWidth) * 100}%` : `${width}px`;
+  // Update the relative height and width. This must be a percentage relative to the
+  // height and width of the parent, if the primitive has such a parent. For the case
+  // where the parent id is the implicit canvas object, or there is no parnet, then
+  // we use the absolute width and height values.
+  primitive.meta.relativeHeight =  (parent && parent.id !== "canvas") ? `${(height / parent.meta.absoluteHeight) * 100}%` : `${height}px`;
+  primitive.meta.relativeWidth = (parent && parent.id !== "canvas") ? `${(width / parent.meta.absoluteWidth) * 100}%` : `${width}px`;
 
 }
 
@@ -200,6 +217,7 @@ function IDGenerator(shapes){
 export {
   getRelativeDistance,
   convertAbsoluteToRelativeCoordinates,
+  convertGlobalToBoundingBoxCoordinates,
   findACRObjectById,
   moveACRObject,
   getUpperLeftmostVertex,
