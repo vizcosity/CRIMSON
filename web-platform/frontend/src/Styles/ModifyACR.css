@@ -6,6 +6,11 @@
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
+
+  /* Disable user-selection */
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 .acr-image-container {
@@ -102,7 +107,7 @@ button.active > p {
 
 .drop-active {
   background-color: #afd6ffcc;
-  transform: scale(1.05);
+  /* transform: scale(1.05); */
 }
 
 .selected {
