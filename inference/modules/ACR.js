@@ -112,10 +112,20 @@ class ACRObject {
 
   // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
   // creates an instance of the ACRObject.
-  static fromJSON(object){
+  static fromJSON(json){
 
-    let startObject = new ACRObject({...object});
-    Object.assign(startObject, object);
+    // If the incoming object is an array, map each json object to an ACRObject instance.
+    if (Array.isArray(json)) return json.map(acrObject => ACRObject.fromJSON(acrObject));
+
+    let startObject = new ACRObject({...json});
+    Object.assign(startObject, json);
+
+    // Assign 'initialVertices' if this has not been done already.
+    if (!startObject.meta.initialVertices) startObject.meta.initialVertices = startObject.meta.vertices.concat();
+
+    // Recursively map all containing shapes to ACRObjects.
+    startObject.contains = ACRObject.fromJSON(startObject.contains);
+
     return startObject;
 
   }
@@ -158,6 +168,8 @@ class Rectangle extends ACRObject {
         [left+width, top]
       ]
     }
+
+    console.log(`Created vertices:`, left, top);
 
     super({id, parent, type, vertices, level});
 
