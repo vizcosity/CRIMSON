@@ -8,67 +8,23 @@
 
 import React, { Component } from 'react';
 import ResizeDetector from 'react-resize-detector';
-import Reactable from 'reactablejs';
 import EditDialogue from './CustomisePrimitive';
-import { ArrowIcon, GenerateCodeIcon, CloseIcon, InfoButtonIcon } from './Icons';
-import { OverlayButton } from './Asset';
 import * as Icon from './Icons';
 import Toolbar from './Toolbar';
-// import Primitive from './Primitive.js';
+import { BoundingBox } from './BoundingBoxComponent';
 import { Container, ACRObject } from 'crimson-inference/modules/ACR.js';
 import {
-  getRelativeDistance,
   findACRObjectById,
   moveACRObject,
   resizeACRObject,
-  convertAbsoluteToRelativeCoordinates,
-  IDGenerator
+  convertGlobalToBoundingBoxCoordinates,
+  IDGenerator,
+  // convertAbsoluteToRelativeCoordinates
 } from './geometry.js';
 import _ from 'lodash';
-import { Link } from "react-router-dom";
-import { Dropdown } from 'semantic-ui-react';
 
 // Import styles.
 import './Styles/ModifyACR.css';
-
-const BoundingBoxComponent = ({
-  shape,
-  className,
-  dragging,
-  parent,
-  level,
-  contains,
-  getRef,
-  selectable = true,
-  children
-}) => {
-
-var meta = shape.meta;
-
-var {left, top} = getRelativeDistance(parent, shape);
-
-return (<div
-ref={getRef}
-className={"bounding-box " + className}
-data-x={left}
-data-y={top}
-data-height={meta.relativeHeight}
-data-width={meta.relativeWidth}
-data-id={shape.id}
-style={{
-  height: `${meta.relativeHeight}`,
-  width: `${meta.relativeWidth}`,
-  top: `${top}${parent ? '%' : 'px'}`,
-  left: `${left}${parent ? '%' : 'px'}`,
-  pointerEvents: selectable ? 'unset' : 'none',
-  zIndex: dragging ? '10000' : 'unset',
-  // transform: `translateX(${meta.vertices[0][0]}px) translateY(${meta.vertices[0][1]}px)`
-}}>
-{children}
-<label className="shape-type-label">{shape.type}</label>
-</div>)}
-
-const BoundingBox = Reactable(BoundingBoxComponent);
 
 class InteractiveACRModifier extends Component {
 
@@ -95,6 +51,16 @@ class InteractiveACRModifier extends Component {
         x: 0,
         y: 0
       },
+
+      // The absolute mouse coordinates.
+      absoluteMouseX: 0,
+      absoluteMouseY: 0,
+      
+      // The mouse coordinates with respect to the canvas. This is used for the creation of 
+      // new primitives, as well as re-sizing.
+      canvasMouseX: 0,
+      canvasMouseY: 0,
+
       // The interaction mode specifies how the user is currently interacting with
       // the canvas.
       // 'select' allows the user to select and move primitives.
@@ -190,29 +156,38 @@ class InteractiveACRModifier extends Component {
   }
 
   // Handles creation of new ACR objects if the user is in 'add' mode.
+  // TODO: Fix positioning of drawn container
+  // TODO: Ensure that we can drag above and to the left of the initial click point
   canvasMouseDownHandler(e){
 
-    if (this.state.interactionMode != "add") return;
 
-    // Create a new ACR object at the current mouse position, and auto-drag on the
-    // corner of the shape until the mouse is released. We need to add it
-    // to the current shape being clicked on.
-    let absCords = [e.pageX, e.pageY];
-    let boundingBoxCords = [this.canvasRef.offsetLeft, this.canvasRef.offsetTop];
-    let boundingBoxSize = { height: this.canvasRef.offsetHeight, width: this.canvasRef.offsetWidth };
+    // If there is already a primitive being created, ignore the mouse down
+    // handler.
+    if (this.state.creatingPrimitve) return;
+    if (this.state.interactionMode !== "add") return;
 
-    // Convert the mouse object into relative coordinates of the object canvas (
-    // or perhaps of the bouding box we have selected).
-    let relCords = convertAbsoluteToRelativeCoordinates(absCords, boundingBoxCords, boundingBoxSize);
+    // let creatingPrimitive = this.createPrimitive(null, {
+    //   left: absCords[0],
+    //   top: absCords[1],
+    //   height: 1,
+    //   width: 1
+    // });
 
-    let creatingPrimitive = this.createPrimitive(null, {
-      left: absCords[0],
-      top: absCords[1],
-      height: 1,
-      width: 1
+    // Create a new container primitive at the base level, using the absolute
+    // mouse coordinates. We save the parent primitive id so that we can add
+    // the newly created primitive to the parent once we release the mouse
+    // button.
+    let creatingPrimitive = new Container({
+      id: this.idGenerator.newId(),
+      left: this.state.canvasMouseX,
+      top: this.state.canvasMouseY,
+      width:  0,
+      height: 0,
+      level: 0,
+      //parent: this.implicitCanvasACRObject
     });
-
-    console.log('Created Primitive:', creatingPrimitive);
+    
+    log('Created Primitive:', creatingPrimitive);
 
 
     // Update the state to contain the newly created primitive as the one being defined.
@@ -233,6 +208,39 @@ class InteractiveACRModifier extends Component {
   // Handles drag-to-create new primitive.
   canvasMouseMoveHandler(e){
 
+    // Create a new ACR object at the current mouse position, and auto-drag on the
+    // corner of the shape until the mouse is released. We need to add it
+    // to the current shape being clicked on.
+    let [absoluteMouseX, absoluteMouseY] = [e.pageX, e.pageY];
+    let canvasCords = [this.canvasRef.offsetLeft, this.canvasRef.offsetTop];
+
+    // Update left and top so that the coordinates are given with respect to the bounding
+    // box.
+    let canvasSize = { 
+      height: this.canvasRef.offsetHeight, 
+      width: this.canvasRef.offsetWidth 
+    };
+
+    // Convert the mouse object into relative coordinates of the object canvas (
+    // or perhaps of the bounding box we have selected).
+    let [canvasMouseX, canvasMouseY] = convertGlobalToBoundingBoxCoordinates(
+      [absoluteMouseX, absoluteMouseY], 
+      canvasCords, 
+      canvasSize
+    );
+
+    // log(`Converted global coordinates`, globalCoords, `to bounding-box coordinates:`, [left, top]);
+
+
+    // Set the absolute and canvas mouse position coordinates for the state.
+    this.setState({
+      ...this.state,
+      absoluteMouseX,
+      absoluteMouseY,
+      canvasMouseX,
+      canvasMouseY
+    })
+
     // Ensure we exit early if the user is not in 'add' mode, or the creatingPrimitve
     // has not yet been created.
     if (this.state.interactionMode !== "add"
@@ -240,18 +248,47 @@ class InteractiveACRModifier extends Component {
       || !this.state.creatingPrimitiveParent
     ) return;
 
-    let height = e.nativeEvent.offsetY;
-    let width = e.nativeEvent.offsetX;
+    // Fetch the initial left and top values for the primitive.
+    // We no longer use nativeEvent.offSet[x/y] as this continuously gets reset
+    // as the mouse hovers over other objects which also have mouse handlers, causing
+    // the creating primitive to needlessly jump around.
+    let [initialLeft, initialTop] = this.state.creatingPrimitive.meta.initialVertices[0];
 
-    console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
-    this.resizePrimitive(
-      this.state.creatingPrimitive,
-      this.findACRObjectById(null),
-      // e.pageY - this.state.creatingPrimitive.meta.vertices[0][1],
-      // e.pageX - this.state.creatingPrimitive.meta.vertices[0][0],
-      width,
-      height
-    );
+    // let height = e.nativeEvent.offsetY;
+    // let width = e.nativeEvent.offsetX;
+
+    // We need to ensure that we are also converting the absolute mouse coordinates to relative 
+    // canvas coordinates at this point, to ensure that the corner of the object remains beneath 
+    // the mouse.
+    let [mouseX, mouseY] = [e.pageX, e.pageY];
+    let boundingBoxCords = [this.canvasRef.offsetLeft, this.canvasRef.offsetTop];
+    let boundingBoxSize = { height: this.canvasRef.offsetHeight, width: this.canvasRef.offsetWidth };
+
+    // Convert the mouse object into relative coordinates of the object canvas (
+    // or perhaps of the bounding box we have selected).
+    let [canvasX, canvasY] = convertGlobalToBoundingBoxCoordinates([mouseX, mouseY], boundingBoxCords, boundingBoxSize);
+
+    log(`Canvas X & Y for mouse position while dragging:`, canvasX, canvasY);
+
+    let height = canvasY - initialTop;
+    let width = canvasX - initialLeft;
+
+    console.log(`Creating Primitive height:`, height, `width:`, width);
+
+    // console.log(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    // this.resizePrimitive(
+    //   this.state.creatingPrimitive,
+    //   this.findACRObjectById(null),
+    //   // e.pageY - this.state.creatingPrimitive.meta.vertices[0][1],
+    //   // e.pageX - this.state.creatingPrimitive.meta.vertices[0][0],
+    //   width,
+    //   height
+    // );
+
+    //Checkpint: consider drawsaleactor.
+    resizeACRObject(this.state.creatingPrimitive, null, width, height);
+    // Redraw.
+    this.setState(this.state);
 
   }
 
@@ -359,6 +396,7 @@ class InteractiveACRModifier extends Component {
     // Change the type of the modifying primitive. We are not changing the state
     // so much as a reference to an object contained within the state, so
     // warnings about mutation of the state can safely be ignored.
+    // eslint-disable-next-line
     this.state.modifyingPrimitive.type = type;
 
     this.setState(this.state);
@@ -373,13 +411,14 @@ class InteractiveACRModifier extends Component {
     });
   }
 
-  resizePrimitive(primitive, parent, height, width){
-    if (parent.id !== "canvas") height *= this.state.drawScaleFactor.y;
-    if (parent.id !== "canvas") width *= this.state.drawScaleFactor.x;
+  resizePrimitive(primitive, parent, width, height){
 
-    log(`Resizing ${primitive.id} to`, height, width);
+    if (parent.id !== "canvas") width *= this.state.drawScaleFactor.y;
+    if (parent.id !== "canvas") height *= this.state.drawScaleFactor.x;
 
-    resizeACRObject(primitive, parent, height, width);
+    log(`Resizing ${primitive.id} to`, width, height);
+
+    resizeACRObject(primitive, parent, width, height);
     // Redraw.
     this.setState(this.state);
   }
@@ -452,12 +491,12 @@ class InteractiveACRModifier extends Component {
   generateBoundingBox({primitive, parent, i}){
     return (<BoundingBox
     className={
-      this.state.selectedPrimitive && (this.state.selectedPrimitive.id == primitive.id) ? 'selected' : ''
+      this.state.selectedPrimitive && (this.state.selectedPrimitive.id === primitive.id) ? 'selected' : ''
     }
     dragging={
       this.state.selectedPrimitive &&
       this.state.selectedPrimitive.dragging &&
-      this.state.selectedPrimitive.id == primitive.id
+      this.state.selectedPrimitive.id === primitive.id
     }
     parent={parent}
     shape={primitive}
@@ -480,7 +519,7 @@ class InteractiveACRModifier extends Component {
     }}
     // Ensure that the object is only interactable when the user is in selection
     // mode.
-    draggable={this.state.interactionMode == "select"}
+    draggable={this.state.interactionMode === "select"}
     resizable={{
       margin: 5,
       edges: {
@@ -495,15 +534,19 @@ class InteractiveACRModifier extends Component {
       this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
     }
     onDown={e => {
-      // We need to ensure that the event propagates so that we capture the mouse movement
-      // used to create new primitives.
-      // e.stopPropagation() || e.preventDefault() ||
-      // Ensure that we prevent selection of a new primitive while we are in the
-      // middle of creating a new one, as this will cause a new state update and
-      // change the prospective parent of the primitive.
+        // We need to ensure that the event propagates so that we capture the mouse movement
+        // used to create new primitives.
+        // e.stopPropagation() || e.preventDefault() ||
+        // Ensure that we prevent selection of a new primitive while we are in the
+        // middle of creating a new one, as this will cause a new state update and
+        // change the prospective parent of the primitive.
         if (this.state.creatingPrimitiveParent) return;
+        if (this.state.interactionMode !== "add") {
+          console.log(`Preventing propagation`);
+          e.preventDefault();
+          e.stopPropagation();
+        }
         this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
-        if (this.state.interactionMode !== "add") e.preventDefault() && e.stopPropagation();
       }
     }
     // Ensure that the primitive is visible on top of all other primitives.
@@ -637,7 +680,9 @@ class InteractiveACRModifier extends Component {
           // Interaction mode handlers.
           selectButtonHandler={() => this.changeInteractionModeHandler("select")}
           addPrimitiveHandler={() => this.changeInteractionModeHandler("add")}
-
+          absoluteMouse={{x: this.state.absoluteMouseX, y: this.state.absoluteMouseY}}
+          canvasMouse={{x: this.state.canvasMouseX, y: this.state.canvasMouseY}}
+          debugMode={this.props.debugMode}
         />
         <div
           className="acr-image-container"
@@ -676,14 +721,61 @@ class InteractiveACRModifier extends Component {
             onMouseUp={this.canvasMouseUpHandler}
             ref={ref => this.canvasRef = ref}
           >
+
+          {
+            /* Draw the expected position of the new primitive before creating when in 'add' mode */
+            this.props.debugMode
+            && this.state.interactionMode === "add" 
+            && this.state.canvasMouseX 
+            && this.state.canvasMouseY ? 
+            <div className="add-primitive-cursor-canvas-cord-preview" style={{
+              position: 'absolute',
+              left: this.state.canvasMouseX - 2.5,
+              top: this.state.canvasMouseY - 2.5,
+              width: '5px',
+              height: '5px',
+              backgroundColor: 'black',
+              borderRadius: '100%'
+            }}></div> : ""
+          }
+
+          {
+            /* Draw the expected position of the new primitive before creating when in 'add' mode, if 
+            the absolute mouse coordinate were to be used. */
+            this.props.debugMode 
+            && this.state.interactionMode === "add" 
+            && this.state.absoluteMouseX 
+            && this.state.absoluteMouseY ? 
+            <div className="add-primitive-cursor-absolute-cord-preview" style={{
+              position: 'absolute',
+              left: this.state.absoluteMouseX - 2.5,
+              top: this.state.absoluteMouseY - 2.5,
+              width: '5px',
+              height: '5px',
+              backgroundColor: 'blue',
+              borderRadius: '100%'
+            }}></div> : ""
+          }
+
           {
             /* Draw ACR Bounding boxes */
             this.state.ready ? this.drawPrimitives(this.props.project.acr) : ""
           }
 
+          {
+            /* Draw the creating primitive if there is one. */
+            this.state.creatingPrimitive ?
+            // "SAMPLE": ""
+            this.generateBoundingBox({
+              // parent: this.implicitCanvasACRObject,
+              primitive: this.state.creatingPrimitive
+            })
+            : ""
+          }
+
           </div>
 
-          <img ref={ref => this.imageRef = ref} style={{
+          <img alt="Background Canvas" ref={ref => this.imageRef = ref} style={{
             width: 'auto',
             // height: '-webkit-fill-available',
             maxHeight: '100%'
