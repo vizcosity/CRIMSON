@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Page for conducting UI experiments, such as experimental click and drag to
  * create a new primitive.
@@ -139,7 +141,7 @@ export default class Experiments extends Component {
         width: '100%',
         height: '100%',
         cursor: 'crosshair',
-        webkitUserSelect: 'none'
+        WebkitUserSelect: 'none'
       }}>
       Selected Primitive: {`${require('util').inspect(this.state.selectedPrimitive)}`}
 

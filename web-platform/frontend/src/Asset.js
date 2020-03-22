@@ -4,7 +4,7 @@
  * @ Aaron Baw 2019
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { HashLoader } from 'react-spinners';
 import ReactTooltip from 'react-tooltip';
 

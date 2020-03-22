@@ -3,10 +3,6 @@ import React, { Component } from 'react';
 
 export default class GenerateCodeIcon extends Component {
 
-  constructor(props, context){
-    super(props, context);
-  }
-
   componentDidMount(){
     if (this.props.getRef) this.props.getRef(this.ref);
   }

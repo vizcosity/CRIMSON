@@ -40,7 +40,7 @@ const PostGitHubDeployActions = ({repo}) => <div>
   <p className="subtext">Now that {repo.name} has been published, you can deploy your project to
   Heroku and obtain a live URL that you can share. </p>
   <div className="horizontal-container">
-    <a target="_blank" href={`https://heroku.com/deploy?template=${repo.url}`}>
+    <a target="_blank" rel="noopener noreferrer" href={`https://heroku.com/deploy?template=${repo.url}`}>
       <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy To Heroku" />
     </a>
   </div>
@@ -60,9 +60,6 @@ const DeployingIndicator = () => <div className="vertical-container">
 </div>
 
 class GitHubDeployActions extends Component {
-  constructor(props, context){
-    super(props, context);
-  }
 
   render(){
     return (

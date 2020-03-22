@@ -7,8 +7,8 @@
 import React, { Component } from 'react';
 import { CloseIcon } from './Icons';
 import { Checkbox } from 'semantic-ui-react';
-import Icon from './Icons';
-import Reactable from 'reactablejs';
+// import Icon from './Icons';
+// import Reactable from 'reactablejs';
 
 class ContainedPrimitive extends Component {
 
