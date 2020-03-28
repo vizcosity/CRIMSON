@@ -223,7 +223,7 @@ class InteractiveACRModifier extends Component {
 
     this.setState({
       ...this.state,
-      creatingPrimitve: null,
+      creatingPrimitive: null,
       creatingPrimitiveParent: null
     });
 
@@ -312,6 +312,7 @@ class InteractiveACRModifier extends Component {
 
     //Checkpint: consider drawsaleactor.
     resizeACRObject(this.state.creatingPrimitive, null, width, height);
+
     // Redraw.
     this.setState(this.state);
 

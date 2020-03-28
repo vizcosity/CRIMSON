@@ -74,7 +74,7 @@ class ACRObject {
     var [ox, oy] = this.meta.vertices[0];
 
     // for (var i = 0; i < otherShape.meta.vertices.length; i++){
-    //   otherShape.meta.relativeVertices[i] = [
+    //   otherShape.meta.vertices[i] = [
     //     (otherShape.meta.vertices[i][0] - ox) / this.meta.absoluteWidth,
     //     (otherShape.meta.vertices[i][1] - oy) / this.meta.absoluteHeight,
     //   ];
