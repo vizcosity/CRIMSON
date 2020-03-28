@@ -585,7 +585,7 @@ class InteractiveACRModifier extends Component {
     onDragEnd={() => this.setState({...this.state, selectedPrimitive: {...this.state.selectedPrimitive, dragging: false}})}
     onDragMove={
       (e) => {
-        let {target, dx, dy} = e;
+        let {dx, dy} = e;
         // If we are not in selection mode, then we should return before the
         // primitive location is altered.
         if (this.state.interactionMode !== "select") return;
