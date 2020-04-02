@@ -4,7 +4,7 @@ import { ACRObject } from 'crimson-inference/modules/ACR.js';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import query from 'query-string';
 import Landing from './Landing.js';
-import InteractiveACRModifier from './ModifyACR.js';
+import InteractiveACRModifier from './ModifyACR';
 import CodeGenerator from './CodeGeneration.js';
 // import Experiments from './Experiments.js';
 // import logo from './logo.svg';

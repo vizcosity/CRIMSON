@@ -5,6 +5,14 @@
  * @ Aaron Baw 2018
  */
 
+ // Defines an interface for points, and sizes.
+export type Point = [number, number];
+
+export interface Size {
+  height: number | string;
+  width: number | string;
+};
+
 // Converts absolute distances into relative values so that proportions
 // are maintained as we resize the window.
 function getRelativeDistance(parent, shape){
@@ -14,8 +22,8 @@ function getRelativeDistance(parent, shape){
     parent.meta.absoluteHeight = 1;
   }
 
-  const [ox, oy] = getUpperLeftmostVertex(shape.meta.vertices);
-  const [px, py] = getUpperLeftmostVertex(parent.meta.vertices);
+  const [ox, oy]: Point = getUpperLeftmostVertex(shape.meta.vertices);
+  const [px, py]: Point = getUpperLeftmostVertex(parent.meta.vertices);
 
   const absX = ox - px;
   const absY = oy - py;
@@ -35,23 +43,25 @@ function getRelativeDistance(parent, shape){
 
 }
 
-/**
- * [converts absolute screen coordinates into relative bounding-box coordinates,
- * for a given bounding box at some position.]
- * absoluteCords: [x, y]
- * boundingBoxPosition: [x, y] (top-left vertex position)
- * @type [relX, relY]
- */
-const convertAbsoluteToRelativeCoordinates = (absoluteCoords, boundingBoxPosition, boundingBoxSize) => {
-  let [absX, absY] = absoluteCoords;
-  let [bbX, bbY] = boundingBoxPosition;
-  let { width, height } = boundingBoxSize;
+// /**
+//  * [converts absolute screen coordinates into relative bounding-box coordinates,
+//  * for a given bounding box at some position.]
+//  * absoluteCords: [x, y]
+//  * boundingBoxPosition: [x, y] (top-left vertex position)
+//  * @type [relX, relY]
+//  */
+// const convertAbsoluteToRelativeCoordinates = (absoluteCoords: Point, boundingBoxPosition: Point, boundingBoxSize: Size): Point => {
+//   let [absX, absY] = absoluteCoords;
+//   let [bbX, bbY] = boundingBoxPosition;
+//   let { width, height } = boundingBoxSize;
 
-  let relX = (absX - bbX) / width;
-  let relY = (absY - bbY) / height;
+//   // Ensure that the width and height are of type number, and not string.
 
-  return [relX, relY]
-}
+//   let relX = (absX - bbX) / width;
+//   let relY = (absY - bbY) / height;
+
+//   return [relX, relY]
+// }
 
 /**
  * [Converts global page coordinates into absolute bounding-box coordinates]
@@ -60,7 +70,7 @@ const convertAbsoluteToRelativeCoordinates = (absoluteCoords, boundingBoxPositio
  * @param  {[Object]} boundingBoxSize     [{width, height} object contaiing the bounding box size}]
  * @return {[Tuple]}                     [Array tuple containing the bounding-box coordinates]
  */
-const convertGlobalToBoundingBoxCoordinates = (globalCoords, boundingBoxPosition, boundingBoxSize) => {
+const convertGlobalToBoundingBoxCoordinates = (globalCoords: Point, boundingBoxPosition: Point): Point => {
   let [absX, absY] = globalCoords;
   let [bbX, bbY] = boundingBoxPosition
 
@@ -71,7 +81,7 @@ const convertGlobalToBoundingBoxCoordinates = (globalCoords, boundingBoxPosition
 }
 
 // Finds and returns an object in the ACR tree given an ID.
-function findACRObjectById(acr, id){
+function findACRObjectById(acr, id: number){
 
   if (!acr || acr.length === 0) return;
 
@@ -85,10 +95,10 @@ function findACRObjectById(acr, id){
 }
 
 // Given an ACR object and a change in x, y, translates the object.
-function moveACRObject({primitive, parent}, dx, dy){
+function moveACRObject({primitive, parent}, dx: number, dy: number){
 
   // Generate updated vertex coordinates.
-  var updatedVertices = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
+  var updatedVertices: Point[] = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
 
   // Move all of the vertices & the midpoint.
   primitive.meta.vertices = updatedVertices
@@ -97,12 +107,15 @@ function moveACRObject({primitive, parent}, dx, dy){
 
   // Move all containing primitives by the same amount, recursively.
   if (primitive.contains && primitive.contains.length > 0){
-    primitive.contains.forEach(innerPrimitive => moveACRObject({primitive:innerPrimitive, parent:primitive}, dx, dy));
+    primitive.contains.forEach(innerPrimitive => moveACRObject({
+      primitive:innerPrimitive, 
+      parent: primitive
+    }, dx, dy));
   }
 }
 
 // Grabs the upperleftmost vertex.
-function getUpperLeftmostVertex(vertices){
+function getUpperLeftmostVertex(vertices: Point[]): Point{
   return sortVertices(vertices)[0]
 }
 
@@ -110,7 +123,7 @@ function getUpperLeftmostVertex(vertices){
 // vertices, for instance, must be ordered in the sequence [TOPLEFT, BOTTOMLEFT, BOTTOMRIGHT, TOPRIGHT].
 // The sort function below ensures consistency among the vertices defined for all
 // primitives manipulated by these functions.
-function sortVertices(vertices){
+function sortVertices(vertices: Point[]): Point[] {
 
   // Keep vertices as they are if we are not dealing with rectangles.
   // (Assume that the shapes defined by these vertices conform to the
@@ -130,7 +143,7 @@ function sortVertices(vertices){
 }
 
 // Traverses the ACR to find the largest ID.
-function getLastACRObjectId(acr){
+function getLastACRObjectId(acr): number{
 
   if (!acr || acr.length === 0) return 0;
 
@@ -216,7 +229,7 @@ function IDGenerator(shapes){
 
 export {
   getRelativeDistance,
-  convertAbsoluteToRelativeCoordinates,
+  // convertAbsoluteToRelativeCoordinates,
   convertGlobalToBoundingBoxCoordinates,
   findACRObjectById,
   moveACRObject,

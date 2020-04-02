@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Vizcosity/CRIMSON#readme",
   "dependencies": {
+    "@types/node": "^13.11.0",
     "commander": "^2.19.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
@@ -43,6 +44,7 @@
     "the-noun-project": "^2.1.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.10.3"
+    "parcel-bundler": "^1.10.3",
+    "typescript": "^3.8.3"
   }
 }
