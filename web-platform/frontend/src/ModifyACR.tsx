@@ -124,6 +124,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     log(`Instantiating ACR Modifier with project:`, this.props.project);
     this.props.project.acr.forEach(object => object.parentId = "None");
 
+
     this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
     this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
     this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
@@ -626,8 +627,16 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       }
     }
     // Ensure that the primitive is visible on top of all other primitives.
-    onDragStart={() => this.setState({...this.state, selectedPrimitive: {...this.state.selectedPrimitive, dragging: true}})}
-    onDragEnd={() => this.setState({...this.state, selectedPrimitive: {...this.state.selectedPrimitive, dragging: false}})}
+    onDragStart={() => {
+      let selectedPrimitive = this.state.selectedPrimitive;
+      selectedPrimitive.dragging = true;
+      this.setState({...this.state, selectedPrimitive})
+    }}
+    onDragEnd={() => {
+      let selectedPrimitive = this.state.selectedPrimitive;
+      selectedPrimitive.dragging = false;
+      this.setState({...this.state, selectedPrimitive})
+    }}
     onDragMove={
       (e) => {
         let {dx, dy} = e;

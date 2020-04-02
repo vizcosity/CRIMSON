@@ -17,12 +17,16 @@ interface ACRObjectMetadata {
   absoluteWidth: number;
   absoluteHeight: number;
 
-  relativeWidth: number;
-  relativeHeight: number;
+  relativeWidth:  string;
+  relativeHeight: string;
 
   area: number; 
 
-  vertices: [Point]
+  vertices: Point[];
+  initialVertices: Point[];
+
+  midpoint: Point | [];
+
 }
 
 class ACRObject {
@@ -31,8 +35,17 @@ class ACRObject {
   parentId: string;
 
   draw: boolean;
+
+  dragging: boolean;
   
-  meta: 
+  meta: ACRObjectMetadata;
+
+  type: string;
+
+  // The nesting level for the object.
+  level: number;
+
+  contains: ACRObject[];
 
 
   constructor({id, parent, type, vertices = [], level=0}){

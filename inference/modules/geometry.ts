@@ -84,7 +84,7 @@
  }
  
  // Finds and returns an object in the ACR tree given an ID.
- function findACRObjectById(acr, id: number){
+ function findACRObjectById(acr, id: string){
  
    if (!acr || acr.length === 0) return;
  
@@ -230,40 +230,40 @@
  
  }
 
-const getHighestY = shape => {
+const getHighestY = (shape: Point[] | ACRObject): number => {
  var vertices = Array.isArray(shape) ? shape : shape.meta.vertices;
  return vertices.sort((a, b) => a[1] > b[1] ? -1 : 1)[0][1];
 };
 
-const getLowestY = shape => {
+const getLowestY = (shape: Point[] | ACRObject): number => {
   var vertices = Array.isArray(shape) ? shape : shape.meta.vertices;
  return vertices.sort((a, b) => a[1] < b[1] ? -1 : 1)[0][1];
 };
 
-const getHighestX = shape => {
+const getHighestX = (shape: Point[] | ACRObject): number => {
   var vertices = Array.isArray(shape) ? shape : shape.meta.vertices;
   return vertices.map(([x, _]) => x).sort((a,b) => a < b ? 1 : -1)[0];
 };
 
-const getLowestX = shape => {
+const getLowestX = (shape: Point[] | ACRObject): number => {
   var vertices = Array.isArray(shape) ? shape : shape.meta.vertices;
   return vertices.map(([x, _]) => x).sort((a, b) => a > b ? 1 : -1)[0];
 }
 
-const calculateMidPoint = vertices => vertices.length !== 0 ? [
+const calculateMidPoint = (vertices: Point[]): Point | [] => vertices.length !== 0 ? [
   vertices.map(([x, y]) => x).reduce((prev, curr) => prev + curr) / vertices.length,
   vertices.map(([x, y]) => y).reduce((prev, curr) => prev + curr) / vertices.length
 ] : [];
 
-const sortShapesAlongXAxis = (shapes) => {
+const sortShapesAlongXAxis = (shapes: ACRObject[]): ACRObject[] => {
    return shapes.concat().sort((a, b) => a.meta.vertices[0][0] < b.meta.vertices[0][0] ? -1 : 1);
 };
 
-const sortshapesAlongYAxis = shapes => {
+const sortshapesAlongYAxis = (shapes: ACRObject[]): ACRObject[] => {
   return shapes.concat().sort((a, b) => a.meta.vertices[0][1] < b.meta.vertices[0][1] ? -1 : 1);
 };
 
-const sortShapesBySize = shapes => {
+const sortShapesBySize = (shapes: ACRObject[]): ACRObject[] => {
   return shapes.concat().sort((a, b) => a.meta.area > b.meta.area ? -1 : 1);
 };
 
