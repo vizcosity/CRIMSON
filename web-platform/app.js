@@ -130,7 +130,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // If we have recieved a code from GitHub, then return the liveURL for the
   // running process, and return the oAuth token.
-  if (req.body.code != 'false'){
+  if (req.body.code && req.body.code != 'false'){
 
     log(`Recieved callback from GitHub with code`, req.body.code, `and sessionID`, req.body.sessionID);
 
@@ -180,6 +180,9 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
   var outputDir = await crimson.generateCode(req.body.acr, {
     fileName: fileName,
     context: req.body.context,
+    // Ensure that the 'server' project is selected by default - otherwise 'static' bundling is used, which is no longer supported.
+    // TODO: Ensure that we entirely remove support for static bundling.
+    project: req.body.project || "server",
     file: req.file ? req.file.originalname : null,
     imgPath: req.body.imgPath ? req.body.imgPath : (req.file ? req.file.path : null),
     outputDir: function(){
