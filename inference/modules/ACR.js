@@ -55,36 +55,55 @@ var ACRObject = /** @class */ (function () {
         var relativeWidthValue = absoluteWidth / parent.meta.absoluteWidth;
         if (isNaN(relativeWidthValue))
             relativeWidthValue = 0;
-        var relativeWidth = (relativeWidthValue) * 100 + "%";
+        // let relativeWidth = `${(relativeWidthValue) * 100}%`;
         var relativeHeightValue = absoluteHeight / parent.meta.absoluteHeight;
         if (isNaN(relativeHeightValue))
             relativeHeightValue = 0;
-        var relativeHeight = (relativeHeightValue) * 100 + "%";
+        // let relativeHeight = `${(relativeHeightValue) * 100}%`;
+        console.log("Called constructor with vertices:", vertices, "and id", id);
         this.id = id;
+        this.parent = parent;
         this.parentId = parent.id;
         this.type = type;
         this.draw = true;
         this.meta = {
             absoluteWidth: absoluteWidth,
             absoluteHeight: absoluteHeight,
-            relativeWidth: relativeWidth,
-            relativeHeight: relativeHeight,
-            area: absoluteWidth * absoluteHeight,
+            relativeWidthValue: relativeWidthValue,
+            relativeHeightValue: relativeHeightValue,
+            get relativeWidth() {
+                // console.log('getting relative width');
+                return this.relativeWidthValue * 100 + "%";
+                // return `100%`;
+            },
+            // relativeWidth: '12%',
+            get relativeHeight() {
+                return this.relativeHeightValue * 100 + "%";
+                // return `100%`;
+            },
+            // relativeWidth,
+            // relativeHeight,
+            get area() {
+                return this.absoluteWidth * this.absoluteHeight;
+            },
             vertices: vertices,
             // Save a copy of the initial vertices for the object for the purposes of
             // calculating resizing deltas, etc.
             initialVertices: vertices.concat(),
-            midpoint: geometry_1.calculateMidPoint(vertices),
+            get midpoint() {
+                return geometry_1.calculateMidPoint(this.vertices);
+            },
         };
         this.level = level;
         this.contains = [];
     }
     ACRObject.prototype.addContainingShape = function (otherShape) {
+        console.log("Adding", otherShape.id, "to", this.id);
         // Set the new parent ID for the other shape.
         otherShape.parentId = this.id;
         // Adjust the relative width and height of the otherShape.
-        otherShape.meta.relativeWidth = (otherShape.meta.absoluteWidth / this.meta.absoluteWidth) * 100 + "%";
-        otherShape.meta.relativeHeight = (otherShape.meta.absoluteHeight / this.meta.absoluteHeight) * 100 + "%";
+        //otherShape.meta.relativeWidth = `${(otherShape.meta.absoluteWidth / this.meta.absoluteWidth) * 100}%`;
+        //otherShape.meta.relativeHeight = `${(otherShape.meta.absoluteHeight / this.meta.absoluteHeight) * 100}%`;
         // Adjust the relative vertices.
         var _a = this.meta.vertices[0], ox = _a[0], oy = _a[1];
         // for (var i = 0; i < otherShape.meta.vertices.length; i++){
@@ -118,7 +137,9 @@ var ACRObject = /** @class */ (function () {
             var xVert = _a[0], yVert = _a[1];
             return [xVert + x, yVert + y];
         });
-        this.meta.midpoint = geometry_1.calculateMidPoint(this.meta.vertices);
+        //this.meta.midpoint = calculateMidPoint(this.meta.vertices);
+        // Displace all contained objects recursively.
+        this.contains.forEach(function (acrObject) { return acrObject.displace({ x: x, y: y }); });
     };
     // Non-mutating version of the above.
     ACRObject.prototype.displaced = function (deltas) {
@@ -132,13 +153,35 @@ var ACRObject = /** @class */ (function () {
         // If the incoming object is an array, map each json object to an ACRObject instance.
         if (Array.isArray(json))
             return json.map(function (acrObject) { return ACRObject.fromJSON(acrObject); });
-        var startObject = new ACRObject(__assign({}, json));
-        Object.assign(startObject, json);
+        var startObject = new ACRObject({
+            id: json.id,
+            parent: json.parent,
+            type: json.type,
+            vertices: json.meta.vertices,
+            level: json.level
+        });
+        if (json.parentId)
+            startObject.parentId = json.parentId;
+        if (json.dragging)
+            startObject.dragging = json.dragging;
+        if (json.draw)
+            startObject.draw = json.draw;
+        if (json.id)
+            startObject.id = json.id;
+        if (json.level)
+            startObject.level = json.level;
+        if (json.meta.absoluteHeight)
+            startObject.meta.absoluteHeight = json.meta.absoluteHeight;
+        if (json.meta.absoluteWidth)
+            startObject.meta.absoluteWidth = json.meta.absoluteWidth;
+        if (json.meta.relativeWidthValue)
+            startObject.meta.relativeWidthValue = json.meta.relativeWidthValue;
+        if (json.meta.relativeHeightValue)
+            startObject.meta.relativeHeightValue = json.meta.relativeHeightValue;
         // Assign 'initialVertices' if this has not been done already.
-        if (!startObject.meta.initialVertices)
-            startObject.meta.initialVertices = startObject.meta.vertices.concat();
+        //if (!startObject.meta.initialVertices) startObject.meta.initialVertices = startObject.meta.vertices.concat();
         // Recursively map all containing shapes to ACRObjects.
-        startObject.contains = ACRObject.fromJSON(startObject.contains);
+        startObject.contains = ACRObject.fromJSON(json.contains).map(function (primitive) { return __assign(__assign({}, primitive), { parent: startObject }); });
         return startObject;
     };
     return ACRObject;

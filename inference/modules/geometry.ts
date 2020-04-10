@@ -24,7 +24,7 @@
      parent.meta.absoluteWidth = 1;
      parent.meta.absoluteHeight = 1;
    }
- 
+   
    const [ox, oy]: Point = getUpperLeftmostVertex(shape.meta.vertices);
    const [px, py]: Point = getUpperLeftmostVertex(parent.meta.vertices);
  
@@ -98,7 +98,7 @@
  }
  
  // Given an ACR object and a change in x, y, translates the object.
- function moveACRObject({primitive, parent}, dx: number, dy: number){
+ function moveACRObject({primitive}, dx: number, dy: number){
  
    // Generate updated vertex coordinates.
    var updatedVertices: Point[] = primitive.meta.vertices.map(([x, y]) => [x+dx, y+dy]);
@@ -111,8 +111,7 @@
    // Move all containing primitives by the same amount, recursively.
    if (primitive.contains && primitive.contains.length > 0){
      primitive.contains.forEach(innerPrimitive => moveACRObject({
-       primitive:innerPrimitive, 
-       parent: primitive
+       primitive:innerPrimitive,
      }, dx, dy));
    }
  }
@@ -162,7 +161,7 @@
  
  }
  
- function resizeACRObject(primitive, parent, width, height){
+ function resizeACRObject(primitive: ACRObject, parent: ACRObject, width: number, height: number){
  
    var dX = width - primitive.meta.absoluteWidth;
    var dY = height - primitive.meta.absoluteHeight;
@@ -183,9 +182,28 @@
    // height and width of the parent, if the primitive has such a parent. For the case
    // where the parent id is the implicit canvas object, or there is no parnet, then
    // we use the absolute width and height values.
-   primitive.meta.relativeHeight =  (parent && parent.id !== "canvas") ? `${(height / parent.meta.absoluteHeight) * 100}%` : `${height}px`;
-   primitive.meta.relativeWidth = (parent && parent.id !== "canvas") ? `${(width / parent.meta.absoluteWidth) * 100}%` : `${width}px`;
+   //  primitive.meta.relativeHeight =  (parent && parent.id !== "canvas") ? `${(height / parent.meta.absoluteHeight) * 100}%` : `${height}px`;
+   //  primitive.meta.relativeWidth = (parent && parent.id !== "canvas") ? `${(width / parent.meta.absoluteWidth) * 100}%` : `${width}px`;
  
+  //  primitive.meta.relativeHeight = `${(height / parent.meta.absoluteHeight) * 100}%`;
+  //  primitive.meta.relativeWidth = `${(width / parent.meta.absoluteWidth) * 100}%`;
+  primitive.meta.relativeHeightValue = height / parent.meta.absoluteHeight;
+  primitive.meta.relativeWidthValue = width / parent.meta.absoluteWidth;
+
+  console.log(primitive);
+  console.log(`Set primitive relative height and width to:`, primitive.meta.relativeHeightValue, primitive.meta.relativeWidthValue)
+  console.log(`Primitive relative height and width get values:`, primitive.meta.relativeHeight, primitive.meta.relativeWidth);
+
+   // For each of the child primitives, we need to scale the position of the upper left most vertex by that of the width and height - so that 
+   // when the user is resizing the primitive on screen, the contained shapes maintain their relative positions to that of their parents.
+   // This will recursively call displace on all children contained. 
+   // It's necessary to use the relative width and height values in order to ensure that we are taking into account the drawScaleFactor, as we need 
+   //  to convert any absolute changes in width and height to account for the scale at which the objects are being displayed.
+   primitive.contains.forEach(containedPrimitive => containedPrimitive.displace({
+     x: dX*containedPrimitive.meta.relativeWidthValue, 
+   y: dY*containedPrimitive.meta.relativeHeightValue
+   }));
+
  }
  
  // Sorts shapes in order of their vertical positions before requesting generated

@@ -9,6 +9,7 @@ import {
   Point, 
   Size
 } from './geometry';
+import { start } from 'repl';
 
 /**
  * Metadata for an Abstract Component Representation object, containing positional and size information for a given primitive.
@@ -17,15 +18,18 @@ interface ACRObjectMetadata {
   absoluteWidth: number;
   absoluteHeight: number;
 
-  relativeWidth:  string;
-  relativeHeight: string;
+  relativeWidthValue: number;
+  relativeHeightValue: number;
 
-  area: number; 
+  readonly relativeWidth:  string;
+  readonly relativeHeight: string;
+
+  readonly area: number; 
 
   vertices: Point[];
   initialVertices: Point[];
 
-  midpoint: Point | [];
+  readonly midpoint: Point | [];
 
 }
 
@@ -33,6 +37,7 @@ class ACRObject {
 
   id: string;
   parentId: string;
+  parent: ACRObject;
 
   draw: boolean;
 
@@ -67,32 +72,59 @@ class ACRObject {
 
     let relativeWidthValue = absoluteWidth / parent.meta.absoluteWidth;
     if (isNaN(relativeWidthValue)) relativeWidthValue = 0;
-    let relativeWidth = `${(relativeWidthValue) * 100}%`;
+    // let relativeWidth = `${(relativeWidthValue) * 100}%`;
     let relativeHeightValue = absoluteHeight / parent.meta.absoluteHeight;
     if (isNaN(relativeHeightValue)) relativeHeightValue = 0;
-    let relativeHeight = `${(relativeHeightValue) * 100}%`;
+    // let relativeHeight = `${(relativeHeightValue) * 100}%`;
+
+    console.log(`Called constructor with vertices:`, vertices, `and id`, id);
 
     this.id = id;
+    this.parent = parent;
     this.parentId = parent.id;
     this.type = type;
     this.draw = true;
     this.meta = {
       absoluteWidth,
       absoluteHeight,
-      relativeWidth,
-      relativeHeight,
-      area: absoluteWidth * absoluteHeight,
-      vertices: vertices,
+      relativeWidthValue,
+      relativeHeightValue,
+
+      get relativeWidth(){
+        // console.log('getting relative width');
+        return `${this.relativeWidthValue * 100}%`;
+        // return `100%`;
+      },
+      // relativeWidth: '12%',
+
+      get relativeHeight(){
+        return `${this.relativeHeightValue * 100}%`;
+        // return `100%`;
+      },
+
+      // relativeWidth,
+      // relativeHeight,
+
+      get area(){
+        return this.absoluteWidth * this.absoluteHeight;
+      },
+
+      vertices,
       // Save a copy of the initial vertices for the object for the purposes of
       // calculating resizing deltas, etc.
       initialVertices: vertices.concat(),
-      midpoint: calculateMidPoint(vertices),
+      
+      get midpoint(){ 
+        return calculateMidPoint(this.vertices)
+      },
+
       // relativeVertices: [
       //   [0,0],
       //   [0,1],
       //   [1,1],
       //   [1,0]
       // ],
+
     };
       this.level = level;
       this.contains = [];
@@ -100,12 +132,14 @@ class ACRObject {
 
   addContainingShape(otherShape){
 
+    console.log(`Adding`, otherShape.id, `to`, this.id);
+
     // Set the new parent ID for the other shape.
     otherShape.parentId = this.id;
 
     // Adjust the relative width and height of the otherShape.
-    otherShape.meta.relativeWidth = `${(otherShape.meta.absoluteWidth / this.meta.absoluteWidth) * 100}%`;
-    otherShape.meta.relativeHeight = `${(otherShape.meta.absoluteHeight / this.meta.absoluteHeight) * 100}%`;
+    //otherShape.meta.relativeWidth = `${(otherShape.meta.absoluteWidth / this.meta.absoluteWidth) * 100}%`;
+    //otherShape.meta.relativeHeight = `${(otherShape.meta.absoluteHeight / this.meta.absoluteHeight) * 100}%`;
 
     // Adjust the relative vertices.
     var [ox, oy] = this.meta.vertices[0];
@@ -136,8 +170,13 @@ class ACRObject {
 
   // Mutates the object, displacing it x units or y units.
   displace({x = 0,y = 0}){
+
       this.meta.vertices = this.meta.vertices.map(([xVert, yVert]) => [xVert+x, yVert+y]);
-      this.meta.midpoint = calculateMidPoint(this.meta.vertices);
+      //this.meta.midpoint = calculateMidPoint(this.meta.vertices);
+
+      // Displace all contained objects recursively.
+      this.contains.forEach(acrObject => acrObject.displace({x, y}));
+
   }
 
   // Non-mutating version of the above.
@@ -149,19 +188,44 @@ class ACRObject {
 
   // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
   // creates an instance of the ACRObject.
-  static fromJSON(json){
+  static fromJSON(json: ACRObject | ACRObject[] | any){
 
     // If the incoming object is an array, map each json object to an ACRObject instance.
     if (Array.isArray(json)) return json.map(acrObject => ACRObject.fromJSON(acrObject));
 
-    let startObject = new ACRObject({...json});
-    Object.assign(startObject, json);
+    let startObject = new ACRObject({
+      id: json.id,
+      parent: json.parent,
+      type: json.type,
+      vertices: json.meta.vertices,
+      level: json.level
+    });
+
+    if (json.parentId)
+      startObject.parentId = json.parentId;
+    if (json.dragging)
+      startObject.dragging = json.dragging;
+    if (json.draw)
+      startObject.draw = json.draw;
+    if (json.id)
+      startObject.id = json.id;
+    if (json.level)
+      startObject.level = json.level;
+
+    if (json.meta.absoluteHeight)
+      startObject.meta.absoluteHeight = json.meta.absoluteHeight;
+    if (json.meta.absoluteWidth)
+      startObject.meta.absoluteWidth = json.meta.absoluteWidth;
+    if (json.meta.relativeWidthValue)
+      startObject.meta.relativeWidthValue = json.meta.relativeWidthValue;
+    if (json.meta.relativeHeightValue)
+      startObject.meta.relativeHeightValue = json.meta.relativeHeightValue;
 
     // Assign 'initialVertices' if this has not been done already.
-    if (!startObject.meta.initialVertices) startObject.meta.initialVertices = startObject.meta.vertices.concat();
+    //if (!startObject.meta.initialVertices) startObject.meta.initialVertices = startObject.meta.vertices.concat();
 
     // Recursively map all containing shapes to ACRObjects.
-    startObject.contains = ACRObject.fromJSON(startObject.contains);
+    startObject.contains = ACRObject.fromJSON(json.contains).map(primitive => {return {...primitive, parent: startObject}});
 
     return startObject;
 

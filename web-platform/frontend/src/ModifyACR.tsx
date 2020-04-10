@@ -129,6 +129,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
     this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
     this.sourceImageWidth = this.panelWidth !== 0 ? this.panelWidth / (parseFloat(this.props.project.acr[0].meta.relativeWidth) / 100) : 0;
+    
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
@@ -483,17 +484,24 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
   resizePrimitive(primitive, parent, width, height){
 
-    if (parent.id !== "canvas") width *= this.state.drawScaleFactor[0];
-    if (parent.id !== "canvas") height *= this.state.drawScaleFactor[1];
+    // if (parent.id !== "canvas") width *= this.state.drawScaleFactor[0];
+    // if (parent.id !== "canvas") height *= this.state.drawScaleFactor[1];
 
-    log(`Resizing ${primitive.id} to`, width, height);
+    // We need to multiply the deltas in width and height by the draw-scale factor in order to convert from browser coordinates to ACR 
+    // coordinates.
+    width *= this.state.drawScaleFactor[0];
+    height *= this.state.drawScaleFactor[1];
+
+    //log(`Resizing ${primitive.id} to`, width, height);
 
     resizeACRObject(primitive, parent, width, height);
+    
     // Redraw.
     this.setState(this.state);
+
   }
 
-  movePrimitive({primitive, parent}, {dx, dy}){
+  movePrimitive({primitive, parent}: {primitive: ACRObject, parent: ACRObject}, {dx, dy}){
 
     // Select the current primitive.
 
@@ -503,9 +511,11 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
     // console.log(`Moving ${primitive.id} by`, dx, dy);
 
-    moveACRObject({primitive, parent}, dx, dy);
+    // moveACRObject({primitive}, dx, dy);
+    primitive.displace({x: dx, y: dy})
+
     // Force a redraw.
-    this.setState(this.state);
+    this.forceUpdate()
   }
 
   // Nests the primitive within the new parent.
@@ -584,9 +594,9 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         // console.log(primitive.id, `no longer active for dropping.`);
       },
 
-      ondrop: event => {
-        this.nestWithinNewParent(event.relatedTarget, event.target)
-      }
+      // ondrop: event => {
+      //   this.nestWithinNewParent(event.relatedTarget, event.target)
+      // }
     }}
     // Ensure that the object is only interactable when the user is in selection
     // mode.
@@ -693,6 +703,8 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     })
   {
     if (!acr || acr.length === 0) return "";
+
+    console.log(`Drawing primitives for parnet:`, parent);
 
     // We keep the acr object as a prop so that we do not have to call
     // setState when moving the primitive, as we would not be able to do

@@ -5,7 +5,7 @@
  */
 
 import { api } from '../package.json';
-import { sortShapes } from './geometry';
+import { sortShapes } from 'crimson-inference/modules/geometry';
 
 // Given an acr object, context, and project type, generates the code and returns
 // response from the server according to the desired format.
