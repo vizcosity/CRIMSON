@@ -130,7 +130,7 @@ app.post(`${endpointPrefix}/generateCode`, upload.single('wireframe'), async (re
 
   // If we have recieved a code from GitHub, then return the liveURL for the
   // running process, and return the oAuth token.
-  if (req.body.code != 'false'){
+  if (req.body.code && req.body.code != 'false'){
 
     log(`Recieved callback from GitHub with code`, req.body.code, `and sessionID`, req.body.sessionID);
 
