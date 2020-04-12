@@ -18,8 +18,12 @@ interface ACRObjectMetadata {
   absoluteWidth: number;
   absoluteHeight: number;
 
-  relativeWidthValue: number;
-  relativeHeightValue: number;
+  // Ensure that the relativeWidthValues are also read only - and computed properties.
+  // Previously, relative sizing values were correclty computed by taking into account the parent primtive, but 
+  // *only* during instantiation. It is uncommon that the parent primitive is assigned during instantiation, however, 
+  // so it is crucial that we ensure these are calculated dynamically.
+  readonly relativeWidthValue: number;
+  readonly relativeHeightValue: number;
 
   readonly relativeWidth:  string;
   readonly relativeHeight: string;
@@ -37,7 +41,8 @@ class ACRObject {
 
   id: string;
   parentId: string;
-  parent: ACRObject;
+  
+  private _parent: ACRObject;
 
   draw: boolean;
 
@@ -47,63 +52,87 @@ class ACRObject {
 
   type: string;
 
-  // The nesting level for the object.
-  level: number;
+  get level(): number {
+    
+    // Recursively traverse the parent tree until there are no more parents.
+    let level = -1;
+    let parent: any = this;
+    while (parent && parent.parent) {parent = parent.parent; level++;}
+
+    return level;
+
+  }
 
   contains: ACRObject[];
 
+  get parent(): ACRObject{
+    return this._parent
+  };
 
-  constructor({id, parent, type, vertices = [], level=0}){
+  set parent(newValue: ACRObject){
+    this._parent = newValue;
+  };
+
+
+  constructor({id, parent: _parent, type, vertices = [], level=0}){
 
     var xs = vertices.map(([x, _]) => x).sort().reverse();
     var ys = vertices.map(([_, y]) => y).sort().reverse();
     var absoluteWidth = Math.abs(xs[0] - xs[xs.length - 1]);
     var absoluteHeight = Math.abs(ys[0] - ys[ys.length - 1]);
 
-    if (!parent){ 
-      parent = {
+    if (!_parent){ 
+      _parent = {
         id: "None",
         meta: {
           absoluteWidth: absoluteWidth,
           absoluteHeight: absoluteHeight
         }
       }
+      //console.log(`Constructing implicit parent object.`);
     }
 
-    let relativeWidthValue = absoluteWidth / parent.meta.absoluteWidth;
-    if (isNaN(relativeWidthValue)) relativeWidthValue = 0;
+    // let relativeWidthValue = absoluteWidth / parent.meta.absoluteWidth;
+    // if (isNaN(relativeWidthValue)) relativeWidthValue = 0;
     // let relativeWidth = `${(relativeWidthValue) * 100}%`;
-    let relativeHeightValue = absoluteHeight / parent.meta.absoluteHeight;
-    if (isNaN(relativeHeightValue)) relativeHeightValue = 0;
+    // let relativeHeightValue = absoluteHeight / parent.meta.absoluteHeight;
+    // if (isNaN(relativeHeightValue)) relativeHeightValue = 0;
     // let relativeHeight = `${(relativeHeightValue) * 100}%`;
 
-    console.log(`Called constructor with vertices:`, vertices, `and id`, id);
+    // console.log(`Called constructor with vertices:`, vertices, `and id`, id);
+
+    // Maintain a reference to 'this' which can be used within the 'meta' object.
+    var self = this;
 
     this.id = id;
-    this.parent = parent;
-    this.parentId = parent.id;
+    this.parentId = _parent.id;
+    this._parent = _parent;
     this.type = type;
     this.draw = true;
     this.meta = {
       absoluteWidth,
       absoluteHeight,
-      relativeWidthValue,
-      relativeHeightValue,
+
+      get relativeWidthValue(){
+        //console.log(`Calculating relative width, with parent:`, self.parent, this.absoluteWidth, self.parent.meta.absoluteWidth, this);
+        let relativeWidthValue = this.absoluteWidth / self.parent.meta.absoluteWidth;
+        if (isNaN(relativeWidthValue)) relativeWidthValue = 0;
+        return relativeWidthValue;
+      },
+
+      get relativeHeightValue(){
+        let relativeHeightValue = this.absoluteHeight / self.parent.meta.absoluteHeight;
+        if (isNaN(relativeHeightValue)) relativeHeightValue = 0;
+        return relativeHeightValue;
+      },
 
       get relativeWidth(){
-        // console.log('getting relative width');
         return `${this.relativeWidthValue * 100}%`;
-        // return `100%`;
       },
-      // relativeWidth: '12%',
 
       get relativeHeight(){
         return `${this.relativeHeightValue * 100}%`;
-        // return `100%`;
       },
-
-      // relativeWidth,
-      // relativeHeight,
 
       get area(){
         return this.absoluteWidth * this.absoluteHeight;
@@ -126,7 +155,6 @@ class ACRObject {
       // ],
 
     };
-      this.level = level;
       this.contains = [];
   }
 
@@ -136,6 +164,9 @@ class ACRObject {
 
     // Set the new parent ID for the other shape.
     otherShape.parentId = this.id;
+
+    // Ensure that the other shape has this shape as its parent.
+    otherShape.parent = this;
 
     // Adjust the relative width and height of the otherShape.
     //otherShape.meta.relativeWidth = `${(otherShape.meta.absoluteWidth / this.meta.absoluteWidth) * 100}%`;
@@ -150,9 +181,6 @@ class ACRObject {
     //     (otherShape.meta.vertices[i][1] - oy) / this.meta.absoluteHeight,
     //   ];
     // }
-
-    // Increase the nesting level for the other shape.
-    otherShape.level++;
 
     this.contains.push(otherShape);
 
@@ -175,6 +203,7 @@ class ACRObject {
       //this.meta.midpoint = calculateMidPoint(this.meta.vertices);
 
       // Displace all contained objects recursively.
+      // TODO: Understand why contained acrObjects are undefined, or are not instances of the ACRObject class.
       this.contains.forEach(acrObject => acrObject.displace({x, y}));
 
   }
@@ -198,7 +227,6 @@ class ACRObject {
       parent: json.parent,
       type: json.type,
       vertices: json.meta.vertices,
-      level: json.level
     });
 
     if (json.parentId)
@@ -209,23 +237,25 @@ class ACRObject {
       startObject.draw = json.draw;
     if (json.id)
       startObject.id = json.id;
-    if (json.level)
-      startObject.level = json.level;
-
+      
     if (json.meta.absoluteHeight)
       startObject.meta.absoluteHeight = json.meta.absoluteHeight;
     if (json.meta.absoluteWidth)
       startObject.meta.absoluteWidth = json.meta.absoluteWidth;
-    if (json.meta.relativeWidthValue)
-      startObject.meta.relativeWidthValue = json.meta.relativeWidthValue;
-    if (json.meta.relativeHeightValue)
-      startObject.meta.relativeHeightValue = json.meta.relativeHeightValue;
+    // if (json.meta.relativeWidthValue)
+    //   startObject.meta.relativeWidthValue = json.meta.relativeWidthValue;
+    // if (json.meta.relativeHeightValue)
+    //   startObject.meta.relativeHeightValue = json.meta.relativeHeightValue;
 
     // Assign 'initialVertices' if this has not been done already.
     //if (!startObject.meta.initialVertices) startObject.meta.initialVertices = startObject.meta.vertices.concat();
 
     // Recursively map all containing shapes to ACRObjects.
-    startObject.contains = ACRObject.fromJSON(json.contains).map(primitive => {return {...primitive, parent: startObject}});
+    // startObject.contains = ACRObject.fromJSON(json.contains).map(primitive => {return {...primitive, parent: startObject}});
+
+    json.contains.forEach(jsonPrimitive => {
+      startObject.addContainingShape(ACRObject.fromJSON(jsonPrimitive));
+    });
 
     return startObject;
 

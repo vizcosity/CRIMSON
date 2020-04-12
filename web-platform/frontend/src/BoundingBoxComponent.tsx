@@ -11,13 +11,14 @@ const BoundingBoxComponent = ({
   contains,
   getRef, 
   selectable = true, 
-  children
+  children,
 }) => {
   var meta = shape.meta;
 
   // console.log(`Getting relative distance:`, parent, shape);
 
   let [left, top] = parent && parent.meta.vertices ? getRelativeDistance(parent, shape) : shape.meta.initialVertices[0];
+  
   return (<div 
     ref={getRef} 
     className={"bounding-box " + className} 

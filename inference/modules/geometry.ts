@@ -187,8 +187,11 @@
  
   //  primitive.meta.relativeHeight = `${(height / parent.meta.absoluteHeight) * 100}%`;
   //  primitive.meta.relativeWidth = `${(width / parent.meta.absoluteWidth) * 100}%`;
-  primitive.meta.relativeHeightValue = height / parent.meta.absoluteHeight;
-  primitive.meta.relativeWidthValue = width / parent.meta.absoluteWidth;
+  
+  // No need to re-calculate the relative with and height values manually, as these 
+  // are computed properties.
+  // primitive.meta.relativeHeightValue = height / parent.meta.absoluteHeight;
+  // primitive.meta.relativeWidthValue = width / parent.meta.absoluteWidth;
 
   console.log(primitive);
   console.log(`Set primitive relative height and width to:`, primitive.meta.relativeHeightValue, primitive.meta.relativeWidthValue)

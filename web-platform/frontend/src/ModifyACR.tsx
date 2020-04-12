@@ -118,11 +118,25 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       ready: false
     };
 
+    // Update implicit canvasACR element which will simply be used as the
+    // top level ACR object. It contains no useful information and is simply
+    // used to support functions which require the use of a parent acr object,
+    // on objects such as panels which are natively the top level elements of the
+    // ACR representation.
+    this.implicitCanvasACRObject = ACRObject.fromJSON({
+      meta: {
+        absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
+        absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
+        vertices: [[0,0]]
+      },
+      id: "canvas",
+      contains: []
+    });
 
-    // Perform some pre-processing on the ACR. Top level shapes should have a
-    // parent of 'none'.
+    // Perform some pre-processing on the ACR. All top-level shapes should be nested within the ImplicitCanvasACRObject.
     log(`Instantiating ACR Modifier with project:`, this.props.project);
-    this.props.project.acr.forEach(object => object.parentId = "None");
+    // this.props.project.acr.forEach(object => object.parentId = "None");
+    this.props.project.acr.forEach(object => this.implicitCanvasACRObject.addContainingShape(object));
 
 
     this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
@@ -177,6 +191,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   }
 
   updateImageSizeProperties(){
+
     this.setState({
       canvasSize: {
         width: this.imageRef.width,
@@ -188,20 +203,18 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       ]
     });
 
-    // Update implicit canvasACR element which will simply be used as the
-    // top level ACR object. It contains no useful information and is simply
-    // used to support functions which require the use of a parent acr object,
-    // on objects such as panels which are natively the top level elements of the
-    // ACR representation.
-    this.implicitCanvasACRObject = ACRObject.fromJSON({
-      meta: {
-        absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
-        absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
-        vertices: [[0,0]]
-      },
-      id: "canvas",
-      contains: []
-    });
+    this.implicitCanvasACRObject.meta.absoluteWidth = this.imageRef.width * this.state.drawScaleFactor[0];
+    this.implicitCanvasACRObject.meta.absoluteHeight = this.imageRef.height * this.state.drawScaleFactor[1];
+
+    // this.implicitCanvasACRObject = ACRObject.fromJSON({
+    //   meta: {
+    //     absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
+    //     absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
+    //     vertices: [[0,0]]
+    //   },
+    //   id: "canvas",
+    //   contains: []
+    // });
 
   }
 
@@ -704,7 +717,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   {
     if (!acr || acr.length === 0) return "";
 
-    console.log(`Drawing primitives for parnet:`, parent);
+    // console.log(`Drawing primitives for parnet:`, parent);
 
     // We keep the acr object as a prop so that we do not have to call
     // setState when moving the primitive, as we would not be able to do

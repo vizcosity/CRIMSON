@@ -21,8 +21,6 @@ function getRelativeDistance(parent, shape) {
         parent.meta.absoluteWidth = 1;
         parent.meta.absoluteHeight = 1;
     }
-    console.log("Getting upper left most vertex from", shape.id);
-    console.log("Getting upper left most vertex from parent", parent);
     var _a = getUpperLeftmostVertex(shape.meta.vertices), ox = _a[0], oy = _a[1];
     var _b = getUpperLeftmostVertex(parent.meta.vertices), px = _b[0], py = _b[1];
     var absX = ox - px;
@@ -167,8 +165,10 @@ function resizeACRObject(primitive, parent, width, height) {
     //  primitive.meta.relativeWidth = (parent && parent.id !== "canvas") ? `${(width / parent.meta.absoluteWidth) * 100}%` : `${width}px`;
     //  primitive.meta.relativeHeight = `${(height / parent.meta.absoluteHeight) * 100}%`;
     //  primitive.meta.relativeWidth = `${(width / parent.meta.absoluteWidth) * 100}%`;
-    primitive.meta.relativeHeightValue = height / parent.meta.absoluteHeight;
-    primitive.meta.relativeWidthValue = width / parent.meta.absoluteWidth;
+    // No need to re-calculate the relative with and height values manually, as these 
+    // are computed properties.
+    // primitive.meta.relativeHeightValue = height / parent.meta.absoluteHeight;
+    // primitive.meta.relativeWidthValue = width / parent.meta.absoluteWidth;
     console.log(primitive);
     console.log("Set primitive relative height and width to:", primitive.meta.relativeHeightValue, primitive.meta.relativeWidthValue);
     console.log("Primitive relative height and width get values:", primitive.meta.relativeHeight, primitive.meta.relativeWidth);
