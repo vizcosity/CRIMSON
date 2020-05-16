@@ -37,6 +37,7 @@
   },
   "api": {
     "generateACR": "/api/v1/generateACR",
+    "fetchAvailablePrimitives": "/api/v1/getSupportedPrimitives",
     "generateCode": "/api/v1/generateCode",
     "deployToGithub": "/api/v1/deployToGithub"
   },

@@ -7,6 +7,7 @@
  */
 
 import React, { Component, ElementRef, RefObject } from 'react';
+import { fetchAvailablePrimitives } from './Fetch';
 import ResizeDetector from 'react-resize-detector';
 import EditDialogue from './CustomisePrimitive';
 import * as Icon from './Icons';
@@ -46,7 +47,7 @@ type InteractiveACRModifierProps = {
 type InteractiveACRModifierState = {
   canvasSize: Size,
 
-  availablePrimitives: ACRObject[],
+  availablePrimitives: Object[],
 
   selectedPrimitive: ACRObject,
   creatingPrimitive: ACRObject,
@@ -488,9 +489,9 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   // that the internal state believes is selected.
   async initPrimitiveSelection(e, primitive){
 
-    if (!this.state.availablePrimitives){
+    if (!this.state.availablePrimitives || this.state.availablePrimitives.length == 0){
       // Fetch available primitives from the backend.
-      var primitives = await fetch('/api/v1/getSupportedPrimitives').then(res => res.json());
+      var primitives = await fetchAvailablePrimitives();
       this.setState({
         ...this.state,
         availablePrimitives: primitives.map(primitive => Object({
@@ -500,8 +501,6 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         }))
       })
     }
-
-    console.log(`MODIFY ACR | Available primitives`, this.state.availablePrimitives);
 
     this.setState({
       ...this.state,
@@ -851,6 +850,20 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
             height: '100%'
           }}
         >
+
+            {
+              /* Display dropdown on double click. */
+              (this.state.modifyingPrimitive) ?
+              <EditDialogue
+                x={this.state.doubleTap[0]}
+                y={this.state.doubleTap[1]}
+                primitive={this.state.modifyingPrimitive}
+                onChangePrimitiveType={type => this.setPrimitiveType(type)}
+                onClose={() => this.endPrimitiveSelection()}
+                primitiveTypes={this.state.availablePrimitives} />
+              : ""
+            }
+
 
           <ResizeDetector handleWidth handleHeight onResize={this.onResize}>
 
