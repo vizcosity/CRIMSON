@@ -160,7 +160,7 @@ class ACRObject {
 
   addContainingShape(otherShape){
 
-    console.log(`Adding`, otherShape.id, `to`, this.id);
+    // console.log(`Adding`, otherShape.id, `to`, this.id);
 
     // Set the new parent ID for the other shape.
     otherShape.parentId = this.id;

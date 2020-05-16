@@ -129,7 +129,7 @@ var ACRObject = /** @class */ (function () {
     ;
     ;
     ACRObject.prototype.addContainingShape = function (otherShape) {
-        console.log("Adding", otherShape.id, "to", this.id);
+        // console.log(`Adding`, otherShape.id, `to`, this.id);
         // Set the new parent ID for the other shape.
         otherShape.parentId = this.id;
         // Ensure that the other shape has this shape as its parent.
