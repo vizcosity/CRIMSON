@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ACRSample from './acr.json';
+import ACRSample from './assets/acr/act_sample_full.json';
 import { ACRObject } from 'crimson-inference/modules/ACR.js';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import query from 'query-string';

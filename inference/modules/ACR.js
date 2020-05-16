@@ -179,6 +179,15 @@ var ACRObject = /** @class */ (function () {
         displacedObject.displace(deltas);
         return displacedObject;
     };
+    /**
+     * Converts the ACR Object to JSON, removing circular references.
+     */
+    ACRObject.prototype.toJSON = function () {
+        var jsonified = __assign({}, this);
+        jsonified._parent = null;
+        jsonified.contains = jsonified.contains.map(function (primitive) { return primitive.toJSON ? primitive.toJSON() : primitive; });
+        return jsonified;
+    };
     // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
     // creates an instance of the ACRObject.
     ACRObject.fromJSON = function (json) {

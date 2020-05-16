@@ -217,6 +217,16 @@ class ACRObject {
     displacedObject.displace(deltas);
     return displacedObject;
   }
+  
+  /**
+   * Converts the ACR Object to JSON, removing circular references.
+   */
+  toJSON(){
+    let jsonified = {...this};
+    jsonified._parent = null;
+    jsonified.contains = jsonified.contains.map(primitive => primitive.toJSON ? primitive.toJSON() : primitive);
+    return jsonified;
+  }
 
   // Given a JSON ACR Object, which is not already an instance of the ACRObject class,
   // creates an instance of the ACRObject.

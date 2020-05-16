@@ -39,7 +39,8 @@ type ACRProject = {
 
 type InteractiveACRModifierProps = {
   project: ACRProject,
-  history: string[]
+  history: string[],
+  debugMode: boolean
 };
 
 type InteractiveACRModifierState = {
@@ -800,6 +801,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       .displaced({x: 3, y: 3});
 
     duplicated.id = this.idGenerator.newId();
+    duplicated.parent = parentPrimitive;
     parentPrimitive.contains.push(duplicated);
 
     this.setState(this.state);
@@ -825,6 +827,22 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   render(){
     return (
       <div className="acr-mod-container">
+
+        <Toolbar
+
+        generateCodeHandler={this.generateCodeHandler}
+        goBackHandler={this.goBackHandler}
+
+        // Primitive modification handlers (selection, creation, duplication).
+        duplicatePrimitiveHandler={this.duplicatePrimitiveHandler}
+
+        // Interaction mode handlers.
+        selectButtonHandler={() => this.changeInteractionModeHandler("select")}
+        addPrimitiveHandler={() => this.changeInteractionModeHandler("add")}
+        absoluteMouse={{x: this.state.absoluteMouseCord[0], y: this.state.absoluteMouseCord[1]}}
+        canvasMouse={{x: this.state.canvasMouseCord[0], y: this.state.canvasMouseCord[1]}}
+        debugMode={this.props.debugMode}
+        />
 
         <div
           className="acr-image-container"

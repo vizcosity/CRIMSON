@@ -152,6 +152,10 @@ function resizeACRObject(primitive, parent, width, height) {
     var heightPercentageChange = height / primitive.meta.absoluteHeight;
     primitive.contains.forEach(function (containedPrimitive) {
         resizeACRObject(containedPrimitive, primitive, width * containedPrimitive.meta.relativeWidthValue, height * containedPrimitive.meta.relativeHeightValue);
+        //  primitive.contains.forEach(containedPrimitive => containedPrimitive.displace({
+        //   x: dX*containedPrimitive.meta.relativeWidthValue, 
+        //   y: dY*containedPrimitive.meta.relativeHeightValue
+        //  }));  
     });
     primitive.meta.absoluteHeight = height;
     primitive.meta.absoluteWidth = width;
@@ -183,9 +187,10 @@ function resizeACRObject(primitive, parent, width, height) {
     // It's necessary to use the relative width and height values in order to ensure that we are taking into account the drawScaleFactor, as we need 
     //  to convert any absolute changes in width and height to account for the scale at which the objects are being displayed.
     //  primitive.contains.forEach(containedPrimitive => containedPrimitive.displace({
-    //    x: dX*containedPrimitive.meta.relativeWidthValue, 
-    //    y: dY*containedPrimitive.meta.relativeHeightValue
+    //    x: dX*containedPrimitive.meta.relativeWidthValue * widthPercentageChange, 
+    //    y: dY*containedPrimitive.meta.relativeHeightValue * heightPercentageChange
     //  }));    
+    //  console.log(widthPercentageChange, heightPercentageChange);
 }
 exports.resizeACRObject = resizeACRObject;
 // Sorts shapes in order of their vertical positions before requesting generated

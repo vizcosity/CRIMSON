@@ -8,6 +8,7 @@
 const shapeMap = require('../config/config.json').shapeMap;
 const { implicitlyNestIntoVerticalContainers, implicitlyNestIntoRows, nest } = require('./inference/implicitNest');
 const { getLastACRObjectId, sortshapesAlongYAxis, sortShapes } = require('./geometry');
+const { ACRObject } = require('./ACR');
 const inferProperties = require('./inference/infer');
 const indent = require('indent-string');
 const transform = require('./transformation/transform');
@@ -115,7 +116,7 @@ function separateNavFromShapes(shapes){
      shapes[i].contains = generateACRObjects(shapes[i].contains);
    }
 
-   return inferProperties(shapes);
+   return ACRObject.fromJSON(inferProperties(shapes));
  }
 
  // Takes JSON representation of detected shapes and outputs serialised HTML for the
