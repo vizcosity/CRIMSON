@@ -6,7 +6,7 @@
  * @ Aaron Baw 2018
  */
 
-import React, { Component, ElementRef } from 'react';
+import React, { Component, ElementRef, RefObject } from 'react';
 import ResizeDetector from 'react-resize-detector';
 import EditDialogue from './CustomisePrimitive';
 import * as Icon from './Icons';
@@ -65,14 +65,15 @@ type InteractiveACRModifierState = {
 
 class InteractiveACRModifier extends Component<InteractiveACRModifierProps, InteractiveACRModifierState> {
 
-  imageRef: any;
+  imageRef: RefObject<HTMLImageElement>;
+
+  imageRefWidth: number;
+  imageRefHeight: number;
+
   canvasRef: HTMLDivElement;
 
   panelWidth: number;
   panelHeight: number;
-
-  sourceImageHeight: number;
-  sourceImageWidth: number;
 
   implicitCanvasACRObject: ACRObject;
 
@@ -83,7 +84,9 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   constructor(props, context){
 
     super(props, context);
-    this.imageRef = React.createRef();
+
+    this.imageRef = React.createRef<HTMLImageElement>();
+
     this.state = {
       canvasSize: { width: '100%', height: '100%' },
       selectedPrimitive: null,
@@ -99,6 +102,8 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
       modifyingPrimitive: null,
 
+      // We initialise the draw scale factor to be 1 for both x and y initially. As soon as we resize the canvas, this 
+      // will be updated.
       drawScaleFactor: [1, 1],
       doubleTap: [0, 0],
 
@@ -118,32 +123,6 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       ready: false
     };
 
-    // Update implicit canvasACR element which will simply be used as the
-    // top level ACR object. It contains no useful information and is simply
-    // used to support functions which require the use of a parent acr object,
-    // on objects such as panels which are natively the top level elements of the
-    // ACR representation.
-    this.implicitCanvasACRObject = ACRObject.fromJSON({
-      meta: {
-        absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
-        absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
-        vertices: [[0,0]]
-      },
-      id: "canvas",
-      contains: []
-    });
-
-    // Perform some pre-processing on the ACR. All top-level shapes should be nested within the ImplicitCanvasACRObject.
-    log(`Instantiating ACR Modifier with project:`, this.props.project);
-    // this.props.project.acr.forEach(object => object.parentId = "None");
-    this.props.project.acr.forEach(object => this.implicitCanvasACRObject.addContainingShape(object));
-
-
-    this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
-    this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
-    this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
-    this.sourceImageWidth = this.panelWidth !== 0 ? this.panelWidth / (parseFloat(this.props.project.acr[0].meta.relativeWidth) / 100) : 0;
-    
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
     this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
@@ -171,6 +150,45 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
   }
 
   componentDidMount(){
+    
+    // Update implicit canvasACR element which will simply be used as the
+    // top level ACR object. It contains no useful information and is simply
+    // used to support functions which require the use of a parent acr object,
+    // on objects such as panels which are natively the top level elements of the
+    // ACR representation.
+    this.implicitCanvasACRObject = ACRObject.fromJSON({
+      meta: {
+        absoluteWidth: this.imageRef.current.width * this.state.drawScaleFactor[0],
+        absoluteHeight: this.imageRef.current.height * this.state.drawScaleFactor[1],
+        vertices: [[0,0]]
+      },
+      id: "canvas",
+      contains: []
+    });
+
+    log(`ImageRef W & H: ${this.imageRef.current.width}, ${this.imageRef.current.height}`);
+    log(`Created implicitCanvasACRObject:`, this.implicitCanvasACRObject);
+
+    // Perform some pre-processing on the ACR. All top-level shapes should be nested within the ImplicitCanvasACRObject.
+    log(`Instantiating ACR Modifier with project:`, this.props.project);
+    // this.props.project.acr.forEach(object => object.parentId = "None");
+    this.props.project.acr.forEach(object => this.implicitCanvasACRObject.addContainingShape(object));
+
+
+    this.panelWidth = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteWidth : 0;
+    this.panelHeight = this.props.project.acr.length !== 0 ? this.props.project.acr[0].meta.absoluteHeight : 0;
+    
+    // CHECKPOINT:
+    // To investigate: Why the source image width & height are initially set to zero.
+
+    // Here, we are dividing the width and height of the highest level shape in the ACR, by it's relative width and height. Since the 
+    // relative width and height of the top-level objects represent the size in proportion to the source image, dividing the absolute 
+    // value by the relative width and height should return the source image height. This, however, is problematic as the 
+    // relative width and height is dynamically calculated based off of the parent. Perhaps we could solve this by ensuring the implicit 
+    // canvas ACR object initially has the width and height of the source image?
+    // this.sourceImageHeight = this.panelHeight !== 0 ? this.panelHeight / (parseFloat(this.props.project.acr[0].meta.relativeHeight) / 100) : 0;
+    // this.sourceImageWidth = this.panelWidth !== 0 ? this.panelWidth / (parseFloat(this.props.project.acr[0].meta.relativeWidth) / 100) : 0;
+
     this.updateImageSizeProperties();
     this.setState({
       ready: true
@@ -192,24 +210,34 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
   updateImageSizeProperties(){
 
+    // log(`Updating image size properties. 
+    //   Source image W & H: ${this.sourceImageWidth}, ${this.sourceImageHeight}. 
+    //   Actual image element W & H: ${this.imageRef.current.width}, ${this.imageRef.current.height}`);
+
+    //console.log(this.imageRef.current);
+
     this.setState({
       canvasSize: {
-        width: this.imageRef.width,
-        height: this.imageRef.height
+        width: this.imageRef.current.width,
+        height: this.imageRef.current.height
       },
       drawScaleFactor: [
-        this.sourceImageWidth / this.imageRef.width,
-        this.sourceImageHeight / this.imageRef.height
+        this.imageRef.current.naturalWidth / this.imageRef.current.width,
+        this.imageRef.current.naturalHeight / this.imageRef.current.height
       ]
     });
 
-    this.implicitCanvasACRObject.meta.absoluteWidth = this.imageRef.width * this.state.drawScaleFactor[0];
-    this.implicitCanvasACRObject.meta.absoluteHeight = this.imageRef.height * this.state.drawScaleFactor[1];
+    // Here we are updating the absolute width and height of the implicit canvas ACR object - understandably, we will receive NaNs, 
+    // and infinities if the drawScaleFactor is 0, or also infinite / NaN.
+    this.implicitCanvasACRObject.meta.absoluteWidth = this.imageRef.current.width * this.state.drawScaleFactor[0];
+    this.implicitCanvasACRObject.meta.absoluteHeight = this.imageRef.current.height * this.state.drawScaleFactor[1];
+
+    //console.log(`Recalculating canvas size:`,this.state.canvasSize, `draw factor:`, this.state.drawScaleFactor, `source height:`,  this.sourceImageHeight,  `Implicit Canvas Object:`, this.implicitCanvasACRObject);
 
     // this.implicitCanvasACRObject = ACRObject.fromJSON({
     //   meta: {
-    //     absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
-    //     absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
+    //     absoluteWidth: this.imageRef.current.width * this.state.drawScaleFactor[0],
+    //     absoluteHeight: this.imageRef.current.height * this.state.drawScaleFactor[1],
     //     vertices: [[0,0]]
     //   },
     //   id: "canvas",
@@ -707,8 +735,8 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     // contain it - the canvas.
     parent={
           meta: {
-            absoluteWidth: this.imageRef.width * this.state.drawScaleFactor[0],
-            absoluteHeight: this.imageRef.height * this.state.drawScaleFactor[1],
+            absoluteWidth: this.imageRef.current.width * this.state.drawScaleFactor[0],
+            absoluteHeight: this.imageRef.current.height * this.state.drawScaleFactor[1],
             vertices: [[0,0]]
           },
           id: "canvas",
@@ -819,7 +847,15 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
           </div>
 
-          <img alt="Background Canvas" ref={ref => this.imageRef = ref} style={{
+          <img 
+          alt="Background Canvas" 
+          // ref={ref => {
+          //   this.imageRef.current.= ref;
+          //   log(`Setting imageRef to:`);
+          //   console.log(ref);
+          // }} 
+          ref={this.imageRef}
+          style={{
             width: 'auto',
             // height: '-webkit-fill-available',
             maxHeight: '100%'
