@@ -7,6 +7,7 @@
 import {
   calculateMidPoint,
   Point, 
+  sortVertices,
   Size
 } from './geometry';
 import { start } from 'repl';
@@ -110,6 +111,7 @@ class ACRObject {
     this.type = type;
     this.draw = true;
     this.meta = {
+
       absoluteWidth,
       absoluteHeight,
 
@@ -138,10 +140,11 @@ class ACRObject {
         return this.absoluteWidth * this.absoluteHeight;
       },
 
-      vertices,
+      vertices: sortVertices(vertices),
+      
       // Save a copy of the initial vertices for the object for the purposes of
       // calculating resizing deltas, etc.
-      initialVertices: vertices.concat(),
+      initialVertices: sortVertices(vertices).concat(),
       
       get midpoint(){ 
         return calculateMidPoint(this.vertices)

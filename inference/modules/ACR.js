@@ -92,10 +92,10 @@ var ACRObject = /** @class */ (function () {
             get area() {
                 return this.absoluteWidth * this.absoluteHeight;
             },
-            vertices: vertices,
+            vertices: geometry_1.sortVertices(vertices),
             // Save a copy of the initial vertices for the object for the purposes of
             // calculating resizing deltas, etc.
-            initialVertices: vertices.concat(),
+            initialVertices: geometry_1.sortVertices(vertices).concat(),
             get midpoint() {
                 return geometry_1.calculateMidPoint(this.vertices);
             },
