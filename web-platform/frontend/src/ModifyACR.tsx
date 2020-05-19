@@ -56,7 +56,7 @@ type InteractiveACRModifierState = {
   modifyingPrimitive: ACRObject,
 
   drawScaleFactor: Point,
-  doubleTap: Point,
+  editDialogueMouseCord: Point,
 
   absoluteMouseCord: Point,
   canvasMouseCord: Point,
@@ -108,7 +108,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       // We initialise the draw scale factor to be 1 for both x and y initially. As soon as we resize the canvas, this 
       // will be updated.
       drawScaleFactor: [1, 1],
-      doubleTap: [0, 0],
+      editDialogueMouseCord: [0, 0],
 
       // The absolute mouse coordinates.
       absoluteMouseCord: [0, 0],
@@ -514,7 +514,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
     this.setState({
       ...this.state,
-      doubleTap: [e.x, e.y],
+      editDialogueMouseCord: [e.x, e.y],
       modifyingPrimitive: primitive
     });
 
@@ -881,8 +881,8 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
               /* Display dropdown on double click. */
               (this.state.modifyingPrimitive) ?
               <EditDialogue
-                x={this.state.doubleTap[0]}
-                y={this.state.doubleTap[1]}
+                x={this.state.editDialogueMouseCord[0]}
+                y={this.state.editDialogueMouseCord[1]}
                 primitive={this.state.modifyingPrimitive}
                 onChangePrimitiveType={type => this.setPrimitiveType(type)}
                 onClose={() => this.endPrimitiveSelection()}
@@ -893,7 +893,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
                   (e) => {
                     let {dx, dy} = e;
                     this.setState({
-                      doubleTap: [this.state.doubleTap[0] + dx, this.state.doubleTap[1] + dy]
+                      editDialogueMouseCord: [this.state.editDialogueMouseCord[0] + dx, this.state.editDialogueMouseCord[1] + dy]
                     })
                     // If we are not in selection mode, then we should return before the
                     // primitive location is altered.
