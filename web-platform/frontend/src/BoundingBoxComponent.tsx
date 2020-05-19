@@ -28,7 +28,6 @@ const BoundingBoxComponent = ({
     data-abs-height={meta.absoluteHeight}
     data-abs-width={meta.absoluteWidth}
     data-id={shape.id} 
-    onContextMenu={e => e.preventDefault()}
     style={{
       height: `${meta.relativeHeight}`,
       width: `${meta.relativeWidth}`,

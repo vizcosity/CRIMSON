@@ -9,6 +9,7 @@ import { CloseIcon } from './Icons';
 import { Checkbox } from 'semantic-ui-react';
 import { ACRObject } from 'crimson-inference/modules/ACR';
 import Reactable from 'reactablejs';
+import { Fade } from 'react-reveal';
 
 // import Icon from './Icons';
 // import Reactable from 'reactablejs';
@@ -163,6 +164,11 @@ class EditDialogueUnreactable extends Component<EditDialogueProps, EditDialogueS
 
   render(){
     return (
+      <Fade 
+      top 
+      duration={500} 
+      distance="10px"
+      collapse>
       <div 
       // Prevent propagation so that we stop the dialogue from closing when interacting with it - as the parent div 
       // captures all background mouse events in order to close the dialogue when clicking outside of it.
@@ -174,7 +180,6 @@ class EditDialogueUnreactable extends Component<EditDialogueProps, EditDialogueS
         left: this.props.x,
         top: this.props.y
       }} className="edit-dialogue dialogue-container">
-
         <div className="dialogue-header-container">
           <h2>Edit {this.props.primitive.type} {this.props.primitive.id}</h2>
           <button className="button-fade"
@@ -240,8 +245,9 @@ class EditDialogueUnreactable extends Component<EditDialogueProps, EditDialogueS
           </p>
         </div>
 
-
+          
       </div>
+      </Fade>
     );
   }
 }
