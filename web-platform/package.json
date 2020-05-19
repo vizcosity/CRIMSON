@@ -11,7 +11,8 @@
     "offline-api": "SHAPE_DETECT_WEB_API_ENDPOINT= npm run api",
     "online-api": "SHAPE_DETECT_WEB_API_ENDPOINT=https://crimson-detection.herokuapp.com/api/v1/shapeDetect npm run api",
     "dev": "DEBUG=true node app.js & npm start --prefix ./frontend",
-    "dev-online-api": "npm run online-api & npm start --prefix ./frontend",
+    "dev:online-api": "npm run online-api & npm start --prefix ./frontend",
+    "dev:offline-api": "npm run offline-api & npm start --prefix ./frontend",
     "test": "echo \"Error: no test specified\" && exit 1",
     "post-install": "npm link crimson-inference"
   },

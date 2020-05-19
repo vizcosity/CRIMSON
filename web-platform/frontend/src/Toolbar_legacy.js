@@ -70,7 +70,7 @@ export default class Toolbar extends Component {
               this.selectButton("Select") |
               (this.props.selectButtonHandler && this.props.selectButtonHandler())
             }
-            className={this.state.selectedButton === "Select" ? "selected-button" : ""}
+            className={this.props.interactionMode === "select" ? "selected-button" : ""}
           >
             <SelectPrimitiveIcon />
           </button>
@@ -82,7 +82,7 @@ export default class Toolbar extends Component {
               this.selectButton("Add") |
               (this.props.addPrimitiveHandler && this.props.addPrimitiveHandler())
             }
-            className={this.state.selectedButton === "Add" ? "selected-button" : ""}
+            className={this.props.interactionMode === "add" ? "selected-button" : ""}
           >
             <AddPrimitiveIcon />
           </button>

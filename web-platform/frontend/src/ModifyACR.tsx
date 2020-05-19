@@ -12,6 +12,7 @@ import ResizeDetector from 'react-resize-detector';
 import EditDialogue from './CustomisePrimitive';
 import * as Icon from './Icons';
 import Toolbar from './Toolbar';
+import { InteractionMode } from './data/constants';
 import { BoundingBox } from './BoundingBoxComponent';
 import { Container, ACRObject } from 'crimson-inference/modules/ACR';
 import {
@@ -60,7 +61,7 @@ type InteractiveACRModifierState = {
   absoluteMouseCord: Point,
   canvasMouseCord: Point,
 
-  interactionMode: string,
+  interactionMode: InteractionMode,
 
   ready: Boolean,
 };
@@ -120,7 +121,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
       // the canvas.
       // 'select' allows the user to select and move primitives.
       // 'add' allows users to create new primitives.
-      interactionMode: "select",
+      interactionMode: InteractionMode.Select,
 
       ready: false
     };
@@ -271,7 +272,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     // If there is already a primitive being created, ignore the mouse down
     // handler.
     if (this.state.creatingPrimitive) return;
-    if (this.state.interactionMode !== "add") return;
+    if (this.state.interactionMode !== InteractionMode.Add) return;
 
     // let creatingPrimitive = this.createPrimitive(null, {
     //   left: absCords[0],
@@ -372,7 +373,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
     // Ensure we exit early if the user is not in 'add' mode, or the creatingPrimitve
     // has not yet been created.
-    if (this.state.interactionMode !== "add"
+    if (this.state.interactionMode !== InteractionMode.Add
       || !this.state.creatingPrimitive
       || !this.state.creatingPrimitiveParent
     ) return;
@@ -634,7 +635,6 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     shape={primitive}
     children={this.drawPrimitives(primitive.contains, primitive)}
     key={i}
-    //selectable={this.state.interactionMode === "select"}
     dropzone={{
       ondropactivate: event => {
         event.target.classList.add('drop-active')
@@ -651,7 +651,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     }}
     // Ensure that the object is only interactable when the user is in selection
     // mode.
-    draggable={this.state.interactionMode === "select"}
+    draggable={this.state.interactionMode === InteractionMode.Select}
     resizable={{
       margin: 5,
       edges: {
@@ -674,7 +674,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         // middle of creating a new one, as this will cause a new state update and
         // change the prospective parent of the primitive.
         if (this.state.creatingPrimitiveParent) return;
-        if (this.state.interactionMode !== "add") {
+        if (this.state.interactionMode !== InteractionMode.Add) {
           console.log(`Preventing propagation`);
           e.preventDefault();
           e.stopPropagation();
@@ -703,7 +703,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         let {dx, dy} = e;
         // If we are not in selection mode, then we should return before the
         // primitive location is altered.
-        if (this.state.interactionMode !== "select") return;
+        if (this.state.interactionMode !== InteractionMode.Select) return;
         // var primitive = this.findACRObjectById(target.dataset.id);
         var parent = this.findACRObjectById(primitive.parentId);
         this.movePrimitive({
@@ -723,7 +723,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     // }
     onResizeMove={
       e => {
-        if (this.state.interactionMode !== "select") return;
+        if (this.state.interactionMode !== InteractionMode.Select) return;
         e.stopPropagation();
         // var primitive = this.findACRObjectById(e.currentTarget.dataset.id);
         var parent = this.findACRObjectById(primitive.parentId);
@@ -805,9 +805,12 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
     this.setState(this.state);
 
+    // Change the interactionHandler back to select.
+    this.changeInteractionModeHandler(InteractionMode.Select);
+
   }
 
-  changeInteractionModeHandler(interactionMode){
+  changeInteractionModeHandler(interactionMode: InteractionMode){
     // Clear the selected primitive, creating primitive(s) and set the interaction mode.
     this.setState({
       ...this.state,
@@ -836,11 +839,14 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         duplicatePrimitiveHandler={this.duplicatePrimitiveHandler}
 
         // Interaction mode handlers.
-        selectButtonHandler={() => this.changeInteractionModeHandler("select")}
-        addPrimitiveHandler={() => this.changeInteractionModeHandler("add")}
-        absoluteMouse={{x: this.state.absoluteMouseCord[0], y: this.state.absoluteMouseCord[1]}}
-        canvasMouse={{x: this.state.canvasMouseCord[0], y: this.state.canvasMouseCord[1]}}
+        selectButtonHandler={() => this.changeInteractionModeHandler(InteractionMode.Select)}
+        addPrimitiveHandler={() => this.changeInteractionModeHandler(InteractionMode.Add)}
+        absoluteMouse={this.state.absoluteMouseCord}
+        canvasMouse={this.state.canvasMouseCord}
         debugMode={this.props.debugMode}
+
+        // Pass the current interaction mode.
+        interactionMode={this.state.interactionMode}
         />
 
         <div
@@ -872,7 +878,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
               width: this.state.canvasSize.width,
               height: this.state.canvasSize.height,
               position: 'absolute',
-              cursor: this.state.interactionMode === 'add' ? 'crosshair' : 'unset'
+              cursor: this.state.interactionMode === InteractionMode.Add ? 'crosshair' : 'unset'
             }}
             className="acr-object-canvas"
             // onMouseDown={this.canvasMouseDownHandler}

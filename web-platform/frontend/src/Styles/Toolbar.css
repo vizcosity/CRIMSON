@@ -40,6 +40,10 @@
   opacity: 0.5;
 }
 
+.toolbar-section > *:active {
+  opacity: 0.5;
+}
+
 .selected-button {
   opacity: 1;
 }
