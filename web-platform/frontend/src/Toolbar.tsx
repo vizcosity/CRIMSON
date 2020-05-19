@@ -114,7 +114,7 @@ export default class Toolbar extends Component<ToolbarProps, ToolbarState> {
               this.selectButton("Duplicate");
               return (this.props.duplicatePrimitiveHandler && this.props.duplicatePrimitiveHandler())
             }}
-            className={this.state.selectedButton === "Duplicate" ? "selected-button" : ""}
+            className={this.props.interactionMode == InteractionMode.Duplicate ? "selected-button" : ""}
           >
             <DuplicatePrimitiveIcon />
           </button>

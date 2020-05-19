@@ -129,7 +129,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     this.setSourceImageRef = this.setSourceImageRef.bind(this);
     this.onResize = this.onResize.bind(this);
     this.updateImageSizeProperties = this.updateImageSizeProperties.bind(this);
-    this.initPrimitiveSelection = this.initPrimitiveSelection.bind(this);
+    this.editPrimitive = this.editPrimitive.bind(this);
     this.generateBoundingBox = this.generateBoundingBox.bind(this);
 
     // Toolbar handlers: Navigation.
@@ -141,6 +141,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     // :Interaction
     this.changeInteractionModeHandler = this.changeInteractionModeHandler.bind(this);
     // :Adding primitives and canvas click handling.
+    this.onBackgroundClickHandler = this.onBackgroundClickHandler.bind(this);
     this.canvasMouseDownHandler = this.canvasMouseDownHandler.bind(this);
     this.canvasMouseUpHandler = this.canvasMouseUpHandler.bind(this);
     this.canvasMouseMoveHandler = this.canvasMouseMoveHandler.bind(this);
@@ -261,6 +262,14 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
   onResize(x, y){
     this.updateImageSizeProperties();
+  }
+
+  // Handles background clicks used to close edit dialogues.
+  onBackgroundClickHandler(){
+    this.setState({
+      ...this.state,
+      modifyingPrimitive: null
+    })
   }
 
   // Handles creation of new ACR objects if the user is in 'add' mode.
@@ -488,7 +497,7 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
   // TEMP: Attempt to address desync between primitive clicked on, and the one
   // that the internal state believes is selected.
-  async initPrimitiveSelection(e, primitive){
+  async editPrimitive(e, primitive){
 
     if (!this.state.availablePrimitives || this.state.availablePrimitives.length == 0){
       // Fetch available primitives from the backend.
@@ -664,9 +673,9 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
     onDoubleTap={e =>
       e.stopPropagation() || e.preventDefault() ||
       // this.initPrimitiveSelection(e, this.findACRObjectById(e.currentTarget.dataset.id))
-      this.initPrimitiveSelection(e, primitive)
+      this.editPrimitive(e, primitive)
     }
-    onDown={e => {
+    onDown={(e: MouseEvent) => {
         // We need to ensure that the event propagates so that we capture the mouse movement
         // used to create new primitives.
         // e.stopPropagation() || e.preventDefault() ||
@@ -683,8 +692,16 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
         // TEMP: Select primitive using the object used to construct the bounding box, 
         // rather than trying to find the primitive by using the ID attached to the div's 
         // data-id property.
+
+        // Select the primitive if it is a left click.
         this.selectPrimitive(primitive);
-        // this.selectPrimitive(this.findACRObjectById(e.currentTarget.dataset.id))
+
+        // Open the edit primitive dialogue in addition to this, if it is a right click.
+        if (e.button == 2) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.editPrimitive(e, this.state.selectedPrimitive);
+        }
       }
     }
     // Ensure that the primitive is visible on top of all other primitives.
@@ -828,7 +845,10 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
 
   render(){
     return (
-      <div className="acr-mod-container">
+      <div 
+        className="acr-mod-container"
+        onClick={() => this.onBackgroundClickHandler()}
+      >
 
         <Toolbar
 
@@ -866,7 +886,28 @@ class InteractiveACRModifier extends Component<InteractiveACRModifierProps, Inte
                 primitive={this.state.modifyingPrimitive}
                 onChangePrimitiveType={type => this.setPrimitiveType(type)}
                 onClose={() => this.endPrimitiveSelection()}
-                primitiveTypes={this.state.availablePrimitives} />
+                primitiveTypes={this.state.availablePrimitives}
+                
+                draggable={true}
+                onDragMove={
+                  (e) => {
+                    let {dx, dy} = e;
+                    this.setState({
+                      doubleTap: [this.state.doubleTap[0] + dx, this.state.doubleTap[1] + dy]
+                    })
+                    // If we are not in selection mode, then we should return before the
+                    // primitive location is altered.
+                    // if (this.state.interactionMode !== InteractionMode.Select) return;
+                    // var primitive = this.findACRObjectById(target.dataset.id);
+                    // var parent = this.findACRObjectById(primitive.parentId);
+                    // this.movePrimitive({
+                    //   primitive: primitive,
+                    //   parent: parent
+                    // }, {dx, dy});
+                    // e.preventDefault();
+                  }
+                }
+                />
               : ""
             }
 

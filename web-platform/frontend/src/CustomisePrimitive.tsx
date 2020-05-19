@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import { CloseIcon } from './Icons';
 import { Checkbox } from 'semantic-ui-react';
 import { ACRObject } from 'crimson-inference/modules/ACR';
+import Reactable from 'reactablejs';
 
 // import Icon from './Icons';
 // import Reactable from 'reactablejs';
@@ -133,6 +134,8 @@ type EditDialogueProps = {
   onClose: any,
   onChangePrimitiveType: any,
 
+  getRef: any,
+
   x: number,
   y: number
 
@@ -143,7 +146,7 @@ type EditDialogueState = {
   y: number
 }
 
-class EditDialogue extends Component<EditDialogueProps, EditDialogueState> {
+class EditDialogueUnreactable extends Component<EditDialogueProps, EditDialogueState> {
 
   constructor(props, context){
     super(props, context);
@@ -160,11 +163,16 @@ class EditDialogue extends Component<EditDialogueProps, EditDialogueState> {
 
   render(){
     return (
-      <div style={{
+      <div 
+      // Prevent propagation so that we stop the dialogue from closing when interacting with it - as the parent div 
+      // captures all background mouse events in order to close the dialogue when clicking outside of it.
+      onClick={e => e.stopPropagation()}
+      ref={this.props.getRef}
+      style={{
         position: 'absolute',
         zIndex: 10,
-        left: this.state.x,
-        top: this.state.y
+        left: this.props.x,
+        top: this.props.y
       }} className="edit-dialogue dialogue-container">
 
         <div className="dialogue-header-container">
@@ -237,5 +245,7 @@ class EditDialogue extends Component<EditDialogueProps, EditDialogueState> {
     );
   }
 }
+
+const EditDialogue = Reactable(EditDialogueUnreactable);
 
 export default EditDialogue;
