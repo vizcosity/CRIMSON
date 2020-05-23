@@ -254,7 +254,7 @@ var Rectangle = /** @class */ (function (_super) {
                 [left + width, top]
             ];
         }
-        console.log("Created vertices:", left, top);
+        //console.log(`Created vertices:`, left, top);
         _this = _super.call(this, { id: id, parent: parent, type: type, vertices: vertices, level: level }) || this;
         return _this;
     }

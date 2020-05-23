@@ -313,7 +313,7 @@ class Rectangle extends ACRObject {
       ]
     }
 
-    console.log(`Created vertices:`, left, top);
+    //console.log(`Created vertices:`, left, top);
 
     super({id, parent, type, vertices, level});
 
