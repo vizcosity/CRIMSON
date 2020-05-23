@@ -13,7 +13,7 @@
     "dev": "DEBUG=true node app.js & npm start --prefix ./frontend",
     "dev:online-api": "npm run online-api & npm start --prefix ./frontend",
     "dev:offline-api": "npm run offline-api & npm start --prefix ./frontend",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run offline-api & mocha test.js",
     "post-install": "npm link crimson-inference"
   },
   "repository": {
@@ -47,5 +47,8 @@
     "passport-local": "^1.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "mocha": "^7.2.0"
   }
 }

@@ -6,7 +6,7 @@
 
  const { bundle } = require('./modules/bundle/bundle');
  const detectPrimitives = require('./modules/detectPrimitives');
- const { inferCompoundPrimitives } = require('./modules/inference/inferCompound');
+ const { inferCompoundPrimitives, serialise } = require('./modules/inference/inferCompound');
  const inferProperties = require('./modules/inference/infer');
  const { inferGrid } = require('./modules/inference/inferGrid');
  const { getLastACRObjectId } = require('./modules/geometry');
@@ -96,7 +96,15 @@ module.exports = {
     });
 
     return zip ? zipPath : outputDir;
-  }
+  },
+  detectPrimitives,
+  inferCompoundPrimitives, 
+  filterPrimitives,
+  markDisplayablePrimitives,
+  serialise,
+  inferProperties,
+  inferGrid,
+  getLastACRObjectId,
 };
 
 

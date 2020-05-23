@@ -80,6 +80,7 @@ function inferCompoundPrimitives(shapes){
 module.exports = {
   inferCompoundPrimitivesAtLevel: inferCompoundPrimitivesAtLevel,
   inferCompoundPrimitives: inferCompoundPrimitives,
+  serialise
 }
 
 function log(...msg){

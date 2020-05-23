@@ -127,22 +127,24 @@
  // primitives manipulated by these functions.
  function sortVertices(vertices: Point[]): Point[] {
  
-   // Keep vertices as they are if we are not dealing with rectangles.
-   // (Assume that the shapes defined by these vertices conform to the
-   // same spec)
-   if (vertices.length !== 4) return vertices;
- 
-   var radixSorted = vertices.sort(([x1, y1], [x2, y2]) => (x1 - x2) + (y1 - y2));
- 
-   // Geometrically, radix sort does not have a meaning. We swap the 3rd and 4th
-   // vertices so that we conform to the vertex specification outlined above.
-   var output = Array.from(radixSorted);
-   output[2] = radixSorted[3];
-   output[3] = radixSorted[2];
- 
-   return output;
- 
- }
+  // Keep vertices as they are if we are not dealing with rectangles.
+  // (Assume that the shapes defined by these vertices conform to the
+  // same spec)
+  if (vertices.length !== 4) return vertices;
+
+  let secondDimSorted = vertices.sort(([x1, y1], [x2, y2]) => y1 - y2);
+  let firstDimSorted = secondDimSorted.sort(([x1, y1], [x2, y2]) => x1 - x2);
+
+  // Geometrically, radix sort does not have a meaning. We swap the 3rd and 4th
+  // vertices so that we conform to the vertex specification outlined above.
+  var output = Array.from(firstDimSorted);
+  
+  output[2] = firstDimSorted[3];
+  output[3] = firstDimSorted[2];
+
+  return output;
+  
+}
  
  // Traverses the ACR to find the largest ID.
  function getLastACRObjectId(acr): number{

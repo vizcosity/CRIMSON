@@ -117,16 +117,21 @@ function sortVertices(vertices) {
     // same spec)
     if (vertices.length !== 4)
         return vertices;
-    var radixSorted = vertices.sort(function (_a, _b) {
+    var secondDimSorted = vertices.sort(function (_a, _b) {
         var x1 = _a[0], y1 = _a[1];
         var x2 = _b[0], y2 = _b[1];
-        return (x1 - x2) + (y1 - y2);
+        return y1 - y2;
+    });
+    var firstDimSorted = secondDimSorted.sort(function (_a, _b) {
+        var x1 = _a[0], y1 = _a[1];
+        var x2 = _b[0], y2 = _b[1];
+        return x1 - x2;
     });
     // Geometrically, radix sort does not have a meaning. We swap the 3rd and 4th
     // vertices so that we conform to the vertex specification outlined above.
-    var output = Array.from(radixSorted);
-    output[2] = radixSorted[3];
-    output[3] = radixSorted[2];
+    var output = Array.from(firstDimSorted);
+    output[2] = firstDimSorted[3];
+    output[3] = firstDimSorted[2];
     return output;
 }
 exports.sortVertices = sortVertices;
