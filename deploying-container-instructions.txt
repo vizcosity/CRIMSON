@@ -1,7 +1,0 @@
-
-
-
-heroku container:login
-heroku create (This step should have already been performed)
-heroku container:push -a APP_NAME (Builds container locally and pushes image to Heroku)
-heroku container:release web -a APP_NAME (Informs heroku that the image should be released)
