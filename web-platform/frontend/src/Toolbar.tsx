@@ -168,15 +168,20 @@ export default class Toolbar extends Component<ToolbarProps, ToolbarState> {
         fontSize: '8px'
       }} className="toolbar-hover-text">
         {
-          this.props.debugMode && this.props.absoluteMouse ? 
-          `(${this.props.absoluteMouse[0]}, ${this.props.absoluteMouse[1]})`
-          : ""
-        }
-        |
-        {
-          this.props.debugMode && this.props.canvasMouse ? 
-          `(${this.props.canvasMouse[0]}, ${this.props.canvasMouse[1]})`
-          : ""
+          this.props.debugMode ?
+
+            
+            (this.props.absoluteMouse ? 
+            `(${this.props.absoluteMouse[0]}, ${this.props.absoluteMouse[1]})`
+            : "")
+
+            +
+            
+            (this.props.canvasMouse ? 
+            `(${this.props.canvasMouse[0]}, ${this.props.canvasMouse[1]})`
+            : "")
+
+            : ""
         }
       </p>
 
