@@ -1,0 +1,67 @@
+#!/usr/bin/python3
+
+import argparse
+import os
+import subprocess
+
+SUPPORTED_CONTAINERS = ["web-core", "detection"]
+
+def build(container):
+    if container not in SUPPORTED_CONTAINERS:
+        raise Exception("Container not supported")
+    build_container_script = f"./docker-scripts/docker-build-{container}.sh"
+    build_container_script_path = os.path.join(os.path.dirname(__file__), build_container_script)
+    print("Building container", container, "using script", build_container_script_path)
+    subprocess.call(build_container_script_path)
+
+def run(container):
+    if container not in SUPPORTED_CONTAINERS:
+        raise Exception("Container not supported")
+    run_container_script = f"./docker-scripts/docker-run-{container}.sh"
+    run_container_script_path = os.path.join(os.path.dirname(__file__), run_container_script)
+    print("Running container", container, "using script", run_container_script_path)
+    subprocess.call(run_container_script_path)
+
+def rerun(container):
+    if container not in SUPPORTED_CONTAINERS:
+        raise Exception("Container not supported")
+    run_container_script = f"./docker-scripts/docker-rerun-{container}.sh"
+    run_container_script_path = os.path.join(os.path.dirname(__file__), run_container_script)
+    print("Re-running container", container, "using script", run_container_script_path)
+    subprocess.call(run_container_script_path)
+
+def deploy(container):
+    if container not in SUPPORTED_CONTAINERS:
+        raise Exception("Container not supported")
+    build_container_script = f"./docker-scripts/docker-build-{container}-heroku.sh"
+    build_container_script_path = os.path.join(os.path.dirname(__file__), build_container_script)
+    print("Building container", container, "using script", build_container_script_path)
+    subprocess.call(build_container_script_path)
+
+if __name__ == "__main__":
+    argparser = argparse.ArgumentParser(description="Script for building and running docker containers, and deploying to Heroku.")
+    
+    argparser.add_argument("-b", "--build", type=str)
+    argparser.add_argument("-d", "--deploy", type=str)
+    argparser.add_argument("-r", "--run", type=str)
+    argparser.add_argument("-rr", "--rerun", type=str)
+
+    args = argparser.parse_args().__dict__
+
+    print(args)
+
+    if args["build"] is not None:
+        build(args["build"])
+
+    if args["deploy"] is not None:
+        deploy(args["deploy"])
+    
+    if args["run"] is not None:
+        run(args["run"])
+
+    if args["rerun"] is not None:
+        rerun(args["rerun"])
+
+
+    
+
