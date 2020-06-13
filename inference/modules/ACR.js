@@ -32,7 +32,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var geometry_1 = require("./geometry");
 var ACRObject = /** @class */ (function () {
     function ACRObject(_a) {
-        var id = _a.id, _parent = _a.parent, type = _a.type, _b = _a.vertices, vertices = _b === void 0 ? [] : _b, _c = _a.level, level = _c === void 0 ? 0 : _c;
+        var id = _a.id, _parent = _a.parent, type = _a.type, _b = _a.vertices, vertices = _b === void 0 ? [] : _b, _c = _a.level, level = _c === void 0 ? 0 : _c, _d = _a.content, content = _d === void 0 ? "" : _d;
         var xs = vertices.map(function (_a) {
             var x = _a[0], _ = _a[1];
             return x;
@@ -66,6 +66,7 @@ var ACRObject = /** @class */ (function () {
         this.parentId = _parent.id;
         this._parent = _parent;
         this.type = type;
+        this.content = content;
         this.draw = true;
         this.meta = {
             absoluteWidth: absoluteWidth,
@@ -208,6 +209,8 @@ var ACRObject = /** @class */ (function () {
             startObject.draw = json.draw;
         if (json.id)
             startObject.id = json.id;
+        if (json.content)
+            startObject.content = json.content;
         if (json.meta.absoluteHeight)
             startObject.meta.absoluteHeight = json.meta.absoluteHeight;
         if (json.meta.absoluteWidth)

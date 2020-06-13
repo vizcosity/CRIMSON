@@ -41,16 +41,12 @@ interface ACRObjectMetadata {
 class ACRObject {
 
   id: string;
-  parentId: string;
-  
+  content: string;
+  parentId: string;  
   private _parent: ACRObject;
-
   draw: boolean;
-
-  dragging: boolean;
-  
+  dragging: boolean;  
   meta: ACRObjectMetadata;
-
   type: string;
 
   get level(): number {
@@ -75,7 +71,7 @@ class ACRObject {
   };
 
 
-  constructor({id, parent: _parent, type, vertices = [], level=0}){
+  constructor({id, parent: _parent, type, vertices = [], level=0, content = ""}){
 
     var xs = vertices.map(([x, _]) => x).sort().reverse();
     var ys = vertices.map(([_, y]) => y).sort().reverse();
@@ -109,6 +105,7 @@ class ACRObject {
     this.parentId = _parent.id;
     this._parent = _parent;
     this.type = type;
+    this.content = content;
     this.draw = true;
     this.meta = {
 
@@ -250,6 +247,8 @@ class ACRObject {
       startObject.draw = json.draw;
     if (json.id)
       startObject.id = json.id;
+    if (json.content)
+      startObject.content = json.content;
       
     if (json.meta.absoluteHeight)
       startObject.meta.absoluteHeight = json.meta.absoluteHeight;
