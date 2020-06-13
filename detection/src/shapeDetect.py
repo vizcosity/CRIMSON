@@ -16,6 +16,10 @@ import json
 import argparse
 import sys
 
+def log(*msg):
+    if os.getenv('PY_DEBUG') is not None:
+        print("SHAPE DETECT |", *msg)
+
 def outputResultsToDir(dir, filename, json, annotated=None, containers=None, intersections=None, lines=None, cnn_preds=None, text_image=None, full_detections=None):
     # Output results.
 
@@ -118,6 +122,8 @@ def detectShapes(imagePath):
     # Resolve text predictions with shapes detected using YOLO CNN.
     shapes = resolveTextUsingPredictions(textPredictions, shapes, lastShapeId)
 
+    # log("Shapes after resolving with text preds:", shapes[0])
+
     # Renumber all shapeIDs so that they are sequential and don't contain gaps
     # due to filtering.
     shapes, _ = renumberShapeIds(shapes)
@@ -141,5 +147,15 @@ if (__name__ == "__main__"):
 
     if (args["output"]):
         filename = args["image"].split('/')[-1].split('.')[0]
-        outputResultsToDir(args['output'], filename, jsonHierarchy, annotated=containerImg, containers=whiteImg, cnn_preds=cnnPredsImg, text_image=textImg, full_detections=fullPrimitivesImg)
-    else: print(json.dumps(jsonHierarchy, indent=4))
+        outputResultsToDir(
+            args['output'], 
+            filename, 
+            json.dumps(jsonHierarchy, indent=4), 
+            # annotated=containerImg, 
+            # containers=whiteImg, 
+            # cnn_preds=cnnPredsImg, 
+            # text_image=textImg, 
+            full_detections=fullPrimitivesImg
+        )
+    else: 
+        print(json.dumps(jsonHierarchy, indent=4))

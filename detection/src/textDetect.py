@@ -92,10 +92,11 @@ def detectTextFromImage(image, ext='.png', annotate=True):
     return detections, image
 
 if __name__ == "__main__":
-    image = cv2.imread('clf/PrimitiveDetect/data/images/Scans-04.png')
+    image = cv2.imread('/Users/aaronbaw/Code/Crimson/detection/src/images/drawn_login_sample_subpath.png')
     preds = detectTextFromImage(image)
+    print("Detected predictions", preds[0])
     # Draw results on the image and write it.
-    for (text, bounding_box) in preds[1:]:
+    for (text, confidence, bounding_box) in preds[0]:
         pt1 = tuple(bounding_box[0])
         pt2 = tuple(bounding_box[2])
         print(pt1, pt2)
