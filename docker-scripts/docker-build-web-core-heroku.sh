@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Build the frontend.
+npm run build --prefix ./web-platform/frontend
+
 # Enables separate dockerignore files for each container in the same repo.
 export DOCKER_BUILDKIT=1
 

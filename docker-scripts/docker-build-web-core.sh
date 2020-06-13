@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Build the frontend.
+npm run build --prefix ./web-platform/frontend
+
 # Builds the docker image for the web-platform pipeline.
 
 export DOCKER_BUILDKIT=1
