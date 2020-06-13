@@ -35,7 +35,6 @@ function separateNavFromShapes(shapes){
       remainingShapes = remainingShapes.filter(s => s.id !== shape.id);
     }
   });
-  // console.log(remainingShapes);
 
   return {navShapes, remainingShapes};
 
@@ -100,6 +99,9 @@ function separateNavFromShapes(shapes){
 
    if (!shapes || shapes.length == 0) return shapes;
 
+   // Convert the shapes json into ACRObjects.
+   shapes = ACRObject.fromJSON(shapes);
+
    // Implicitly nest shapes horizontally and vertically.
    shapes = nest(shapes);
 
@@ -116,7 +118,12 @@ function separateNavFromShapes(shapes){
      shapes[i].contains = generateACRObjects(shapes[i].contains);
    }
 
-   return ACRObject.fromJSON(inferProperties(shapes));
+  // Because we are calling inferProperties recursively, when we 
+  // reconstruct the entire hierarchy from scratch, we love the appropriate
+  // level information as the reference to the highest parent is no longer maintained.
+  // We need to call this once on the source - when primitives are first detected.
+  //  return ACRObject.fromJSON(inferProperties(shapes));
+  return inferProperties(shapes);
  }
 
  // Takes JSON representation of detected shapes and outputs serialised HTML for the
