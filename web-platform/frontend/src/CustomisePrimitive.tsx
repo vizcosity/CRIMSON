@@ -76,8 +76,9 @@ class ContainedPrimitivesField extends Component<ContainedPrimitivesFieldProps> 
     }
 
       {
-        this.props.primitive.contains.map(primitive =>
+        this.props.primitive.contains.map((primitive, i) =>
           <ContainedPrimitive
+            key={i}
             primitive={primitive}
             parent={this.props.primitive}
             removePrimitive={this.removePrimitive}
