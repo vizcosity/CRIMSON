@@ -1,0 +1,114 @@
+[
+  {
+    "id": "1",
+    "parentId": "None",
+    "type": "panel",
+    "meta": {
+      "absoluteWidth": 753,
+      "absoluteHeight": 901,
+      "relativeWidth": "96.04591836734694%",
+      "relativeHeight": "92.6954732510288%",
+      "midpoint": [
+        388,
+        494
+      ],
+      "area": 678453,
+      "vertices": [
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          945
+        ],
+        [
+          765,
+          945
+        ],
+        [
+          765,
+          44
+        ]
+      ],
+      "boundingBox": [
+        [
+          12,
+          44
+        ],
+        [
+          12,
+          945
+        ],
+        [
+          765,
+          945
+        ],
+        [
+          765,
+          44
+        ]
+      ]
+    },
+    "content": false,
+    "level": 0,
+    "contains": [
+      {
+        "id": "2",
+        "parentId": "1",
+        "type": "navigation",
+        "meta": {
+          "absoluteWidth": 614,
+          "absoluteHeight": 153,
+          "relativeWidth": "81.54050464807437%",
+          "relativeHeight": "16.9811320754717%",
+          "midpoint": [
+            407,
+            196
+          ],
+          "area": 93942,
+          "vertices": [
+            [
+              100,
+              272
+            ],
+            [
+              714,
+              272
+            ],
+            [
+              100,
+              119
+            ],
+            [
+              714,
+              119
+            ]
+          ],
+          "boundingBox": [
+            [
+              100,
+              119
+            ],
+            [
+              100,
+              272
+            ],
+            [
+              714,
+              272
+            ],
+            [
+              714,
+              119
+            ]
+          ]
+        },
+        "content": false,
+        "level": 1,
+        "contains": [],
+        "generateAuth": true
+      }
+    ]
+  }
+]

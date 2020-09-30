@@ -28,7 +28,16 @@ const db = require(path.join(__dirname, 'db/db.js'));
 const passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 <% } %>
-const _PORT = process.env.PORT || <%- port %>
+
+// LIVE_PREVIEW_MDOE is an ENV variable set by CRIMSON in order to launch the
+// server and preview the generated wireframe in-app.
+// Replace with the commented line below to remove this for production.
+const _PORT = process.env.LIVE_PREVIEW_MODE ? <%- port %> : (process.env.PORT || <%- port %>)
+// const _PORT = process.env.PORT || 3000;
+
+// The _SUBPATH_PREFIX is used to proxy requests from the parent express server
+// when previewing live in the CRIMSON web interface. Comment out in production.
+const _SUBPATH_PREFIX = <% if (locals.subpathPrefix) { %> "<%- subpathPrefix %>" || <% } %> process.env.SUBPATH || "";
 
 <% if (locals.generateAuthRoutes) { %>
 // Define local authentication strategy.
@@ -52,9 +61,9 @@ const indexRouter = require(path.join(__dirname, 'routes/index'))();
     in template params.
 %>
 <% if (locals.generateAuthRoutes) { %>
-const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport});
-const registrationRouter = require(path.join(__dirname, 'routes/register'))({db, passport});
-const logoutRouter = require(path.join(__dirname, 'routes/logout'))({db, passport});
+const loginRouter = require(path.join(__dirname,'routes/login'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
+const registrationRouter = require(path.join(__dirname, 'routes/register'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
+const logoutRouter = require(path.join(__dirname, 'routes/logout'))({db, passport, subpathPrefix: _SUBPATH_PREFIX});
 <% } %>
 
 const app = express();
@@ -90,8 +99,13 @@ app.use('/register', registrationRouter);
  */
 if (require.main == module)
   app.listen(app.get('port'), async () => {
-    var host = `http://${await ipv4()}:${app.get('port')}`
-    console.log('drawn_jumbotron_sample_2 is running at %s in %s mode', host, app.get('env'));
+    let ipAddress = "localhost";
+    try {
+      ipAddress = await ipv4();
+    } catch(e){ console.log(`Could not determine IP Address. Likely due to a poor connection.`, e) }
+    let host = `http://${ipAddress}:${app.get('port')}`
+    console.log('<%- projectName %> is running at %s in %s mode', host, app.get('env'));
+    if (_SUBPATH_PREFIX) console.log(`Running on subpath prefix`, _SUBPATH_PREFIX);
     console.log('  Press CTRL-C to stop\n');
   });
 else module.exports = app;

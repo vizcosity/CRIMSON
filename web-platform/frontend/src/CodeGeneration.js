@@ -14,7 +14,7 @@ import { OverlayButton } from './Asset';
 import DeployDialogue from './Deploy';
 import Modal from 'react-modal';
 import fileDownload from 'js-file-download';
-import download from 'downloadjs';
+// import download from 'downloadjs';
 import { Loader } from './Asset';
 import { fetchGeneratedCode, fetchZippedBundle } from './Fetch.js';
 

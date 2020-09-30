@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-module.exports = () => {
+module.exports = ({subpathPrefix}) => {
 
   router.get('/', (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.redirect(`/${subpathPrefix}`);
   });
 
   return router;

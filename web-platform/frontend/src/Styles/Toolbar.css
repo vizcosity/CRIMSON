@@ -1,0 +1,60 @@
+.modify-acr-toolbar-container {
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.toolbar-hover-text {
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+.modify-acr-toolbar {
+  border: 1px solid var(--border-blue);
+  display: flex;
+  align-items: center;
+  padding: 5px 10px 5px 10px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 3px #E7ECFF;
+  background-color: white;
+  transition: 0.3s ease-in-out;
+}
+
+.modify-acr-toolbar:hover {
+  box-shadow: 0px 4px 6px #E7ECFF;
+  /* transform: translateY(-3px); */
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-section > * {
+  margin: 5px;
+  transition: 0.3s ease-in-out;
+  opacity: 0.5;
+}
+
+.toolbar-section > *:active {
+  opacity: 0.5;
+}
+
+.selected-button {
+  opacity: 1;
+}
+
+.toolbar-section > *:hover {
+  opacity: 1;
+}
+
+
+.vertical-separator {
+  height: 43px;
+  border: 0.5px solid var(--border-blue);
+  margin: 0px 10px 0px 10px;
+}

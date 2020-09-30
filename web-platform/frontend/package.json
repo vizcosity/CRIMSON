@@ -2,10 +2,13 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "downloadjs": "^1.4.7",
+    "htmltojsx": "^0.3.0",
     "interactjs": "^1.3.4",
     "js-file-download": "^0.4.4",
+    "lodash": "^4.17.15",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-file-drop": "^0.2.7",
@@ -26,6 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "convert-svgs": "node src/assets/ConvertAllToJSX.js",
     "post-install": "npm link crimson-inference"
   },
   "eslintConfig": {
@@ -33,6 +37,7 @@
   },
   "api": {
     "generateACR": "/api/v1/generateACR",
+    "fetchAvailablePrimitives": "/api/v1/getSupportedPrimitives",
     "generateCode": "/api/v1/generateCode",
     "deployToGithub": "/api/v1/deployToGithub"
   },
@@ -42,5 +47,12 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.8",
+    "@types/react": "^16.9.30",
+    "@types/react-dom": "^16.9.5",
+    "typescript": "^3.8.3"
+  }
 }

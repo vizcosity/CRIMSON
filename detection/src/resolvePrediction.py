@@ -11,12 +11,13 @@
 
 from shape import Shape
 import numpy as np
+import os
 
 # Shapes with an IOU score greater than the below will be resolved into a single
 # classification.
 _IOU_THRESHOLD = 0.5
 _TEXT_CONFIDENCE_THRESHOLD = 0.65
-_DEBUG = False
+_DEBUG = True if os.getenv('PY_DEBUG') is not None else False
 
 def addNewShape(shapes, newShape):
     log("No intersecting shapes for " + str(newShape) + ". Creating one now.")
@@ -76,6 +77,8 @@ def mergeShapeWithPrimitive(primitiveShape, intersectingShape, iou):
 
     # Set content for the intersectingShape.
     intersectingShape.content = primitiveShape.content
+
+    log("Merged shape inner content:", intersectingShape.content)
 
     # Once we classify a shape, since it can no longer be a container, we
     # remove all the containing shapes.
@@ -144,5 +147,5 @@ def resolveShapesUsingPredictions(primitives, shapes, lastShapeId):
 
     return shapes
 
-def log(msg):
-    if (_DEBUG): print("PRIMITIVE DETECT | " + str(msg))
+def log(*msg):
+    if (_DEBUG): print("PRIMITIVE DETECT | ", msg)

@@ -5,9 +5,15 @@
   "description": "Interactive web platform for the CRIMSON prototyping inference engine, allowing users to customise and adjust inferred componenets for extra practicality.",
   "main": "api.js",
   "scripts": {
-    "start": "npm run api & npm start --prefix frontend/",
-    "api": "DEBUG=true node api.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-dns": "./update-web-dns.sh",
+    "start": "DEBUG=true PRODUCTION=true node app.js",
+    "api": "DEBUG=true node app.js",
+    "offline-api": "SHAPE_DETECT_WEB_API_ENDPOINT= npm run api",
+    "online-api": "SHAPE_DETECT_WEB_API_ENDPOINT=https://crimson-detection.herokuapp.com/api/v1/shapeDetect npm run api",
+    "dev:online-api": "npm run online-api & npm start --prefix ./frontend",
+    "dev:offline-api": "npm run offline-api & npm start --prefix ./frontend",
+    "dev:front-end": "npm start --prefix ./frontend",
+    "test": "npm run offline-api & mocha test.js",
     "post-install": "npm link crimson-inference"
   },
   "repository": {
@@ -22,19 +28,27 @@
   "homepage": "https://github.com/Vizcosity/CRIMSON#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.3",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-dynamic-middleware": "^1.0.0",
+    "express-http-proxy": "^1.6.0",
     "express-session": "^1.15.6",
     "glob": "^7.1.3",
     "glob-promise": "^3.4.0",
+    "http-proxy-middleware": "^0.20.0",
     "local-ipv4-address": "0.0.2",
     "mongodb": "^3.1.13",
     "multer": "^1.4.1",
+    "node-html-parser": "^1.1.16",
     "parcel-bundler": "^1.11.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "mocha": "^7.2.0"
   }
 }

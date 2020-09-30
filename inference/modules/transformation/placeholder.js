@@ -69,8 +69,10 @@ const generateDummyContent = shape => {
 const getPlaceholderLogoUrl = () => new Promise((resolve, reject) => {
   nounProject.getCollectionIconsById(random(_LOGO_COLLECTIONS), (err, res) => {
 
-    return resolve(random(res.icons.map(item => item.preview_url_84)));
+    // If there is no response from the server, return an empty string.
+    if (err || !res) return resolve("");
 
+    return resolve(random(res.icons.map(item => item.preview_url_84)));
   });
 });
 

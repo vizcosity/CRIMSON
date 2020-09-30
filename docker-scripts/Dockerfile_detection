@@ -1,0 +1,18 @@
+FROM jjanzic/docker-python3-opencv:latest
+
+ADD /.temp_creds/google-cloud-compute-engine-key.json /opt/.google-cloud/google-cloud-compute-engine-key.json
+
+ENV GOOGLE_APPLICATION_CREDENTIALS=/opt/.google-cloud/google-cloud-compute-engine-key.json
+
+ADD detection/ /opt/detection
+
+WORKDIR /opt/detection/src
+
+RUN pip3 install -r requirements.txt
+
+EXPOSE 5373
+
+ENV CRIMSON_GODADDY_API_SECRET=$CRIMSON_GODADDY_API_SECRET
+ENV CRIMSON_GODADDY_API_KEY=$CRIMSON_GODADDY_API_KEY
+
+CMD ./update-detect-dns.sh && python3 server.py

@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "benchmark": "DEBUG=true node main.js ../detection/test/images/benchmark.png",
     "gridsample": "DEBUG=true node main.js ../detection/test/images/grid_sample_1.png",
-    "gridsample2": "DEBUG=true node main.js ../detection/test/images/grid_sample_2.png"
+    "gridsample2": "DEBUG=true node main.js ../detection/test/images/grid_sample_2.png",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/Vizcosity/CRIMSON#readme",
   "dependencies": {
+    "@types/node": "^13.11.0",
     "commander": "^2.19.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
@@ -29,6 +32,7 @@
     "glob-promise": "^3.4.0",
     "indent-string": "^3.2.0",
     "local-ipv4-address": "0.0.2",
+    "lodash": "^4.17.15",
     "mayonnaise.js": "^1.1.0",
     "mkdirp": "^0.5.1",
     "mongodb": "^3.1.13",
@@ -42,6 +46,7 @@
     "the-noun-project": "^2.1.0"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.10.3"
+    "parcel-bundler": "^1.10.3",
+    "typescript": "^3.8.3"
   }
 }
