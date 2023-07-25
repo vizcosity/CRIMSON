@@ -1,6 +1,6 @@
 aniso8601==7.0.0
 cachetools==3.1.1
-certifi==2019.6.16
+certifi==2023.7.22
 chardet==3.0.4
 Click==7.0
 docopt==0.6.2
